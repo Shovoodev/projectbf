@@ -1,23 +1,18 @@
 import { Outlet } from "react-router-dom";
-
-import Header from "./components/layoutes/Header";
+import Footer from "./components/layouts/Footer/Footer";
+import Header from "./components/layouts/Header/Header";
 
 function App() {
+  // const navigation = useNavigation();
   return (
-    <>
+    <section className="">
       <Header />
-
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="max-w-[1360px] mx-auto">
         <Outlet />
       </main>
-
-      {/* <Footer /> */}
-    </>
+      <Footer />
+    </section>
   );
 }
 
 export default App;
-
-//  <main className="container mx-auto px-4 py-8 max-w-7xl">
-//    <Outlet />
-//  </main>;

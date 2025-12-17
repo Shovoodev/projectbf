@@ -1,4 +1,5 @@
 const Hero = () => {
+  // Using placeholders or the original URLs
   const images = [
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBCu1IkKJqU_-tCxTC6pGy-5awEkJjYXdUdvzRKqhXu8zz23wyAGekmZ54pdrljjZdmEbzq0GuXd7gQOwWSq5vfEFoGcJ6ue8SgOeI7AEHp96u0YFasYUUEFOe0r6iWaaiWbAYg_IMbGIoRLXAdOzfbH4iAPBM3YC9nIpgqA5Bb6WNx1vD4gPTJcIVq7exoRbifXBco6U2V31QviOsrsV9EbvyIvuk28lhWSJqgYVavcB7S_mLO67GqC8CK_M1vVQxJBLjXXEtZIfA",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuB4bjfa4c-aUlhpS3E-TYqW2tfnLjzAMoVne-5u9RZGUdVlfYE5VqylbVHhCh6h9qpXXKD4OeQs74aTvVMh2PXJreGExKts3HuYt8Yf4Uk5UbPlpxFaMOVGogqY1ARCiVAMTpwPi0gdLIPrk0vSgVH6BXekZ5a2XWPzQHj_3NAJgOMAH1YGBNIndYTg-Rt4qkAMnMTSY6BGI5UM_qrJ9NU4AVpnb3kVTO6LAbpwE2xBh7FnJBoqL4ilO9lCZWAxeef0IaUCT9pAC5Q",
@@ -11,7 +12,7 @@ const Hero = () => {
   return (
     <section className="pt-16 pb-8 text-center bg-white">
       <div className="max-w-4xl mx-auto px-4">
-        <h1 className="heading-xl text-red-500 ">Black Tulip Funerals</h1>
+        <h1 className="heading-xl">Black Tulip Funerals</h1>
         <p className="text-lg md:text-xl text-gray-600 font-light mb-12 font-body">
           A place where you're treated like family
         </p>
