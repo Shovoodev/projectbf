@@ -1,7 +1,35 @@
 @import "tailwindcss";
 
+@theme {
+  /* 1. Define Fonts Here */
+  --font-display: "Playfair Display", serif;
+  --font-body: "Lato", sans-serif;
+
+  /* 2. Define Colors Here */
+  --color-primary: #000000;
+  --color-surface: #f2f5f7;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: #1f2937; /* Tailwind's gray-800 */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+  p {
+    @apply text-[16px] md:text-[18px] leading-relaxed;
+  }
+}
+/* 3. Apply your custom classes */
 @layer components {
-  /* Layout Utilities */
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
@@ -10,7 +38,6 @@
     @apply py-16 md:py-24;
   }
 
-  /* Typography */
   .heading-xl {
     @apply font-display text-4xl md:text-6xl font-medium text-gray-900 mb-4;
   }
@@ -27,9 +54,8 @@
     @apply text-gray-600 font-light leading-relaxed;
   }
 
-  /* Components */
   .btn-primary {
-    @apply bg-primary text-white px-8 py-3 rounded-full text-sm font-bold 
+    @apply bg-primary text-white px-8 py-3 rounded-full text-2xl font-bold 
            uppercase tracking-wide hover:opacity-80 transition-opacity flex items-center justify-center;
   }
 
@@ -44,10 +70,4 @@
   .instrument-tag {
     @apply px-3 py-1 border border-gray-300 rounded text-sm text-gray-600;
   }
-}
-
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
 }
