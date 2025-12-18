@@ -1,11 +1,6 @@
 import express from "express";
 
-import {
-  getUserByEmail,
-  getUserById,
-  getUsers,
-  updateUserDetailsByUserId,
-} from "../db/user";
+import { getUserByEmail, getUserById, getUsers } from "../db/user";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -30,23 +25,6 @@ export const signOutUser = async (
     return res.status(400);
   }
 };
-export const getSingleUser = async (
-  req: express.Request,
-  res: express.Response
-): Promise<any> => {
-  try {
-    const { userId } = req.params;
-    const user = await getUserById(userId);
-    if (!user) {
-      console.log("no user found");
-    }
-    if (user) {
-      return res.status(200).json(user);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 export const registerUserDetails = async (
   req: express.Request,
   res: express.Response
@@ -59,12 +37,6 @@ export const registerUserDetails = async (
     const existingUser = await getUserByEmail(email);
     console.log(existingUser);
     const userid = existingUser._id.toString();
-    if (existingUser) {
-      const data = await updateUserDetailsByUserId(userid, {
-        email,
-      });
-      return res.status(200).json(data);
-    }
     const user = await getUserByEmail(email);
     return res.status(200).json(user);
   } catch (error) {

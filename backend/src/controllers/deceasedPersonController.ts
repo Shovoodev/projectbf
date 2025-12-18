@@ -1,30 +1,27 @@
 import express from "express";
-import { attendenceData } from "../data/attandenceData";
+import { deceasedPersonData } from "../data/deceasedPersonData";
 
-export const getAttendenceData = async (
+export const getDeceasedPersonFormData = async (
   req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const page = Number(req.query.page);
-    const filtered = page
-      ? attendenceData.filter((q) => q.type === "radio")
-      : attendenceData;
+    const resquestions = deceasedPersonData;
 
-    res.json(filtered);
+    res.json(resquestions);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getAnswers = async (
+export const getDeceasedPersonFormAnswers = async (
   req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const { reference, email, responses, totalPriceImpact } = req.body;
+    const { ...deceasedPersonData } = req.body;
 
-    if (!reference || !email || !responses || !totalPriceImpact) {
+    if (!res) {
       return res.status(400).json({ message: "Answers required" });
     }
 
