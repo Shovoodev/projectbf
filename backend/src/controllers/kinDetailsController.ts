@@ -1,33 +1,38 @@
 import express from "express";
+import { createKinDetail } from "../db/kinDetails";
 
-export const registerUserGroup = async (
+export const registerKinDetals = async (
   req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const { userId } = req.params;
-
-    const { name } = req.body;
-    //   if (!name) {
-    //     return res.status(400);
-    //   }
-    //   const group = await createGroup({
-    //     name,
-    //     owner_id: userId,
-    //   });
-    //   console.log({ group });
-
-    //   const inviteToken = authentication(random(), random());
-    //   const member = await createMember({
-    //     userId: userId,
-    //     groupId: group._id,
-    //     role: "admin",
-    //     inviteToken: inviteToken,
-    //     isActive: true,
-    //   });
-    //   console.log({ member });
-
-    //   return res.status(200).json({ ...group, member });
+    const {
+      userid,
+      salutation,
+      givenName,
+      surname,
+      currentAddress,
+      mobile,
+      relation,
+      photo,
+      sign,
+    } = req.body;
+    const member = await createKinDetail({
+      userid,
+      salutation,
+      givenName,
+      surname,
+      currentAddress,
+      mobile,
+      relation,
+      photo,
+      sign,
+    });
+    console.log({ member });
+    return res.status(400).json({
+      message: "Failed to create kin details",
+      error: Error instanceof Error ? Error.message : "error",
+    });
   } catch (error) {
     console.log(error);
     return res.status(400);
