@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { salutationEnum } from "./common";
 
 const kinDetailsSchema = new mongoose.Schema(
   {
@@ -7,7 +6,6 @@ const kinDetailsSchema = new mongoose.Schema(
     salutation: {
       type: String,
       required: true,
-      enum: salutationEnum,
     },
     givenName: { type: String, required: true },
     surname: { type: String, required: true },

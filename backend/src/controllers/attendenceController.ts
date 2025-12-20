@@ -1,5 +1,7 @@
 import express from "express";
 import { attendenceData } from "../data/attandenceData";
+import { createattendencedetail } from "../db/attendence";
+import { AuthenticatedRequest } from "../lib/types";
 
 export const getAttendenceData = async (
   req: express.Request,
@@ -18,21 +20,22 @@ export const getAttendenceData = async (
 };
 
 export const getAnswers = async (
-  req: express.Request,
+  req: AuthenticatedRequest,
   res: express.Response
 ): Promise<any> => {
   try {
-    const { reference, email, responses, totalPriceImpact } = req.body;
-
-    if (!reference || !email || !responses || !totalPriceImpact) {
-      return res.status(400).json({ message: "Answers required" });
-    }
-
-    // Example DB save
-    // await db.insert(answers)
-
-    res.json({ message: "Answers saved" });
-    console.log(res.json());
+    const user = req.identity;
+    const { questionText, value, priceImpact } = req.body;
+    const entry = await createattendencedetail({
+      userid: user._id,
+      questionText,
+      value,
+      priceImpact,
+    });
+    return res.status(400).json({
+      message: "Failed to create attendence person details",
+      error: Error instanceof Error ? Error.message : entry,
+    });
   } catch (error) {
     console.log(error);
   }

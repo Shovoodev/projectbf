@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-import { salutationEnum } from "./common";
 
 const deceasedPersonSchema = new mongoose.Schema(
   {
     userid: { type: String, required: true },
-    salutation: { type: String, required: true, enum: salutationEnum },
+    salutation: { type: String, required: true },
     givenName: { type: String, required: true },
-    Surname: { type: String, required: true },
-    DateOfDeath: { type: String, required: true },
-    Address: { type: String, required: true },
+    surname: { type: String, required: true },
+    dateOfDeath: { type: String, required: true },
+    address: { type: String, required: true },
     deceasedPassedReason: { type: String, required: true },
     deceasedNow: { type: String, required: true },
     batterypowereddevices: { type: String, required: true },
@@ -23,3 +22,5 @@ export const deceasedPersonModel = mongoose.model(
   "deceasedPerson",
   deceasedPersonSchema
 );
+export const createDeceasedpersondetail = (values: Record<string, any>) =>
+  new deceasedPersonModel(values).save().then((user) => user.toObject());

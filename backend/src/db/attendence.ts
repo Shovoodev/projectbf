@@ -4,7 +4,6 @@ const formQuestionSchema = new mongoose.Schema(
   {
     userid: { type: String, required: true },
     questionId: { type: Number, required: true, unique: true },
-    section: { type: String, required: true },
     questionText: { type: String, required: true },
     options: [
       {
@@ -79,3 +78,6 @@ export const FormResponseModel = mongoose.model(
   "FormResponse",
   formResponseSchema
 );
+
+export const createattendencedetail = (values: Record<string, any>) =>
+  new FormResponseModel(values).save().then((user) => user.toObject());

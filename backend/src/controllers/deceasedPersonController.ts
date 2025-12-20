@@ -1,5 +1,7 @@
 import express from "express";
 import { deceasedPersonData } from "../data/deceasedPersonData";
+import { createDeceasedpersondetail } from "../db/deceasedPerson";
+import { AuthenticatedRequest } from "../lib/types";
 
 export const getDeceasedPersonFormData = async (
   req: express.Request,
@@ -15,21 +17,38 @@ export const getDeceasedPersonFormData = async (
 };
 
 export const getDeceasedPersonFormAnswers = async (
-  req: express.Request,
+  req: AuthenticatedRequest,
   res: express.Response
 ): Promise<any> => {
   try {
-    const { ...deceasedPersonData } = req.body;
-
-    if (!res) {
-      return res.status(400).json({ message: "Answers required" });
-    }
-
-    // Example DB save
-    // await db.insert(answers)
-
-    res.json({ message: "Answers saved" });
-    console.log(res.json());
+    const user = req.identity;
+    const {
+      salutation,
+      givenName,
+      surname,
+      dateOfDeath,
+      address,
+      deceasedPassedReason,
+      deceasedNow,
+      batterypowereddevices,
+      regulardoctoraddress,
+    } = req.body;
+    const entry = await createDeceasedpersondetail({
+      userid: user._id,
+      salutation,
+      givenName,
+      surname,
+      dateOfDeath,
+      address,
+      deceasedPassedReason,
+      deceasedNow,
+      batterypowereddevices,
+      regulardoctoraddress,
+    });
+    return res.status(400).json({
+      message: "Failed to create deceased person details",
+      error: Error instanceof Error ? Error.message : entry,
+    });
   } catch (error) {
     console.log(error);
   }

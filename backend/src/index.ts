@@ -47,18 +47,18 @@ server.listen(PORT, (err?: Error) => {
       try {
         // Run a simple command to test
         const result = await mongoose.connection.db.admin().ping();
-        console.log("🏓 Database ping response:", result);
+        console.log("Database ping response:", result);
 
         // Check collections count
         const collections = await mongoose.connection.db
           .listCollections()
           .toArray();
         console.log({ collections });
-        console.log(`📚 Collections count: ${collections.length}`);
+        console.log(` Collections count: ${collections.length}`);
 
         return true;
       } catch (error) {
-        console.error("❌ Database test failed:", error.message);
+        console.error("Database test failed:", error.message);
         return false;
       }
     };

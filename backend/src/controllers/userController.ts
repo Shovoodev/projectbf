@@ -3,6 +3,7 @@ import { createUser, getUserByEmail, getUserBySessionToken } from "../db/user";
 import { authentication, invoiceId, random } from "../lib";
 
 import nodemailer from "nodemailer";
+import { AuthenticatedRequest } from "../lib/types";
 export const login = async (
   req: express.Request,
   res: express.Response
@@ -46,12 +47,13 @@ export const login = async (
     res.status(400);
   }
 };
-export const registrationByToken = async (
-  req: express.Request,
+export const sendAllRelatedDocuments = async (
+  req: AuthenticatedRequest,
   res: express.Response
 ): Promise<any> => {
   try {
-    const { to, user } = req.body;
+    const { to } = req.body;
+    const { user } = req.identity;
     const token = "hello";
 
     const transporter = nodemailer.createTransport({
@@ -60,15 +62,15 @@ export const registrationByToken = async (
       secure: true,
       auth: {
         user: "resend",
-        pass: "re_RNSeBKAn_6oWiyfp3GEoXv1C5DuCNnnT8",
+        pass: process.env.RESEND_API_KEY,
       },
     });
     const info = await transporter.sendMail({
-      from: '"Toukir Shuvo" <expensly@toukir.cc>',
+      from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: `${to}`,
-      subject: `Your friend ${user} send you requiest to join Expense Tracker `,
-      text: "Expense tracker is a platform to manage your expenses with your friend more easily and smartly",
-      html: `<h4>You are invited to join<h4><br/>
+      subject: `Thanks  ${user} beleaving us for trusting us `,
+      text: "we get all you documents",
+      html: `<h4>This is all the document we have recived<h4><br/>
       <a href="http://localhost:5173/invite/register?token=${token}">Click to Join Group</a>
      `,
     });
@@ -91,14 +93,14 @@ export const registerUser = async (
     }
     const existingUser = await getUserByEmail(email);
     console.log(existingUser);
-    const reference = invoiceId;
+    const reference = invoiceId();
     if (existingUser) {
       return res.status(400);
     }
     const salt = random();
     const user = await createUser({
       email,
-      reference: reference,
+      reference,
       authentication: {
         salt,
         password: authentication(salt, password),
@@ -107,7 +109,7 @@ export const registerUser = async (
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
-    return res.status(400);
+    return res.status(400).json({ message: "Bad request" });
   }
 };
 export const logOut = async (

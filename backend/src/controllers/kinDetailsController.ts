@@ -1,13 +1,14 @@
 import express from "express";
 import { createKinDetail } from "../db/kinDetails";
+import { AuthenticatedRequest } from "../lib/types";
 
 export const registerKinDetals = async (
-  req: express.Request,
+  req: AuthenticatedRequest,
   res: express.Response
 ): Promise<any> => {
+  const user = req.identity;
   try {
     const {
-      userid,
       salutation,
       givenName,
       surname,
@@ -17,8 +18,8 @@ export const registerKinDetals = async (
       photo,
       sign,
     } = req.body;
-    const member = await createKinDetail({
-      userid,
+    const entry = await createKinDetail({
+      userid: user._id,
       salutation,
       givenName,
       surname,
@@ -28,10 +29,9 @@ export const registerKinDetals = async (
       photo,
       sign,
     });
-    console.log({ member });
     return res.status(400).json({
       message: "Failed to create kin details",
-      error: Error instanceof Error ? Error.message : "error",
+      error: Error instanceof Error ? Error.message : entry,
     });
   } catch (error) {
     console.log(error);
