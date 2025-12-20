@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- GLOBAL FONTS --- */
+  --font-display: "Playfair Display", serif;
+  --font-body: "Lato", sans-serif;
+
+  /* --- EXISTING COLORS (Home Page) --- */
+  --color-primary: #000000;
+  --color-surface: #f2f5f7;
+
+  /* --- NEW COLORS (Added for Team Page) --- */
+  --color-accent: #d4af37; /* Gold Accent */
+  --color-text-light: #666666; /* Lighter text for descriptions */
+  --color-card-light: #f9f9f9; /* Light background for cards */
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    @apply bg-white text-gray-800 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  /* =========================================
+     EXISTING CLASSES (DO NOT DELETE)
+     ========================================= */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .heading-xl {
+    @apply font-display text-4xl md:text-6xl font-medium text-gray-900 mb-4;
+  }
+
+  .heading-lg {
+    @apply text-3xl md:text-5xl font-display text-gray-900 mb-6;
+  }
+
+  .heading-md {
+    @apply text-xl md:text-2xl font-display font-bold text-gray-900;
+  }
+
+  .text-body-light {
+    @apply text-gray-600 font-light leading-relaxed;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white px-8 py-3 rounded-full text-sm font-bold 
+           uppercase tracking-wide hover:opacity-80 transition-opacity flex items-center justify-center;
+  }
+
+  .btn-sm {
+    @apply px-8 py-2 text-xs;
+  }
+
+  .badge {
+    @apply inline-block px-4 py-1 border border-gray-300 rounded-full text-xs font-bold uppercase tracking-widest;
+  }
+
+  .instrument-tag {
+    @apply px-3 py-1 border border-gray-300 rounded text-sm text-gray-600;
+  }
+  .dropdown-item {
+    @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary;
+  }
+
+  /* =========================================
+     NEW CLASSES (ADDED FOR TEAM PAGE)
+     ========================================= */
+
+  /* Layout specific to Team Page */
+  .section-gap {
+    @apply py-16 space-y-20;
+  }
+
+  /* Typography for Team Page */
+  .heading-hero {
+    @apply text-5xl md:text-6xl font-bold text-gray-800 mb-2;
+  }
+
+  .heading-section {
+    @apply text-4xl text-center italic mb-6 border-b-2 border-gray-200 pb-4;
+  }
+
+  .heading-name {
+    @apply text-2xl font-bold mb-1;
+  }
+
+  .text-role {
+    @apply text-xs font-bold uppercase tracking-wide opacity-80 mb-6;
+  }
+
+  .text-desc {
+    @apply text-xs leading-relaxed text-justify;
+  }
+
+  /* Team Page Cards */
+  .card-mission {
+    @apply border border-gray-300 p-8 md:p-10 rounded-sm bg-white shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  /* Team Page Icons */
+  .icon-circle {
+    @apply w-16 h-16 rounded-full border-2 border-gray-800 flex items-center justify-center mb-6;
+  }
+
+  /* paragraph  */
+  .bold-paragraph {
+    @apply text-lg md:text-xl text-gray-600 font-light mb-12 font-body;
+  }
+}
