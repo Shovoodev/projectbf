@@ -7,7 +7,7 @@ import Stationery from "../components/pages/Home/Stationery";
 
 function Home() {
   return (
-    <section className="">
+    <section className="max-w-[1360px] mx-auto">
       <Hero />
       <Packages />
       <Stationery />

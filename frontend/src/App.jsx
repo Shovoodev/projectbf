@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import Hero from "./components/common/Hero";
 import Footer from "./components/layouts/Footer/Footer";
 import Header from "./components/layouts/Header/Header";
 
@@ -7,7 +8,7 @@ function App() {
   return (
     <section className="">
       <Header />
-      <main className="max-w-[1360px] mx-auto">
+      <main className="mx-auto">
         <Outlet />
       </main>
       <Footer />

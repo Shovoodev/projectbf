@@ -7,7 +7,7 @@ const Hero = () => {
     <section className="pt-16 pb-8 text-center bg-white">
       <div className="max-w-4xl mx-auto px-4">
         <h1 className="heading-xl">Black Tulip Funerals</h1>
-        <p className="text-lg md:text-xl text-gray-600 font-light mb-12 font-body">
+        <p className="bold-paragraph">
           A place where you're treated like family
         </p>
       </div>
