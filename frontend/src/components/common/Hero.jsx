@@ -11,13 +11,13 @@ const Hero = ({ title, subtitle }) => {
       <div className="absolute inset-0 "></div>
 
       <div className="relative section-container w-full z-10">
-        <h1 className="heading-hero">{title}</h1>
+        <h1 className="heading-hero text-white">{title}</h1>
         <nav className="text-sm font-medium text-text-light uppercase tracking-wide">
-          <a className="hover:underline text-xl text-gray-800" href="#">
+          <a className="hover:underline text-xl text-white" href="#">
             Home
           </a>
-          <span className="mx-2">/</span>
-          <span className="text-gray-800 text-xl">{subtitle}</span>
+          <span className="mx-2 text-xl text-white">/</span>
+          <span className="text-white text-xl">{subtitle}</span>
         </nav>
       </div>
     </header>
