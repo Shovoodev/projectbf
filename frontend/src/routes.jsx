@@ -2,10 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
 
+import Chapels from "./pages/Chapels";
+import Contact from "./pages/Contact";
 import Home from "./pages/Home";
-import Service from "./pages/Service";
-import Team from "./pages/Team";
+import MusicSection from "./pages/Music";
 import News from "./pages/News";
+import Team from "./pages/Team";
 
 export const routes = createBrowserRouter([
   {
@@ -23,6 +25,18 @@ export const routes = createBrowserRouter([
       {
         path: "/news",
         element: <News />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/music",
+        element: <MusicSection />,
+      },
+      {
+        path: "/chepels",
+        element: <Chapels />,
       },
     ],
   },

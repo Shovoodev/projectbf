@@ -5,7 +5,7 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa6";
-
+import logo from "../Header/btf-logo.png";
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -36,15 +36,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="flex items-start">
             <div className="flex items-center gap-3">
-              <FaSeedling className="text-4xl text-primary" />
-              <div>
-                <span className="block text-xl font-bold tracking-widest uppercase leading-none font-display">
-                  Black Tulip
-                </span>
-                <span className="block text-xs tracking-[0.2em] uppercase text-gray-500">
-                  Funerals
-                </span>
-              </div>
+              <img className="h-[130px]" src={logo} alt="" />
             </div>
           </div>
 
