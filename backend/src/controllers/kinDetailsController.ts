@@ -6,8 +6,12 @@ export const registerKinDetals = async (
   req: AuthenticatedRequest,
   res: express.Response
 ): Promise<any> => {
-  const user = req.identity;
   try {
+    const response = req.identity;
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    console.log({ response });
     const {
       salutation,
       givenName,
@@ -18,8 +22,9 @@ export const registerKinDetals = async (
       photo,
       sign,
     } = req.body;
+
     const entry = await createKinDetail({
-      userid: user._id,
+      userid: req.identity._id,
       salutation,
       givenName,
       surname,
@@ -29,12 +34,16 @@ export const registerKinDetals = async (
       photo,
       sign,
     });
-    return res.status(400).json({
-      message: "Failed to create kin details",
-      error: Error instanceof Error ? Error.message : entry,
+
+    return res.status(201).json({
+      message: "Kin details created successfully",
+      data: entry,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(400);
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to create kin details",
+      error: error instanceof Error ? error.message : error,
+    });
   }
 };

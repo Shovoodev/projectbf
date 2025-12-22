@@ -1,10 +1,15 @@
 import express from "express";
 import {
-  getAnswers,
+  getAttendenceAnswers,
   getAttendenceData,
 } from "../controllers/attendenceController";
+import { isAuthenticated } from "../middlewear";
 
 export default (router: express.Router) => {
   router.get("/attendenceservicecremention", getAttendenceData);
-  router.post("/attendenceservicecrementionanswers", getAnswers);
+  router.post(
+    "/attendenceservicecrementionanswers",
+    isAuthenticated,
+    getAttendenceAnswers
+  );
 };

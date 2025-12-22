@@ -21,7 +21,11 @@ export const getDeceasedPersonFormAnswers = async (
   res: express.Response
 ): Promise<any> => {
   try {
-    const user = req.identity;
+    const response = req.identity;
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    console.log({ response });
     const {
       salutation,
       givenName,
@@ -34,7 +38,7 @@ export const getDeceasedPersonFormAnswers = async (
       regulardoctoraddress,
     } = req.body;
     const entry = await createDeceasedpersondetail({
-      userid: user._id,
+      userid: req.identity._id,
       salutation,
       givenName,
       surname,
