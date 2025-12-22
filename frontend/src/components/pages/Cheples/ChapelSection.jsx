@@ -1,13 +1,4 @@
-import React from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-
-const ChapelSection = ({
-  title,
-  image,
-  children,
-  background = "bg-white",
-  hasSlider = false,
-}) => {
+const ChapelSection = ({ title, image, children, background = "bg-white" }) => {
   return (
     <section className={`section-padding ${background}`}>
       <div className="section-container">
@@ -20,21 +11,6 @@ const ChapelSection = ({
           />
 
           {/* Optional Slider Controls (Visual Only based on HTML) */}
-          {hasSlider && (
-            <>
-              <button className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur rounded-full flex items-center justify-center text-white transition-colors">
-                <FaChevronLeft />
-              </button>
-              <button className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur rounded-full flex items-center justify-center text-white transition-colors">
-                <FaChevronRight />
-              </button>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                <span className="block w-2 h-2 rounded-full bg-white"></span>
-                <span className="block w-2 h-2 rounded-full bg-white/50"></span>
-                <span className="block w-2 h-2 rounded-full bg-white/50"></span>
-              </div>
-            </>
-          )}
         </div>
 
         {/* Text Content */}

@@ -90,9 +90,22 @@ const Header = () => {
               </div>
             </div>
 
-            <Link to="/info" className="hover:text-primary">
-              Info
-            </Link>
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-primary">
+                Info <FaChevronDown className="text-[10px]" />
+              </button>
+              <div className="absolute top-full left-0 mt-2 w-40 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <Link to="/resources" target="_blank" className="dropdown-item">
+                  Resources
+                </Link>
+                <Link to="/upcoming-funerals" className="dropdown-item">
+                  Upcoming Funerals
+                </Link>
+                <Link to="/music" className="dropdown-item">
+                  Blog
+                </Link>
+              </div>
+            </div>
           </nav>
 
           {/* Right Side */}
@@ -194,11 +207,25 @@ const Header = () => {
                 </Link>
               </div>
             )}
-
-            <Link to="/info" className="block text-lg mb-6">
-              Info
-            </Link>
-
+            <button
+              onClick={() => toggleMobileDropdown("info")}
+              className="flex justify-between w-full text-lg font-medium mb-2"
+            >
+              Info <FaChevronDown />
+            </button>
+            {openMobileDropdown === "info" && (
+              <div className="ml-4 mb-4 flex flex-col space-y-2">
+                <Link to="/resources" className="block">
+                  Resources
+                </Link>
+                <Link to="/options/option-two" className="block">
+                  Upcoming Funerals
+                </Link>
+                <Link to="/options/option-two" className="block">
+                  Blog
+                </Link>
+              </div>
+            )}
             <a href="tel:1300110031" className="btn-primary">
               <FaPhone className="mr-2" /> Call Now
             </a>
