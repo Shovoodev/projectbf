@@ -22,62 +22,50 @@ export const getAttendenceData = async (
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
-): Promise<any> => {
+) => {
   try {
     if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const user = req.identity._id;
-    const { questionText, textAnswer } = req.body;
+    console.log("RAW BODY:", req.body);
 
-    if (!questionText) {
-      return res.status(400).json({ message: "questionText is required" });
+    const { responses } = req.body;
+
+    if (!responses || !Array.isArray(responses)) {
+      return res.status(400).json({ message: "responses array missing" });
     }
 
-    const price = 24;
+    console.log("RESPONSES:", responses);
+    console.log("QUESTION TEXT:", responses[0]?.questionText);
 
-    const attendence = await getAttendenceByUserId(user);
+    if (!responses[0]?.questionText) {
+      return res.status(400).json({
+        message: "questionText is required inside responses",
+      });
+    }
+
+    const attendence = await getAttendenceByUserId(req.identity._id);
 
     if (!attendence) {
       return res.status(404).json({ message: "Attendance not found" });
     }
 
-    const { email, reference } = attendence;
-
-    const { responses } = req.body;
-    if (!responses || !Array.isArray(responses) || responses.length === 0) {
-      return res.status(400).json({ message: "Responses array is required" });
-    }
-
-    for (let i = 0; i < responses.length; i++) {
-      if (!responses[i].questionText) {
-        return res.status(400).json({
-          message: `Response at index ${i} is missing questionText`,
-        });
-      }
-    }
-
     const entry = await createResponseAttandence({
-      userid: user,
-      email,
-      reference,
-      responses: responses.map((r: any) => ({
-        questionId: r.questionId,
-        questionText: r.questionText,
-        textAnswer: r.textAnswer,
-        totalPriceImpact: price,
-      })),
+      userid: req.identity._id,
+      email: attendence.email,
+      reference: attendence.reference,
+      responses,
     });
 
     return res.status(201).json({
-      message: "Attendance response created successfully",
+      message: "Attendance response saved",
       data: entry,
     });
   } catch (error) {
-    console.error(error);
+    console.error("ERROR:", error);
     return res.status(500).json({
-      message: "Failed to create attendance response",
+      message: "Server error",
       error: error instanceof Error ? error.message : error,
     });
   }

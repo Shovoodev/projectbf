@@ -24,3 +24,6 @@ export const deceasedPersonModel = mongoose.model(
 );
 export const createDeceasedpersondetail = (values: Record<string, any>) =>
   new deceasedPersonModel(values).save().then((user) => user.toObject());
+
+export const getDeceasedByUserId = (userId: string) =>
+  deceasedPersonModel.findOne({ userid: userId });

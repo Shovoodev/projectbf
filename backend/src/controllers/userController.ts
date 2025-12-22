@@ -4,6 +4,9 @@ import { authentication, invoiceId, random } from "../lib";
 import nodemailer from "nodemailer";
 import { AuthenticatedRequest } from "../lib/types";
 import SendEmail from "../lib/resend";
+import { getAttendenceByUserId } from "../db/attendence";
+import { getKinByUserId } from "../db/kinDetails";
+import { getDeceasedByUserId } from "../db/deceasedPerson";
 
 // export const login = async (
 //   req: express.Request,
@@ -48,6 +51,7 @@ import SendEmail from "../lib/resend";
 //     res.status(400);
 //   }
 // };
+
 export const login = async (req: express.Request, res: express.Response) => {
   try {
     const { email, password } = req.body;
@@ -92,22 +96,6 @@ export const login = async (req: express.Request, res: express.Response) => {
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: "Something went wrong" });
-  }
-};
-
-export const sendAllRelatedDocuments = async (
-  req: express.Request,
-  res: express.Response
-): Promise<any> => {
-  try {
-    const { user } = req.body;
-
-    const response = SendEmail(user);
-    console.log(response);
-    return res.status(200).json({ message: "massage deleverd" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to send email" });
   }
 };
 
@@ -158,5 +146,35 @@ export const logOut = async (
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "An error occurred during logout" });
+  }
+};
+
+export const sendAllRelatedDocuments = async (
+  req: AuthenticatedRequest,
+  res: express.Response
+): Promise<any> => {
+  try {
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.identity._id.toString();
+
+    console.log("USER ID:", userId);
+
+    const attendence = await getAttendenceByUserId(userId);
+    const kinDetails = await getKinByUserId(userId);
+    const deceasedPerson = await getDeceasedByUserId(userId);
+
+    console.log({ attendence, kinDetails, deceasedPerson });
+    // const response = SendEmail(userId);
+
+    return res.status(200).json({
+      message: "Data fetched successfully",
+      data: { attendence, kinDetails, deceasedPerson },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to fetch documents" });
   }
 };

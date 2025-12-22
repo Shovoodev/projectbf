@@ -10,6 +10,8 @@ const formResponseSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    questionId: { type: Number, required: false },
+    textAnswer: { type: Number, required: false },
     responses: [
       {
         questionId: { type: Number, required: false },
@@ -38,3 +40,6 @@ export const FormResponseModel = mongoose.model(
 
 export const createResponseAttandence = (values: Record<string, any>) =>
   new FormResponseModel(values).save().then((user) => user.toObject());
+
+export const getAttendenceByUserId = (userId: string) =>
+  FormResponseModel.findOne({ userid: userId });

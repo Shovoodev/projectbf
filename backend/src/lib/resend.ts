@@ -20,7 +20,7 @@ export default async function SendEmail(user: string) {
     subject: `Thanks  ${user} beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>
-        <a href="http://localhost:5173/invite/register?token=${token}">Click to Join Group</a>
+        <a href="http://localhost:5173/finish">Click to Preview all you selected services</a>
        `,
   });
   console.log(info);

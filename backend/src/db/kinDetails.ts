@@ -22,3 +22,6 @@ export const KinDetailsModel = mongoose.model("KinDetails", kinDetailsSchema);
 
 export const createKinDetail = (values: Record<string, any>) =>
   new KinDetailsModel(values).save().then((user) => user.toObject());
+
+export const getKinByUserId = (userId: string) =>
+  KinDetailsModel.findOne({ userid: userId });
