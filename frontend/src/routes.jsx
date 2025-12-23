@@ -5,11 +5,13 @@ import App from "./App";
 import Chapels from "./pages/Chapels";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
+import LiveMusic from "./pages/LiveMusic";
 import MusicSection from "./pages/Music";
 import News from "./pages/News";
-import Team from "./pages/Team";
-import LiveMusic from "./pages/LiveMusic";
 import Resources from "./pages/Resources";
+import ServiceArea from "./pages/Service-Area";
+import Team from "./pages/Team";
+import LandingPage from "./pages/Landing-Page";
 
 export const routes = createBrowserRouter([
   {
@@ -47,6 +49,14 @@ export const routes = createBrowserRouter([
       {
         path: "/resources",
         element: <Resources />,
+      },
+      {
+        path: "/service-area",
+        element: <ServiceArea />,
+      },
+      {
+        path: "/landing-page",
+        element: <LandingPage />,
       },
     ],
   },

@@ -1,10 +1,10 @@
 import {
   FaChevronUp,
   FaFacebookF,
-  FaSeedling,
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import logo from "../Header/btf-logo.png";
 const Footer = () => {
   const scrollToTop = () => {
@@ -29,6 +29,37 @@ const Footer = () => {
     col3: ["Blog", "FAQ", "Landing Page", "Pay Now", "Testimonials"],
   };
 
+  const getPathFromLabel = (label) => {
+    const map = {
+      Home: "/",
+      "Ash Storage": "/ash-storage",
+      "Contact Us": "/contact",
+      "Disclaimer & Terms": "/disclaimer",
+      "Refund Policy": "/refund-policy",
+      Agreement: "/agreement",
+      Signature: "/signature",
+      "Payment Terms": "/payment-terms",
+      "Privacy Policy": "/privacy-policy",
+      "Service Area": "/service-area",
+      Blog: "/news",
+      FAQ: "/faq",
+      "Landing Page": "/landing-page",
+      "Pay Now": "/pay-now",
+      Testimonials: "/testimonials",
+    };
+
+    if (map[label]) return map[label];
+
+    // fallback: slugify the label
+    return (
+      "/" +
+      label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "")
+    );
+  };
+
   return (
     <footer className="bg-surface pt-16 pb-8 border-t border-gray-200 relative">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8">
@@ -44,13 +75,15 @@ const Footer = () => {
           {[links.col1, links.col2, links.col3].map((col, idx) => (
             <div key={idx} className="space-y-3 text-sm font-body">
               {col.map((link) => (
-                <a
+                <Link
                   key={link}
-                  href="#"
+                  to={getPathFromLabel(link)}
+                  onClick={() => scrollToTop()}
+                  aria-label={`Go to ${link}`}
                   className="block text-gray-700 hover:text-primary transition-colors"
                 >
                   {link}
-                </a>
+                </Link>
               ))}
             </div>
           ))}
