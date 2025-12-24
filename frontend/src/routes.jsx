@@ -12,6 +12,9 @@ import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import LandingPage from "./pages/Landing-Page";
+import Faq from "./pages/Faq";
+import Testimonials from "./pages/Testimonials";
+import Refund_Policy from "./pages/Refund_Policy";
 
 export const routes = createBrowserRouter([
   {
@@ -57,6 +60,18 @@ export const routes = createBrowserRouter([
       {
         path: "/landing-page",
         element: <LandingPage />,
+      },
+      {
+        path: "/faq",
+        element: <Faq />,
+      },
+      {
+        path: "/testimonials",
+        element: <Testimonials />,
+      },
+      {
+        path: "/refund-policy",
+        element: <Refund_Policy />,
       },
     ],
   },
