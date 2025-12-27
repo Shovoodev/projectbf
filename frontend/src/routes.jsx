@@ -15,6 +15,8 @@ import LandingPage from "./pages/Landing-Page";
 import Faq from "./pages/Faq";
 import Testimonials from "./pages/Testimonials";
 import Refund_Policy from "./pages/Refund_Policy";
+import Coffins from "./pages/Coffins";
+import Disclaimer from "./pages/Disclaimer";
 
 export const routes = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ export const routes = createBrowserRouter([
         element: <Chapels />,
       },
       {
+        path: "/coffins",
+        element: <Coffins />,
+      },
+      {
         path: "/live-music",
         element: <LiveMusic />,
       },
@@ -72,6 +78,10 @@ export const routes = createBrowserRouter([
       {
         path: "/refund-policy",
         element: <Refund_Policy />,
+      },
+      {
+        path: "/disclaimer",
+        element: <Disclaimer />,
       },
     ],
   },

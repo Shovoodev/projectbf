@@ -75,7 +75,7 @@ const Header = () => {
                 >
                   Stationery
                 </Link>
-                <Link to="/options/option-one" className="dropdown-item">
+                <Link to="/coffins" className="dropdown-item">
                   Coffins
                 </Link>
                 <Link to="/music" className="dropdown-item">
