@@ -11,9 +11,18 @@ const kinDetailsSchema = new mongoose.Schema(
     surname: { type: String, required: true },
     currentAddress: { type: String, required: true },
     mobile: { type: String, required: true },
+    email: { type: String, required: true },
     relation: { type: String, required: true },
-    photo: { type: String, required: true },
-    sign: { type: String, required: true },
+    // photo: {
+    //   public_id: String,
+    //   url: String,
+    // },
+    // sign: {
+    //   public_id: String,
+    //   url: String,
+    // },
+    photo: { type: String },
+    sign: { type: String },
   },
   { timestamps: true }
 );
@@ -25,3 +34,5 @@ export const createKinDetail = (values: Record<string, any>) =>
 
 export const getKinByUserId = (userId: string) =>
   KinDetailsModel.findOne({ userid: userId });
+export const updateKinByUserId = (id: string, values: Record<string, any>) =>
+  KinDetailsModel.findByIdAndUpdate(id, values);

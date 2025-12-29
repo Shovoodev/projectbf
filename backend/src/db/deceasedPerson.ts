@@ -27,3 +27,8 @@ export const createDeceasedpersondetail = (values: Record<string, any>) =>
 
 export const getDeceasedByUserId = (userId: string) =>
   deceasedPersonModel.findOne({ userid: userId });
+
+export const updateDeceasedByUserId = (
+  id: string,
+  values: Record<string, any>
+) => deceasedPersonModel.findByIdAndUpdate(id, values);

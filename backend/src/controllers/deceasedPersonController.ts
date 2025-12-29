@@ -1,6 +1,9 @@
 import express from "express";
 import { deceasedPersonData } from "../data/deceasedPersonData";
-import { createDeceasedpersondetail } from "../db/deceasedPerson";
+import {
+  createDeceasedpersondetail,
+  deceasedPersonModel,
+} from "../db/deceasedPerson";
 import { AuthenticatedRequest } from "../lib/types";
 
 export const getDeceasedPersonFormData = async (
@@ -25,7 +28,12 @@ export const getDeceasedPersonFormAnswers = async (
     if (!response) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    console.log({ response });
+    let existingResponse = await deceasedPersonModel.findOne({
+      userid: req.identity._id,
+    });
+
+    let savedResponse;
+
     const {
       salutation,
       givenName,
@@ -37,21 +45,36 @@ export const getDeceasedPersonFormAnswers = async (
       batterypowereddevices,
       regulardoctoraddress,
     } = req.body;
-    const entry = await createDeceasedpersondetail({
-      userid: req.identity._id,
-      salutation,
-      givenName,
-      surname,
-      dateOfDeath,
-      address,
-      deceasedPassedReason,
-      deceasedNow,
-      batterypowereddevices,
-      regulardoctoraddress,
-    });
-    return res.status(400).json({
-      message: "Failed to create deceased person details",
-      error: Error instanceof Error ? Error.message : entry,
+
+    if (existingResponse) {
+      existingResponse.salutation = salutation;
+      existingResponse.givenName = givenName;
+      existingResponse.surname = surname;
+      existingResponse.dateOfDeath = dateOfDeath;
+      existingResponse.address = address;
+      existingResponse.deceasedPassedReason = deceasedPassedReason;
+      existingResponse.deceasedNow = deceasedNow;
+      existingResponse.batterypowereddevices = batterypowereddevices;
+      existingResponse.regulardoctoraddress = regulardoctoraddress;
+
+      savedResponse = await existingResponse.save();
+    } else {
+      savedResponse = await createDeceasedpersondetail({
+        userid: req.identity._id,
+        salutation,
+        givenName,
+        surname,
+        dateOfDeath,
+        address,
+        deceasedPassedReason,
+        deceasedNow,
+        batterypowereddevices,
+        regulardoctoraddress,
+      });
+    }
+    return res.status(200).json({
+      message: "Attendance response saved",
+      data: savedResponse,
     });
   } catch (error) {
     console.log(error);

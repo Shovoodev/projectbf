@@ -41,13 +41,16 @@ const Header = () => {
                 Packages <FaChevronDown className="text-[10px]" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link to="/packages/basic" className="dropdown-item">
+                <Link to="/packages/basic/register" className="dropdown-item">
                   Basic Package
                 </Link>
-                <Link to="/packages/standard" className="dropdown-item">
+                <Link
+                  to="/packages/standard/register"
+                  className="dropdown-item"
+                >
                   Standard Package
                 </Link>
-                <Link to="/packages/premium" className="dropdown-item">
+                <Link to="/packages/premium/register" className="dropdown-item">
                   Premium Package
                 </Link>
               </div>

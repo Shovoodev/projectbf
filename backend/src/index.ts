@@ -15,10 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const server = http.createServer(app);
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    origin: "*",
   })
 );
 mongoose.Promise = Promise;
@@ -32,9 +29,6 @@ server.listen(PORT, (err?: Error) => {
       try {
         const conn = await mongoose.connect(MONGO_URL);
         console.log("✅ MongoDB Connected:", conn.connection.host);
-        console.log("📊 Database:", conn.connection.name);
-
-        // Test the connection
         await testConnection();
 
         return conn;
@@ -46,9 +40,6 @@ server.listen(PORT, (err?: Error) => {
     const testConnection = async () => {
       try {
         const result = await mongoose.connection.db.admin().ping();
-        console.log("Database ping response:", result);
-
-        // Check collections count
         const collections = await mongoose.connection.db
           .listCollections()
           .toArray();

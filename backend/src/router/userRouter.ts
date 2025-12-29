@@ -14,12 +14,12 @@ import { pdfController } from "../controllers/pdf.routeController";
 export default (router: express.Router) => {
   router.get("/user", getUsers);
   router.post("/blacktulipauth/login", login);
-  router.post("/registeruser", registerUser);
+  router.post("/blacktulipauth/newuser", registerUser);
   router.post(
     "/sendallrelateddocuments",
     isAuthenticated,
     sendAllRelatedDocuments
   );
   router.post("/logout", logOut);
-  router.get("/report/:userId/pdf", isAuthenticated, pdfController);
+  // router.get("/report/:userId/pdf", isAuthenticated, pdfController);
 };

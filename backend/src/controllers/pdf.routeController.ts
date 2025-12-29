@@ -1,130 +1,140 @@
-import express, { Request, Response } from "express";
-import PDFDocument from "pdfkit";
-import { getKinByUserId } from "../db/kinDetails";
-import { getDeceasedByUserId } from "../db/deceasedPerson";
-import { getAttendenceByUserId } from "../db/attendence";
+// import express, { Request, Response } from "express";
+// import PDFDocument from "pdfkit";
+// import { getKinByUserId } from "../db/kinDetails";
+// import { getDeceasedByUserId } from "../db/deceasedPerson";
+// import { getAttendenceByUserId } from "../db/attendence";
 
-const router = express.Router();
+// const router = express.Router();
 
-// router.get("/report/:userId/pdf",
+// export const pdfController = async (req: Request, res: Response) => {
+//   try {
+//     const { userId } = req.params;
 
-export const pdfController = async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    console.log(userId);
-    const attendance = await getAttendenceByUserId(userId);
-    const kin = await getKinByUserId(userId);
-    const deceased = await getDeceasedByUserId(userId);
-    const reportData = {
-      userId,
-      attendance,
-      kin,
-      deceased,
-    };
-    console.log(reportData);
-    // 3️⃣ Create PDF
-    const doc = new PDFDocument({ margin: 50 });
+//     const attendances = await getAttendenceByUserId(userId);
+//     const kin = await getKinByUserId(userId);
+//     const deceased = await getDeceasedByUserId(userId);
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=report-${userId}.pdf`
-    );
+//     if (!attendances || attendances.length === 0) {
+//       return res.status(404).json({ message: "No attendance data found" });
+//     }
 
-    doc.pipe(res);
+//     const totalPrice = attendances.reduce(
+//       (sum: number, a: any) => sum + (a.totalPriceImpact || 0),
+//       0
+//     );
 
-    const sectionTitle = (doc: PDFKit.PDFDocument, title: string) => {
-      doc.fontSize(14).text(title, { underline: true }).moveDown(0.5);
-    };
+//     const doc = new PDFDocument({ margin: 50 });
 
-    const keyValue = (doc: PDFKit.PDFDocument, key: string, value: any) => {
-      doc.fontSize(11).text(`${key}: ${value ?? "N/A"}`);
-    };
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename=report-${userId}.pdf`
+//     );
 
-    const drawDivider = (doc: PDFKit.PDFDocument) => {
-      doc.moveDown();
-      doc
-        .strokeColor("#aaaaaa")
-        .lineWidth(1)
-        .moveTo(50, doc.y)
-        .lineTo(550, doc.y)
-        .stroke();
-      doc.moveDown();
-    };
+//     doc.pipe(res);
 
-    doc
-      .fontSize(20)
-      .text("User Attendance Report", { align: "center" })
-      .moveDown();
+//     /* =========================
+//        HELPERS
+//     ========================= */
+//     const sectionTitle = (title: string) => {
+//       doc.fontSize(14).text(title, { underline: true }).moveDown(0.5);
+//     };
 
-    doc
-      .fontSize(12)
-      .text(`User ID: ${userId}`)
-      .text(`Reference / Invoice ID: ${attendance.reference}`)
-      .text(`Email: ${attendance.email}`)
-      .text(`Status: ${attendance.status}`)
-      .moveDown();
+//     const keyValue = (key: string, value: any) => {
+//       doc.fontSize(11).text(`${key}: ${value ?? "N/A"}`);
+//     };
 
-    drawDivider(doc);
+//     const drawDivider = () => {
+//       doc.moveDown();
+//       doc
+//         .strokeColor("#aaaaaa")
+//         .lineWidth(1)
+//         .moveTo(50, doc.y)
+//         .lineTo(550, doc.y)
+//         .stroke();
+//       doc.moveDown();
+//     };
 
-    sectionTitle(doc, "Attendance Summary");
+//     /* =========================
+//        HEADER
+//     ========================= */
+//     doc
+//       .fontSize(20)
+//       .text("User Attendance Report", { align: "center" })
+//       .moveDown();
 
-    doc
-      .fontSize(12)
-      .text(`Total Price: €${attendance.totalPrice}`)
-      .text(`Created At: ${new Date(attendance.createdAt).toLocaleString()}`)
-      .moveDown();
+//     keyValue("User ID", userId);
 
-    /* =========================
-     RESPONSES
-  ========================= */
-    sectionTitle(doc, "Responses");
+//     keyValue("Total Price", `€${totalPrice}`);
 
-    if (attendance.responses?.length) {
-      attendance.responses.forEach((r: any, index: number) => {
-        doc
-          .fontSize(11)
-          .text(`${index + 1}. Question ID: ${r.questionId ?? "N/A"}`)
-          .text(`   Answer: ${r.answer ?? "N/A"}`)
-          .moveDown(0.5);
-      });
-    } else {
-      doc.fontSize(11).text("No responses available").moveDown();
-    }
+//     drawDivider();
 
-    drawDivider(doc);
+//     /* =========================
+//        RESPONSES
+//     ========================= */
+//     sectionTitle("Responses");
 
-    sectionTitle(doc, "Kin Details");
+//     attendances.forEach((a: any, index: number) => {
+//       doc
+//         .fontSize(11)
+//         .text(`${index + 1}. ${a.questionText ?? "Question"}`)
+//         .text(`   Answer: ${a.textAnswer ?? "N/A"}`)
+//         .text(`   Price Impact: €${a.totalPriceImpact ?? 0}`)
+//         .moveDown(0.5);
+//     });
 
-    keyValue(doc, "Name", `${kin.salutation} ${kin.givenName} ${kin.surname}`);
-    keyValue(doc, "Relation", kin.relation);
-    keyValue(doc, "Mobile", kin.mobile);
-    keyValue(doc, "Address", kin.currentAddress);
+//     drawDivider();
 
-    drawDivider(doc);
+//     /* =========================
+//        KIN DETAILS
+//     ========================= */
+//     sectionTitle("Kin Details");
 
-    /* =========================
-       DECEASED DETAILS
-    ========================= */
-    sectionTitle(doc, "Deceased Details");
+//     if (kin) {
+//       keyValue(
+//         "Name",
+//         `${kin.salutation} ${kin.givenName} ${kin.surname}`
+//       );
+//       keyValue("Relation", kin.relation);
+//       keyValue("Mobile", kin.mobile);
+//       keyValue("Address", kin.currentAddress);
+//     } else {
+//       doc.fontSize(11).text("No kin details available");
+//     }
 
-    keyValue(
-      doc,
-      "Name",
-      `${deceased.salutation} ${deceased.givenName} ${deceased.surname}`
-    );
-    keyValue(doc, "Date of Death", deceased.dateOfDeath);
-    keyValue(doc, "Address", deceased.address);
-    keyValue(doc, "Reason", deceased.deceasedPassedReason);
-    keyValue(doc, "Current Location", deceased.deceasedNow);
-    keyValue(doc, "Battery Powered Devices", deceased.batterypowereddevices);
-    keyValue(doc, "Regular Doctor Address", deceased.regulardoctoraddress);
+//     drawDivider();
 
-    doc.end();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to generate PDF" });
-  }
-};
+//     /* =========================
+//        DECEASED DETAILS
+//     ========================= */
+//     sectionTitle("Deceased Details");
 
-export default router;
+//     if (deceased) {
+//       keyValue(
+//         "Name",
+//         `${deceased.salutation} ${deceased.givenName} ${deceased.surname}`
+//       );
+//       keyValue("Date of Death", deceased.dateOfDeath);
+//       keyValue("Address", deceased.address);
+//       keyValue("Reason", deceased.deceasedPassedReason);
+//       keyValue("Current Location", deceased.deceasedNow);
+//       keyValue(
+//         "Battery Powered Devices",
+//         deceased.batterypowereddevices
+//       );
+//       keyValue(
+//         "Regular Doctor Address",
+//         deceased.regulardoctoraddress
+//       );
+//     } else {
+//       doc.fontSize(11).text("No deceased details available");
+//     }
+
+//     doc.end();
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Failed to generate PDF" });
+//   }
+// };
+
+// export default router;

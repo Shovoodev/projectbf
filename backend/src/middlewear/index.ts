@@ -47,6 +47,7 @@ export const isAuthenticated = async (
     const response = (req.identity = {
       _id: user._id,
       email: user.email,
+      reference: user.reference,
     });
     console.log(response);
     next();

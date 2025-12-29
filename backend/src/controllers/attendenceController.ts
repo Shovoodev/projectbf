@@ -1,8 +1,7 @@
 import express from "express";
 import { attendenceData } from "../data/attandenceData";
 import { AuthenticatedRequest } from "../lib/types";
-import { createResponseAttandence } from "../db/attendence";
-import { getAttendenceByUserId } from "../db/user";
+import { FormResponseModel } from "../db/attendence";
 
 export const getAttendenceData = async (
   req: express.Request,
@@ -28,39 +27,67 @@ export const getAttendenceAnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    console.log("RAW BODY:", req.body);
+    const {
+      stationery,
+      bodypreparation,
+      coffin,
+      flowers,
+      urn,
+      collectionOfUrn,
+      totalPriceImpact = 0,
+    } = req.body;
 
-    const { responses } = req.body;
+    let existingResponse = await FormResponseModel.findOne({
+      userid: req.identity._id,
+      reference: req.identity.reference,
+    });
 
-    if (!responses || !Array.isArray(responses)) {
-      return res.status(400).json({ message: "responses array missing" });
-    }
+    let savedResponse;
 
-    console.log("RESPONSES:", responses);
-    console.log("QUESTION TEXT:", responses[0]?.questionText);
+    if (existingResponse) {
+      existingResponse.stationery = stationery;
+      existingResponse.bodyPreparation = bodypreparation;
+      existingResponse.coffin = coffin;
+      existingResponse.flowers = flowers;
+      existingResponse.urn = urn;
+      existingResponse.collectionOfUrn = collectionOfUrn;
+      existingResponse.totalPriceImpact = totalPriceImpact;
 
-    if (!responses[0]?.questionText) {
-      return res.status(400).json({
-        message: "questionText is required inside responses",
+      savedResponse = await existingResponse.save();
+    } else {
+      savedResponse = await FormResponseModel.create({
+        userid: req.identity._id,
+        reference: req.identity.reference,
+        email: req.identity.email,
+        stationery,
+        bodypreparation,
+        coffin,
+        flowers,
+        urn,
+        collectionOfUrn,
+        totalPriceImpact,
+        status: "draft",
       });
     }
 
-    const attendence = await getAttendenceByUserId(req.identity._id);
-
-    if (!attendence) {
-      return res.status(404).json({ message: "Attendance not found" });
-    }
-
-    const entry = await createResponseAttandence({
+    const allResponses = await FormResponseModel.find({
       userid: req.identity._id,
-      email: attendence.email,
-      reference: attendence.reference,
-      responses,
     });
 
-    return res.status(201).json({
+    const totalPrice = allResponses.reduce(
+      (sum, r) => sum + (r.totalPriceImpact || 0),
+      0
+    );
+
+    await FormResponseModel.updateMany(
+      { userid: req.identity._id },
+      { totalPrice }
+    );
+
+    return res.status(200).json({
       message: "Attendance response saved",
-      data: entry,
+      data: savedResponse,
+      totalPrice,
     });
   } catch (error) {
     console.error("ERROR:", error);

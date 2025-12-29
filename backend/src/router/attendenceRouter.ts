@@ -6,9 +6,9 @@ import {
 import { isAuthenticated } from "../middlewear";
 
 export default (router: express.Router) => {
-  router.get("/attendenceservicecremention", getAttendenceData);
+  router.get("/newattendingservicecremation", getAttendenceData);
   router.post(
-    "/attendenceservicecrementionanswers",
+    "/newattendingservicecremationanswers",
     isAuthenticated,
     getAttendenceAnswers
   );

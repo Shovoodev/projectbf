@@ -15,6 +15,8 @@ export default {
       fontFamily: {
         display: ["'Playfair Display'", "serif"],
         body: ["'Lato'", "sans-serif"],
+        serif: ["Playfair Display", "serif"],
+        sans: ["Inter", "sans-serif"],
       },
     },
   },
