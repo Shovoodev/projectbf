@@ -21,6 +21,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: var(--font-body);
     @apply bg-white text-gray-800 antialiased;
@@ -98,7 +101,7 @@
 
   /* Typography for Team Page */
   .heading-hero {
-    @apply text-5xl md:text-6xl font-display font-bold text-gray-800 mb-2;
+    @apply text-6xl md:text-6xl font-display font-bold text-gray-800 mb-2;
   }
 
   .heading-section {

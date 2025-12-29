@@ -17,6 +17,8 @@ import Testimonials from "./pages/Testimonials";
 import Refund_Policy from "./pages/Refund_Policy";
 import Coffins from "./pages/Coffins";
 import Disclaimer from "./pages/Disclaimer";
+import Ash_Storage from "./pages/Ash_Storage";
+import Expansion from "./pages/Expansion";
 
 export const routes = createBrowserRouter([
   {
@@ -82,6 +84,14 @@ export const routes = createBrowserRouter([
       {
         path: "/disclaimer",
         element: <Disclaimer />,
+      },
+      {
+        path: "/ash-storage",
+        element: <Ash_Storage />,
+      },
+      {
+        path: "/expansion",
+        element: <Expansion />,
       },
     ],
   },
