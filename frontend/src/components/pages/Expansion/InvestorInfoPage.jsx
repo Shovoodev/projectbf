@@ -11,7 +11,7 @@ const TOCLink = ({ href, label }) => (
       className="flex items-center text-gray-700 hover:text-black transition-colors duration-200"
     >
       <span className="w-1.5 h-1.5 bg-black rounded-full mr-2"></span>
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-lg font-medium">{label}</span>
     </a>
   </li>
 );
@@ -20,12 +20,10 @@ const TOCLink = ({ href, label }) => (
 const TOCSection = () => (
   <section className="bg-white">
     <div>
-      <img className="w-full" src={img} alt="" />
+      <img className="w-full rounded-lg" src={img} alt="" />
     </div>
-    <div className="section-container mx-auto">
-      <h2 className="text-3xl font-display font-bold text-center text-gray-900 mb-12">
-        Table of contents
-      </h2>
+    <div className="py-16">
+      <h2 className="heading-lg text-center">Table of contents</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Column 1 */}
         <div className="border-2 border-black rounded-xl p-6">
@@ -111,14 +109,14 @@ const FeatureBox = ({ title, text, dark = false }) => (
     }`}
   >
     <h3
-      className={`font-display font-bold text-lg mb-3 ${
+      className={`font-display font-bold text-2xl mb-3 ${
         dark ? "text-white" : "text-gray-900"
       }`}
     >
       {title}
     </h3>
     <div
-      className={`font-body text-sm leading-relaxed ${
+      className={`font-body text-lg leading-relaxed ${
         dark ? "text-gray-300" : "text-gray-600"
       }`}
       dangerouslySetInnerHTML={{ __html: text }}
@@ -129,10 +127,8 @@ const FeatureBox = ({ title, text, dark = false }) => (
 // --- Component for a full Content Section (Boxes on left, Image on right) ---
 const ContentSection = ({ id, title, features, imageSrc, imageAlt }) => (
   <section id={id} className="py-16 bg-white scroll-mt-8">
-    <div className="section-container mx-auto">
-      <h2 className="text-3xl font-display font-bold text-gray-900 mb-12">
-        {title}
-      </h2>
+    <div className="">
+      <h2 className="heading-lg">{title}</h2>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
         {/* Left Side: Feature Boxes Grid */}
         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -200,7 +196,7 @@ const InvestorInfoPage = () => {
   ];
 
   return (
-    <div className="min-h-screen ">
+    <div className="">
       {/* Table of Contents */}
       <TOCSection />
 
@@ -216,10 +212,8 @@ const InvestorInfoPage = () => {
       {/* 2. Vision & Mission Section */}
       {/* Note: I've adjusted the FeatureBox grid component slightly here to handle the 'colSpan' for Core Values */}
       <section id="vision-mission" className="py-16 bg-white scroll-mt-8">
-        <div className="section-container  mx-auto">
-          <h2 className="text-3xl font-display font-bold text-gray-900 mb-12">
-            Vision & Mission
-          </h2>
+        <div className="">
+          <h2 className="heading-lg">Vision & Mission</h2>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
             <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
               <FeatureBox {...visionMissionFeatures[0]} />
