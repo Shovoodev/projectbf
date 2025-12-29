@@ -4,6 +4,7 @@ import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
 
 import { useNavigate, useParams } from "react-router";
+import CORE from "../../components/common/Reusables";
 const KinDetailsPage = () => {
   const navigate = useNavigate();
   const { userid } = useParams();
@@ -35,7 +36,7 @@ const KinDetailsPage = () => {
 
       fd.append("userid", userid);
 
-      const res = await fetch("http://localhost:4000/kindetiales", {
+      const res = await fetch(`${CORE}/kindetiales`, {
         method: "POST",
         credentials: "include",
         body: fd,
@@ -63,7 +64,7 @@ const KinDetailsPage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await fetch("http://localhost:4000/nexttokeen", {
+        const res = await fetch(`${CORE}/nexttokeen`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch questions");

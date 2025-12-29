@@ -3,6 +3,7 @@ import InputField from "../../components/InputField";
 import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
 import { useNavigate, useParams } from "react-router";
+import CORE from "../../components/common/Reusables";
 
 const DeceasedPersonPage = () => {
   const navigate = useNavigate();
@@ -30,17 +31,14 @@ const DeceasedPersonPage = () => {
         ...formValues,
       };
 
-      const res = await fetch(
-        "http://localhost:4000/desencepersondetailsanswer",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${CORE}/desencepersondetailsanswer`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) {
         const text = await res.text();
@@ -63,7 +61,7 @@ const DeceasedPersonPage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await fetch("http://localhost:4000/desencepersondetails", {
+        const res = await fetch(`${CORE}/desencepersondetails`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch questions");

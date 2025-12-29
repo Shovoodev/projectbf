@@ -3,6 +3,7 @@ import InputField from "../../components/InputField";
 import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
 import { useNavigate, useParams } from "react-router";
+import CORE from "../../components/common/Reusables";
 
 const AttendenceCrementionPage = () => {
   const BASE_PRICE = 4400;
@@ -92,12 +93,9 @@ const AttendenceCrementionPage = () => {
   useEffect(() => {
     const fetchStepData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:4000/newattendingservicecremation",
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${CORE}/newattendingservicecremation`, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch data");

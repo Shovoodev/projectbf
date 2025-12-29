@@ -36,3 +36,6 @@ export function Select({ label, value, options, onChange }) {
     </div>
   );
 }
+
+const CORE = "https://blacktulip.vercel.app/";
+export default CORE;
