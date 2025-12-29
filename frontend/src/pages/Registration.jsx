@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import Input from "../components/common/Input";
+import CORE from "../components/common/Reusables";
 
 const Registrarion = () => {
   const [data, setData] = useState({ email: "", password: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch("http://localhost:4000/blacktulipauth/newuser", {
+    await fetch(`${CORE}/blacktulipauth/newuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

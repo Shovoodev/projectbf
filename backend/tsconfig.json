@@ -6,5 +6,5 @@
       "sourceMap": true,
       "noImplicitAny": true
     },
-    "include": ["src/**/*", "users.ts"]
+    "include": ["src/**/*", "users.ts", "src", "src/types"]
   }

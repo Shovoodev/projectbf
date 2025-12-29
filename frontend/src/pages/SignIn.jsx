@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/common/Input";
 import { useUser } from "../components/hooks/useUser";
+import CORE from "../components/common/Reusables";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,7 @@ const SignIn = () => {
     await e.preventDefault();
     console.log(userData);
     setIsLoading(true);
-    await fetch("http://localhost:4000/blacktulipauth/login", {
+    await fetch(`${CORE}/blacktulipauth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
