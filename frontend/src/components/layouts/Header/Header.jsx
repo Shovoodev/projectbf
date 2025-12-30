@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { FaBars, FaChevronDown, FaPhone, FaSeedling } from "react-icons/fa6";
-
+import logo from "./btf-logo.png";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
@@ -15,29 +15,21 @@ const Header = () => {
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50 font-body">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8 py-4">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-26">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <FaSeedling className="text-3xl text-primary" />
-            <div className="hidden sm:block">
-              <span className="block text-lg font-bold tracking-widest uppercase leading-none font-display">
-                Black Tulip
-              </span>
-              <span className="block text-xs tracking-[0.2em] uppercase text-gray-500">
-                Funerals
-              </span>
-            </div>
+          <Link to="/" className="">
+            <img className="h-[130px]" src={logo} alt="" />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8 items-center text-sm font-medium text-gray-700">
+          <nav className="hidden lg:flex space-x-8 items-center text-lg font-medium text-gray-700">
             <Link to="/" className="hover:text-primary">
               Home
             </Link>
 
             {/* Packages Dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-1 hover:text-primary">
+              <button className=" flex items-center gap-1 hover:text-primary">
                 Packages <FaChevronDown className="text-[10px]" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
@@ -74,13 +66,49 @@ const Header = () => {
               </div>
             </div>
 
-            <Link to="/options" className="hover:text-primary">
-              Options
-            </Link>
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-primary">
+                Options <FaChevronDown className="text-[10px]" />
+              </button>
+              <div className="absolute top-full left-0 mt-2 w-40 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <Link
+                  to="https://funeralstationery.com.au/"
+                  target="_blank"
+                  className="dropdown-item"
+                >
+                  Stationery
+                </Link>
+                <Link to="/coffins" className="dropdown-item">
+                  Coffins
+                </Link>
+                <Link to="/music" className="dropdown-item">
+                  Music
+                </Link>
+                <Link to="/chepels" className="dropdown-item">
+                  Chapels
+                </Link>
+                <Link to="/live-music" className="dropdown-item">
+                  Live Music
+                </Link>
+              </div>
+            </div>
 
-            <Link to="/info" className="hover:text-primary">
-              Info
-            </Link>
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-primary">
+                Info <FaChevronDown className="text-[10px]" />
+              </button>
+              <div className="absolute top-full left-0 mt-2 w-40 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <Link to="/resources" target="_blank" className="dropdown-item">
+                  Resources
+                </Link>
+                <Link to="/upcoming-funerals" className="dropdown-item">
+                  Upcoming Funerals
+                </Link>
+                <Link to="/music" className="dropdown-item">
+                  Blog
+                </Link>
+              </div>
+            </div>
           </nav>
 
           {/* Right Side */}
@@ -131,10 +159,16 @@ const Header = () => {
               Packages <FaChevronDown />
             </button>
             {openMobileDropdown === "packages" && (
-              <div className="ml-4 mb-4 space-y-2">
-                <Link to="/packages/basic">Basic Package</Link>
-                <Link to="/packages/standard">Standard Package</Link>
-                <Link to="/packages/premium">Premium Package</Link>
+              <div className="ml-4 mb-4 flex flex-col space-y-2">
+                <Link to="/packages/basic" className="block">
+                  Basic Package
+                </Link>
+                <Link to="/packages/standard" className="block">
+                  Standard Package
+                </Link>
+                <Link to="/packages/premium" className="block">
+                  Premium Package
+                </Link>
               </div>
             )}
 
@@ -146,20 +180,55 @@ const Header = () => {
               BTF <FaChevronDown />
             </button>
             {openMobileDropdown === "btf" && (
-              <div className="ml-4 mb-4 space-y-2">
-                <Link to="/team">Team</Link>
-                <Link to="/contact">Contact</Link>
-                <Link to="/news">News</Link>
+              <div className="ml-4 mb-4 flex flex-col space-y-2">
+                <Link to="/team" className="block">
+                  Team
+                </Link>
+                <Link to="/contact" className="block">
+                  Contact
+                </Link>
+                <Link to="/news" className="block">
+                  News
+                </Link>
               </div>
             )}
 
-            <Link to="/options" className="block text-lg mb-4">
-              Options
-            </Link>
-            <Link to="/info" className="block text-lg mb-6">
-              Info
-            </Link>
-
+            {/* Options */}
+            <button
+              onClick={() => toggleMobileDropdown("options")}
+              className="flex justify-between w-full text-lg font-medium mb-2"
+            >
+              Options <FaChevronDown />
+            </button>
+            {openMobileDropdown === "options" && (
+              <div className="ml-4 mb-4 flex flex-col space-y-2">
+                <Link to="/options/option-one" className="block">
+                  Option One
+                </Link>
+                <Link to="/options/option-two" className="block">
+                  Option Two
+                </Link>
+              </div>
+            )}
+            <button
+              onClick={() => toggleMobileDropdown("info")}
+              className="flex justify-between w-full text-lg font-medium mb-2"
+            >
+              Info <FaChevronDown />
+            </button>
+            {openMobileDropdown === "info" && (
+              <div className="ml-4 mb-4 flex flex-col space-y-2">
+                <Link to="/resources" className="block">
+                  Resources
+                </Link>
+                <Link to="/options/option-two" className="block">
+                  Upcoming Funerals
+                </Link>
+                <Link to="/options/option-two" className="block">
+                  Blog
+                </Link>
+              </div>
+            )}
             <a href="tel:1300110031" className="btn-primary">
               <FaPhone className="mr-2" /> Call Now
             </a>

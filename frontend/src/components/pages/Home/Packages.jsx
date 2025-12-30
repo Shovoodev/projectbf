@@ -13,7 +13,7 @@ const PackageCard = ({ img, title, desc, price }) => (
     </div>
     <div className="p-8 flex-1 flex flex-col items-center text-center">
       <h3
-        className="font-display text-3xl font-bold mb-4 text-gray-900"
+        className="text-4xl font-bold mb-4 text-gray-900"
         dangerouslySetInnerHTML={{ __html: title }}
       ></h3>
       <p className="text-sm text-gray-600 mb-6 leading-relaxed flex-1">
