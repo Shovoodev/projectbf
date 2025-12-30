@@ -117,6 +117,7 @@ export const routes = createBrowserRouter([
         path: "/login",
         element: <SignIn />,
       },
+
       {
         path: "/packages/standard/register",
         element: <Registrarion />,
