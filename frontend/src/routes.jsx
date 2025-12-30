@@ -19,6 +19,13 @@ import Coffins from "./pages/Coffins";
 import Disclaimer from "./pages/Disclaimer";
 import Ash_Storage from "./pages/Ash_Storage";
 import Expansion from "./pages/Expansion";
+// from Toukirul vai
+import SignIn from "./pages/SignIn";
+import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
+import Registrarion from "./pages/Registration";
+import KinDetailsPage from "./pages/packages/KinDetailsPage";
+import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
+import AttendenceCrementionPageFinal from "./pages/packages/AttendenceCrementionPageFinal";
 
 export const routes = createBrowserRouter([
   {
@@ -92,6 +99,39 @@ export const routes = createBrowserRouter([
       {
         path: "/expansion",
         element: <Expansion />,
+      },
+      // from Toukirul
+      {
+        path: "/:userid/packages/basic",
+        element: <AttendenceCrementionPage />,
+      },
+      {
+        path: "/:userid/kindetailpage",
+        element: <KinDetailsPage />,
+      },
+      {
+        path: "/:userid/deceasedpersondetails",
+        element: <DeceasedPersonPage />,
+      },
+      {
+        path: "/login",
+        element: <SignIn />,
+      },
+      {
+        path: "/packages/standard/register",
+        element: <Registrarion />,
+      },
+      {
+        path: "/packages/premium/register",
+        element: <Registrarion />,
+      },
+      {
+        path: "/packages/basic/register",
+        element: <Registrarion />,
+      },
+      {
+        path: "/packages/attendencecremention",
+        element: <AttendenceCrementionPageFinal />,
       },
     ],
   },
