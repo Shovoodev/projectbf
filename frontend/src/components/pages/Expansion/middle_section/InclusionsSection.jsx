@@ -1,4 +1,7 @@
-import React from "react";
+import img1 from "./images/inclusions/inclsn_1-1-1.avif";
+import img2 from "./images/inclusions/inclsn_1.avif";
+import img3 from "./images/inclusions/inclsn_3.avif";
+import img4 from "./images/inclusions/inclsn_4.avif";
 
 const InclusionCard = ({ imageSrc, title, description }) => (
   <div className="flex flex-col items-center text-center group">
@@ -25,29 +28,25 @@ const InclusionsSection = () => {
   const inclusions = [
     {
       title: "Chapels",
-      imageSrc:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/inclsn_1-1-1.jpg",
+      imageSrc: img1,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
     },
     {
       title: "Live Streaming",
-      imageSrc:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/inclsn_3.jpg",
+      imageSrc: img2,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
     },
     {
       title: "Urns",
-      imageSrc:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/inclsn_1.avif",
+      imageSrc: img3,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
     },
     {
       title: "Stationary",
-      imageSrc:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/inclsn_4.avif",
+      imageSrc: img4,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
     },
