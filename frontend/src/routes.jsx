@@ -2,30 +2,34 @@ import { createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
 
+import Ash_Storage from "./pages/Ash_Storage";
 import Chapels from "./pages/Chapels";
+import Coffins from "./pages/Coffins";
 import Contact from "./pages/Contact";
+import Disclaimer from "./pages/Disclaimer";
+import Expansion from "./pages/Expansion";
+import Faq from "./pages/Faq";
 import Home from "./pages/Home";
+import LandingPage from "./pages/Landing-Page";
 import LiveMusic from "./pages/LiveMusic";
 import MusicSection from "./pages/Music";
 import News from "./pages/News";
+import NewsDetails from "./pages/News[id]/NewsDetails";
+import Refund_Policy from "./pages/Refund_Policy";
 import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
-import LandingPage from "./pages/Landing-Page";
-import Faq from "./pages/Faq";
 import Testimonials from "./pages/Testimonials";
-import Refund_Policy from "./pages/Refund_Policy";
-import Coffins from "./pages/Coffins";
-import Disclaimer from "./pages/Disclaimer";
-import Ash_Storage from "./pages/Ash_Storage";
-import Expansion from "./pages/Expansion";
 // from Toukirul vai
+import AgreementForm from "./pages/Agreement";
+import Pay_now from "./pages/Pay_now";
+import Registrarion from "./pages/Registration";
 import SignIn from "./pages/SignIn";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
-import Registrarion from "./pages/Registration";
-import KinDetailsPage from "./pages/packages/KinDetailsPage";
-import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import AttendenceCrementionPageFinal from "./pages/packages/AttendenceCrementionPageFinal";
+import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
+import KinDetailsPage from "./pages/packages/KinDetailsPage";
+import Signature from "./pages/Signature";
 
 export const routes = createBrowserRouter([
   {
@@ -43,6 +47,10 @@ export const routes = createBrowserRouter([
       {
         path: "/news",
         element: <News />,
+      },
+      {
+        path: "/news/:id",
+        element: <NewsDetails />,
       },
       {
         path: "/contact",
@@ -99,6 +107,18 @@ export const routes = createBrowserRouter([
       {
         path: "/expansion",
         element: <Expansion />,
+      },
+      {
+        path: "/agreement",
+        element: <AgreementForm />,
+      },
+      {
+        path: "/pay-now",
+        element: <Pay_now />,
+      },
+      {
+        path: "/signature",
+        element: <Signature />,
       },
       // from Toukirul
       {
