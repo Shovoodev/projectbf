@@ -111,19 +111,16 @@ sharp input.webp --toFormat png -o output.png
 
 ---
 
-## 🧠 What to Tell the Client (Professional Reply)
-
-You can reply:
-
-> “No worries. We’ll deliver images in JPEG/PNG format for compatibility.
-> Internally we used modern formats for optimization, but final assets will be converted to standard formats as requested.”
-
-This reassures them without sounding defensive.
-
----
+Freelancing
 
 ## 🏆 My Recommendation
 
+
 * **Vite / Webpack plugin** → best long-term
 * **Bulk convert** → fastest if deadline is close
+
+
+
+
+
 

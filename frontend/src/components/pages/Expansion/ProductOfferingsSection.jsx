@@ -18,7 +18,7 @@ const ProductOfferingsSection = () => {
   const logos = [afterLifeLogo, award2024, funeraLogo, image2023];
 
   return (
-    <section id="product-offerings" className="py-16 bg-white scroll-mt-24">
+    <section id="product-offerings" className="section-padding bg-white">
       <div className="mx-auto">
         {/* --- HEADER --- */}
         <div className="mb-12">

@@ -1,6 +1,6 @@
 import img from "./images/photo-one.jpg";
-import img2 from "./images/photo-two.jpg";
 import img3 from "./images/photo-three.avif";
+import img2 from "./images/photo-two.jpg";
 import Organisation_Structure from "./Organisation_Structure";
 
 // --- Component for a single link in the Table of Contents ---
@@ -211,10 +211,7 @@ const InvestorInfoPage = () => {
 
       {/* 2. Vision & Mission Section */}
       {/* Note: I've adjusted the FeatureBox grid component slightly here to handle the 'colSpan' for Core Values */}
-      <section
-        id="vision-mission"
-        className="section-padding bg-white scroll-mt-8"
-      >
+      <section id="vision-mission" className="section-padding bg-white">
         <div className="">
           <h2 className="heading-lg">Vision & Mission</h2>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">

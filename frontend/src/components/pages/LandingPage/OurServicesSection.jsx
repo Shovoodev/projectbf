@@ -1,24 +1,26 @@
 import React from "react";
+import img1 from "./images/service/Attending-Service-Cremation.png";
+import img2 from "./images/service/Viewing-Cremation.png";
+import img3 from "./images/service/No-Service-Direct-Cremation.png";
+
 import { FaPhone, FaArrowRight } from "react-icons/fa6";
 
 const OurServicesSection = () => {
   const services = [
     {
       title: "No Service Direct Cremation",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/No-Service-Direct-Cremation.png",
+      image: img1,
       alt: "Wicker coffin with flowers for direct cremation",
     },
     {
       title: "Viewing & Cremation",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Viewing-Cremation.png",
+      image: img2,
       alt: "Floral arrangement on top of the coffin for viewing and cremation",
     },
     {
       title: "Attending Service Cremation",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Attending-Service-Cremation.png",
+      image: img3,
+
       alt: "Coffin with floral arrangement in a cremation service",
     },
   ];

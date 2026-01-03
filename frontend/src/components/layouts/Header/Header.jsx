@@ -116,9 +116,12 @@ const Header = () => {
           </nav>
 
           {/* Right Side */}
-          <div className="flex items-center btn-primary">
-            <a href="tel:1300110031" className=" flex items-center">
-              <FaPhone className="mr-2 " /> 1300 11 0031
+          <div className="flex items-center">
+            <a
+              href="tel:1300110031"
+              className="hidden sm:inline-flex items-center px-4 py-2 border border-gray-300 rounded-full text-sm font-bold text-gray-900 hover:bg-gray-50"
+            >
+              <FaPhone className="mr-2 text-primary" /> 1300 11 0031
             </a>
 
             <button
@@ -243,12 +246,13 @@ const Header = () => {
                 </Link>
               </div>
             )}
-            <a href="tel:1300110031" className="btn-primary">
-              <FaPhone className="mr-2" /> Call Now
-            </a>
+
             <Link to="/agreement" className="block text-lg font-bold mb-6">
               Agreement
             </Link>
+            <a href="tel:1300110031" className="btn-primary">
+              <FaPhone className="mr-2" /> Call Now
+            </a>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import img from "./images/funeral-arrangements.jpeg";
+
 import { FaArrowRight, FaCircleCheck, FaPhone } from "react-icons/fa6";
 
 const Hero = () => {
@@ -15,7 +17,7 @@ const Hero = () => {
         <img
           alt="Funeral service with flowers on coffin"
           className="w-full h-full object-cover"
-          src="https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/funeral-arrangements.jpeg"
+          src={img}
         />
         {/* Dark Overlay for Text Readability */}
         <div className="absolute inset-0 bg-black/60"></div>

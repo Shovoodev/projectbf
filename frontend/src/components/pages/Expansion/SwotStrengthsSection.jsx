@@ -1,5 +1,4 @@
-import React from "react";
-
+import img from "./images/swot_img.jpg";
 // Card Component with "dark" mode support
 const StrengthCard = ({ title, text, dark }) => (
   <div
@@ -52,7 +51,10 @@ const SwotStrengthsSection = () => {
   ];
 
   return (
-    <section id="swot-strengths" className="py-16 bg-white scroll-mt-24">
+    <section
+      id="swot-strengths"
+      className="section-padding bg-white"
+    >
       <div className="mx-auto">
         {/* Section Heading */}
         <h2 className="heading-lg">SWOT Analysis: Strengths</h2>
@@ -73,7 +75,7 @@ const SwotStrengthsSection = () => {
           {/* --- RIGHT SIDE: IMAGE (Takes 2/5 width - Narrower) --- */}
           <div className="lg:col-span-2 rounded-2xl overflow-hidden shadow-xl h-full min-h-[500px]">
             <img
-              src="https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/swot_img.jpg"
+              src={img}
               alt="Black Tulip Funerals Team"
               className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
             />

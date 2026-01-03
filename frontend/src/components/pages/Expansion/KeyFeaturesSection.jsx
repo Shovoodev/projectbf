@@ -52,7 +52,10 @@ const KeyFeaturesSection = () => {
   ];
 
   return (
-    <section id="key-features" className="py-16 bg-white scroll-mt-24">
+    <section
+      id="key-features"
+      className="section-padding bg-white "
+    >
       <div className="">
         {/* Section Heading */}
         <h2 className="heading-lg font-semibold">Key Features</h2>

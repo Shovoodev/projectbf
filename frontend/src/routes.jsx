@@ -129,6 +129,7 @@ export const routes = createBrowserRouter([
         path: "/:userid/kindetailpage",
         element: <KinDetailsPage />,
       },
+
       {
         path: "/:userid/deceasedpersondetails",
         element: <DeceasedPersonPage />,
