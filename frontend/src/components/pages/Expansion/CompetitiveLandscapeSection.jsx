@@ -35,7 +35,7 @@ const MarketShareTable = () => (
 
 const CompetitiveLandscapeSection = () => {
   return (
-    <section id="competitive-landscape" className="py-16 bg-white scroll-mt-24">
+    <section id="competitive-landscape" className="section-padding bg-white ">
       <div className="">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* --- LEFT SIDE: CONTENT & TABLE --- */}

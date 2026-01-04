@@ -45,7 +45,7 @@ const TeamCard = ({ member }) => {
         <div className="w-full md:w-[40%] flex-shrink-0">
           <img
             alt={member.name}
-            className={`w-full h-70 object-cover rounded shadow-md ${
+            className={`w-full  object-cover rounded shadow-md ${
               isDark ? "border border-gray-700" : ""
             }`}
             src={member.imgLarge}

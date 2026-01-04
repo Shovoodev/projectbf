@@ -1,6 +1,6 @@
 import img from "./images/photo-one.jpg";
-import img2 from "./images/photo-two.jpg";
 import img3 from "./images/photo-three.avif";
+import img2 from "./images/photo-two.jpg";
 import Organisation_Structure from "./Organisation_Structure";
 
 // --- Component for a single link in the Table of Contents ---
@@ -27,7 +27,7 @@ const TOCSection = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Column 1 */}
         <div className="border-2 border-black rounded-xl p-6">
-          <ul>
+          <ul className="text-left">
             <TOCLink href="#business-overview" label="Business Overview" />
             <TOCLink href="#vision-mission" label="Vision & Mission" />
             <TOCLink
@@ -53,7 +53,7 @@ const TOCSection = () => (
 
         {/* Column 2 */}
         <div className="border-2 border-black rounded-xl p-6">
-          <ul>
+          <ul className="text-left">
             <TOCLink
               href="#competitive-advantage"
               label="BTF's Competitive Advantage"
@@ -102,14 +102,14 @@ const TOCSection = () => (
 // --- Component for a single feature box within a section ---
 const FeatureBox = ({ title, text, dark = false }) => (
   <div
-    className={`p-6 rounded-xl border-2 ${
+    className={`p-6 rounded-xl border-2 text-center ${
       dark
         ? "bg-black border-black text-white"
         : "bg-white border-gray-200 text-gray-900"
     }`}
   >
     <h3
-      className={`font-display font-bold text-2xl mb-3 ${
+      className={`font-display font-bold text-2xl mb-3  ${
         dark ? "text-white" : "text-gray-900"
       }`}
     >
@@ -126,7 +126,7 @@ const FeatureBox = ({ title, text, dark = false }) => (
 
 // --- Component for a full Content Section (Boxes on left, Image on right) ---
 const ContentSection = ({ id, title, features, imageSrc, imageAlt }) => (
-  <section id={id} className="py-16 bg-white scroll-mt-8">
+  <section id={id} className="section-padding bg-white scroll-mt-8">
     <div className="">
       <h2 className="heading-lg">{title}</h2>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
@@ -211,7 +211,7 @@ const InvestorInfoPage = () => {
 
       {/* 2. Vision & Mission Section */}
       {/* Note: I've adjusted the FeatureBox grid component slightly here to handle the 'colSpan' for Core Values */}
-      <section id="vision-mission" className="py-16 bg-white scroll-mt-8">
+      <section id="vision-mission" className="section-padding bg-white">
         <div className="">
           <h2 className="heading-lg">Vision & Mission</h2>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">

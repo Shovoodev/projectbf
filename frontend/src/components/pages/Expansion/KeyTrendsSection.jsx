@@ -1,5 +1,4 @@
-import React from "react";
-import img from "./images/key_trnd_img.avif";
+import img from "./images/key-trends.jpg";
 const TrendCard = ({ title, text }) => (
   <div className="bg-gray-50 border border-gray-200 p-6 rounded-xl hover:shadow-md transition-shadow duration-300 h-full flex flex-col justify-center">
     <h5 className="font-display font-bold text-gray-900 text-2xl mb-3  pb-2 inline-block">
@@ -30,7 +29,7 @@ const KeyTrendsSection = () => {
   ];
 
   return (
-    <section id="trend-impact-section" className="py-16 bg-white scroll-mt-24">
+    <section id="trend-impact-section" className="section-padding bg-white ">
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* --- LEFT SIDE: IMAGE --- */}

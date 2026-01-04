@@ -11,7 +11,7 @@ const CeoProfile = () => {
         <div className="h-px bg-gray-400 w-1/4"></div>
       </div>
 
-      <section className="flex flex-col md:flex-row gap-10 items-start">
+      <section className="flex flex-col md:flex-row gap-10 items-center">
         <div className="w-full md:w-1/3 lg:w-1/4 flex-shrink-0">
           <img
             alt="Scott Harris Portrait"
@@ -21,10 +21,10 @@ const CeoProfile = () => {
         </div>
         <div className="w-full md:w-2/3 lg:w-3/4 space-y-4">
           <div className="space-y-1">
-            <p className="text-gray-500 font-light text-lg tracking-wide">
+            <p className="text-gray-500 text-center md:text-left font-light text-lg tracking-wide">
               25+ Years of Compassionate Funeral Leadership
             </p>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900">
+            <h2 className="text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900">
               Scott Harris
             </h2>
             <p className="text-lg font-bold text-gray-700">

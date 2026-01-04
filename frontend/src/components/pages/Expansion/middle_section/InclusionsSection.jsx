@@ -1,6 +1,6 @@
-import img1 from "./images/inclusions/inclsn_1-1-1.avif";
+import img1 from "./images/inclusions/inclsn_1-1-1.jpg";
 import img2 from "./images/inclusions/inclsn_1.avif";
-import img3 from "./images/inclusions/inclsn_3.avif";
+import img3 from "./images/inclusions/inclsn_3.jpg";
 import img4 from "./images/inclusions/inclsn_4.avif";
 
 const InclusionCard = ({ imageSrc, title, description }) => (

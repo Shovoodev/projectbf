@@ -1,9 +1,9 @@
 import React from "react";
 
-import img1 from "./images/CompetitiveAdvantageSection/advntg_1.avif";
-import img2 from "./images/CompetitiveAdvantageSection/advntg_2.avif";
-import img3 from "./images/CompetitiveAdvantageSection/advntg_3.avif";
-import img4 from "./images/CompetitiveAdvantageSection/advntg_4.avif";
+import img1 from "./images/CompetitiveAdvantageSection/advntg_1.jpg";
+import img2 from "./images/CompetitiveAdvantageSection/advntg_2.jpg";
+import img3 from "./images/CompetitiveAdvantageSection/advntg_3.jpg";
+import img4 from "./images/CompetitiveAdvantageSection/advntg_4.jpg";
 const AdvantageCard = ({ imageSrc, title, text }) => (
   <div className="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 h-full group">
     <div className=" mb-6  overflow-hidden  border-4 border-gray-50  transition-colors duration-300">
@@ -50,7 +50,7 @@ const CompetitiveAdvantageSection = () => {
   return (
     <section
       id="competitive-advantage-section"
-      className="py-16 px-4 bg-gray-50 scroll-mt-24"
+      className="section-padding bg-gray-50 "
     >
       <div className="">
         {/* --- HEADING --- */}

@@ -12,7 +12,7 @@ const InfoCard = ({ title, text }) => (
 
 const IndustryOverviewSection = () => {
   return (
-    <section id="industry-overview" className="py-16 bg-white scroll-mt-24">
+    <section id="industry-overview" className="section-padding bg-white">
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* --- LEFT SIDE: FEATURE IMAGE --- */}

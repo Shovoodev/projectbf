@@ -40,7 +40,7 @@ const Are_you_aware = () => {
     <section id="are-you-aware" className="py-16 bg-white scroll-mt-24">
       <div className="mx-auto">
         {/* --- HEADING --- */}
-        <h2 className="heading-lg">SAre you aware?</h2>
+        <h2 className="heading-lg">Are you aware?</h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* --- LEFT SIDE: CARDS STACK --- */}
