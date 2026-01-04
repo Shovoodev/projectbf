@@ -82,7 +82,9 @@ Text: Montserrat (Normal) */
     @apply bg-primary text-white px-8 py-3 rounded-full text-lg font-bold font-body
            uppercase tracking-wide hover:opacity-80 transition-opacity flex items-center justify-center;
   }
-
+  .btn-enquire {
+    @apply flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200;
+  }
   .btn-sm {
     @apply px-8 py-2  font-body;
   }

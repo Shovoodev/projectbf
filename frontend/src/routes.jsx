@@ -30,6 +30,7 @@ import AttendenceCrementionPageFinal from "./pages/packages/AttendenceCremention
 import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import Signature from "./pages/Signature";
+import Btf from "./pages/Btf";
 
 export const routes = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ export const routes = createBrowserRouter([
       {
         path: "/signature",
         element: <Signature />,
+      },
+      {
+        path: "/about-btf",
+        element: <Btf />,
       },
       // from Toukirul
       {

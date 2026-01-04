@@ -50,9 +50,12 @@ const Header = () => {
 
             {/* BTF Dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-1 hover:text-primary">
+              <a
+                href="/about-btf"
+                className="flex items-center gap-1 hover:text-primary"
+              >
                 BTF <FaChevronDown className="text-[10px]" />
-              </button>
+              </a>
               <div className="absolute top-full left-0 mt-2 w-40 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                 <Link to="/team" className="dropdown-item">
                   Team

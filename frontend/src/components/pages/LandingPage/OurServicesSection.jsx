@@ -82,7 +82,7 @@ const OurServicesSection = () => {
           {/* Button */}
           <a
             href="https://blacktulipfunerals.com.au/contact-us/"
-            className="flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200"
+            className="btn-enquire"
           >
             Enquire Now <FaArrowRight />
           </a>
