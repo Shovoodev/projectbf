@@ -3,6 +3,9 @@ import NotificationChecklistSection from "../components/pages/Resources/Notifica
 import SupportGroupsSection from "../components/pages/Resources/SupportGroupsSection";
 import UsefulLinksSection from "../components/pages/Resources/UsefulLinksSection";
 
+
+
+
 function Resources() {
   return (
     <>

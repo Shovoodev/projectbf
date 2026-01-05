@@ -2,6 +2,8 @@ import React from "react";
 import { FaArrowRight, FaPhone } from "react-icons/fa6";
 // Ensure this path matches your project structure
 import img from "../../common/Banner.jpg";
+import { Link } from "react-router-dom";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const AshesStorageHero = () => {
   return (
@@ -42,12 +44,11 @@ const AshesStorageHero = () => {
             >
               <FaPhone /> 1300 11 0031
             </a>
-            <a
-              href="#"
-              className="flex items-center justify-center gap-2 bg-transparent text-white border-2 border-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-white hover:text-black transition-colors shadow-lg"
-            >
-              ENQUIRE NOW <FaArrowRight />
-            </a>
+            <Link to="/contact" className="btn-enquire">
+              <span className="">Enquire Now</span>
+              <FaLongArrowAltRight />
+            </Link>
+            ;
           </div>
         </div>
       </div>

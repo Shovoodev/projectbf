@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import img from "./images/funeral-arrangements.jpeg";
 
 import { FaArrowRight, FaCircleCheck, FaPhone } from "react-icons/fa6";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const Hero = () => {
   const features = [
@@ -63,12 +65,10 @@ const Hero = () => {
               >
                 <FaPhone className="text-sm" /> 1300 11 0031
               </a>
-              <a
-                href="#"
-                className="btn-primary bg-transparent text-white border border-white hover:bg-white hover:text-black flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold uppercase transition-colors"
-              >
-                ENQUIRE NOW <FaArrowRight className="text-sm" />
-              </a>
+              <Link to="/contact" className="btn-enquire">
+                <span className="">Enquire Now</span>
+                <FaLongArrowAltRight />
+              </Link>
             </div>
           </div>
 

@@ -1,13 +1,8 @@
-import React from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 
 const CallToActionSection = () => {
   return (
     <section className="relative py-24 bg-surface isolate overflow-hidden">
-      {/* --- BACKGROUND IMAGE --- */}
-      {/* Using a peaceful, dark nature background to fit the theme */}
-
-      {/* Optional: Gradient Overlay for better text readability */}
       <div className="absolute inset-0 -z-10 "></div>
 
       <div className="section-container max-w-4xl mx-auto px-6 text-center">

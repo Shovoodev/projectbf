@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import heroimg from "../../common/Banner.jpg";
 
 import { FaArrowRight, FaPhone } from "react-icons/fa6";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const Hero = () => {
   return (
@@ -16,13 +18,13 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 section-container w-full">
+      <div className="relative z-10  section-container w-full">
         <div className="max-w-2xl">
           <h1 className="font-display text-5xl md:text-6xl font-medium text-black mb-6 leading-tight">
             Peaceful Chapels for <br />
             <span className="italic">Meaningful Farewells</span>
           </h1>
-          <p className="text-lg text-gray-700 mb-8 max-w-lg leading-relaxed font-body">
+          <p className="text-lg text-gray-700 mb-8 max-w-lg leading-relaxed ">
             Our chapels provide a serene space where families can gather,
             reflect, and celebrate the lives of their loved ones with dignity
             and care.
@@ -32,13 +34,10 @@ const Hero = () => {
             <a href="tel:1300110031" className="btn-primary">
               <FaPhone className="mr-2" /> 1300 11 0031
             </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-black text-base font-medium rounded-full text-black bg-transparent hover:bg-black hover:text-white transition-all"
-            >
-              ENQUIRE NOW
-              <FaArrowRight className="ml-2" />
-            </a>
+            <Link to="/contact" className="btn-enquire">
+              <span className="">Enquire Now</span>
+              <FaLongArrowAltRight />
+            </Link>
           </div>
         </div>
       </div>

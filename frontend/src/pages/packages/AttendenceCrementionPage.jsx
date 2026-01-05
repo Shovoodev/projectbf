@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Actions } from "./_components/Actions";
-import CORE, { List, Select } from "../../components/common/Reusables";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { List, Select } from "../../components/common/Reusables";
+import { Actions } from "./_components/Actions";
 
 import RenderQuestion from "./_components/RenderQuestion";
 

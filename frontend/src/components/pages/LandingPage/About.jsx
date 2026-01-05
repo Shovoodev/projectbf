@@ -1,5 +1,7 @@
 import React from "react";
 import { FaPhone, FaArrowRight } from "react-icons/fa6";
+import { FaLongArrowAltRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -41,12 +43,10 @@ const About = () => {
               >
                 <FaPhone /> 1300 11 0031
               </a>
-              <a
-                href="#"
-                className="flex items-center gap-2 font-bold text-white bg-black rounded-full px-6 py-3 hover:opacity-80 transition-opacity"
-              >
-                Enquire Now <FaArrowRight />
-              </a>
+              <Link to="/contact" className="btn-enquire">
+                <span className="">Enquire Now</span>
+                <FaLongArrowAltRight />
+              </Link>
             </div>
           </div>
         </div>

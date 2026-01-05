@@ -50,10 +50,10 @@ const NewsCard = ({ news }) => {
         </p>
 
         {/* Button */}
-        <div className="mt-auto">
+        <div className="mt-auto flex items-center">
           <Link
             to={`/news/${news.id}`}
-            className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95"
+            className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center text-center gap-2 hover:bg-gray-800 transition-all active:scale-95"
           >
             Read More <FaArrowRight className="text-xs" />
           </Link>

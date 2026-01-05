@@ -1,4 +1,5 @@
 import React from "react";
+import { FaLongArrowAltRight } from "react-icons/fa";
 import {
   FaAddressCard,
   FaRegHeart,
@@ -6,6 +7,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa6";
 import { MdFamilyRestroom } from "react-icons/md"; // Using Material Design icon for Family concept
+import { Link } from "react-router-dom";
 
 const ServiceProcessSection = () => {
   const steps = [
@@ -84,14 +86,11 @@ const ServiceProcessSection = () => {
               1300 11 0031
             </a>
           </div>
-
           {/* Button */}
-          <a
-            href="https://blacktulipfunerals.com.au/contact-us/"
-            className="flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200"
-          >
-            Enquire Now <FaArrowRight />
-          </a>
+          <Link to="/contact" className="btn-enquire">
+            <span className="">Enquire Now</span>
+            <FaLongArrowAltRight />
+          </Link>
         </div>
       </div>
     </section>

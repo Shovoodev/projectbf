@@ -105,7 +105,7 @@ const Header = () => {
                 Info <FaChevronDown className="text-[10px]" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-40 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link to="/resources" target="_blank" className="dropdown-item">
+                <Link to="/resources" className="dropdown-item">
                   Resources
                 </Link>
                 <Link to="/upcoming-funerals" className="dropdown-item">
