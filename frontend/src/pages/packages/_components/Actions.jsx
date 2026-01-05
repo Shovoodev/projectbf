@@ -2,13 +2,13 @@ import { useNavigate } from "react-router";
 import PopupEnquirey from "./PopupEnquirey";
 import { useState } from "react";
 
-export function Actions({ totalPrice }) {
+export function Actions({ totalPrice, geNext }) {
   const navigate = useNavigate();
   const [activePopup, setActivePopup] = useState(null);
 
   const handlePress = () => {
     try {
-      navigate(`/${totalPrice}asdfasdfasdfadf/packages/basic/prepage`);
+      navigate(`/prepay`);
     } catch (error) {
       console.log(error);
     }

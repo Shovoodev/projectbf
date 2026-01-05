@@ -34,10 +34,13 @@ import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import Signature from "./pages/Signature";
 import Btf from "./pages/Btf";
+import PrePayindex from "./pages/prepay";
+import BlankLayout from "./BlankLayout";
 
 export const routes = createBrowserRouter([
   {
     path: "/",
+
     element: <App />,
     children: [
       {
@@ -162,6 +165,15 @@ export const routes = createBrowserRouter([
       {
         path: "/:userid/user",
         element: <UserPage />,
+      },
+    ],
+  },
+  {
+    element: <BlankLayout />,
+    children: [
+      {
+        path: "/prepay",
+        element: <PrePayindex />,
       },
     ],
   },
