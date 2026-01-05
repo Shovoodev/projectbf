@@ -1,0 +1,49 @@
+import express from "express";
+import { getUsers } from "../db/user";
+import { random } from "lodash";
+import { creatAdmin, geAdminByEmail } from "../db/admin";
+import { authentication } from "../lib";
+
+export const getAllUsers = async (
+  req: express.Request,
+  res: express.Response
+): Promise<any> => {
+  try {
+    const user = await getUsers();
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const registerAdmin = async (
+  req: express.Request,
+  res: express.Response
+): Promise<any> => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400);
+    }
+    const existingUser = await geAdminByEmail(email);
+    console.log(existingUser);
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User already registrated to the database" });
+    }
+    const salt = random();
+    const user = await creatAdmin({
+      email,
+      authentication: {
+        salt,
+        password: authentication(salt, password),
+      },
+    });
+    return res.status(200).json(user).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Bad request" });
+  }
+};

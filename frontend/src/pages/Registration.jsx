@@ -1,10 +1,20 @@
+/* eslint-disable no-undef */
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import Input from "../components/common/Input";
 import CORE from "../components/common/Reusables";
 
 const Registrarion = () => {
   const [data, setData] = useState({ email: "", password: "" });
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const stationery = searchParams.get("stationery");
+  const bodypreparation = searchParams.get("bodypreparation");
+  const coffin = searchParams.get("coffin");
+  const flowers = searchParams.get("flowers");
+  const urn = searchParams.get("urn");
+  const collectionOfUrn = searchParams.get("collectionOfUrn");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +25,8 @@ const Registrarion = () => {
       },
       body: JSON.stringify(data),
     });
+    navigate(`/:userid/user`);
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -41,12 +51,16 @@ const Registrarion = () => {
         </form>
         <div className=" flex-initial">
           already have an account{" "}
-          <NavLink
+          <button
             className="ml-5 text-lgpy-2 px-4 py-1 rounded-md hover:bg-blue-600  bg-blue-500 text-white"
-            to="/login"
+            onClick={() => {
+              navigate(
+                `/login?stationery=${stationery}&bodypreparation=${bodypreparation}&coffin=${coffin}&flowers=${flowers}&urn=${urn}&collectionOfUrn=${collectionOfUrn}`
+              );
+            }}
           >
             LogIn
-          </NavLink>
+          </button>
         </div>
       </div>
     </div>

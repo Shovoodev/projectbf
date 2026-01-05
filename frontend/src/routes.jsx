@@ -24,9 +24,12 @@ import Testimonials from "./pages/Testimonials";
 import AgreementForm from "./pages/Agreement";
 import Pay_now from "./pages/Pay_now";
 import Registrarion from "./pages/Registration";
-import SignIn from "./pages/SignIn";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
-import AttendenceCrementionPageFinal from "./pages/packages/AttendenceCrementionPageFinal";
+import LoginScreen from "./pages/SignIn";
+import PaynowPage from "./pages/packages/PaynowPage";
+import UserPage from "./pages/dashboard/UserPage";
+import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
+import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import Signature from "./pages/Signature";
@@ -109,22 +112,6 @@ export const routes = createBrowserRouter([
         path: "/expansion",
         element: <Expansion />,
       },
-      {
-        path: "/agreement",
-        element: <AgreementForm />,
-      },
-      {
-        path: "/pay-now",
-        element: <Pay_now />,
-      },
-      {
-        path: "/signature",
-        element: <Signature />,
-      },
-      {
-        path: "/about-btf",
-        element: <Btf />,
-      },
       // from Toukirul
       {
         path: "/:userid/packages/basic",
@@ -140,8 +127,20 @@ export const routes = createBrowserRouter([
         element: <DeceasedPersonPage />,
       },
       {
+        path: "/packages/basic",
+        element: <AttendenceCrementionPage />,
+      },
+      {
+        path: "/packages/no-service-cremention",
+        element: <NoServiceCrementionPage />,
+      },
+      {
+        path: "/packages/viewing-and-cremention",
+        element: <ViewingAndCrementionPage />,
+      },
+      {
         path: "/login",
-        element: <SignIn />,
+        element: <LoginScreen />,
       },
 
       {
@@ -149,7 +148,7 @@ export const routes = createBrowserRouter([
         element: <Registrarion />,
       },
       {
-        path: "/packages/premium/register",
+        path: "/register",
         element: <Registrarion />,
       },
       {
@@ -157,8 +156,12 @@ export const routes = createBrowserRouter([
         element: <Registrarion />,
       },
       {
-        path: "/packages/attendencecremention",
-        element: <AttendenceCrementionPageFinal />,
+        path: "/:totalPrice/packages/basic/prepage",
+        element: <PaynowPage />,
+      },
+      {
+        path: "/:userid/user",
+        element: <UserPage />,
       },
     ],
   },

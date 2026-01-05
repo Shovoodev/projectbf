@@ -5,7 +5,7 @@ import Discounted_Cashflow_Model from "./Discounted_Cashflow_Model";
 import EquityValuationSection from "./EquityValuationSection";
 import ExitStrategySection from "./ExitStrategySection";
 import Financial_Performance from "./Financial_Performance";
-import InclusionsSection from "./InclusionsSection";
+// import InclusionsSection from "./InclusionsSection";
 import Prepaid_Funeral_Plans from "./Prepaid_Funeral_Plans";
 import SocialImpactSection from "./SocialImpactSection";
 import Solar from "./Solar_powered";
@@ -32,6 +32,8 @@ function Index() {
       <TimelineSection />
       <DisclaimerSection />
       <ContactInfoSection />
+      <Are_you_aware />
+      {/* <InclusionsSection /> */}
     </>
   );
 }

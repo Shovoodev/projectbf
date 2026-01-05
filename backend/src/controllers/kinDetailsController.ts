@@ -2,7 +2,7 @@ import express from "express";
 import { createKinDetail, KinDetailsModel } from "../db/kinDetails";
 import { AuthenticatedRequest } from "../lib/types";
 import { NextToKeen } from "../data/nextToKeenData";
-import cloudinary from "../config/cloudinary";
+import { claudinaryConfig } from "../config/cloudinary";
 
 export const getNextToKeenData = async (
   req: express.Request,
@@ -23,11 +23,10 @@ export const registerKinDetals = async (
 ): Promise<any> => {
   try {
     const response = req.identity;
+    const { userid } = req.params;
     if (!response) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    console.log("hear");
-    console.log("BODY:", req.body);
     console.log("FILES:", req.files);
 
     let savedResponse;
@@ -47,7 +46,7 @@ export const registerKinDetals = async (
     let photoUrl = "";
     let signUrl = "";
     if (files?.photo?.[0]) {
-      const photoUpload = await cloudinary.uploader.upload(
+      const photoUpload = await claudinaryConfig().uploader.upload(
         files.photo[0].path,
         { folder: "kin/photo" }
       );
@@ -55,9 +54,12 @@ export const registerKinDetals = async (
     }
 
     if (files?.sign?.[0]) {
-      const signUpload = await cloudinary.uploader.upload(files.sign[0].path, {
-        folder: "kin/sign",
-      });
+      const signUpload = await claudinaryConfig().uploader.upload(
+        files.sign[0].path,
+        {
+          folder: "kin/sign",
+        }
+      );
       signUrl = signUpload.secure_url;
     }
     let existingResponse = await KinDetailsModel.findOne({
