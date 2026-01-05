@@ -178,3 +178,30 @@ export const sendAllRelatedDocuments = async (
     return res.status(500).json({ error: "Failed to fetch documents" });
   }
 };
+
+export const getAllSelectedServices = async (
+  req: AuthenticatedRequest,
+  res: express.Response
+): Promise<any> => {
+  try {
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.identity._id.toString();
+
+    console.log("USER ID:", userId);
+
+    const attendence = await getAttendenceByUserId(userId);
+    const kinDetails = await getKinByUserId(userId);
+    const deceasedPerson = await getDeceasedByUserId(userId);
+
+    return res.status(200).json({
+      message: "Data fetched successfully",
+      data: { attendence, kinDetails, deceasedPerson },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to fetch documents" });
+  }
+};

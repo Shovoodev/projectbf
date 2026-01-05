@@ -8,6 +8,12 @@ const userSchema = new mongoose.Schema({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
+  role: {
+    type: String,
+    enum: ["admin", "office", "user"],
+    default: "user",
+    required: true,
+  },
 });
 
 export const userModel = mongoose.model("User", userSchema);

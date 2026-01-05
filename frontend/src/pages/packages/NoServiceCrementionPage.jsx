@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { List, Select } from "../../components/common/Reusables";
+import React, { useEffect, useState } from "react";
 import { Actions } from "./_components/Actions";
+import CORE, { List, Select } from "../../components/common/Reusables";
+import { useNavigate } from "react-router";
 
 import RenderQuestion from "./_components/RenderQuestion";
 
@@ -14,97 +14,26 @@ export function Card({ title, children }) {
   );
 }
 
-const AttendenceCrementionPage = () => {
-  const BASE_PRICE = 4400;
+const NoServiceCrementionPage = () => {
+  const BASE_PRICE = 2299;
 
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
-
   const [selections, setSelections] = useState({
-    stationery: { value: "", price: 0 },
-    bodypreparation: { value: "", price: 0 },
-    coffin: { value: "", price: 0 },
-    flowers: { value: "", price: 0 },
     urn: { value: "", price: 0 },
     collectionOfUrn: { value: "", price: 0 },
   });
 
   const [hearse, setHearse] = useState();
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  const handleOptionChange = (index, value, priceImpact) => {
-    const keys = ["stationery", "bodypreparation", "coffin", "flowers", "urn"][
-      index
-    ];
-
-    const key = keys[index];
-
-    setFormValues((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceImpact } };
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0
-      );
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
-  };
-
-  const geNext = async (e) => {
-    e.preventDefault();
-
-    try {
-      // const res = await fetch(
-      //   "http://localhost:4000/newattendingservicecremationanswers",
-      //   {
-      //     method: "POST",
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       ...formValues,
-      //       totalPriceImpact: Object.values(formValues).reduce(
-      //         (sum, opt) => sum + (opt.price || 0),
-      //         0
-      //       ),
-      //     }),
-      //   }
-      // );
-
-      // if (!res.ok) {
-      //   const text = await res.text();
-      //   console.error("Server Error:", text);
-      //   return;
-      // }
-
-      navigate(`/${userid}/deceasedpersondetails`);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (data.length > 0) {
-      setFormValues({
-        stationery: data[0].options[0]?.value || "No option selected",
-        bodypreparation: data[1]?.options[0]?.value || "No option selected",
-        coffin: data[2]?.options[0]?.value || "No opiton selected",
-        flowers: data[3]?.options[0]?.value || "No option selected",
-        urn: data[4]?.options[0]?.value || "No option selected",
-        collectionOfUrn: data[5]?.options[0]?.value || "No option selected",
-      });
-    }
-  }, [data]);
 
   useEffect(() => {
     const fetchStepData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:4000/newattendingservicecremation",
+          "http://localhost:4000/noservicefunraldata",
           { credentials: "include" }
         );
 
@@ -127,20 +56,15 @@ const AttendenceCrementionPage = () => {
       0
     );
 
-    const price = setTotalPrice(BASE_PRICE + totalPriceImpact);
-    setAmount(price);
+    setTotalPrice(BASE_PRICE + totalPriceImpact);
   }, [selections]);
 
   console.log(data);
   useEffect(() => {
     if (data.length > 0) {
       setSelections({
-        stationery: data[0].options[0]?.value || "No option selected",
-        bodypreparation: data[1]?.options[0]?.value || "No option selected",
-        coffin: data[2]?.options[0]?.value || "No opiton selected",
-        flowers: data[3]?.options[0]?.value || "No option selected",
-        urn: data[4]?.options[0]?.value || "No option selected",
-        collectionOfUrn: data[5]?.options[0]?.value || "No option selected",
+        urn: data[0]?.options[0]?.value || "No option selected",
+        collectionOfUrn: data[1]?.options[0]?.value || "No option selected",
       });
     }
   }, [data]);
@@ -150,7 +74,7 @@ const AttendenceCrementionPage = () => {
 
     try {
       navigate(
-        `/register?stationery=${selections.stationery}&bodypreparation=${selections.bodypreparation}&coffin=${selections.coffin}&flowers=${selections.flowers}&urn=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
+        `/register?=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
       );
     } catch (err) {
       console.error("Fetch error:", err);
@@ -164,14 +88,12 @@ const AttendenceCrementionPage = () => {
     <div className=" mx-20">
       <div className="grid md:grid-cols-[1fr_auto] gap-8 items-start mb-10">
         <div>
-          <h1 className="font-serif text-4xl mb-4">
-            Attending Service Cremation
-          </h1>
+          <h1 className="font-serif text-4xl mb-4">No Service Cremation</h1>
           <p className="text-gray-600 max-w-2xl">
-            Black Tulip Funerals offers a respectful and simple farewell,
-            allowing family and close friends to be present during the cremation
-            service. It provides a meaningful opportunity to honor your loved
-            one in a calm, dignified, and supportive setting.
+            Black Tulip Funerals simple and unattendent cremention options ,
+            with no formal services or viewing .it offer a dignify ,
+            straightforward funeral while allowing families to arrange a
+            memorial and remembarence for later on
           </p>
         </div>
 
@@ -252,9 +174,9 @@ const AttendenceCrementionPage = () => {
           />
         </Card>
       </div>
-      <Actions goNext={geNext} totalPrice={amount} />
+      <Actions goNext={geNext} />
     </div>
   );
 };
 
-export default AttendenceCrementionPage;
+export default NoServiceCrementionPage;

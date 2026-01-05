@@ -1,9 +1,22 @@
 import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+export const claudinaryConfig = () => {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
-export default cloudinary;
+  return cloudinary;
+};
+
+export const uploadToCloudinary = async (filePath: string) => {
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: "myAppFiles",
+    });
+    return result.secure_url;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import logo from "./btf-logo.png";
+import { useUser } from "../../hooks/useUser";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
-
+  const { user } = useUser();
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
+  const navigate = useNavigate();
   const toggleMobileDropdown = (name) => {
     setOpenMobileDropdown(openMobileDropdown === name ? null : name);
   };
@@ -33,16 +34,19 @@ const Header = () => {
                 Packages <FaChevronDown className="text-[10px]" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link to="/packages/basic/register" className="dropdown-item">
+                <Link to="/packages/basic" className="dropdown-item">
                   Basic Package
                 </Link>
                 <Link
-                  to="/packages/standard/register"
+                  to="/packages/viewing-and-cremention"
                   className="dropdown-item"
                 >
                   Standard Package
                 </Link>
-                <Link to="/packages/premium/register" className="dropdown-item">
+                <Link
+                  to="/packages/no-service-cremention"
+                  className="dropdown-item"
+                >
                   Premium Package
                 </Link>
               </div>
@@ -170,10 +174,10 @@ const Header = () => {
                 <Link to="/packages/basic" className="block">
                   Basic Package
                 </Link>
-                <Link to="/packages/standard" className="block">
+                <Link to="/packages/viewing-and-cremention" className="block">
                   Standard Package
                 </Link>
-                <Link to="/packages/premium" className="block">
+                <Link to="/packages/no-service-cremention" className="block">
                   Premium Package
                 </Link>
               </div>
@@ -255,6 +259,15 @@ const Header = () => {
             </Link>
             <a href="tel:1300110031" className="btn-primary">
               <FaPhone className="mr-2" /> Call Now
+              {/* {!user ? (
+                <button onClick={() => navigate(`/users/${user._id}`)}>
+                  View User
+                </button>
+              ) : (
+                <div>
+                  <FaPhone className="mr-2" /> Call Now
+                </div>
+              )} */}
             </a>
           </div>
         </div>

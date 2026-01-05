@@ -25,7 +25,6 @@ import { AuthenticatedRequest } from "../lib/types";
 //     return res.sendStatus(400);
 //   }
 // };
-
 export const isAuthenticated = async (
   req: AuthenticatedRequest,
   res: express.Response,
@@ -44,12 +43,13 @@ export const isAuthenticated = async (
       return res.status(401).json({ message: "Invalid session token" });
     }
 
-    const response = (req.identity = {
-      _id: user._id,
+    req.identity = {
+      _id: user._id.toString(),
       email: user.email,
       reference: user.reference,
-    });
-    console.log(response);
+      role: user.role,
+    };
+
     next();
   } catch (error) {
     console.error(error);
@@ -61,4 +61,22 @@ export const AccessAuthentication = async (
   req: AuthenticatedRequest,
   res: express.Response,
   next: express.NextFunction
-): Promise<any> => {};
+) => {
+  try {
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Only admins allowed
+    if (req.identity.role !== "admin") {
+      return res.status(403).json({
+        message: "Forbidden: Admin access required",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

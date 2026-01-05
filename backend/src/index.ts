@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import router from "./router";
 import mongoose from "mongoose";
+import Stripe from "stripe";
+import { claudinaryConfig } from "./config/cloudinary";
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;
@@ -13,11 +15,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 const server = http.createServer(app);
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 mongoose.Promise = Promise;
 
 server.listen(PORT, (err?: Error) => {
@@ -25,6 +32,7 @@ server.listen(PORT, (err?: Error) => {
     console.error("Error starting server :", err);
   } else {
     console.log("server running on port ", PORT);
+    claudinaryConfig();
     const connectDB = async () => {
       try {
         const conn = await mongoose.connect(MONGO_URL);
@@ -84,3 +92,7 @@ export async function connectDB() {
   cached.conn = await cached.promise;
   return cached.conn;
 }
+console.log({
+  cloud: process.env.CLOUDINARY_CLOUD_NAME,
+  key: process.env.CLOUDINARY_API_KEY,
+});

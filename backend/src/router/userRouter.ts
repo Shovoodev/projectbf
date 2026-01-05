@@ -20,6 +20,11 @@ export default (router: express.Router) => {
     isAuthenticated,
     sendAllRelatedDocuments
   );
+  router.post(
+    "/all-selected-services",
+    isAuthenticated,
+    sendAllRelatedDocuments
+  );
   router.post("/logout", logOut);
   // router.get("/report/:userId/pdf", isAuthenticated, pdfController);
 };

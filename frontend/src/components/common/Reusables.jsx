@@ -1,16 +1,7 @@
-export function Card({ title, children }) {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <h3 className="font-semibold uppercase text-sm mb-4">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
 export function List({ items }) {
   return (
     <ul className="space-y-2 text-sm text-gray-700">
-      {items.map((item, i) => (
+      {items?.map((item, i) => (
         <li key={i}>• {item}</li>
       ))}
     </ul>
@@ -27,9 +18,9 @@ export function Select({ label, value, options, onChange }) {
         onChange={(e) => onChange(e.target.value)}
         className="p-1 border rounded bg-gray-100 text-right w-48"
       >
-        {options.map((opt) => (
+        {options?.map((opt) => (
           <option key={opt} value={opt}>
-            {opt}
+            {opt ? opt : value}
           </option>
         ))}
       </select>
@@ -37,5 +28,5 @@ export function Select({ label, value, options, onChange }) {
   );
 }
 
-const CORE = "https://blacktulip.vercel.app/";
+const CORE = "http://localhost:4000";
 export default CORE;

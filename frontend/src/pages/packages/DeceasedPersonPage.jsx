@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
+import InfoSection from "../../components/InfoSection";
+import ServicesSection from "../../components/ServicesSection";
 import { useNavigate, useParams } from "react-router";
 import CORE from "../../components/common/Reusables";
-import InfoSection from "../../components/InfoSection";
 import InputField from "../../components/InputField";
-import ServicesSection from "../../components/ServicesSection";
-import { FaLongArrowAltRight } from "react-icons/fa";
+import PopupEnquirey from "./_components/PopupEnquirey";
+import { FiLoader } from "react-icons/fi";
 
 const DeceasedPersonPage = () => {
   const navigate = useNavigate();
   const { userid } = useParams();
   const [questions, setQuestions] = useState([]);
-  const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [activePopup, setActivePopup] = useState(null);
   const [formValues, setFormValues] = useState({
     salutation: "",
     givenName: "",
@@ -24,7 +26,14 @@ const DeceasedPersonPage = () => {
     batterypowereddevices: "",
     regulardoctoraddress: "",
   });
-  console.log({ formData });
+
+  const openPopup = (popupType) => {
+    setActivePopup(popupType);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
   const geNext = async () => {
     try {
       const payload = {
@@ -74,7 +83,7 @@ const DeceasedPersonPage = () => {
         data.forEach((q) => {
           initialFormData[q.id] = "";
         });
-        setFormData(initialFormData);
+        setFormValues(initialFormData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -84,7 +93,12 @@ const DeceasedPersonPage = () => {
 
     fetchQuestions();
   }, []);
-  if (loading) return <p className="text-white">Loading...</p>;
+  if (loading)
+    return (
+      <p className="text-white ">
+        <FiLoader />
+      </p>
+    );
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
@@ -97,9 +111,11 @@ const DeceasedPersonPage = () => {
         </div>
         {questions.map((q) => {
           let field = "";
+          let inputType = "text";
           switch (q.id) {
             case 1:
               field = "salutation";
+              inputType = "gender";
               break;
             case 2:
               field = "givenName";
@@ -109,6 +125,7 @@ const DeceasedPersonPage = () => {
               break;
             case 4:
               field = "dateOfDeath";
+              inputType = "date";
               break;
             case 5:
               field = "address";
@@ -121,6 +138,7 @@ const DeceasedPersonPage = () => {
               break;
             case 8:
               field = "batterypowereddevices";
+              inputType = "select";
               break;
             case 9:
               field = "regulardoctoraddress";
@@ -131,12 +149,36 @@ const DeceasedPersonPage = () => {
           return (
             <div key={q.id} className="mb-4">
               <label className="block font-semibold mb-2">{q.question}</label>
-              <input
-                type="text"
-                value={formValues[field] || ""}
-                onChange={(e) => handleChange(field, e.target.value)}
-                className="p-2 w-full border rounded bg-white text-black"
-              />
+              {inputType === "gender" && (
+                <select
+                  value={formValues[field] || ""}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                  className="p-2 w-full border rounded bg-white text-black"
+                >
+                  <option value="Mr">Mr</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Sir">Sir</option>
+                  <option value="Mister">Mister</option>
+                </select>
+              )}
+              {inputType === "select" && (
+                <select
+                  value={formValues[field] || ""}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                  className="p-2 w-full border rounded bg-white text-black"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              )}
+              {inputType !== "select" && inputType !== "gender" && (
+                <input
+                  type={inputType}
+                  value={formValues[field] || ""}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                  className="p-2 w-full border rounded bg-white text-black"
+                />
+              )}
             </div>
           );
         })}
@@ -149,17 +191,29 @@ const DeceasedPersonPage = () => {
       </InputField>
 
       <div className="mx-20 mt-[-40px] gap-2">
-        <Link to="/contact" className="btn-enquire">
-          <span className="">Enquire Now</span>
-          <FaLongArrowAltRight />
-        </Link>
-
-        <button className="bg-black text-white text-xl rounded-2xl p-2 ml-2">
-          PREPAY
+        <button
+          className="bg-black text-white text-xl rounded-2xl p-2"
+          onClick={() => openPopup("enquirey")}
+        >
+          ENQUIRE NOW
         </button>
       </div>
 
       <InfoSection />
+      <PopupEnquirey
+        isOpen={activePopup === "enquirey"}
+        onClose={closePopup}
+        mode="enquirey"
+        mainTitle="Please tell us what you whant to know about us"
+        description="We'll get back to you shortly"
+        title="Make an Enquiry"
+        subtitle="We'll get back to you shortly"
+        onSuccess={(userData) => {
+          console.log("Enquiry submitted:", userData);
+          closePopup();
+          // Handle enquiry submission
+        }}
+      />
     </div>
   );
 };

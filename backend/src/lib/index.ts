@@ -5,7 +5,7 @@ export const invoiceId = (): string => {
   return `${Date.now().toString().slice(-5)}${crypto.randomInt(100, 999)}`;
 };
 
-export const authentication = (salt: string, password: string) => {
+export const authentication = (salt: any, password: string) => {
   return crypto
     .createHmac("sha256", [salt, password].join("/"))
     .update(SECRET)

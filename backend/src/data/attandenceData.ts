@@ -272,7 +272,7 @@ export const attendenceData = [
   {
     id: 3,
     question: "Coffin",
-    type: "radio",
+    type: "select",
     options: [
       {
         label: "Contract - Raw (Included)",
@@ -462,7 +462,7 @@ export const attendenceData = [
   {
     id: 4,
     question: "Flowers:",
-    type: "number",
+    type: "select",
     options: [
       {
         label: "100cm Mixed Seasonal Coffin Cover - White",
@@ -484,7 +484,7 @@ export const attendenceData = [
   {
     id: 5,
     question: "Urn",
-    type: "radio",
+    type: "select",
     options: [
       {
         label: "Funera Preferred Adult Urn",
@@ -499,9 +499,9 @@ export const attendenceData = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     question: "Collection of Urn",
-    type: "radio",
+    type: "select",
     options: [
       {
         label: "Collect in Person",

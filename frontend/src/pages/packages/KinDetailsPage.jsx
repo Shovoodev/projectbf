@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InputField from "../../components/InputField";
 import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
 
 import { useNavigate, useParams } from "react-router";
 import CORE from "../../components/common/Reusables";
+import base64ToFile from "../../utility";
+import SignatureField from "./_components/SignatureField";
 const KinDetailsPage = () => {
   const navigate = useNavigate();
   const { userid } = useParams();
+
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +23,6 @@ const KinDetailsPage = () => {
     email: "",
     relation: "",
   });
-  const [formData, setFormData] = useState({});
   const geNext = async () => {
     try {
       const fd = new FormData();
@@ -36,7 +38,7 @@ const KinDetailsPage = () => {
 
       fd.append("userid", userid);
 
-      const res = await fetch(`${CORE}/kindetiales`, {
+      const res = await fetch(`${CORE}/${userid}/next-to-keen-details`, {
         method: "POST",
         credentials: "include",
         body: fd,
@@ -48,7 +50,7 @@ const KinDetailsPage = () => {
         return;
       }
 
-      navigate(`/${userid}/kindetailpage`);
+      navigate(`/${userid}/dashboard`);
     } catch (err) {
       console.error(err);
     }
@@ -64,7 +66,7 @@ const KinDetailsPage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await fetch(`${CORE}/nexttokeen`, {
+        const res = await fetch(`${CORE}/${userid}/kindetiales`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch questions");
@@ -75,7 +77,7 @@ const KinDetailsPage = () => {
         data.forEach((q) => {
           initialFormData[q.id] = "";
         });
-        setFormData(initialFormData);
+        setFormValues(initialFormData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -84,7 +86,25 @@ const KinDetailsPage = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [userid]);
+  const sigPadRef = useRef(null);
+
+  const saveSignature = () => {
+    if (!sigPadRef.current.isEmpty()) {
+      const dataUrl = sigPadRef.current
+        .getTrimmedCanvas()
+        .toDataURL("image/png");
+
+      const file = base64ToFile(dataUrl, "signature.png");
+
+      handleChange("sign", file);
+    }
+  };
+
+  const clearSignature = () => {
+    sigPadRef.current.clear();
+    handleChange(field, null);
+  };
   if (loading) return <p className="text-white">Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
   return (
@@ -126,27 +146,44 @@ const KinDetailsPage = () => {
               inputType = "file";
               break;
             case 9:
-              field = "sign";
-              inputType = "file";
+              field = "canvasSign";
+              inputType = "canvas";
               break;
           }
           return (
             <div key={q.id} className="mb-4">
               <label className="block font-semibold mb-2">{q.question}</label>
-              {inputType === "file" ? (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleChange(field, e.target.files[0])}
-                  className="p-2 w-full border rounded bg-white text-black"
-                />
-              ) : (
+
+              {inputType === "text" && (
                 <input
                   type="text"
                   value={formValues[field] || ""}
                   onChange={(e) => handleChange(field, e.target.value)}
                   className="p-2 w-full border rounded bg-white text-black"
                 />
+              )}
+              {inputType === "file" && (
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleChange(field, e.target.files[0])}
+                  className="p-2 w-full border rounded bg-white text-black"
+                />
+              )}
+              {inputType === "canvas" && (
+                <div className="border rounded bg-white p-2">
+                  <SignatureField
+                    sigPadRef={sigPadRef}
+                    saveSignature={saveSignature}
+                    clearSignature={clearSignature}
+                    penColor="black"
+                    canvasProps={{
+                      width: 400,
+                      height: 150,
+                      className: "w-full h-[150px]",
+                    }}
+                  />
+                </div>
               )}
             </div>
           );
