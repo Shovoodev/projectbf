@@ -4,6 +4,8 @@ import img2 from "./images/service/Viewing-Cremation.png";
 import img3 from "./images/service/No-Service-Direct-Cremation.png";
 
 import { FaPhone, FaArrowRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const OurServicesSection = () => {
   const services = [
@@ -78,14 +80,11 @@ const OurServicesSection = () => {
               1300 11 0031
             </a>
           </div>
-
           {/* Button */}
-          <a
-            href="https://blacktulipfunerals.com.au/contact-us/"
-            className="btn-enquire"
-          >
-            Enquire Now <FaArrowRight />
-          </a>
+          <Link to="/contact" className="btn-enquire">
+            <span className="">Enquire Now</span>
+            <FaLongArrowAltRight />
+          </Link>
         </div>
       </div>
     </section>

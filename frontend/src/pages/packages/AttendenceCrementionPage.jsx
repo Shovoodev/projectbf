@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import InputField from "../../components/InputField";
 import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import CORE from "../../components/common/Reusables";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const AttendenceCrementionPage = () => {
   const BASE_PRICE = 4400;
@@ -181,9 +182,11 @@ const AttendenceCrementionPage = () => {
       </InputField>
 
       <div className="mx-20 mt-[-40px] gap-2">
-        <button className="bg-black text-white text-xl rounded-2xl p-2">
-          ENQUIRE NOW
-        </button>
+        <Link to="/contact" className="btn-enquire">
+          <span className="">Enquire Now</span>
+          <FaLongArrowAltRight />
+        </Link>
+        
         <button className="bg-black text-white text-xl rounded-2xl p-2 ml-2">
           PREPAY
         </button>

@@ -2,6 +2,8 @@ import { FaArrowRight, FaPhone } from "react-icons/fa6";
 import img3 from "./images/Attending-Service-Cremation.png";
 import img1 from "./images/No-Service-Direct-Cremation.png";
 import img2 from "./images/Viewing-Cremation.png";
+import { Link } from "react-router-dom";
+import { FaLongArrowAltRight } from "react-icons/fa";
 const PackageCard = ({ img, title, desc, price }) => (
   <div className="bg-surface rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
     <div className="h-48 overflow-hidden">
@@ -79,12 +81,11 @@ const Packages = () => {
           <a href="tel:1300110031" className="btn-primary">
             <FaPhone className="mr-2" /> 1300 11 0031
           </a>
-          <a
-            href="#"
-            className="btn-primary bg-white text-black border border-black hover:bg-gray-100"
-          >
-            ENQUIRE NOW <FaArrowRight className="ml-2" />
-          </a>
+          <Link to="/contact" className="btn-enquire">
+            <span className="">Enquire Now</span>
+            <FaLongArrowAltRight />
+          </Link>
+          ;
         </div>
       </div>
     </section>

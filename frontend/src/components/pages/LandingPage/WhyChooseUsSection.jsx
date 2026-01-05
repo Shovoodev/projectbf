@@ -7,6 +7,8 @@ import {
   FaUserPen,
 } from "react-icons/fa6";
 import HelpButton from "../Service/HelpButton";
+import { Link } from "react-router-dom";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const WhyChooseUsSection = () => {
   const features = [
@@ -76,12 +78,10 @@ const WhyChooseUsSection = () => {
               >
                 <FaPhone className="text-sm" /> 1300 11 0031
               </a>
-              <a
-                href="#"
-                className="flex items-center gap-2 border border-black text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-colors"
-              >
-                Enquire Now <FaArrowRight className="text-sm" />
-              </a>
+              <Link to="/contact" className="btn-enquire">
+                <span className="">Enquire Now</span>
+                <FaLongArrowAltRight />
+              </Link>
             </div>
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg h-full">
