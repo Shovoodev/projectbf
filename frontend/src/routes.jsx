@@ -21,29 +21,24 @@ import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
 import Btf from "./pages/Btf";
+import Btf from "./pages/Btf";
 // from Toukirul vai
+import BlankLayout from "./BlankLayout";
 
 import BlankLayout from "./BlankLayout";
 import AgreementForm from "./pages/Agreement";
 
-// import Pay_now from "./pages/Pay_now";
-import Registrarion from "./pages/Registration";
+// import UserPage from "./pages/dashboard/UserPage";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
-import LoginScreen from "./pages/SignIn";
-// import PaynowPage from "./pages/packages/PaynowPage";
-
-import UserPage from "./pages/dashboard/UserPage";
-
+import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
+import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
-// import PaynowPage from "./pages/packages/PaynowPage";
+import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import PrePayindex from "./pages/prepay";
-// import Registrarion from "./pages/Registration";
-// import LoginScreen from "./pages/SignIn";
+import Registrarion from "./pages/Registration";
+import LoginScreen from "./pages/SignIn";
 import Signature from "./pages/Signature";
-// import BlankLayout from "./BlankLayout";
-import AgreementFormPage from "./pages/packages/Agreement";
-import Registration from "./pages/Registration";
 
 export const routes = createBrowserRouter([
   {
@@ -123,6 +118,18 @@ export const routes = createBrowserRouter([
       {
         path: "/expansion",
         element: <Expansion />,
+      },
+      {
+        path: "/agreement",
+        element: <AgreementForm />,
+      },
+      {
+        path: "/about-btf",
+        element: <Btf />,
+      },
+      {
+        path: "/signature",
+        element: <Signature />,
       },
       {
         path: "/agreement",

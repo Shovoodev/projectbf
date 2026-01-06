@@ -57,6 +57,10 @@ import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
 const displayImage = [
+import SlipOne from "./SlipOne";
+import SlipTwo from "./SlipTwo";
+import SlipThree from "./SlipThree";
+const images = [
   cover,
   one,
   two,
@@ -281,6 +285,10 @@ const PrePay = () => {
             Finish your submittion
           </button>
         )}
+      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto">
+        <SlipOne />
+        <SlipTwo />
+        <SlipThree />
       </div>
     </div>
   );
