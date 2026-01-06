@@ -4,6 +4,7 @@ import { List, Select } from "../../components/common/Reusables";
 import { Actions } from "./_components/Actions";
 
 import RenderQuestion from "./_components/RenderQuestion";
+import { useUser } from "../../components/hooks/useUser";
 
 export function Card({ title, children }) {
   return (
@@ -22,7 +23,7 @@ const AttendenceCrementionPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState(0);
-
+  const { user } = useUser();
   const [selections, setSelections] = useState({
     stationery: { value: "", price: 0 },
     bodypreparation: { value: "", price: 0 },
@@ -41,7 +42,7 @@ const AttendenceCrementionPage = () => {
 
     const key = keys[index];
 
-    setFormValues((prev) => {
+    setSelections((prev) => {
       const updated = { ...prev, [key]: { value, price: priceImpact } };
       const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
@@ -57,31 +58,31 @@ const AttendenceCrementionPage = () => {
     e.preventDefault();
 
     try {
-      // const res = await fetch(
-      //   "http://localhost:4000/newattendingservicecremationanswers",
-      //   {
-      //     method: "POST",
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       ...formValues,
-      //       totalPriceImpact: Object.values(formValues).reduce(
-      //         (sum, opt) => sum + (opt.price || 0),
-      //         0
-      //       ),
-      //     }),
-      //   }
-      // );
+      const res = await fetch(
+        "http://localhost:4000/newattendingservicecremationanswers",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...setSelections,
+            totalPriceImpact: Object.values(setSelections).reduce(
+              (sum, opt) => sum + (opt.price || 0),
+              0
+            ),
+          }),
+        }
+      );
 
-      // if (!res.ok) {
-      //   const text = await res.text();
-      //   console.error("Server Error:", text);
-      //   return;
-      // }
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server Error:", text);
+        return;
+      }
 
-      navigate(`/${userid}/deceasedpersondetails`);
+      navigate(`/${user._id}/deceasedpersondetails`);
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -89,7 +90,7 @@ const AttendenceCrementionPage = () => {
 
   useEffect(() => {
     if (data.length > 0) {
-      setFormValues({
+      setSelections({
         stationery: data[0].options[0]?.value || "No option selected",
         bodypreparation: data[1]?.options[0]?.value || "No option selected",
         coffin: data[2]?.options[0]?.value || "No opiton selected",
@@ -145,17 +146,17 @@ const AttendenceCrementionPage = () => {
     }
   }, [data]);
 
-  const geNext = async (e) => {
-    e.preventDefault();
+  // const geNext = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      navigate(
-        `/register?stationery=${selections.stationery}&bodypreparation=${selections.bodypreparation}&coffin=${selections.coffin}&flowers=${selections.flowers}&urn=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
-      );
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
+  //   try {
+  //     navigate(
+  //       `/register?stationery=${selections.stationery}&bodypreparation=${selections.bodypreparation}&coffin=${selections.coffin}&flowers=${selections.flowers}&urn=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
+  //     );
+  //   } catch (err) {
+  //     console.error("Fetch error:", err);
+  //   }
+  // };
 
   if (loading) return <p className="text-white">Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
