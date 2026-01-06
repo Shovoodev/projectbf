@@ -2,16 +2,14 @@ import React from "react";
 
 const SlipOne = () => {
   return (
-    <section className="max-w-5xl mx-auto bg-white px-10 py-12 text-[#2E3192]">
+    <section className="bg-white px-10 py-12 text-[#2E3192]">
       {/* Header */}
       <h1 className="text-4xl font-bold mb-6">
         KeyInvest Funeral Bond
         <br />
         application form
       </h1>
-
       <hr className="border-[#2E3192]/40 mb-8" />
-
       {/* Intro paragraphs */}
       <div className="space-y-4 text-sm leading-relaxed">
         <p>
@@ -41,7 +39,6 @@ const SlipOne = () => {
           Please use CAPITAL letters to complete the Application form
         </p>
       </div>
-
       {/* Highlight box */}
       <div className="bg-[#F1F6F7] text-sm p-4 my-8">
         For an individual applicant you only need to complete{" "}
@@ -50,12 +47,11 @@ const SlipOne = () => {
         insured the Investor is <strong>Investor 1</strong> and the life insured{" "}
         <strong>Investor 2</strong>.
       </div>
-
       {/* Questionnaire */}
       <h2 className="text-2xl font-semibold text-[#4BA6A6] mb-6">
         Target market questionnaire
       </h2>
-
+      text-center
       <div className="space-y-8 text-sm">
         {/* Q1 */}
         <div>
@@ -133,7 +129,6 @@ const SlipOne = () => {
           </div>
         </div>
       </div>
-
       <div className="mt-10 text-xs leading-relaxed border-t pt-6">
         <p>
           <strong>Note:</strong> Investors must be at least 10 years old and

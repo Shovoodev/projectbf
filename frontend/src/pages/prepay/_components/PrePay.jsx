@@ -33,6 +33,8 @@ import {
   thirty,
 } from "../../../images/index";
 import SlipOne from "./SlipOne";
+import SlipTwo from "./SlipTwo";
+import SlipThree from "./SlipThree";
 const images = [
   cover,
   one,
@@ -95,7 +97,6 @@ const PrePay = () => {
         style={{ backgroundImage: `url(${bgImage})` }}
       />
       <div className="fixed inset-0 -z-10 bg-black/40" />
-
       {/* 🔹 Flowing Images */}
       <div className="flex flex-col  items-center gap-10 py-3">
         {images.map((img, index) => (
@@ -108,8 +109,10 @@ const PrePay = () => {
         ))}
       </div>
 
-      <div id="page" className="scroll-mt-24">
+      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto">
         <SlipOne />
+        <SlipTwo />
+        <SlipThree />
       </div>
     </div>
   );

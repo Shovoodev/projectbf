@@ -1,5 +1,7 @@
 import React from "react";
-
+import img1 from "./images/service/Attending-Service-Cremation.png";
+import img2 from "./images/service/No-Service-Direct-Cremation.png";
+import img3 from "./images/service/Viewing-Cremation.png";
 const PackageCard = ({ title, price, image, desc }) => (
   <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col h-full">
     <div className="h-48 overflow-hidden">
@@ -34,22 +36,19 @@ const PackagesPreview = () => {
     {
       title: "No Service<br/>Direct Cremation",
       price: "$ 2200",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/No-Service-Direct-Cremation.png",
+      image: img1,
       desc: "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process.",
     },
     {
       title: "Viewing &<br/>Cremation",
       price: "$ 3300",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Viewing-Cremation.png",
+      image: img2,
       desc: "Our Viewing & Cremation Package provides families in Sydney with a dignified, compassionate, and cost effective option during a difficult time.",
     },
     {
       title: "Attending Service<br/>Cremation",
       price: "$ 4400",
-      image:
-        "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Attending-Service-Cremation.png",
+      image: img3,
       desc: "This package offers a compassionate and affordable way to say goodbye, allowing families to gather with loved ones for a meaningful ceremony.",
     },
   ];
