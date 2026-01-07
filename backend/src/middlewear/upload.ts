@@ -4,11 +4,13 @@ import { claudinaryConfig } from "../config/cloudinary";
 
 const storage = new CloudinaryStorage({
   cloudinary: claudinaryConfig(),
-  params: {
-    folder: "kin-details",
-    allowed_formats: ["jpg", "png", "jpeg"],
-  } as any,
+  params: async (req, file) => ({
+    folder: file.fieldname === "photo" ? "kin/photo" : "kin/sign",
+    format: file.mimetype === "application/pdf" ? "pdf" : undefined,
+    allowed_formats: ["jpg", "png", "jpeg", "pdf"],
+  }),
 });
+
 export const upload = multer({
   storage,
 });

@@ -3,6 +3,7 @@ import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
 import logo from "./btf-logo.png";
 import { useUser } from "../../hooks/useUser";
+import LogOut from "../../../pages/packages/_components/LogOut";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
@@ -120,6 +121,7 @@ const Header = () => {
             <Link to="/agreement" className="hover:text-primary">
               Agreement
             </Link>
+            <LogOut />
           </nav>
 
           {/* Right Side */}

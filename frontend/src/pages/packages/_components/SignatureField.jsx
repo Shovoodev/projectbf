@@ -1,33 +1,29 @@
 import { useEffect, useRef, useState } from "react";
-import SignatureCanvas from "react-signature-canvas";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 
 const SignatureField = ({ sigPadRef, clearSignature }) => {
   const wrapperRef = useRef(null);
   const [size, setSize] = useState({ width: 0, height: 150 });
 
+  // Set initial canvas width based on container
   useEffect(() => {
     if (wrapperRef.current) {
-      setSize({
-        width: wrapperRef.current.offsetWidth,
-        height: 150,
-      });
+      setSize({ width: wrapperRef.current.offsetWidth, height: 150 });
     }
   }, []);
 
   return (
     <div className="w-full">
       <label className="block mb-2 font-medium text-gray-700">Signature</label>
-
       <div ref={wrapperRef} className="border rounded bg-white w-full">
         {size.width > 0 && (
-          <SignatureCanvas
+          <ReactSketchCanvas
             ref={sigPadRef}
-            penColor="black"
-            canvasProps={{
-              width: size.width,
-              height: size.height,
-              className: "block",
-            }}
+            width={`${size.width}px`}
+            height={`${size.height}px`}
+            strokeWidth={2}
+            strokeColor="black"
+            className="block"
           />
         )}
       </div>
@@ -36,7 +32,9 @@ const SignatureField = ({ sigPadRef, clearSignature }) => {
         <button
           type="button"
           onClick={clearSignature}
-          className={`px-4 py-2 rounded  ${!size ? "bg-gray-200" : "bg-black"}`}
+          className={`px-4 py-2 rounded ${
+            !size.width ? "bg-gray-200" : "bg-black text-white"
+          }`}
         >
           Clear
         </button>

@@ -33,6 +33,7 @@ import {
   thirty,
 } from "../../../images/index";
 import SlipOne from "./SlipOne";
+import SlipTwo from "./SlipTwo";
 const images = [
   cover,
   one,
@@ -108,8 +109,9 @@ const PrePay = () => {
         ))}
       </div>
 
-      <div id="page" className="scroll-mt-24">
+      <div id="page" className="scroll-mt-24 gap-10">
         <SlipOne />
+        <SlipTwo />
       </div>
     </div>
   );

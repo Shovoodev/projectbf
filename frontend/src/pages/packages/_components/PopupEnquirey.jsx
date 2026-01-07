@@ -145,7 +145,7 @@ const PopupEnquirey = ({
 
         localStorage.setItem("user", JSON.stringify(loginData));
 
-        navigate(`/${loginData._id}/deceasedpersondetails`);
+        navigate(`/${loginData._id}/fill-agreement-form`);
       } else {
         const error = await response.json();
         showMessage(error.message || "Registration failed", "error");

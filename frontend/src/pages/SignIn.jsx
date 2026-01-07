@@ -35,7 +35,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full min-h-screen overflow-hidden">
       {/* Image Section - Left */}
       <div className="hidden md:block md:w-3/5 lg:w-1/2 relative">
         <img
@@ -48,7 +48,7 @@ const SignIn = () => {
       </div>
 
       {/* Login Form Section - Right */}
-      <div className="flex-1 md:w-2/5 lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+      <div className="flex-1 md:w-2/5 lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8 min-h-[100dvh] md:min-h-screen">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">
             <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin mb-4"></div>
@@ -60,13 +60,13 @@ const SignIn = () => {
             <div className="md:hidden mb-8 rounded-2xl overflow-hidden">
               <img
                 alt="Login background"
-                className="w-full h-48 object-cover"
+                className="w-full max-h-32 object-cover"
                 src={img}
               />
             </div>
 
             <form
-              className="w-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl px-6 py-8 md:px-8 md:py-10"
+              className="w-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-10"
               onSubmit={handleSubmit}
             >
               {/* Title */}

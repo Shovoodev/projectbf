@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import Input from "../components/common/Input";
 import CORE from "../components/common/Reusables";
@@ -15,6 +16,7 @@ const Registrarion = () => {
   const flowers = searchParams.get("flowers");
   const urn = searchParams.get("urn");
   const collectionOfUrn = searchParams.get("collectionOfUrn");
+  const { userid } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ const Registrarion = () => {
       },
       body: JSON.stringify(data),
     });
-    navigate(`/:userid/user`);
+    navigate(`/${userid}/fill-agreement-form`);
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

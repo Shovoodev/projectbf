@@ -21,12 +21,11 @@ import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
 // from Toukirul vai
-import AgreementForm from "./pages/Agreement";
-import Pay_now from "./pages/Pay_now";
+// import Pay_now from "./pages/Pay_now";
 import Registrarion from "./pages/Registration";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
 import LoginScreen from "./pages/SignIn";
-import PaynowPage from "./pages/packages/PaynowPage";
+// import PaynowPage from "./pages/packages/PaynowPage";
 import UserPage from "./pages/dashboard/UserPage";
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -36,6 +35,7 @@ import Signature from "./pages/Signature";
 import Btf from "./pages/Btf";
 import PrePayindex from "./pages/prepay";
 import BlankLayout from "./BlankLayout";
+import AgreementFormPage from "./pages/packages/Agreement";
 
 export const routes = createBrowserRouter([
   {
@@ -46,6 +46,7 @@ export const routes = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        isPrivate: false,
       },
       {
         path: "/team",
@@ -117,19 +118,6 @@ export const routes = createBrowserRouter([
       },
       // from Toukirul
       {
-        path: "/:userid/packages/basic",
-        element: <AttendenceCrementionPage />,
-      },
-      {
-        path: "/:userid/kindetailpage",
-        element: <KinDetailsPage />,
-      },
-
-      {
-        path: "/:userid/deceasedpersondetails",
-        element: <DeceasedPersonPage />,
-      },
-      {
         path: "/packages/basic",
         element: <AttendenceCrementionPage />,
       },
@@ -158,13 +146,19 @@ export const routes = createBrowserRouter([
         path: "/packages/basic/register",
         element: <Registrarion />,
       },
-      {
-        path: "/:totalPrice/packages/basic/prepage",
-        element: <PaynowPage />,
-      },
+      // {
+      //   path: "/:totalPrice/packages/basic/prepage",
+      //   element: <PaynowPage />,
+      // },
       {
         path: "/:userid/user",
         element: <UserPage />,
+        isPrivate: true,
+      },
+      {
+        path: "/:userid/fill-agreement-form",
+        element: <AgreementFormPage />,
+        isPrivate: true,
       },
     ],
   },
@@ -174,6 +168,7 @@ export const routes = createBrowserRouter([
       {
         path: "/prepay",
         element: <PrePayindex />,
+        isPrivate: true,
       },
     ],
   },
