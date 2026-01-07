@@ -58,8 +58,8 @@ import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
 const displayImage = [
 import SlipOne from "./SlipOne";
-import SlipTwo from "./SlipTwo";
 import SlipThree from "./SlipThree";
+import SlipTwo from "./SlipTwo";
 const images = [
   cover,
   one,
@@ -220,10 +220,11 @@ const PrePay = () => {
             : "Move back to the Documentation"}
         </button>
       </div>
-      <div
+      {/* <div
         className="fixed inset-0 -z-10 bg-cover bg-center blur-2xl scale-150 transition-all duration-700"
         style={{ backgroundImage: `url(${bgImage})` }}
-      />
+      /> */}
+      {/* <Main /> */}
       {/* <Main /> */}
       <div className="fixed inset-0 -z-10 bg-black/40" />
       {/* 🔹 Flowing Images */}
@@ -285,7 +286,10 @@ const PrePay = () => {
             Finish your submittion
           </button>
         )}
-      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto">
+      <div
+        id="page"
+        className="scroll-mt-24 max-w-4xl mx-auto space-y-3  text-[rgb(49,41,166)] "
+      >
         <SlipOne />
         <SlipTwo />
         <SlipThree />
