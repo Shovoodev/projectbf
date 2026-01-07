@@ -37,7 +37,7 @@ import UserPage from "./pages/dashboard/UserPage";
 import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
-import PaynowPage from "./pages/packages/PaynowPage";
+// import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import PrePayindex from "./pages/prepay";
 // import Registrarion from "./pages/Registration";

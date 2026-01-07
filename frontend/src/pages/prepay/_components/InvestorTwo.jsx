@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SlipTwo = () => {
+const InvestorTwo = () => {
   const [formData, setFormData] = useState({
     title: "",
     surname: "",
@@ -35,9 +35,10 @@ const SlipTwo = () => {
   return (
     <div className="form-container-base">
       <div className="form-header-area">
-        <h2 className="pdf-h2">1. Investor details</h2>
         <p className="pdf-subtitle">
-          Investor 1 (all correspondence will be sent to this person)
+          Investor 2 ((Only complete this section if this is to be a jointly
+          owned Policy, if being completed by a POA or if the policy is for a
+          Separate Life Insured))
         </p>
       </div>
 
@@ -294,7 +295,7 @@ const SlipTwo = () => {
             />
           </div>
         </div>
-        <div>
+        {/* <div>
           <p className="pdf-intro-p">
             If the application is being completed under a Power of Attorney
             (POA), please include the attorney’s contact details under
@@ -309,7 +310,7 @@ const SlipTwo = () => {
             or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
             Other
           </p>
-        </div>
+        </div> */}
         {/* Footer */}
         <div className="pdf-footer">
           <div>
@@ -323,4 +324,4 @@ const SlipTwo = () => {
   );
 };
 
-export default SlipTwo;
+export default InvestorTwo;
