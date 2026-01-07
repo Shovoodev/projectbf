@@ -33,10 +33,7 @@ import {
   two,
 } from "../../../images/index";
 import SlipOne from "./SlipOne";
-<<<<<<< HEAD
 import SlipThree from "./SlipThree";
-=======
->>>>>>> main
 import SlipTwo from "./SlipTwo";
 const images = [
   cover,
@@ -113,7 +110,6 @@ const PrePay = () => {
         ))}
       </div>
 
-<<<<<<< HEAD
       <div
         id="page"
         className="scroll-mt-24 max-w-4xl mx-auto space-y-3  text-[rgb(49,41,166)] "
@@ -121,11 +117,6 @@ const PrePay = () => {
         <SlipOne />
         <SlipTwo />
         <SlipThree />
-=======
-      <div id="page" className="scroll-mt-24 gap-10">
-        <SlipOne />
-        <SlipTwo />
->>>>>>> main
       </div>
     </div>
   );
