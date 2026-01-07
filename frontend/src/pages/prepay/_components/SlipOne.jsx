@@ -66,7 +66,7 @@ const SlipOne = () => {
                 <input
                   type="radio"
                   name="bondType"
-                  defaultChecked={opt === "Prepaid/Assigned"}
+                  checked={opt === "Prepaid/Assigned"}
                 />
                 {opt}
               </label>
@@ -82,7 +82,7 @@ const SlipOne = () => {
               <input type="radio" name="age10" /> Yes
             </label>
             <label className="flex items-center gap-2">
-              <input type="radio" name="age10" defaultChecked /> No
+              <input type="radio" name="age10" checked /> No
             </label>
           </div>
         </div>
@@ -97,7 +97,7 @@ const SlipOne = () => {
               <input type="radio" name="existingBonds" /> Yes
             </label>
             <label className="flex items-center gap-2">
-              <input type="radio" name="existingBonds" defaultChecked /> No
+              <input type="radio" name="existingBonds" checked /> No
             </label>
           </div>
         </div>
@@ -113,7 +113,7 @@ const SlipOne = () => {
               <input type="radio" name="overCost" /> Yes
             </label>
             <label className="flex items-center gap-2">
-              <input type="radio" name="overCost" defaultChecked /> No
+              <input type="radio" name="overCost" checked /> No
             </label>
           </div>
         </div>
@@ -128,7 +128,7 @@ const SlipOne = () => {
               <input type="radio" name="accessCapital" /> Yes
             </label>
             <label className="flex items-center gap-2">
-              <input type="radio" name="accessCapital" defaultChecked /> No
+              <input type="radio" name="accessCapital" checked /> No
             </label>
           </div>
         </div>

@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router";
 import PopupEnquirey from "./PopupEnquirey";
 import { useState } from "react";
+import { useUserFront } from "../../../utility/use-userFront";
 
 export function Actions({ totalPrice, geNext }) {
   const navigate = useNavigate();
   const [activePopup, setActivePopup] = useState(null);
 
+  const { user } = useUserFront();
   const handlePress = () => {
     try {
-      navigate(`/prepay`);
+      navigate(`/${user._id}/prepay`);
     } catch (error) {
       console.log(error);
     }

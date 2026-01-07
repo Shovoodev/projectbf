@@ -34,7 +34,10 @@ import {
 } from "../../../images/index";
 import SlipOne from "./SlipOne";
 import SlipTwo from "./SlipTwo";
-const images = [
+import { useUserFront } from "../../../utility/use-userFront";
+import { generatePdfBlob } from "./ImageToPdf";
+import CORE from "../../../components/common/Reusables";
+const displayImage = [
   cover,
   one,
   two,
@@ -69,7 +72,26 @@ const images = [
 ];
 
 const PrePay = () => {
-  const [bgImage, setBgImage] = useState(images[0]);
+  const [bgImage, setBgImage] = useState(displayImage[0]);
+  // const [images, setImages] = useState([]);
+  const [images, setImages] = useState(displayImage);
+  const { user } = useUserFront();
+  // const handleImageChange = () => {
+  //   setImages(displayImage);
+  // };
+  const sendPdfByEmail = async () => {
+    setImages(displayImage);
+    const pdfBlob = await generatePdfBlob(displayImage);
+
+    const formData = new FormData();
+    formData.append("file", pdfBlob, "policy.pdf");
+    formData.append("email", ` ${user.email}`);
+
+    await fetch(`${CORE}/${user._id}/send-pdf-on-email`, {
+      method: "POST",
+      body: formData,
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,12 +105,13 @@ const PrePay = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [images]);
+
   return (
     <div className="relative">
       <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
         <button className="bg-green-700 text-xl p-3 text-white shadow-2xl rounded-2xl">
-          <a href="#page"> Continue to fill in the form </a>
+          <a href="#CompleteForm"> Continue to fill in the form </a>
         </button>
       </div>
       <div
@@ -109,9 +132,17 @@ const PrePay = () => {
         ))}
       </div>
 
-      <div id="page" className="scroll-mt-24 gap-10">
+      <div id="CompleteForm" className="scroll-mt-24 gap-10">
         <SlipOne />
         <SlipTwo />
+      </div>
+      <div className=" flex items-center justify-center">
+        <button
+          className=" bg-amber-400 p-5 rounded-2xl "
+          onClick={sendPdfByEmail}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
