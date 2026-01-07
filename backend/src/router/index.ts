@@ -6,6 +6,7 @@ import userRouter from "./userRouter";
 import adminRouter from "./adminRouter";
 import enquireyRouter from "./enquireyRouter";
 import paymentRouter from "./paymentRouter";
+import pdfRouter from "./pdfRouter";
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ export default (): express.Router => {
   adminRouter(router);
   enquireyRouter(router);
   paymentRouter(router);
+  pdfRouter(router);
   return router;
 };

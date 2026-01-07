@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 import nodemailer from "nodemailer";
 
-export default async function SendEmail(user: string) {
+export default async function SendEmail(email: string, pdfBuffer: Buffer) {
   // const getAttendenceDataResponse = await getresponsesById(user);
   const token = "helo";
   const transporter = nodemailer.createTransport({
@@ -16,12 +16,19 @@ export default async function SendEmail(user: string) {
   });
   const info = await transporter.sendMail({
     from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-    to: `${user}`,
-    subject: `Thanks  ${user} beleaving us for trusting us `,
+    to: email,
+    subject: `Thanks  ${email} beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>
         <a href="http://localhost:5173/finish">Click to Preview all you selected services</a>
        `,
+    attachments: [
+      {
+        filename: "Funeral bond.pdf",
+        content: pdfBuffer,
+      },
+    ],
   });
+
   console.log(info);
 }
