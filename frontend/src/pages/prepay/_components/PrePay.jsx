@@ -37,6 +37,9 @@ import SlipTwo from "./SlipTwo";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
 import CORE from "../../../components/common/Reusables";
+import SlipThree from "./SlipThree";
+import SlipFour from "./SlipFour";
+import SlipFive from "./SlipFive";
 const displayImage = [
   cover,
   one,
@@ -79,6 +82,9 @@ const PrePay = () => {
   // const handleImageChange = () => {
   //   setImages(displayImage);
   // };
+  const [formActive, setFormActive] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(true);
+
   const sendPdfByEmail = async () => {
     setImages(displayImage);
     const pdfBlob = await generatePdfBlob(displayImage);
@@ -92,6 +98,14 @@ const PrePay = () => {
       body: formData,
     });
   };
+  const [step, setStep] = useState(0);
+  const slips = [
+    <SlipOne />,
+    <SlipTwo />,
+    <SlipThree />,
+    <SlipFour />,
+    <SlipFive />,
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,12 +120,55 @@ const PrePay = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [images]);
+  useEffect(() => {
+    if (formActive) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [formActive]);
+  const handleToggleForm = () => {
+    if (formActive) {
+      // 🔓 Enable scroll, go back to docs
+      setFormActive(false);
+      setButtonStatus(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } else {
+      // 🔒 Disable scroll, go to form
+      setFormActive(true);
+      setButtonStatus(false);
+
+      document.getElementById("CompleteForm")?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
+  useEffect(() => {
+    document.body.style.overflow = formActive ? "hidden" : "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [formActive]);
 
   return (
     <div className="relative">
       <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
-        <button className="bg-green-700 text-xl p-3 text-white shadow-2xl rounded-2xl">
-          <a href="#CompleteForm"> Continue to fill in the form </a>
+        <button
+          onClick={handleToggleForm}
+          className="bg-green-700 text-xl p-3 text-white shadow-2xl rounded-2xl"
+        >
+          {buttonStatus
+            ? "Continue to fill in the form"
+            : "Move back to the Documentation"}
         </button>
       </div>
       <div
@@ -132,18 +189,41 @@ const PrePay = () => {
         ))}
       </div>
 
-      <div id="CompleteForm" className="scroll-mt-24 gap-10">
-        <SlipOne />
-        <SlipTwo />
+      <div
+        id="CompleteForm"
+        className="w-full h-full flex items-center justify-center transition-all duration-500"
+      >
+        <div>{slips[step]}</div>
+        {step > 0 && (
+          <button
+            onClick={() => setStep(step - 1)}
+            className="fixed left-6 top-1/2 -translate-y-1/2 z-50
+                     bg-black/60 text-white p-4 rounded-full
+                     hover:bg-black transition"
+          >
+            ◀ Previous Secction
+          </button>
+        )}
+
+        {step < slips.length - 1 && (
+          <button
+            onClick={() => setStep(step + 1)}
+            className="fixed right-6 top-1/2 -translate-y-1/2 z-50
+                     bg-black/60 text-white p-4 rounded-full
+                     hover:bg-black transition"
+          >
+            Nect Section ▶
+          </button>
+        )}
       </div>
-      <div className=" flex items-center justify-center">
+      {step === slips.length - 1 && (
         <button
-          className=" bg-amber-400 p-5 rounded-2xl "
           onClick={sendPdfByEmail}
+          className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
         >
-          Submit
+          Finish your submittion
         </button>
-      </div>
+      )}
     </div>
   );
 };

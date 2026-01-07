@@ -2,18 +2,18 @@ import React from "react";
 
 const SlipOne = () => {
   return (
-    <section className="max-w-5xl mx-auto bg-white px-10 py-12 text-[#2E3192]">
+    <section className="h-screen max-w-2xl bg-white px-10 py-5 text-[#2E3192]">
       {/* Header */}
-      <h1 className="text-4xl font-bold mb-6">
+      <h1 className="text-2xl font-bold mb-3">
         KeyInvest Funeral Bond
         <br />
         application form
       </h1>
 
-      <hr className="border-[#2E3192]/40 mb-8" />
+      <hr className="border-[#2E3192]/40 mb-2" />
 
       {/* Intro paragraphs */}
-      <div className="space-y-4 text-sm leading-relaxed">
+      <div className="space-y-2 text-xs leading-relaxed">
         <p>
           This Application Form (including the Direct Debit Request and the
           Adviser Electronic Transaction Authority Form) accompanies and forms
@@ -43,7 +43,7 @@ const SlipOne = () => {
       </div>
 
       {/* Highlight box */}
-      <div className="bg-[#F1F6F7] text-sm p-4 my-8">
+      <div className="bg-[#F1F6F7] text-xs p-2 my-2">
         For an individual applicant you only need to complete{" "}
         <strong>Investor 1</strong>. Joint applicants will complete{" "}
         <strong>Investor 1 &amp; 2</strong>. If investing for a separate life
@@ -52,11 +52,11 @@ const SlipOne = () => {
       </div>
 
       {/* Questionnaire */}
-      <h2 className="text-2xl font-semibold text-[#4BA6A6] mb-6">
+      <h2 className="text-xl font-semibold text-[#4BA6A6] mb-3">
         Target market questionnaire
       </h2>
 
-      <div className="space-y-8 text-sm">
+      <div className="space-y-4 text-sm">
         {/* Q1 */}
         <div>
           <p className="font-semibold mb-2">1. Funeral Bond Type:</p>

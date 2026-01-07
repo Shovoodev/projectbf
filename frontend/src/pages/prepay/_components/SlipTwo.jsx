@@ -1,152 +1,324 @@
-import React from "react";
+import { useState } from "react";
 
 const SlipTwo = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    surname: "",
+    givenNames: "",
+    dob: "",
+    gender: "",
+    res_unit: "",
+    res_streetNo: "",
+    res_streetName: "",
+    res_suburb: "",
+    res_state: "NSW",
+    res_postcode: "",
+    res_country: "AUSTRALIA",
+    mail_unit: "",
+    mail_streetNo: "",
+    mail_streetName: "",
+    mail_suburb: "",
+    mail_state: "NSW",
+    mail_postcode: "",
+    mail_country: "AUSTRALIA",
+    daytimeTelephone: "",
+    mobile: "",
+    daytimeAddress: "",
+    email: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
-    <section className="max-w-5xl mx-auto bg-white px-10 py-12 text-[#2E3192]">
-      {/* Header */}
-      <h1 className="text-4xl font-bold mb-6">
-        KeyInvest Funeral Bond
-        <br />
-        application form
-      </h1>
-
-      <hr className="border-[#2E3192]/40 mb-8" />
-
-      {/* Intro paragraphs */}
-      <div className="space-y-4 text-sm leading-relaxed">
-        <p>
-          This Application Form (including the Direct Debit Request and the
-          Adviser Electronic Transaction Authority Form) accompanies and forms
-          part of the Product Disclosure Statement (PDS) issued by KeyInvest Ltd
-          ABN 74 087 649 474 AFSL 240667 (KeyInvest) (‘we’, ‘us’, ‘our’ in this
-          Application Form) for the Funeral Bond dated 28 July 2025.
-        </p>
-
-        <p>
-          The PDS (and any Supplementary PDS issued) contain important
-          information about the Funeral Bond which you should consider before
-          making an application. The PDS is available via our website at
-          keyinvest.com.au or you may request a copy from your financial adviser
-          or funeral director.
-        </p>
-
-        <p>
-          An application to invest in the KeyInvest Funeral Bond can only be
-          made using this form. Completed Application Forms can be posted to
-          KeyInvest, Reply Paid 3340, RUNDLE MALL SA 5000 (no stamp required) or
-          emailed to: info@keyinvest.com.au
-        </p>
-
-        <p className="font-semibold">
-          Please use CAPITAL letters to complete the Application form
+    <section className="h-screen max-w-2xl bg-white px-10 py-5 text-[#2E3192]">
+      <div className="form-header-area">
+        <h2 className="pdf-h2">1. Investor details</h2>
+        <p className="pdf-subtitle">
+          Investor 1 (all correspondence will be sent to this person)
         </p>
       </div>
 
-      {/* Highlight box */}
-      <div className="bg-[#F1F6F7] text-sm p-4 my-8">
-        For an individual applicant you only need to complete{" "}
-        <strong>Investor 1</strong>. Joint applicants will complete{" "}
-        <strong>Investor 1 &amp; 2</strong>. If investing for a separate life
-        insured the Investor is <strong>Investor 1</strong> and the life insured{" "}
-        <strong>Investor 2</strong>.
-      </div>
+      <form className="p-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+        {/* Personal Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="col-span-full">
+            <label className="pdf-label mb-3">Title:</label>
+            <div className="pdf-radio-group">
+              {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
+                <label key={t} className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name="title"
+                    value={t}
+                    onChange={handleChange}
+                    className="pdf-radio-input"
+                  />
+                  <span className="text-gray-700 group-hover:text-blue-900">
+                    {t}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
 
-      {/* Questionnaire */}
-      <h2 className="text-2xl font-semibold text-[#4BA6A6] mb-6">
-        Target market questionnaire
-      </h2>
+          <div>
+            <label className="pdf-label">Surname:</label>
+            <input
+              type="text"
+              name="surname"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
 
-      <div className="space-y-8 text-sm">
-        {/* Q1 */}
-        <div>
-          <p className="font-semibold mb-2">1. Funeral Bond Type:</p>
-          <div className="flex gap-10">
-            {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
-              <label key={opt} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="bondType"
-                  defaultChecked={opt === "Prepaid/Assigned"}
-                />
-                {opt}
-              </label>
-            ))}
+          <div>
+            <label className="pdf-label">Given Names:</label>
+            <input
+              type="text"
+              name="givenNames"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+
+          <div>
+            <label className="pdf-label">Date of Birth:</label>
+            <input
+              type="date"
+              name="dob"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+
+          <div>
+            <label className="pdf-label">Gender:</label>
+            <div className="pdf-radio-group mt-2">
+              {["Female", "Male", "Other"].map((g) => (
+                <label key={g} className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value={g}
+                    onChange={handleChange}
+                    className="pdf-radio-input"
+                  />
+                  <span className="text-gray-700">{g}</span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Q2 */}
-        <div>
-          <p className="font-semibold mb-2">2. Is the applicant aged 10+?</p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="age10" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="age10" defaultChecked /> No
-            </label>
+        {/* Residential Address */}
+        <h3 className="pdf-section-title">
+          Residential Address{" "}
+          <span className="pdf-note">
+            (must not be a PO box, RMB or Locked Bag)
+          </span>
+        </h3>
+
+        <div className="grid grid-cols-6 gap-4">
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Unit Number</label>
+            <input
+              type="text"
+              name="res_unit"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-4">
+            <label className="pdf-label-sm">Street No</label>
+            <input
+              type="text"
+              name="res_streetNo"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Street Name</label>
+            <input
+              type="text"
+              name="res_streetName"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Suburb</label>
+            <input
+              type="text"
+              name="res_suburb"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">State</label>
+            <input
+              type="text"
+              defaultValue="NSW"
+              className="pdf-input pdf-input-readonly"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Postcode</label>
+            <input
+              type="text"
+              name="res_postcode"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Country</label>
+            <input
+              type="text"
+              defaultValue="AUSTRALIA"
+              className="pdf-input pdf-input-readonly"
+            />
+          </div>
+        </div>
+        {/* Milling  Address */}
+        <h3 className="pdf-section-title">
+          Mailing Address (
+          <span className="pdf-note">(if different to above address))</span>
+        </h3>
+
+        <div className="grid grid-cols-6 gap-4">
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Unit Number</label>
+            <input
+              type="text"
+              name="res_unit"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-4">
+            <label className="pdf-label-sm">Street No</label>
+            <input
+              type="text"
+              name="res_streetNo"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Street Name</label>
+            <input
+              type="text"
+              name="res_streetName"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Suburb</label>
+            <input
+              type="text"
+              name="res_suburb"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">State</label>
+            <input
+              type="text"
+              defaultValue="NSW"
+              className="pdf-input pdf-input-readonly"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Postcode</label>
+            <input
+              type="text"
+              name="res_postcode"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Country</label>
+            <input
+              type="text"
+              defaultValue="AUSTRALIA"
+              className="pdf-input pdf-input-readonly"
+            />
           </div>
         </div>
 
-        {/* Q3 */}
+        {/* Contact Details */}
+        <h3 className="pdf-section-title">Contact Details</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="pdf-label">Daytime Telephone:</label>
+            <input
+              type="text"
+              name="daytimeTelephone"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div>
+            <label className="pdf-label">Mobile:</label>
+            <input
+              type="text"
+              name="mobile"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div>
+            <label className="pdf-label">Daytime Adress:</label>
+            <input
+              type="text"
+              name="daytimeAddress"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="">
+            <label className="pdf-label">Email:</label>
+            <input
+              type="email"
+              name="email"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+        </div>
         <div>
-          <p className="font-semibold mb-2">
-            3. Does the Applicant currently have 1 or more funeral bonds?
+          <p className="pdf-intro-p">
+            If the application is being completed under a Power of Attorney
+            (POA), please include the attorney’s contact details under
           </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="existingBonds" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="existingBonds" defaultChecked /> No
-            </label>
-          </div>
-        </div>
-
-        {/* Q4 */}
-        <div>
-          <p className="font-semibold mb-2">
-            4. Does the Applicant intend to contribute more than the actual or
-            reasonable cost of a funeral?
+          <h3 className="pdf-section-title">Queensland residents only</h3>
+          <p className="pdf-intro-p">
+            Queensland State legislation requires all ‘selling agents’ of
+            Funeral Bonds to provide clients with a ‘Client Care Statement. We
+            are not permitted to accept Keylnvest Funeral Bond Applications from
+            Queensland residents without receiving a completed Client Care
+            Statement. A Client Care Statement can be obtained from our website
+            or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
+            Other
           </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="overCost" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="overCost" defaultChecked /> No
-            </label>
-          </div>
         </div>
-
-        <div>
-          <p className="font-semibold mb-2">
-            5. Does the Applicant require access to the capital after the 30 day
-            cooling off period?
-          </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="accessCapital" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="accessCapital" defaultChecked /> No
-            </label>
+        {/* Footer */}
+        <div className="pdf-footer">
+          <div>
+            <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
+          <div>Version: July 2025</div>
+          <div>Page 33</div>
         </div>
-      </div>
-
-      <div className="mt-10 text-xs leading-relaxed border-t pt-6">
-        <p>
-          <strong>Note:</strong> Investors must be at least 10 years old and
-          those under 16 require written consent from a parent or guardian.
-          Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or
-          DVA asset and income tests if certain conditions apply. Funeral Bonds
-          (nominated or unassigned) are exempt if specific criteria are met.
-          Holding multiple Funeral Bonds may result in assets being assessable.
-          Funeral bonds can only be used to contribute to the cost of a funeral.
-          After the 30 day cooling off period there is no access to funeral bond
-          capital prior to payment of funeral expenses.
-        </p>
-      </div>
+      </form>
     </section>
   );
 };
