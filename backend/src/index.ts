@@ -21,7 +21,11 @@ app.use(
     origin: "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Access-Control-Allow-Origin",
+    ],
   })
 );
 
@@ -67,6 +71,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/", router());
+app.options("*", cors());
 
 const MONGO_URI = process.env.MONGO_URL as string;
 

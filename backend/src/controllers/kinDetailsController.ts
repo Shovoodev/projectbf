@@ -22,14 +22,10 @@ export const registerKinDetals = async (
   res: express.Response
 ): Promise<any> => {
   try {
-    const response = req.identity;
-    const { userid } = req.params;
-    if (!response) {
+    if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    console.log("FILES:", req.files);
 
-    let savedResponse;
     const {
       salutation,
       givenName,
@@ -40,6 +36,20 @@ export const registerKinDetals = async (
       relation,
     } = req.body;
 
+    // type CloudinaryFile = Express.Multer.File & {
+    //   secure_url?: string;
+    //   url?: string;
+    //   public_id?: string;
+    // };
+
+    // const files = req.files as {
+    //   photo?: CloudinaryFile[];
+    //   sign?: CloudinaryFile[];
+    // };
+
+    // const photoUrl = files?.photo?.[0]?.secure_url ?? "";
+    // const signUrl = files?.sign?.[0]?.secure_url ?? "";
+    //changing views
     const files = req.files as {
       [fieldname: string]: Express.Multer.File[];
     };
@@ -74,25 +84,30 @@ export const registerKinDetals = async (
       existingResponse.mobile = mobile;
       existingResponse.email = email;
       existingResponse.relation = relation;
-      existingResponse.photo = photoUrl;
-      existingResponse.sign = signUrl;
 
-      savedResponse = await existingResponse.save();
-    } else {
-      savedResponse = await createKinDetail({
-        userid: req.identity._id,
-        salutation,
-        givenName,
-        surname,
-        currentAddress,
-        mobile,
-        email,
-        relation,
-        photo: photoUrl,
-        sign: signUrl,
+      if (photoUrl) existingResponse.photo = photoUrl;
+      if (signUrl) existingResponse.sign = signUrl;
+
+      await existingResponse.save();
+      return res.status(200).json({
+        message: "Kin details updated successfully",
+        data: existingResponse,
       });
     }
-    console.log({ savedResponse });
+
+    const savedResponse = await createKinDetail({
+      userid: req.identity._id,
+      salutation,
+      givenName,
+      surname,
+      currentAddress,
+      mobile,
+      email,
+      relation,
+      photo: photoUrl,
+      sign: signUrl,
+    });
+
     return res.status(201).json({
       message: "Kin details created successfully",
       data: savedResponse,

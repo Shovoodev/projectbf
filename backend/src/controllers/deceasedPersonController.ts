@@ -38,8 +38,9 @@ export const getDeceasedPersonFormAnswers = async (
       salutation,
       givenName,
       surname,
-      dateOfDeath,
-      address,
+      dateofdeath,
+      dateofbirth,
+      deceasedpersonaddress,
       deceasedPassedReason,
       deceasedNow,
       batterypowereddevices,
@@ -50,8 +51,9 @@ export const getDeceasedPersonFormAnswers = async (
       existingResponse.salutation = salutation;
       existingResponse.givenName = givenName;
       existingResponse.surname = surname;
-      existingResponse.dateOfDeath = dateOfDeath;
-      existingResponse.address = address;
+      existingResponse.dateofdeath = dateofdeath;
+      existingResponse.dateofbirth = dateofbirth;
+      existingResponse.deceasedpersonaddress = deceasedpersonaddress;
       existingResponse.deceasedPassedReason = deceasedPassedReason;
       existingResponse.deceasedNow = deceasedNow;
       existingResponse.batterypowereddevices = batterypowereddevices;
@@ -64,8 +66,9 @@ export const getDeceasedPersonFormAnswers = async (
         salutation,
         givenName,
         surname,
-        dateOfDeath,
-        address,
+        dateofdeath,
+        dateofbirth,
+        deceasedpersonaddress,
         deceasedPassedReason,
         deceasedNow,
         batterypowereddevices,

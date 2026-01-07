@@ -7,14 +7,13 @@ import {
 import { isAuthenticated } from "../middlewear";
 import { upload } from "../middlewear/upload";
 export default (router: express.Router) => {
-  //router.get("/:userid/kindetiales", getNextToKeenData);
   router.post(
     "/:userid/next-to-keen-details",
+    isAuthenticated,
     upload.fields([
       { name: "photo", maxCount: 1 },
       { name: "sign", maxCount: 1 },
     ]),
-    isAuthenticated,
     registerKinDetals
   );
 };
