@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   cover,
-  one,
-  two,
-  three,
-  four,
-  five,
-  six,
-  seven,
   eight,
-  nine,
-  ten,
-  eleven,
-  twelve,
-  thirteen,
-  fourteen,
-  fifteen,
-  sixteen,
-  seventeen,
   eighteen,
+  eleven,
+  fifteen,
+  five,
+  four,
+  fourteen,
+  nine,
   nineteen,
-  twenty,
-  twentyOne,
-  twentyTwo,
-  twentyThree,
-  twentyFour,
-  twentyFive,
-  twentySix,
-  twentySeven,
-  twentyEight,
-  twentyNine,
+  one,
+  seven,
+  seventeen,
+  six,
+  sixteen,
+  ten,
+  thirteen,
   thirty,
+  three,
+  twelve,
+  twenty,
+  twentyEight,
+  twentyFive,
+  twentyFour,
+  twentyNine,
+  twentyOne,
+  twentySeven,
+  twentySix,
+  twentyThree,
+  twentyTwo,
+  two,
 } from "../../../images/index";
 import SlipOne from "./SlipOne";
-import SlipTwo from "./SlipTwo";
 import SlipThree from "./SlipThree";
+import SlipTwo from "./SlipTwo";
 const images = [
   cover,
   one,
@@ -92,10 +92,11 @@ const PrePay = () => {
           <a href="#page"> Continue to fill in the form </a>
         </button>
       </div>
-      <div
+      {/* <div
         className="fixed inset-0 -z-10 bg-cover bg-center blur-2xl scale-150 transition-all duration-700"
         style={{ backgroundImage: `url(${bgImage})` }}
-      />
+      /> */}
+      {/* <Main /> */}
       <div className="fixed inset-0 -z-10 bg-black/40" />
       {/* 🔹 Flowing Images */}
       <div className="flex flex-col  items-center gap-10 py-3">
@@ -109,7 +110,10 @@ const PrePay = () => {
         ))}
       </div>
 
-      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto">
+      <div
+        id="page"
+        className="scroll-mt-24 max-w-4xl mx-auto space-y-3  text-[rgb(49,41,166)] "
+      >
         <SlipOne />
         <SlipTwo />
         <SlipThree />
