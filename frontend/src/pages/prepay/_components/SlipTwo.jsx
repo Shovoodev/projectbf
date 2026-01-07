@@ -23,6 +23,7 @@ const SlipTwo = () => {
     mail_country: "AUSTRALIA",
     daytimeTelephone: "",
     mobile: "",
+    daytimeAddress: "",
     email: "",
   });
 
@@ -183,6 +184,75 @@ const SlipTwo = () => {
             />
           </div>
         </div>
+        {/* Milling  Address */}
+        <h3 className="pdf-section-title">
+          Mailing Address (
+          <span className="pdf-note">(if different to above address))</span>
+        </h3>
+
+        <div className="grid grid-cols-6 gap-4">
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Unit Number</label>
+            <input
+              type="text"
+              name="res_unit"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-4">
+            <label className="pdf-label-sm">Street No</label>
+            <input
+              type="text"
+              name="res_streetNo"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Street Name</label>
+            <input
+              type="text"
+              name="res_streetName"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-3">
+            <label className="pdf-label-sm">Suburb</label>
+            <input
+              type="text"
+              name="res_suburb"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">State</label>
+            <input
+              type="text"
+              defaultValue="NSW"
+              className="pdf-input pdf-input-readonly"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Postcode</label>
+            <input
+              type="text"
+              name="res_postcode"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label-sm">Country</label>
+            <input
+              type="text"
+              defaultValue="AUSTRALIA"
+              className="pdf-input pdf-input-readonly"
+            />
+          </div>
+        </div>
 
         {/* Contact Details */}
         <h3 className="pdf-section-title">Contact Details</h3>
@@ -205,7 +275,16 @@ const SlipTwo = () => {
               className="pdf-input"
             />
           </div>
-          <div className="col-span-full">
+          <div>
+            <label className="pdf-label">Daytime Adress:</label>
+            <input
+              type="text"
+              name="daytimeAddress"
+              onChange={handleChange}
+              className="pdf-input"
+            />
+          </div>
+          <div className="">
             <label className="pdf-label">Email:</label>
             <input
               type="email"
@@ -215,7 +294,22 @@ const SlipTwo = () => {
             />
           </div>
         </div>
-
+        <div>
+          <p className="pdf-intro-p">
+            If the application is being completed under a Power of Attorney
+            (POA), please include the attorney’s contact details under
+          </p>
+          <h3 className="pdf-section-title">Queensland residents only</h3>
+          <p className="pdf-intro-p">
+            Queensland State legislation requires all ‘selling agents’ of
+            Funeral Bonds to provide clients with a ‘Client Care Statement. We
+            are not permitted to accept Keylnvest Funeral Bond Applications from
+            Queensland residents without receiving a completed Client Care
+            Statement. A Client Care Statement can be obtained from our website
+            or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
+            Other
+          </p>
+        </div>
         {/* Footer */}
         <div className="pdf-footer">
           <div>

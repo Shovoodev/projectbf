@@ -60,6 +60,8 @@ const displayImage = [
 import SlipOne from "./SlipOne";
 import SlipThree from "./SlipThree";
 import SlipTwo from "./SlipTwo";
+import InvestorTwo from "./InvestorTwo";
+import SlipFive from "./SlipFive";
 const images = [
   cover,
   one,
@@ -286,13 +288,12 @@ const PrePay = () => {
             Finish your submittion
           </button>
         )}
-      <div
-        id="page"
-        className="scroll-mt-24 max-w-4xl mx-auto space-y-3  text-[rgb(49,41,166)] "
-      >
+      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto space-y-3   ">
         <SlipOne />
         <SlipTwo />
+        <InvestorTwo />
         <SlipThree />
+        <SlipFive />
       </div>
     </div>
   );
