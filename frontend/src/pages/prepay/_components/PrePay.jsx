@@ -40,6 +40,10 @@ import SlipThree from "./SlipThree";
 import SlipTwo from "./SlipTwo";
 // import SlipFour from "./SlipFour";
 import SlipFive from "./SlipFive";
+import SlipSix from "./SlipSix";
+import SlipSeven from "./SlipSeven";
+import SlipEight from "./SlipEight";
+import SlipNine from "./SlipNine";
 const displayImage = [
   cover,
   one,
@@ -105,6 +109,10 @@ const PrePay = () => {
     <SlipThree />,
     // <SlipFour />,
     <SlipFive />,
+    <SlipSix />,
+    <SlipSeven />,
+    <SlipEight />,
+    <SlipNine />,
   ];
 
   useEffect(() => {

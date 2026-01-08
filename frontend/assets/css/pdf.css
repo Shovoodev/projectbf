@@ -226,4 +226,48 @@
   .pdf-adviser-label {
     @apply text-sm font-medium text-[rgb(49,41,166)] min-w-[180px];
   }
+
+  /*  Slip Six */
+  .pdf-declaration-list {
+    @apply space-y-4 mt-4 mb-8;
+  }
+
+  /* Individual checkbox item with better spacing for text */
+  .pdf-declaration-item {
+    @apply flex items-start gap-4 p-3 rounded-md transition-colors hover:bg-slate-50;
+  }
+
+  .pdf-declaration-checkbox {
+    @apply w-5 h-5 mt-1 accent-[rgb(49,41,166)] flex-shrink-0 cursor-pointer;
+  }
+
+  .pdf-declaration-text {
+    @apply text-[13px] leading-relaxed text-[rgb(49,41,166)];
+  }
+
+  /* Signature Upload Box */
+  .pdf-signature-zone {
+    @apply w-full border-2 border-dashed border-gray-300 rounded-lg p-6 bg-slate-50;
+    @apply flex flex-col items-center justify-center text-center transition-all;
+    @apply hover:border-[rgb(49,41,166)] hover:bg-blue-50/30;
+  }
+
+  .pdf-upload-btn {
+    @apply bg-white border border-gray-300 px-4 py-2 rounded shadow-sm text-sm font-bold;
+    @apply text-[rgb(49,41,166)] hover:bg-slate-50 active:scale-95 transition-all;
+  }
+  /* Slip Seven */
+  .pdf-signature-date-row {
+    @apply flex flex-col md:flex-row gap-6 mt-4 items-stretch;
+  }
+
+  /* Specific date field container to match signature height */
+  .pdf-date-container {
+    @apply flex flex-col justify-end flex-1;
+  }
+
+  /* Bold instruction text for specific sections */
+  .pdf-instruction-bold {
+    @apply text-sm font-black text-[rgb(49,41,166)] mb-2 leading-relaxed;
+  }
 }
