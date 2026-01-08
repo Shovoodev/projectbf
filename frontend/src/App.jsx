@@ -1,11 +1,11 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Header from "./components/layouts/Header/Header";
 import Footer from "./components/layouts/Footer/Footer";
-import { useUser } from "./components/hooks/useUser";
 import { useEffect } from "react";
+import { useUserFront } from "./utility/use-userFront";
 
 function App() {
-  const { user } = useUser();
+  const { user } = useUserFront();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 

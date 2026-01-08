@@ -187,7 +187,7 @@ export const routes = createBrowserRouter([
     element: <BlankLayout />,
     children: [
       {
-        path: "/prepay",
+        path: "/:userid/prepay",
         element: <PrePayindex />,
         isPrivate: true,
       },
