@@ -62,6 +62,10 @@ import SlipThree from "./SlipThree";
 import SlipTwo from "./SlipTwo";
 import InvestorTwo from "./InvestorTwo";
 import SlipFive from "./SlipFive";
+import SlipSix from "./SlipSix";
+import SlipSeven from "./SlipSeven";
+import SlipEight from "./SlipEight";
+import SlipNine from "./SlipNine";
 const images = [
   cover,
   one,
