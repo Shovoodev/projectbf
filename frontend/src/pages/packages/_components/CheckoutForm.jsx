@@ -3,7 +3,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import CORE from "../../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
 
 function CheckoutForm() {
   const stripe = useStripe();

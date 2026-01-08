@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
 
 import Input from "../components/common/Input";
-import CORE from "../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
 
 const Registrarion = () => {
   const [data, setData] = useState({ email: "", password: "" });

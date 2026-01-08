@@ -12,7 +12,7 @@ import {
   FiUser,
   FiPhone,
 } from "react-icons/fi";
-import CORE from "../../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
 
 const VerifiedEmailPopup = ({
   isOpen: externalIsOpen,

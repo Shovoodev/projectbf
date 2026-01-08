@@ -1,7 +1,8 @@
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
-import CORE from "../../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 const LogOut = () => {
   const navigate = useNavigate();
   const handleLogOut = async () => {

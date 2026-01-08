@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import CORE, { List, Select } from "../../components/common/Reusables";
+import { List, Select } from "../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
 import { Actions } from "./_components/Actions";
 
 import RenderQuestion from "./_components/RenderQuestion";

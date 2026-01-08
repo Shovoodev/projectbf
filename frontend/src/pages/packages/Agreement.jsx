@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
-import CORE from "../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 import SignatureField from "./_components/SignatureField";
 import { useNavigate } from "react-router";
 import base64ToFile from "../../utility";

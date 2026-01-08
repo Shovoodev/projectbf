@@ -36,7 +36,8 @@ import SlipOne from "./SlipOne";
 import SlipTwo from "./SlipTwo";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
-import CORE from "../../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 import SlipThree from "./SlipThree";
 import SlipFour from "./SlipFour";
 import SlipFive from "./SlipFive";

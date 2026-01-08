@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CORE from "../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 import { FiLoader } from "react-icons/fi";
 
 const UserPage = () => {

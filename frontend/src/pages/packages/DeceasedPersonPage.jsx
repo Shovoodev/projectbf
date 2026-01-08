@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import InfoSection from "../../components/InfoSection";
 import ServicesSection from "../../components/ServicesSection";
 import { useNavigate, useParams } from "react-router";
-import CORE from "../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 import InputField from "../../components/InputField";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import { FiLoader } from "react-icons/fi";

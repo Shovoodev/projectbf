@@ -27,6 +27,3 @@ export function Select({ label, value, options, onChange }) {
     </div>
   );
 }
-
-const CORE = "https://express-rosy-delta-94.vercel.app/"; // changeDomain
-export default CORE;
