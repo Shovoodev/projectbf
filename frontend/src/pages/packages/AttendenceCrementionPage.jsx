@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { List, Select } from "../../components/common/Reusables";
+import CORE, { List, Select } from "../../components/common/Reusables";
 import { Actions } from "./_components/Actions";
 
 import RenderQuestion from "./_components/RenderQuestion";
@@ -58,23 +58,20 @@ const AttendenceCrementionPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(
-        "http://localhost:4000/newattendingservicecremationanswers",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...setSelections,
-            totalPriceImpact: Object.values(setSelections).reduce(
-              (sum, opt) => sum + (opt.price || 0),
-              0
-            ),
-          }),
-        }
-      );
+      const res = await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...setSelections,
+          totalPriceImpact: Object.values(setSelections).reduce(
+            (sum, opt) => sum + (opt.price || 0),
+            0
+          ),
+        }),
+      });
 
       if (!res.ok) {
         const text = await res.text();
@@ -104,10 +101,9 @@ const AttendenceCrementionPage = () => {
   useEffect(() => {
     const fetchStepData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:4000/newattendingservicecremation",
-          { credentials: "include" }
-        );
+        const response = await fetch(`${CORE}/newattendingservicecremation`, {
+          credentials: "include",
+        });
 
         if (!response.ok) throw new Error("Failed to fetch data");
 

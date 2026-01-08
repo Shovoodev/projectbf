@@ -3,6 +3,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import CORE from "../../../components/common/Reusables";
 
 function CheckoutForm() {
   const stripe = useStripe();
@@ -11,7 +12,7 @@ function CheckoutForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:4242/create-payment-intent", {
+    const res = await fetch(`${CORE}/create-payment-intent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: 1000 }),

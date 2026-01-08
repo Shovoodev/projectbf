@@ -2,7 +2,7 @@ import { FaChevronLeft, FaChevronRight, FaTools } from "react-icons/fa";
 
 const SlipFive = () => {
   return (
-    <section className="h-screen max-w-2xl bg-white px-10 py-5 text-[#2E3192]">
+    <div className="form-container-base">
       <div className="h-2 bg-blue-900 w-full" />
 
       <form
@@ -197,7 +197,7 @@ const SlipFive = () => {
 
         {/* Navigation Actions */}
       </form>
-    </section>
+    </div>
   );
 };
 

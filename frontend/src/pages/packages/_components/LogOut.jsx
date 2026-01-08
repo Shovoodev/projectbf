@@ -1,10 +1,11 @@
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
+import CORE from "../../../components/common/Reusables";
 const LogOut = () => {
   const navigate = useNavigate();
   const handleLogOut = async () => {
-    await fetch(`http://localhost:4000/logout`, {
+    await fetch(`${CORE}/logout`, {
       credentials: "include",
       method: "POST",
       headers: {

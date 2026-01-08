@@ -2,140 +2,133 @@ import React from "react";
 
 const SlipOne = () => {
   return (
-    <section className="h-screen max-w-2xl bg-white px-10 py-5 text-[#2E3192]">
-      {/* Header */}
-      <h1 className="text-2xl font-bold mb-3">
-        KeyInvest Funeral Bond
-        <br />
-        application form
-      </h1>
+    <div className="form-container-base">
+      {/* Decorative Brand Top Border */}
+      <div className="h-2 bg-blue-900 w-full" />
 
-      <hr className="border-[#2E3192]/40 mb-2" />
+      <section className="p-10">
+        {/* Main Header */}
+        <header className="mb-8">
+          <h1 className="text-4xl font-black text-blue-900 leading-tight">
+            KeyInvest Funeral Bond
+            <br />
+            <span className="font-light">application form</span>
+          </h1>
+          <hr className="pdf-hr" />
+        </header>
 
-      {/* Intro paragraphs */}
-      <div className="space-y-2 text-xs leading-relaxed">
-        <p>
-          This Application Form (including the Direct Debit Request and the
-          Adviser Electronic Transaction Authority Form) accompanies and forms
-          part of the Product Disclosure Statement (PDS) issued by KeyInvest Ltd
-          ABN 74 087 649 474 AFSL 240667 (KeyInvest) (‘we’, ‘us’, ‘our’ in this
-          Application Form) for the Funeral Bond dated 28 July 2025.
-        </p>
-
-        <p>
-          The PDS (and any Supplementary PDS issued) contain important
-          information about the Funeral Bond which you should consider before
-          making an application. The PDS is available via our website at
-          keyinvest.com.au or you may request a copy from your financial adviser
-          or funeral director.
-        </p>
-
-        <p>
-          An application to invest in the KeyInvest Funeral Bond can only be
-          made using this form. Completed Application Forms can be posted to
-          KeyInvest, Reply Paid 3340, RUNDLE MALL SA 5000 (no stamp required) or
-          emailed to: info@keyinvest.com.au
-        </p>
-
-        <p className="font-semibold">
-          Please use CAPITAL letters to complete the Application form
-        </p>
-      </div>
-
-      {/* Highlight box */}
-      <div className="bg-[#F1F6F7] text-xs p-2 my-2">
-        For an individual applicant you only need to complete{" "}
-        <strong>Investor 1</strong>. Joint applicants will complete{" "}
-        <strong>Investor 1 &amp; 2</strong>. If investing for a separate life
-        insured the Investor is <strong>Investor 1</strong> and the life insured{" "}
-        <strong>Investor 2</strong>.
-      </div>
-
-      {/* Questionnaire */}
-      <h2 className="text-xl font-semibold text-[#4BA6A6] mb-3">
-        Target market questionnaire
-      </h2>
-
-      <div className="space-y-4 text-sm">
-        {/* Q1 */}
-        <div>
-          <p className="font-semibold mb-2">1. Funeral Bond Type:</p>
-          <div className="flex gap-10">
-            {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
-              <label key={opt} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="bondType"
-                  checked={opt === "Prepaid/Assigned"}
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Q2 */}
-        <div>
-          <p className="font-semibold mb-2">2. Is the applicant aged 10+?</p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="age10" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="age10" checked /> No
-            </label>
-          </div>
-        </div>
-
-        {/* Q3 */}
-        <div>
-          <p className="font-semibold mb-2">
-            3. Does the Applicant currently have 1 or more funeral bonds?
+        {/* Introduction Text */}
+        <div className="space-y-4">
+          <p className="pdf-intro-p">
+            This Application Form (including the Direct Debit Request and the
+            Adviser Electronic Transaction Authority Form) accompanies and forms
+            part of the Product Disclosure Statement (PDS) issued by KeyInvest
+            Ltd ABN 74 087 649 474 AFSL 240667 (KeyInvest) (‘we’, ‘us’, ‘our’ in
+            this Application Form) for the Funeral Bond dated 28 July 2025.
           </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="existingBonds" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="existingBonds" checked /> No
-            </label>
-          </div>
-        </div>
 
-        {/* Q4 */}
-        <div>
-          <p className="font-semibold mb-2">
-            4. Does the Applicant intend to contribute more than the actual or
-            reasonable cost of a funeral?
+          <p className="pdf-intro-p">
+            The PDS (and any Supplementary PDS issued) contain important
+            information about the Funeral Bond which you should consider before
+            making an application. The PDS is available via our website at{" "}
+            <span className="text-blue-800 font-semibold underline">
+              keyinvest.com.au
+            </span>{" "}
+            or you may request a copy from your financial adviser or funeral
+            director.
           </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="overCost" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="overCost" checked /> No
-            </label>
-          </div>
-        </div>
 
-        <div>
-          <p className="font-semibold mb-2">
-            5. Does the Applicant require access to the capital after the 30 day
-            cooling off period?
+          <p className="pdf-intro-p">
+            An application to invest in the KeyInvest Funeral Bond can only be
+            made using this form. Completed Application Forms can be posted to
+            KeyInvest, Reply Paid 3340, RUNDLE MALL SA 5000 (no stamp required)
+            or emailed to:{" "}
+            <span className="text-blue-800 font-semibold">
+              info@keyinvest.com.au
+            </span>
           </p>
-          <div className="flex gap-10">
-            <label className="flex items-center gap-2">
-              <input type="radio" name="accessCapital" /> Yes
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="radio" name="accessCapital" checked /> No
-            </label>
-          </div>
-        </div>
-      </div>
 
-      <div className="mt-10 text-xs leading-relaxed border-t pt-6">
-        <p>
+          <p className="pdf-label text-blue-900">
+            PLEASE USE CAPITAL LETTERS TO COMPLETE THE APPLICATION FORM
+          </p>
+        </div>
+
+        {/* Highlight Box */}
+        <div className="pdf-highlight-box">
+          For an individual applicant you only need to complete{" "}
+          <strong className="text-blue-900">Investor 1</strong>. Joint
+          applicants will complete{" "}
+          <strong className="text-blue-900">Investor 1 &amp; 2</strong>. If
+          investing for a separate life insured the Investor is{" "}
+          <strong>Investor 1</strong> and the life insured{" "}
+          <strong>Investor 2</strong>.
+        </div>
+
+        {/* Questionnaire Section */}
+        <h2 className="pdf-q-title">Target market questionnaire</h2>
+
+        <div className="space-y-8">
+          {/* Q1 */}
+          <div>
+            <label className="pdf-label">1. Funeral Bond Type:</label>
+            <div className="pdf-radio-group mt-2">
+              {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
+                <label key={opt} className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name="bondType"
+                    className="pdf-radio-input"
+                    defaultChecked={opt === "Prepaid/Assigned"}
+                  />
+                  <span className="text-slate-700">{opt}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Q2 - Q5 */}
+          {[
+            { id: "age10", q: "2. Is the applicant aged 10+?" },
+            {
+              id: "existingBonds",
+              q: "3. Does the Applicant currently have 1 or more funeral bonds?",
+            },
+            {
+              id: "overCost",
+              q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
+            },
+            {
+              id: "accessCapital",
+              q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
+            },
+          ].map((item) => (
+            <div key={item.id}>
+              <label className="pdf-label">{item.q}</label>
+              <div className="pdf-radio-group mt-2">
+                <label className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name={item.id}
+                    className="pdf-radio-input"
+                  />
+                  <span className="text-slate-700">Yes</span>
+                </label>
+                <label className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name={item.id}
+                    className="pdf-radio-input"
+                    defaultChecked
+                  />
+                  <span className="text-slate-700">No</span>
+                </label>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Final Notes */}
+        <footer className="pdf-q-note">
           <strong>Note:</strong> Investors must be at least 10 years old and
           those under 16 require written consent from a parent or guardian.
           Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or
@@ -145,9 +138,12 @@ const SlipOne = () => {
           Funeral bonds can only be used to contribute to the cost of a funeral.
           After the 30 day cooling off period there is no access to funeral bond
           capital prior to payment of funeral expenses.
-        </p>
-      </div>
-    </section>
+        </footer>
+
+        {/* Standard PDF Footer Navigation would go here if needed, 
+          or you can keep this as a pure cover page */}
+      </section>
+    </div>
   );
 };
 

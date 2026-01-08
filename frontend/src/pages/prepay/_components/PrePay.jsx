@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   cover,
   one,
@@ -40,6 +40,8 @@ import CORE from "../../../components/common/Reusables";
 import SlipThree from "./SlipThree";
 import SlipFour from "./SlipFour";
 import SlipFive from "./SlipFive";
+import * as htmlToImage from "html-to-image";
+
 const displayImage = [
   cover,
   one,
@@ -82,6 +84,7 @@ const PrePay = () => {
   // const handleImageChange = () => {
   //   setImages(displayImage);
   // };
+  const refs = useRef([]);
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
 
@@ -158,6 +161,22 @@ const PrePay = () => {
       document.body.style.overflow = "auto";
     };
   }, [formActive]);
+  // all component to image conversion
+  const downloadAll = async () => {
+    for (let i = 0; i < refs.current.length; i++) {
+      const node = refs.current[i];
+      if (!node) continue;
+
+      const dataUrl = await htmlToImage.toPng(node, {
+        pixelRatio: 2,
+      });
+
+      const link = document.createElement("a");
+      link.download = `card-${i + 1}.png`;
+      link.href = dataUrl;
+      link.click();
+    }
+  };
 
   return (
     <div className="relative">
@@ -189,11 +208,18 @@ const PrePay = () => {
         ))}
       </div>
 
+      <button onClick={downloadAll}>Download as Image</button>
+
       <div
         id="CompleteForm"
         className="w-full h-full flex items-center justify-center transition-all duration-500"
       >
         <div>{slips[step]}</div>
+        {/* {slips.map((item, index) => (
+          <div key={item} ref={(el) => (refs.current[index] = el)}>
+            {slips[step]}
+          </div>
+        ))} */}
         {step > 0 && (
           <button
             onClick={() => setStep(step - 1)}
@@ -215,15 +241,15 @@ const PrePay = () => {
             Nect Section ▶
           </button>
         )}
+        {step === slips.length - 1 && (
+          <button
+            onClick={sendPdfByEmail}
+            className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
+          >
+            Finish your submittion
+          </button>
+        )}
       </div>
-      {step === slips.length - 1 && (
-        <button
-          onClick={sendPdfByEmail}
-          className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
-        >
-          Finish your submittion
-        </button>
-      )}
     </div>
   );
 };

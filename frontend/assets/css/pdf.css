@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@layer components {
+  /* Root Layout and Sections */
+  .form-container-base {
+    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
+  }
+
+  .form-header-area {
+    @apply bg-slate-50 p-6 border-b border-gray-200;
+  }
+
+  /* Typography */
+  .pdf-h2 {
+    @apply text-2xl font-bold text-[rgb(49,41,166)];
+  }
+
+  .pdf-section-title {
+    @apply text-lg font-bold text-[rgb(49,41,166)]  uppercase tracking-wide border-b border-gray-200 pb-2 mt-8 mb-4;
+  }
+
+  .pdf-label {
+    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block;
+  }
+
+  .pdf-label-sm {
+    @apply text-[14px] font-black text-[rgb(49,41,166)]  block;
+  }
+
+  /* Inputs */
+  .pdf-input {
+    @apply w-full p-2 border border-gray-300 rounded outline-none transition-all duration-200;
+    @apply focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+
+  .pdf-input-readonly {
+    @apply bg-slate-50 font-semibold cursor-not-allowed;
+  }
+
+  /* Checkboxes & Radios */
+  .pdf-radio-group {
+    @apply flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100;
+  }
+
+  /* Footer & Actions */
+  .pdf-footer {
+    @apply mt-12 pt-4 border-t border-slate-200 flex flex-col md:flex-row justify-between;
+    @apply text-[10px] text-gray-400 font-bold uppercase tracking-widest;
+  }
+
+  .btn-primary-pdf {
+    @apply flex items-center bg-blue-900 text-white px-10 py-3 rounded-md shadow-md;
+    @apply hover:bg-blue-950 transition-all active:scale-95 w-full sm:w-auto justify-center font-bold;
+  }
+
+  .btn-secondary {
+    @apply flex items-center text-[rgb(49,41,166)]  font-bold hover:text-[rgb(49,41,166)] transition-colors py-2 px-4;
+  }
+
+  /*  */
+  .pdf-currency-wrapper {
+    @apply relative flex-1 max-w-xs;
+  }
+  .pdf-radio-item {
+    @apply flex items-center space-x-2 cursor-pointer text-[rgb(49,41,166)];
+  }
+  .pdf-currency-symbol {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(49,41,166)] font-bold;
+  }
+
+  .pdf-info-box {
+    @apply mt-6 p-4 border-l-4 border-blue-900 bg-blue-50 text-sm text-[rgb(49,41,166)]  leading-relaxed italic;
+  }
+
+  .pdf-footnote {
+    @apply mt-8 text-[11px] text-[rgb(49,41,166)]  leading-normal;
+  }
+
+  .pdf-footnote-sup {
+    @apply text-[rgb(49,41,166)]  font-bold mr-1;
+  }
+  /* The standard bold label */
+  .pdf-label {
+    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block transition-colors duration-200;
+  }
+
+  /* The tiny uppercase label used in address grids */
+
+  /* Slip One */
+  .pdf-intro-p {
+    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+  }
+
+  .pdf-hr {
+    @apply border-blue-900/20 my-6;
+  }
+
+  /* Highlight Box (Instruction area) */
+  .pdf-highlight-box {
+    @apply bg-[#F1F6F7] text-sm p-4 my-8 border-l-4 border-[#4BA6A6] text-[rgb(49,41,166)];
+  }
+
+  /* Questionnaire Specifics */
+  .pdf-q-title {
+    @apply text-2xl font-semibold   text-[#4BA6A6] mb-6 mt-8;
+  }
+
+  .pdf-q-note {
+    @apply mt-10 text-[11px] leading-relaxed border-t border-slate-200 pt-6 text-[rgb(49,41,166)]  italic;
+  }
+  /* Full screen backdrop for the introduction */
+  .intro-overlay-container {
+    @apply fixed inset-0 h-screen w-screen bg-[#F5F5F5] flex items-start justify-end z-[1000] overflow-hidden;
+  }
+
+  /* The floating white information card */
+  .intro-card {
+    @apply bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[rgb(44,90,160)]/30;
+    @apply w-full max-w-[400px] m-5 min-h-[200px] flex items-center z-[100] p-9 text-center;
+  }
+
+  /* The main button used in the overlay */
+  .btn-continue {
+    @apply bg-[rgb(44,90,160)] text-white border-2 border-[rgb(44,90,160)] px-8 py-4 rounded-lg;
+    @apply text-base font-semibold uppercase tracking-widest transition-all duration-300;
+    @apply shadow-[0_6px_16px_rgba(44,90,160,0.4)] hover:brightness-110 active:scale-95;
+  }
+
+  /* Navigation circle buttons */
+  .nav-circle-btn {
+    @apply fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44,90,160)];
+    @apply text-[rgb(44,90,160)] w-[60px] h-[60px] rounded-full text-2xl font-bold;
+    @apply flex items-center justify-center transition-all duration-300 z-[1100] shadow-lg hover:bg-white;
+  }
+
+  /* Bottom zoom controls */
+  .zoom-controls {
+    @apply absolute bottom-5 right-5 bg-white border border-gray-200 p-2 rounded-lg flex items-center gap-3 z-[300] shadow-sm;
+  }
+  /* Slip Three */
+  /* Investment Table Styles */
+  .pdf-table {
+    @apply w-full border-collapse mt-4 text-[12px];
+  }
+
+  .pdf-table-thead {
+    @apply border-b border-[#4BA6A6];
+  }
+
+  .pdf-table-th {
+    @apply py-2 px-1 text-left font-bold text-[#4BA6A6] align-bottom leading-tight;
+  }
+
+  .pdf-table-tr-highlight {
+    @apply bg-[#00A99D] text-white font-bold;
+  }
+
+  .pdf-table-td {
+    @apply py-2 px-1 border-b border-[#4BA6A6] text-[rgb(49,41,166)] align-top;
+  }
+
+  .pdf-table-td-teal {
+    @apply text-[#00A99D] font-bold;
+  }
+
+  /* Currency Input within Table */
+  .pdf-table-input-wrapper {
+    @apply flex items-center gap-1;
+  }
+
+  .pdf-table-input {
+    @apply w-full border-b border-gray-300 outline-none bg-transparent py-0.5;
+  }
+
+  /* ASP Frequency Grid */
+  .pdf-asp-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 mt-6;
+  }
+
+  .pdf-checkbox-square {
+    @apply w-6 h-6 border border-blue-200 bg-blue-50/50 flex-shrink-0 cursor-pointer;
+  }
+
+  /* Another for Slip Three */
+
+  .form-container-base {
+    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
+    /* Reduce padding on mobile */
+    @apply p-4 md:p-8;
+  }
+
+  /* Table responsiveness */
+  .pdf-table-wrapper {
+    @apply w-full overflow-x-auto; /* Essential for mobile table viewing */
+  }
+
+  .pdf-table {
+    @apply min-w-[600px] w-full border-collapse mt-4 text-[12px];
+  }
+
+  /* Header responsiveness */
+  .pdf-h2 {
+    @apply text-xl md:text-2xl font-bold text-[rgb(49,41,166)];
+  }
+
+  /* Radio & Frequency Grid responsiveness */
+  .pdf-asp-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 mt-6;
+  }
+
+  /* Slip five */
+  .pdf-checkbox-box {
+    @apply w-6 h-6 border border-blue-200 bg-blue-50/50 flex items-center justify-center cursor-pointer flex-shrink-0;
+  }
+
+  /* Inline input for percentages/amounts */
+  .pdf-inline-input {
+    @apply border-b border-gray-300 bg-blue-50/30 px-2 h-7 outline-none focus:border-blue-500 transition-colors;
+  }
+
+  /* Adviser detail field row */
+  .pdf-adviser-row {
+    @apply flex flex-col md:flex-row md:items-center gap-2 mb-3;
+  }
+
+  .pdf-adviser-label {
+    @apply text-sm font-medium text-[rgb(49,41,166)] min-w-[180px];
+  }
+}
