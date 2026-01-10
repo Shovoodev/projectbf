@@ -58,6 +58,20 @@ const SlipNine = () => {
           <h3 className="pdf-section-title border-none mb-0 text-[#00A99D]">
             Authorised Signature of Funeral Director:
           </h3>
+          {/* Signature Upload Area */}
+          <div className="flex-[2] space-y-2">
+            <label className="pdf-label-sm">Signature:</label>
+            <div className="pdf-signature-zone !py-4">
+              <FaUpload className="text-gray-300 text-2xl mb-2" />
+              <input id="sig-nominate" type="file" className="hidden" />
+              <label
+                htmlFor="sig-nominate"
+                className="pdf-upload-btn cursor-pointer"
+              >
+                Upload Signature
+              </label>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-full">
               <label className="pdf-label">Name of Funeral Director:</label>

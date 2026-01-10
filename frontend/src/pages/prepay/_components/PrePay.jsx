@@ -61,11 +61,18 @@ import SlipOne from "./SlipOne";
 import SlipThree from "./SlipThree";
 import SlipTwo from "./SlipTwo";
 import InvestorTwo from "./InvestorTwo";
-import SlipFive from "./SlipFive";
-import SlipSix from "./SlipSix";
-import SlipSeven from "./SlipSeven";
+import SlipEleven from "./KeyInvestDirectDebitRequest/SlipEleven";
+import SlipFifteen from "./KeyInvestDirectDebitRequest/SlipFifteen";
+import SlipFourteen from "./KeyInvestDirectDebitRequest/SlipFourteen";
+import SlipTen from "./KeyInvestDirectDebitRequest/SlipTen";
+import SlipThirteen from "./KeyInvestDirectDebitRequest/SlipThirteen";
+import SlipTwelve from "./KeyInvestDirectDebitRequest/SlipTwelve";
 import SlipEight from "./SlipEight";
+import SlipFive from "./SlipFive";
 import SlipNine from "./SlipNine";
+import SlipSeven from "./SlipSeven";
+import SlipSix from "./SlipSix";
+import SlipSixteen from "./KeyInvestDirectDebitRequest/SlipSixteen";
 const images = [
   cover,
   one,
@@ -145,6 +152,13 @@ const PrePay = () => {
     <SlipFortySix />,
     <SlipFourtySeven />,
     <img src={fortySeven} />,
+    <SlipTen />,
+    <SlipEleven />,
+    <SlipTwelve />,
+    <SlipThirteen />,
+    <SlipFourteen />,
+    <SlipFifteen />,
+    <SlipSixteen />,
   ];
   useEffect(() => {
     const handleScroll = () => {

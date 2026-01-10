@@ -1,10 +1,11 @@
-import { FaChevronLeft, FaChevronRight, FaTools } from "react-icons/fa";
+import { useState } from "react";
 
 const SlipFive = () => {
+  const [userValue, setUserValue] = useState("");
+  const maxValue = 25;
+
   return (
     <div className="form-container-base">
-      <div className="h-2 bg-blue-900 w-full" />
-
       <form
         className="p-4 md:p-10 space-y-10"
         onSubmit={(e) => e.preventDefault()}
@@ -28,8 +29,19 @@ const SlipFive = () => {
 
           <div className="flex items-center gap-3 flex-wrap">
             <span className="pdf-label mb-0">Annual percentage increase</span>
-            <input type="text" className="pdf-inline-input w-48" />
-            <span className="pdf-label mb-0">% (up to a maximum of 25%)</span>
+            <input
+              type="text"
+              value={userValue}
+              onChange={(e) => {
+                if (e.target.value <= maxValue) {
+                  setUserValue(e.target.value);
+                }
+              }}
+              className="pdf-inline-input w-48"
+            />
+            <span className="pdf-label mb-0">
+              % (up to a maximum of {maxValue}%)
+            </span>
           </div>
         </section>
 
@@ -77,7 +89,7 @@ const SlipFive = () => {
                 <span className="pdf-label mb-0 min-w-[140px]">
                   Percentage of the initial contribution:
                 </span>
-                <input type="text" className="pdf-inline-input w-48" />
+                <input type="number" className="pdf-inline-input w-48" />
                 <span className="font-bold text-[rgb(49,41,166)]">%</span>
               </div>
             </div>

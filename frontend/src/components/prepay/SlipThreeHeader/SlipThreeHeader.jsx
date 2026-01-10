@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const SlipThreeHeader = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +14,6 @@ const SlipThreeHeader = () => {
   return (
     <div className="form-container-base">
       {/* Visual Accent for this section */}
-      <div className="h-2 bg-blue-900 w-full" />
 
       <div className="form-header-area">
         <h2 className="pdf-h2">2. Contribution details</h2>
@@ -34,7 +32,8 @@ const SlipThreeHeader = () => {
             <input
               type="text"
               name="contribution_amount"
-              onChange={handleChange}
+              readOnly
+              value={4000}
               placeholder="0.00"
               className="pdf-input pl-8 font-semibold text-lg"
             />
@@ -47,11 +46,12 @@ const SlipThreeHeader = () => {
             Please select how the initial contribution will be paid.
           </p>
           <div className="pdf-radio-group p-4 bg-slate-50 rounded-md border border-slate-100">
-            {["bpay", "direct_debit", "eft"].map((method) => (
+            {["bpay", "direct_debit", "oheque", "eft"].map((method) => (
               <label key={method} className="pdf-radio-item">
                 <input
                   type="radio"
                   name="payment_method"
+                  disabled={method === "direct_debit" || method === "oheque"}
                   value={method}
                   onChange={handleChange}
                   className="pdf-radio-input"
@@ -61,6 +61,8 @@ const SlipThreeHeader = () => {
                     ? "EFT"
                     : method === "bpay"
                     ? "BPAY"
+                    : method === "oheque"
+                    ? "OHEQUE"
                     : "Direct Debit"}
                 </span>
               </label>
