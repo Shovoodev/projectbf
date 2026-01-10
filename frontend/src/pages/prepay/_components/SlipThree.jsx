@@ -25,7 +25,7 @@ const SlipThree = () => {
     <>
       <SlipThreeHeader />
       <div className="form-container-base">
-        <div className="h-2 bg-blue-900 w-full" />
+    
 
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>

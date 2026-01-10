@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@layer base {
+  p {
+    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+  }
+}
 @layer components {
   /* Root Layout and Sections */
   .form-container-base {
@@ -269,5 +274,22 @@
   /* Bold instruction text for specific sections */
   .pdf-instruction-bold {
     @apply text-sm font-black text-[rgb(49,41,166)] mb-2 leading-relaxed;
+  }
+  /* SlipThirteen */
+  .pdf-legal-list {
+    @apply pl-8 space-y-3 mt-3;
+  }
+
+  .pdf-legal-list-item {
+    @apply flex gap-3 text-[14px] leading-relaxed text-slate-700;
+  }
+
+  .pdf-legal-letter {
+    @apply font-bold text-[rgb(49,41,166)] min-w-[15px] italic;
+  }
+
+  /* Section header for the service agreement */
+  .pdf-agreement-h3 {
+    @apply font-bold text-[rgb(49,41,166)] mb-3 text-lg;
   }
 }

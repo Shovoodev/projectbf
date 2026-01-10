@@ -2,7 +2,6 @@ const SlipOne = () => {
   return (
     <div className="form-container-base">
       {/* Decorative Brand Top Border */}
-      <div className="h-2 bg-blue-900 w-full" />
 
       <section className="p-10">
         {/* Main Header */}
@@ -75,6 +74,9 @@ const SlipOne = () => {
                   <input
                     type="radio"
                     name="bondType"
+                    disabled={
+                      opt === "Unassigned" || opt === "Prepaid/Assigned"
+                    }
                     className="pdf-radio-input"
                     defaultChecked={opt === "Prepaid/Assigned"}
                   />
@@ -114,6 +116,7 @@ const SlipOne = () => {
                 <label className="pdf-radio-item">
                   <input
                     type="radio"
+                    disabled
                     name={item.id}
                     className="pdf-radio-input"
                     defaultChecked
