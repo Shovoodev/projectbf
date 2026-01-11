@@ -54,7 +54,7 @@ const AttendenceCrementionPage = () => {
       return updated;
     });
   };
-
+  console.log({ CORE });
   const geNext = async (e) => {
     e.preventDefault();
 
