@@ -6,6 +6,7 @@ import {
   FaUserGroup,
   FaUserPen,
 } from "react-icons/fa6";
+import img from "./images/image-1.png";
 import HelpButton from "../Service/HelpButton";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -86,7 +87,7 @@ const WhyChooseUsSection = () => {
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg h-full">
             <img
-              src="https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/image-1.png"
+              src={img}
               alt="Compassionate Funeral Team"
               className="w-full h-full object-cover"
             />

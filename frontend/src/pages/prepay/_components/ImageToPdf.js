@@ -9,17 +9,9 @@ export const generatePdfBlob = async (images) => {
     if (i !== 0) pdf.addPage();
 
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight =
-      (imgData.height * pdfWidth) / imgData.width;
+    const pdfHeight = (imgData.height * pdfWidth) / imgData.width;
 
-    pdf.addImage(
-      imgData,
-      "JPEG",
-      0,
-      0,
-      pdfWidth,
-      pdfHeight
-    );
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
   }
 
   return pdf.output("blob");

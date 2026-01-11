@@ -1,8 +1,7 @@
-import React from "react";
-import { FaPhone, FaArrowRight } from "react-icons/fa6";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-
+import img from "./images/About-us-image-1-e1760255666343.png";
 const About = () => {
   return (
     <section className="bg-white py-16 md:py-24">
@@ -11,7 +10,7 @@ const About = () => {
           {/* Image */}
           <div className="rounded-xl overflow-hidden shadow-lg">
             <img
-              src="https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/About-us-image-1-e1760255666343.png"
+              src={img}
               alt="Black funeral hearse"
               className="w-full h-auto object-cover"
             />

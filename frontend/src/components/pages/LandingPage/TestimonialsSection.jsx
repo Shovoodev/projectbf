@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar } from "react-icons/fa6";
+import img from "./images/placeholder.png";
 
 // Individual Testimonial Card
 const TestimonialCard = ({ name, text, image }) => {
@@ -19,10 +20,7 @@ const TestimonialCard = ({ name, text, image }) => {
       <div className="flex items-center gap-4 border-t border-gray-100 pt-6 mt-auto">
         <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
           <img
-            src={
-              image ||
-              "https://blacktulipfunerals.com.au/wp-content/plugins/elementor/assets/images/placeholder.png"
-            }
+            src={image || img}
             alt={name}
             className="w-full h-full object-cover"
           />

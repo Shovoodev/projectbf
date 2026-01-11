@@ -1,17 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import { FaLongArrowAltRight } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
+import team1 from "./images/team1.png";
+import team2 from "./images/team2.png";
+import team3 from "./images/team3.png";
+import team4 from "./images/team4.png";
+import team5 from "./images/team5.png";
+import team6 from "./images/team6.png";
 const MeetTheTeamSection = () => {
   // Image data
-  const teamImages = [
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/new_team_img2.png",
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/new_team_img6.png",
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/new_team_img10.png",
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/new_team_img12.png",
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Gelyn.png",
-    "https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/Patrick-Harrison-Web.png",
-  ];
+  const teamImages = [team1, team2, team3, team4, team5, team6];
 
   // Duplicate the array to create the seamless infinite loop
   const scrollingImages = [...teamImages, ...teamImages];

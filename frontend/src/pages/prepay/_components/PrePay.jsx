@@ -1,48 +1,57 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import CORE from "../../../components/common/Reusables";
 import {
   cover,
-  one,
-  two,
-  three,
-  four,
-  five,
-  six,
-  seven,
   eight,
-  nine,
-  ten,
-  eleven,
-  twelve,
-  thirteen,
-  fourteen,
-  fifteen,
-  sixteen,
-  seventeen,
   eighteen,
+  eleven,
+  fifteen,
+  five,
+  four,
+  fourteen,
+  nine,
   nineteen,
-  twenty,
-  twentyOne,
-  twentyTwo,
-  twentyThree,
-  twentyFour,
-  twentyFive,
-  twentySix,
-  twentySeven,
-  twentyEight,
-  twentyNine,
+  one,
+  seven,
+  seventeen,
+  six,
+  sixteen,
+  ten,
+  thirteen,
   thirty,
+  three,
+  twelve,
+  twenty,
+  twentyEight,
+  twentyFive,
+  twentyFour,
+  twentyNine,
+  twentyOne,
+  twentySeven,
+  twentySix,
+  twentyThree,
+  twentyTwo,
+  two,
 } from "../../../images/index";
-import SlipOne from "./SlipOne";
-import SlipTwo from "./SlipTwo";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
-const CORE = import.meta.env.VITE_API_URL;
-
-import SlipThree from "./SlipThree";
-import SlipFour from "./SlipFour";
-import SlipFive from "./SlipFive";
-import * as htmlToImage from "html-to-image";
-
+import SlipOne from "./Slip32";
+import SlipTwo from "./Slip33";
+import SlipThree from "./Slip35";
+// import SlipFour from "./SlipFour";
+import FormSubmitSlip from "./KeyInvestDirectDebitRequest/FormSubmit";
+import SlipTen from "./KeyInvestDirectDebitRequest/Slip41";
+import SlipEleven from "./KeyInvestDirectDebitRequest/Slip42";
+import SlipTwelve from "./KeyInvestDirectDebitRequest/Slip43";
+import SlipThirteen from "./KeyInvestDirectDebitRequest/Slip44";
+import SlipFourteen from "./KeyInvestDirectDebitRequest/Slip45";
+import SlipFifteen from "./KeyInvestDirectDebitRequest/SlipFifteen";
+import SlipSixteen from "./KeyInvestDirectDebitRequest/SlipSixteen";
+import SlipFive from "./Slip36";
+import SlipSix from "./Slip37";
+import SlipSeven from "./Slip38";
+import SlipEight from "./Slip39";
+import SlipNine from "./Slip40";
 const displayImage = [
   cover,
   one,
@@ -107,8 +116,20 @@ const PrePay = () => {
     <SlipOne />,
     <SlipTwo />,
     <SlipThree />,
-    <SlipFour />,
+    // <SlipFour />,
     <SlipFive />,
+    <SlipSix />,
+    <SlipSeven />,
+    <SlipEight />,
+    <SlipNine />,
+    <SlipTen />,
+    <SlipEleven />,
+    <SlipTwelve />,
+    <SlipThirteen />,
+    <SlipFourteen />,
+    <SlipFifteen />,
+    <FormSubmitSlip />,
+    <SlipSixteen />,
   ];
 
   useEffect(() => {
@@ -195,8 +216,8 @@ const PrePay = () => {
         className="fixed inset-0 -z-10 bg-cover bg-center blur-2xl scale-150 transition-all duration-700"
         style={{ backgroundImage: `url(${bgImage})` }}
       />
+      {/* <Main /> */}
       <div className="fixed inset-0 -z-10 bg-black/40" />
-
       {/* 🔹 Flowing Images */}
       <div className="flex flex-col  items-center gap-10 py-3">
         {images.map((img, index) => (
@@ -213,14 +234,11 @@ const PrePay = () => {
 
       <div
         id="CompleteForm"
-        className="w-full h-full flex items-center justify-center transition-all duration-500"
+        className="w-full  flex items-center justify-center transition-all duration-500"
       >
-        <div>{slips[step]}</div>
-        {/* {slips.map((item, index) => (
-          <div key={item} ref={(el) => (refs.current[index] = el)}>
-            {slips[step]}
-          </div>
-        ))} */}
+        <div className="scroll-mt-24 max-h-[600px] overflow-y-scroll max-w-4xl mx-auto space-y-3">
+          {slips[step]}
+        </div>
         {step > 0 && (
           <button
             onClick={() => setStep(step - 1)}

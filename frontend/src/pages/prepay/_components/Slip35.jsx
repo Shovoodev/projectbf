@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
 
 const SlipThree = () => {
   const [formData, setFormData] = useState({
@@ -22,8 +23,9 @@ const SlipThree = () => {
 
   return (
     <>
-      <section className="h-screen max-w-2xl bg-white px-10 py-5 text-[#2E3192]">
-        <div className="h-2 bg-blue-900 w-full" />
+      <SlipThreeHeader />
+      <div className="form-container-base">
+    
 
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>
@@ -149,7 +151,7 @@ const SlipThree = () => {
             {/* Responsive Buttons */}
           </form>
         </div>
-      </section>
+      </div>
     </>
   );
 };

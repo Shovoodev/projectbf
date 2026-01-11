@@ -20,21 +20,30 @@ import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
+import Btf from "./pages/Btf";
 // from Toukirul vai
+
+import BlankLayout from "./BlankLayout";
+import AgreementForm from "./pages/Agreement";
+
 // import Pay_now from "./pages/Pay_now";
 import Registrarion from "./pages/Registration";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
+
 import UserPage from "./pages/dashboard/UserPage";
-import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
-import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
+
 import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
 import KinDetailsPage from "./pages/packages/KinDetailsPage";
-import Signature from "./pages/Signature";
-import Btf from "./pages/Btf";
+import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
+// import PaynowPage from "./pages/packages/PaynowPage";
+import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import PrePayindex from "./pages/prepay";
-import BlankLayout from "./BlankLayout";
+// import Registrarion from "./pages/Registration";
+// import LoginScreen from "./pages/SignIn";
+import Signature from "./pages/Signature";
+// import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
 
 export const routes = createBrowserRouter([
@@ -115,6 +124,18 @@ export const routes = createBrowserRouter([
       {
         path: "/expansion",
         element: <Expansion />,
+      },
+      {
+        path: "/agreement",
+        element: <AgreementForm />,
+      },
+      {
+        path: "/about-btf",
+        element: <Btf />,
+      },
+      {
+        path: "/signature",
+        element: <Signature />,
       },
       // from Toukirul
       {
