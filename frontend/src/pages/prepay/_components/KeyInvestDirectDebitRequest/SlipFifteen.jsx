@@ -1,6 +1,4 @@
-import { useRef, useState } from "react";
-import { FaUpload } from "react-icons/fa";
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import Signature from "../common/Signature";
 
 const SlipFifteen = () => {
   const declarations = [
@@ -19,31 +17,6 @@ const SlipFifteen = () => {
     "KeyInvest may refuse to accept authority or permit a person to transact or carry out a transaction under this agreement.",
     "KeyInvest can cancel or vary these conditions by giving you not less than seven (7) days written notice.",
   ];
-
-  const sigPadRef = useRef(null);
-  const [sigDataUrl, setSigDataUrl] = useState(null);
-  const [uploadedSig, setUploadedSig] = useState(null);
-
-  const handleExport = async () => {
-    if (!sigPadRef.current) return;
-    try {
-      const data = await sigPadRef.current.exportImage("png");
-      if (data) setSigDataUrl(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleClear = () => sigPadRef.current?.clearCanvas();
-  const handleUndo = () => sigPadRef.current?.undo();
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => setUploadedSig(ev.target.result);
-    reader.readAsDataURL(file);
-  };
 
   return (
     <div className="form-container-base">
@@ -101,69 +74,7 @@ const SlipFifteen = () => {
         </div>
 
         {/* Signature Area */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 items-center">
-          <div className="space-y-4">
-            <p className="text-xs text-gray-500 italic">
-              If this application is in joint names, both Investors are required
-              to sign.
-            </p>
-            <div className="pdf-signature-zone">
-              <FaUpload className="text-gray-300 text-3xl mb-3" />
-              <input
-                id="sig-1"
-                type="file"
-                className="hidden"
-                accept="image/*,application/pdf"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="sig-1" className="pdf-upload-btn cursor-pointer">
-                Upload Investor 1 Signature
-              </label>
-              <p className="text-[10px] text-gray-400 mt-2">
-                PNG, JPG or PDF accepted
-              </p>
-
-              {uploadedSig && uploadedSig.startsWith("data:image") && (
-                <img
-                  src={uploadedSig}
-                  alt="uploaded signature"
-                  className="mt-2 border rounded max-w-full h-auto"
-                />
-              )}
-
-              {uploadedSig &&
-                uploadedSig.startsWith("data:application/pdf") && (
-                  <div className="mt-2 text-xs text-gray-600 border p-2 rounded">
-                    PDF signature uploaded
-                  </div>
-                )}
-            </div>
-            <label className="pdf-label text-center">
-              Signature of Investor 1
-            </label>
-          </div>
-          <div className="space-y-4 mt-7">
-            {/* Signature canvas for Investor 2 */}
-            <ReactSketchCanvas
-              ref={sigPadRef}
-              width={"240px"}
-              height={"120px"}
-              strokeWidth={2}
-              strokeColor="black"
-              className="block border border-gray-200 rounded"
-            />
-
-            <div className="flex gap-2 ">
-              <button
-                type="button"
-                onClick={handleClear}
-                className="px-3 py-1 bg-gray-100 rounded border text-sm"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-        </div>
+        <Signature />
 
         {/* Footer */}
         <div className="pdf-footer">
@@ -176,7 +87,7 @@ const SlipFifteen = () => {
           <div className="flex gap-8 items-center">
             <div className="hidden md:block">Version: July 2025</div>
             <div className="bg-[rgb(49,41,166)] text-white px-2 py-0.5 rounded text-[12px]">
-              37
+              46
             </div>
           </div>
         </div>

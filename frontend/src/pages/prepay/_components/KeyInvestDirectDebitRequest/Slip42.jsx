@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
 
+import Signature from "../common/Signature";
 const SlipEleven = () => {
   const [formData, setFormData] = useState({
     lumpSumAmount: "",
@@ -33,7 +34,7 @@ const SlipEleven = () => {
               <div className="flex items-center">
                 <span className="font-bold text-[rgb(49,41,166)] mr-1">$</span>
                 <input
-                  type="text"
+                  type="number"
                   name="lumpSumAmount"
                   className="pdf-inline-input w-40 font-bold"
                   onChange={handleInputChange}
@@ -48,7 +49,7 @@ const SlipEleven = () => {
               <div className="flex items-center">
                 <span className="font-bold text-[rgb(49,41,166)] mr-1">$</span>
                 <input
-                  type="text"
+                  type="number"
                   name="rspContributionAmount"
                   className="pdf-inline-input w-40 font-bold"
                   onChange={handleInputChange}
@@ -75,7 +76,7 @@ const SlipEleven = () => {
               <div className="flex items-center">
                 <span className="font-bold text-[rgb(49,41,166)] mr-1">$</span>
                 <input
-                  type="text"
+                  type="number"
                   name="rspEndAmount"
                   className="pdf-inline-input w-40 font-bold"
                   onChange={handleInputChange}
@@ -113,9 +114,13 @@ const SlipEleven = () => {
           </div>
 
           {/* Signature Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
-            {/* Signature 1 */}
-            <div className="space-y-6">
+          {/* New Signature Start */}
+          <Signature />
+          {/* New Signature end */}
+          {/* old signatur start */}
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10"> */}
+          {/* Signature 1 */}
+          {/* <div className="space-y-6">
               <div className="border-b-2 border-[rgb(49,41,166)] pb-2">
                 <span className="pdf-label !text-blue-900">
                   Signature of Account Holder 1
@@ -133,10 +138,10 @@ const SlipEleven = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Signature 2 */}
-            <div className="space-y-6">
+          {/* Signature 2 */}
+          {/* <div className="space-y-6">
               <div className="border-b-2 border-[rgb(49,41,166)] pb-2">
                 <span className="pdf-label !text-blue-900">
                   Signature of Account Holder 2
@@ -154,8 +159,9 @@ const SlipEleven = () => {
                   />
                 </div>
               </div>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
+          {/* old signature end */}
           <p className="pdf-footnote text-center mt-6">
             (All bank signatories must sign)
           </p>

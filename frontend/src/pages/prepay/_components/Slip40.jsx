@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
-
+import { useState } from "react";
+import img from "./images/Scott Harris Sign.png";
 const SlipNine = () => {
   const [formData, setFormData] = useState({
     funeral_director_name: "",
@@ -59,17 +58,10 @@ const SlipNine = () => {
             Authorised Signature of Funeral Director:
           </h3>
           {/* Signature Upload Area */}
-          <div className="flex-[2] space-y-2">
+          <div className="max-w-70 space-y-2">
             <label className="pdf-label-sm">Signature:</label>
             <div className="pdf-signature-zone !py-4">
-              <FaUpload className="text-gray-300 text-2xl mb-2" />
-              <input id="sig-nominate" type="file" className="hidden" />
-              <label
-                htmlFor="sig-nominate"
-                className="pdf-upload-btn cursor-pointer"
-              >
-                Upload Signature
-              </label>
+              <img src={img} alt="" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

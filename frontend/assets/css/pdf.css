@@ -234,12 +234,12 @@
 
   /*  Slip Six */
   .pdf-declaration-list {
-    @apply space-y-4 mt-4 mb-8;
+    @apply space-y-0 mt-4 mb-8;
   }
 
   /* Individual checkbox item with better spacing for text */
   .pdf-declaration-item {
-    @apply flex items-start gap-4 p-3 rounded-md transition-colors hover:bg-slate-50;
+    @apply flex items-center gap-4 p-2 rounded-md transition-colors;
   }
 
   .pdf-declaration-checkbox {

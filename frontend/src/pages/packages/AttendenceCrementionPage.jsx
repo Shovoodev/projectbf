@@ -194,7 +194,6 @@ const AttendenceCrementionPage = () => {
             ]}
           />
         </Card>
-
         <Card title="Disbursements">
           <List
             items={[
@@ -205,7 +204,7 @@ const AttendenceCrementionPage = () => {
             ]}
           />
         </Card>
-
+        ok
         <Card title="Included Services">
           <List
             items={[
@@ -216,7 +215,6 @@ const AttendenceCrementionPage = () => {
             ]}
           />
         </Card>
-
         <Card title="Included Variables">
           {data.map((item) => (
             <RenderQuestion
@@ -229,7 +227,6 @@ const AttendenceCrementionPage = () => {
             />
           ))}
         </Card>
-
         <Card title="Options">
           <Select
             label="Hearse"
@@ -241,6 +238,7 @@ const AttendenceCrementionPage = () => {
               "Premium Hearse",
             ]}
           />
+
           <Select
             label="Bottled Water 600ml"
             value="Not Required"

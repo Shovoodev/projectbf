@@ -35,22 +35,23 @@ import {
 } from "../../../images/index";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
-import SlipOne from "./SlipOne";
-import SlipThree from "./SlipThree";
-import SlipTwo from "./SlipTwo";
+import SlipOne from "./Slip32";
+import SlipTwo from "./Slip33";
+import SlipThree from "./Slip35";
 // import SlipFour from "./SlipFour";
-import SlipEleven from "./KeyInvestDirectDebitRequest/SlipEleven";
+import FormSubmitSlip from "./KeyInvestDirectDebitRequest/FormSubmit";
+import SlipTen from "./KeyInvestDirectDebitRequest/Slip41";
+import SlipEleven from "./KeyInvestDirectDebitRequest/Slip42";
+import SlipTwelve from "./KeyInvestDirectDebitRequest/Slip43";
+import SlipThirteen from "./KeyInvestDirectDebitRequest/Slip44";
+import SlipFourteen from "./KeyInvestDirectDebitRequest/Slip45";
 import SlipFifteen from "./KeyInvestDirectDebitRequest/SlipFifteen";
-import SlipFourteen from "./KeyInvestDirectDebitRequest/SlipFourteen";
-import SlipTen from "./KeyInvestDirectDebitRequest/SlipTen";
-import SlipThirteen from "./KeyInvestDirectDebitRequest/SlipThirteen";
-import SlipTwelve from "./KeyInvestDirectDebitRequest/SlipTwelve";
-import SlipEight from "./SlipEight";
-import SlipFive from "./SlipFive";
-import SlipNine from "./SlipNine";
-import SlipSeven from "./SlipSeven";
-import SlipSix from "./SlipSix";
 import SlipSixteen from "./KeyInvestDirectDebitRequest/SlipSixteen";
+import SlipFive from "./Slip36";
+import SlipSix from "./Slip37";
+import SlipSeven from "./Slip38";
+import SlipEight from "./Slip39";
+import SlipNine from "./Slip40";
 const displayImage = [
   cover,
   one,
@@ -126,6 +127,7 @@ const PrePay = () => {
     <SlipThirteen />,
     <SlipFourteen />,
     <SlipFifteen />,
+    <FormSubmitSlip />,
     <SlipSixteen />,
   ];
 
@@ -193,10 +195,10 @@ const PrePay = () => {
             : "Move back to the Documentation"}
         </button>
       </div>
-      {/* <div
+      <div
         className="fixed inset-0 -z-10 bg-cover bg-center blur-2xl scale-150 transition-all duration-700"
         style={{ backgroundImage: `url(${bgImage})` }}
-      /> */}
+      />
       {/* <Main /> */}
       <div className="fixed inset-0 -z-10 bg-black/40" />
       {/* 🔹 Flowing Images */}
@@ -213,9 +215,9 @@ const PrePay = () => {
 
       <div
         id="CompleteForm"
-        className="w-full h-full flex items-center justify-center transition-all duration-500"
+        className="w-full  flex items-center justify-center transition-all duration-500"
       >
-        <div className="scroll-mt-24 max-w-4xl mx-auto space-y-3">
+        <div className="scroll-mt-24 max-h-[600px] overflow-y-scroll max-w-4xl mx-auto space-y-3">
           {slips[step]}
         </div>
         {step > 0 && (

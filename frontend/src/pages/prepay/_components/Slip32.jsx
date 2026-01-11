@@ -1,11 +1,11 @@
 const SlipOne = () => {
   return (
-    <div className="form-container-base">
+    <div className="form-container-base ">
       {/* Decorative Brand Top Border */}
 
       <section className="p-10">
         {/* Main Header */}
-        <header className="mb-8">
+        <header className="mb-2">
           <h1 className="text-4xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />

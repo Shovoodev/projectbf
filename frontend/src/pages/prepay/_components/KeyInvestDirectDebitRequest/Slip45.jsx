@@ -53,6 +53,7 @@ const SlipFourteen = () => {
         </header>
 
         {/* Instructions Block */}
+
         <div className="space-y-4 mb-10">
           <div>
             <span className="font-bold text-[#00A99D] block mb-1 text-sm">
