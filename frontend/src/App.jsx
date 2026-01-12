@@ -30,6 +30,7 @@ function App() {
   return (
     <section>
       <Header />
+
       <main className="mx-auto">
         <Outlet />
       </main>

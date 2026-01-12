@@ -1,6 +1,8 @@
-import Signature from "./common/Signature";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import SignatureField from "../../packages/_components/SignatureField";
 
-const SlipSix = () => {
+const SlipThirtySeven = () => {
+  const { sigCanvasRef, saveSignature, clearSignature } = usePrePayServiceApi();
   const declarations = [
     "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
     "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
@@ -46,12 +48,28 @@ const SlipSix = () => {
         </div>
 
         {/* Signature Section */}
-        <Signature />
+        <div className="">
+          <SignatureField
+            sigPadRef={sigCanvasRef}
+            saveSignature={saveSignature}
+            clearSignature={clearSignature}
+            penColor="black"
+            canvasProps={{
+              width: 400,
+              height: 150,
+              className: "w-full h-[150px]",
+            }}
+          />
+        </div>
         {/* Footer */}
         <div className="pdf-footer">
-          <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
-          <div className="bg-[rgb(49,41,166)] text-white px-2 py-0.5 rounded text-xs">
-            37
+          <div className="flex gap-2">
+            <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
+            <span>Funeral Bond Product Disclosure Statement (PDS)</span>
+          </div>
+          <div className="flex gap-8">
+            <div>Version: July 2025</div>
+            <div className="font-bold">37</div>
           </div>
         </div>
       </form>
@@ -59,4 +77,4 @@ const SlipSix = () => {
   );
 };
 
-export default SlipSix;
+export default SlipThirtySeven;

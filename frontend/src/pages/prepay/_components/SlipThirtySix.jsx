@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SlipFive = () => {
+const SlipThirtySix = () => {
   const [userValue, setUserValue] = useState("");
   const maxValue = 25;
 
@@ -213,4 +213,4 @@ const SlipFive = () => {
   );
 };
 
-export default SlipFive;
+export default SlipThirtySix;

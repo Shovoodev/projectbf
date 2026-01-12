@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-
-
-
-=======
-import React from "react";
-
-const SlipFour = () => {
+const SlipThirtyTwo = () => {
   return (
-    <div className="form-container-base">
+    <div className="form-container-base ">
       {/* Decorative Brand Top Border */}
-      <div className="h-2 bg-blue-900 w-full" />
 
       <section className="p-10">
         {/* Main Header */}
-        <header className="mb-8">
+        <header className="mb-2">
           <h1 className="text-4xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />
@@ -82,8 +74,12 @@ const SlipFour = () => {
                   <input
                     type="radio"
                     name="bondType"
+                    disabled={
+                      opt === "Unassigned" || opt === "Prepaid/Assigned"
+                    }
                     className="pdf-radio-input"
                     defaultChecked={opt === "Prepaid/Assigned"}
+                    checked={opt === "Nominated"}
                   />
                   <span className="text-slate-700">{opt}</span>
                 </label>
@@ -121,6 +117,7 @@ const SlipFour = () => {
                 <label className="pdf-radio-item">
                   <input
                     type="radio"
+                    disabled
                     name={item.id}
                     className="pdf-radio-input"
                     defaultChecked
@@ -146,11 +143,17 @@ const SlipFour = () => {
         </footer>
 
         {/* Standard PDF Footer Navigation would go here if needed, 
-          or you can keep this as a pure cover page */}
+            or you can keep this as a pure cover page */}
       </section>
+      <div className="pdf-footer">
+        <div>
+          <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
+        </div>
+        <div>Version: July 2025</div>
+        <div>Page 32</div>
+      </div>
     </div>
   );
 };
 
-export default SlipFour;
->>>>>>> main
+export default SlipThirtyTwo;

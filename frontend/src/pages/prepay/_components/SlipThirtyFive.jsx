@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
-const SlipThree = () => {
-  const [formData, setFormData] = useState({
-    contribution_amount: "",
-    payment_method: "",
-    asp_frequency: "",
-  });
+const SlipThirtyFive = () => {
+  const { setAspFrequency } = usePrePayServiceApi();
 
   const investmentOptions = [
     {
@@ -25,8 +21,6 @@ const SlipThree = () => {
     <>
       <SlipThreeHeader />
       <div className="form-container-base">
-    
-
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>
         </div>
@@ -129,6 +123,7 @@ const SlipThree = () => {
                       type="radio"
                       name="asp_frequency"
                       className="pdf-radio-input"
+                      onChange={(e) => setAspFrequency(e.target.value)}
                       defaultChecked={freq.label === "Monthly"}
                     />
                     <div className="flex flex-wrap gap-2 text-sm items-center">
@@ -151,9 +146,16 @@ const SlipThree = () => {
             {/* Responsive Buttons */}
           </form>
         </div>
+        <div className="pdf-footer">
+          <div>
+            <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
+          </div>
+          <div>Version: July 2025</div>
+          <div>Page 35</div>
+        </div>
       </div>
     </>
   );
 };
 
-export default SlipThree;
+export default SlipThirtyFive;

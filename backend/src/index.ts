@@ -97,7 +97,3 @@ export async function connectDB() {
   cached.conn = await cached.promise;
   return cached.conn;
 }
-console.log({
-  cloud: process.env.CLOUDINARY_CLOUD_NAME,
-  key: process.env.CLOUDINARY_API_KEY,
-});

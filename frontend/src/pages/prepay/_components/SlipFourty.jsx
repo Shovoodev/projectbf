@@ -1,6 +1,6 @@
 import { useState } from "react";
 import img from "./images/Scott Harris Sign.png";
-const SlipNine = () => {
+const SlipFourty = () => {
   const [formData, setFormData] = useState({
     funeral_director_name: "",
     funeral_director_phone: "",
@@ -92,19 +92,12 @@ const SlipNine = () => {
         {/* Acknowledgement and Signature */}
 
         {/* Footer Branding */}
-        <div className="pdf-footer mt-12">
-          <div className="flex flex-wrap gap-2">
-            <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
-            <span className="hidden sm:inline">
-              Funeral Bond Product Disclosure Statement (PDS)
-            </span>
+        <div className="pdf-footer">
+          <div>
+            <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div className="flex gap-8 items-center">
-            <div className="hidden md:block">Version: July 2025 </div>
-            <div className="bg-[rgb(49,41,166)] text-white px-2 py-0.5 rounded text-[12px]">
-              38
-            </div>
-          </div>
+          <div>Version: July 2025</div>
+          <div>Page 40</div>
         </div>
         {/* Responsive Navigation Actions */}
       </form>
@@ -112,4 +105,4 @@ const SlipNine = () => {
   );
 };
 
-export default SlipNine;
+export default SlipFourty;

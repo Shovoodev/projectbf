@@ -14,4 +14,4 @@ function base64ToFile(dataUrl, filename) {
 
   return new File([u8arr], filename, { type: mime });
 }
- export default base64ToFile  
+ export default base64ToFile  ;

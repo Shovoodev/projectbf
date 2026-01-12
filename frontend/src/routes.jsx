@@ -34,8 +34,6 @@ import LoginScreen from "./pages/SignIn";
 
 import UserPage from "./pages/dashboard/UserPage";
 
-import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
-import KinDetailsPage from "./pages/packages/KinDetailsPage";
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -45,6 +43,7 @@ import PrePayindex from "./pages/prepay";
 import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
+import Registration from "./pages/Registration";
 
 export const routes = createBrowserRouter([
   {
@@ -161,7 +160,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <Registrarion />,
+        element: <Registration />,
       },
       {
         path: "/packages/basic/register",

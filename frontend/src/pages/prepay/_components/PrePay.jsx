@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import CORE from "../../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+
 import {
   cover,
   eight,
   eighteen,
   eleven,
   fifteen,
+  fortySeven,
   five,
   four,
   fourteen,
@@ -23,6 +25,7 @@ import {
   twelve,
   twenty,
   twentyEight,
+  fortyThree,
   twentyFive,
   twentyFour,
   twentyNine,
@@ -32,26 +35,27 @@ import {
   twentyThree,
   twentyTwo,
   two,
+  fortyTwo,
 } from "../../../images/index";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
-import SlipOne from "./Slip32";
-import SlipTwo from "./Slip33";
-import SlipThree from "./Slip35";
 // import SlipFour from "./SlipFour";
-import FormSubmitSlip from "./KeyInvestDirectDebitRequest/FormSubmit";
-import SlipTen from "./KeyInvestDirectDebitRequest/Slip41";
-import SlipEleven from "./KeyInvestDirectDebitRequest/Slip42";
-import SlipTwelve from "./KeyInvestDirectDebitRequest/Slip43";
-import SlipThirteen from "./KeyInvestDirectDebitRequest/Slip44";
-import SlipFourteen from "./KeyInvestDirectDebitRequest/Slip45";
-import SlipFifteen from "./KeyInvestDirectDebitRequest/SlipFifteen";
-import SlipSixteen from "./KeyInvestDirectDebitRequest/SlipSixteen";
-import SlipFive from "./Slip36";
-import SlipSix from "./Slip37";
-import SlipSeven from "./Slip38";
-import SlipEight from "./Slip39";
-import SlipNine from "./Slip40";
+// import all the slips in order
+import SlipThirtyTwo from "./SlipThirtyTwo";
+import SlipThirtyThree from "./SlipThirtyThree";
+import SlipThirtyFour from "./SlipThirtyFour";
+import SlipThirtyFive from "./SlipThirtyFive";
+import SlipThirtySix from "./SlipThirtySix";
+import SlipThirtySeven from "./SlipThirtySeven";
+import SlipThirtyEight from "./SlipThirtyEight";
+import SlipFourtyOne from "./SlipFourtyOne";
+import SlipFourtyTwo from "./SlipFourtyTwo";
+import SlipThirtyNine from "./SlipThirtyNine";
+import SlipFourty from "./SlipFourty";
+import SlipFortySix from "./SlipFortySix";
+import SlipFourtyFive from "./SlipFourtyFive";
+import SlipFourtySeven from "./SlipFourtySeven";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 const displayImage = [
   cover,
   one,
@@ -95,6 +99,7 @@ const PrePay = () => {
   //   setImages(displayImage);
   // };
   const refs = useRef([]);
+  const { investors, directDebitForm } = usePrePayServiceApi();
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
 
@@ -113,25 +118,24 @@ const PrePay = () => {
   };
   const [step, setStep] = useState(0);
   const slips = [
-    <SlipOne />,
-    <SlipTwo />,
-    <SlipThree />,
-    // <SlipFour />,
-    <SlipFive />,
-    <SlipSix />,
-    <SlipSeven />,
-    <SlipEight />,
-    <SlipNine />,
-    <SlipTen />,
-    <SlipEleven />,
-    <SlipTwelve />,
-    <SlipThirteen />,
-    <SlipFourteen />,
-    <SlipFifteen />,
-    <FormSubmitSlip />,
-    <SlipSixteen />,
+    <SlipThirtyTwo />,
+    <SlipThirtyThree />,
+    <SlipThirtyFour />,
+    <SlipThirtyFive />,
+    <SlipThirtySix />,
+    <SlipThirtySeven />,
+    <SlipThirtyEight />,
+    <SlipThirtyNine />,
+    <SlipFourty />,
+    <SlipFourtyOne />,
+    <SlipFourtyTwo />,
+    <img src={fortyTwo} />,
+    <img src={fortyThree} />,
+    <SlipFourtyFive />,
+    <SlipFortySix />,
+    <SlipFourtySeven />,
+    <img src={fortySeven} />,
   ];
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -158,7 +162,6 @@ const PrePay = () => {
   }, [formActive]);
   const handleToggleForm = () => {
     if (formActive) {
-      // 🔓 Enable scroll, go back to docs
       setFormActive(false);
       setButtonStatus(true);
 
@@ -199,7 +202,8 @@ const PrePay = () => {
       link.click();
     }
   };
-
+  //debug
+  console.log({ investors, directDebitForm });
   return (
     <div className="relative">
       <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
@@ -230,13 +234,22 @@ const PrePay = () => {
         ))}
       </div>
 
-      <button onClick={downloadAll}>Download as Image</button>
-
       <div
         id="CompleteForm"
-        className="w-full  flex items-center justify-center transition-all duration-500"
+        className={`fixed inset-0 z-40 flex items-center justify-center
+    transition-all duration-500
+    ${
+      formActive
+        ? "opacity-100 pointer-events-auto"
+        : "opacity-0 pointer-events-none"
+    }
+  `}
       >
-        <div className="scroll-mt-24 max-h-[600px] overflow-y-scroll max-w-4xl mx-auto space-y-3">
+        <div
+          className="w-full h-full max-w-5xl mx-auto
+                overflow-y-auto px-6 py-10 space-y-3
+                bg-white rounded-none md:rounded-2xl shadow-2xl"
+        >
           {slips[step]}
         </div>
         {step > 0 && (
@@ -263,7 +276,7 @@ const PrePay = () => {
         {step === slips.length - 1 && (
           <button
             onClick={sendPdfByEmail}
-            className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
           >
             Finish your submittion
           </button>

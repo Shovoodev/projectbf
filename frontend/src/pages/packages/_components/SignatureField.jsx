@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
-const SignatureField = ({ sigPadRef, clearSignature }) => {
+const SignatureField = ({ sigPadRef, clearSignature, saveSignature }) => {
   const wrapperRef = useRef(null);
   const [size, setSize] = useState({ width: 0, height: 150 });
 
@@ -29,6 +29,15 @@ const SignatureField = ({ sigPadRef, clearSignature }) => {
       </div>
 
       <div className="flex gap-3 mt-3 right-0">
+        <button
+          type="button"
+          onClick={saveSignature}
+          className={`px-4 py-2 rounded ${
+            !size.width ? "bg-gray-200" : "bg-black text-white"
+          }`}
+        >
+          Save
+        </button>
         <button
           type="button"
           onClick={clearSignature}
