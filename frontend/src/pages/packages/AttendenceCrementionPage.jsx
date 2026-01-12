@@ -20,7 +20,7 @@ export function Card({ title, children, className = "" }) {
 }
 
 const AttendenceCrementionPage = () => {
-  const BASE_PRICE = 4400;
+  const BASE_PRICE = 4899;
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -213,7 +213,7 @@ const AttendenceCrementionPage = () => {
           </Card>
         </div>
         {/* my */}
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* 4. Included Variables (Dynamic) */}
           {/* Spanning 2 columns visually if needed, but keeping grid uniform for now */}
           <Card title="Included Variables" className="">

@@ -16,7 +16,7 @@ export function Select({ label, value, options, onChange }) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="p-2  rounded bg-gray-100 text-left w-48"
+        className="p-2  rounded bg-gray-100 text-left w-2/3"
       >
         {options?.map((opt) => (
           <option className="text-sm" key={opt} value={opt}>
