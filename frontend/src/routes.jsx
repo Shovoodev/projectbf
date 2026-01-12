@@ -139,7 +139,7 @@ export const routes = createBrowserRouter([
       },
       // from Toukirul
       {
-        path: "/packages/basic",
+        path: "/packages/attending-service-cremation",
         element: <AttendenceCrementionPage />,
       },
       {

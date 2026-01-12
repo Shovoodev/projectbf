@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
-import logo from "./btf-logo.png";
-import { useUser } from "../../hooks/useUser";
 import LogOut from "../../../pages/packages/_components/LogOut";
+import { useUser } from "../../hooks/useUser";
+import logo from "./btf-logo.png";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
@@ -34,21 +34,24 @@ const Header = () => {
               <button className=" flex items-center gap-1 hover:text-primary">
                 Packages <FaChevronDown className="text-[10px]" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link to="/packages/basic" className="dropdown-item">
-                  Basic Package
+              <div className="absolute top-full left-0 mt-2 w-65 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <Link
+                  to="/packages/attending-service-cremation"
+                  className="dropdown-item"
+                >
+                  Attending Service & Cremation
                 </Link>
                 <Link
                   to="/packages/viewing-and-cremention"
                   className="dropdown-item"
                 >
-                  Standard Package
+                  Viewing & Cremation
                 </Link>
                 <Link
                   to="/packages/no-service-cremention"
                   className="dropdown-item"
                 >
-                  Premium Package
+                  No Service Cremation
                 </Link>
               </div>
             </div>
@@ -173,14 +176,23 @@ const Header = () => {
             </button>
             {openMobileDropdown === "packages" && (
               <div className="ml-4 mb-4 flex flex-col space-y-2">
-                <Link to="/packages/basic" className="block">
-                  Basic Package
+                <Link
+                  to="/packages/attending-service-cremation"
+                  className="dropdown-item"
+                >
+                  Attending Service & Cremation
                 </Link>
-                <Link to="/packages/viewing-and-cremention" className="block">
-                  Standard Package
+                <Link
+                  to="/packages/viewing-and-cremention"
+                  className="dropdown-item"
+                >
+                  Viewing & Cremation
                 </Link>
-                <Link to="/packages/no-service-cremention" className="block">
-                  Premium Package
+                <Link
+                  to="/packages/no-service-cremention"
+                  className="dropdown-item"
+                >
+                  No Service Cremation
                 </Link>
               </div>
             )}

@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
-import PopupEnquirey from "./PopupEnquirey";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useUserFront } from "../../../utility/use-userFront";
+import PopupEnquirey from "./PopupEnquirey";
 
 export function Actions({ totalPrice, geNext }) {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export function Actions({ totalPrice, geNext }) {
       {/* Make Agreement button */}
       <div>
         <button
-          className="px-6 py-3 rounded-full bg-gray-100 font-medium hover:bg-gray-600 hover:text-white hover:font-bold transition-all duration-300"
+          className="btn-primary normal"
           onClick={() => openPopup("agreement")}
         >
           Make Agreement Now
@@ -39,7 +39,7 @@ export function Actions({ totalPrice, geNext }) {
       {/* Enquiry button */}
       <div>
         <button
-          className="px-6 py-3 rounded-full bg-gray-100 font-medium hover:bg-gray-600 hover:text-white hover:font-bold transition-all duration-300"
+          className="btn-primary normal"
           onClick={() => openPopup("enquirey")}
         >
           Enquire Now
@@ -47,10 +47,7 @@ export function Actions({ totalPrice, geNext }) {
       </div>
 
       {/* PrePay button */}
-      <button
-        className="px-6 py-3 rounded-full bg-gray-100 font-medium hover:bg-gray-600 hover:text-white hover:font-bold transition-all duration-300"
-        onClick={handlePress}
-      >
+      <button className="btn-primary normal" onClick={handlePress}>
         Prepay
       </button>
 
