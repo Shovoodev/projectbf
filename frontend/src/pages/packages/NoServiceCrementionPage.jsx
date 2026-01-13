@@ -11,7 +11,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
     >
-      <h3 className="font-display font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-display font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}

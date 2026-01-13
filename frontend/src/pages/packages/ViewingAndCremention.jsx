@@ -11,7 +11,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
     >
-      <h3 className="font-display font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-display font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}
@@ -120,7 +120,7 @@ const ViewingAndCrementionPage = () => {
 
   return (
     <div className="bg-white min-h-screen pb-20">
-      <div className="section-container max-w-7xl mx-auto px-6 py-16">
+      <div className="section-container  mx-auto px-6 py-16">
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
           <div className="max-w-2xl">
