@@ -45,6 +45,7 @@ import PrePayindex from "./pages/prepay";
 import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
+import Packages from "./pages/Packages";
 
 export const routes = createBrowserRouter([
   {
@@ -126,6 +127,10 @@ export const routes = createBrowserRouter([
         element: <Expansion />,
       },
       {
+        path: "/packages",
+        element: <Packages />,
+      },
+      {
         path: "/agreement",
         element: <AgreementForm />,
       },
@@ -171,6 +176,7 @@ export const routes = createBrowserRouter([
       //   path: "/:totalPrice/packages/basic/prepage",
       //   element: <PaynowPage />,
       // },
+
       {
         path: "/:userid/user",
         element: <UserPage />,

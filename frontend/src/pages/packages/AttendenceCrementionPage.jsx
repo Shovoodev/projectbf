@@ -4,6 +4,8 @@ import { List, Select } from "../../components/common/Reusables"; // Ensure thes
 import { useUser } from "../../components/hooks/useUser";
 import { Actions } from "./_components/Actions";
 import RenderQuestion from "./_components/RenderQuestion";
+import AdditionalInfoSection from "./service-component/AdditionalInfoSection";
+import FloralGallerySection from "./service-component/FloralGallerySection";
 
 // Reusable Card Component matching the design
 export function Card({ title, children, className = "" }) {
@@ -266,6 +268,8 @@ const AttendenceCrementionPage = () => {
         {/* --- ACTIONS FOOTER --- */}
         <Actions goNext={goNext} totalPrice={totalPrice} />
       </div>
+      <FloralGallerySection />
+      <AdditionalInfoSection />
     </div>
   );
 };
