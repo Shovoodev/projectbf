@@ -39,6 +39,9 @@ import PrePayindex from "./pages/prepay";
 import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 import Signature from "./pages/Signature";
+// import BlankLayout from "./BlankLayout";
+import AgreementFormPage from "./pages/packages/Agreement";
+import Packages from "./pages/Packages";
 
 export const routes = createBrowserRouter([
   {
@@ -120,16 +123,8 @@ export const routes = createBrowserRouter([
         element: <Expansion />,
       },
       {
-        path: "/agreement",
-        element: <AgreementForm />,
-      },
-      {
-        path: "/about-btf",
-        element: <Btf />,
-      },
-      {
-        path: "/signature",
-        element: <Signature />,
+        path: "/packages",
+        element: <Packages />,
       },
       {
         path: "/agreement",
@@ -177,6 +172,7 @@ export const routes = createBrowserRouter([
       //   path: "/:totalPrice/packages/basic/prepage",
       //   element: <PaynowPage />,
       // },
+
       {
         path: "/:userid/user",
         element: <UserPage />,

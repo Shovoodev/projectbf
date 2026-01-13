@@ -31,9 +31,12 @@ const Header = () => {
 
             {/* Packages Dropdown */}
             <div className="relative group">
-              <button className=" flex items-center gap-1 hover:text-primary">
+              <a
+                href="/packages"
+                className="flex items-center gap-1 hover:text-primary"
+              >
                 Packages <FaChevronDown className="text-[10px]" />
-              </button>
+              </a>
               <div className="absolute top-full left-0 mt-2 w-65 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                 <Link
                   to="/packages/attending-service-cremation"
@@ -165,12 +168,13 @@ const Header = () => {
             </Link>
 
             {/* Packages */}
-            <button
+            <a
+              href="/packages"
               onClick={() => toggleMobileDropdown("packages")}
-              className="flex justify-between w-full text-lg font-medium mb-2"
+              className="flex items-center gap-1 hover:text-primary"
             >
-              Packages <FaChevronDown />
-            </button>
+              Packages <FaChevronDown className="text-[10px]" />
+            </a>
             {openMobileDropdown === "packages" && (
               <div className="ml-4 mb-4 flex flex-col space-y-2">
                 <Link
@@ -195,12 +199,13 @@ const Header = () => {
             )}
 
             {/* BTF */}
-            <button
+            <a
+              href="/about-btf"
               onClick={() => toggleMobileDropdown("btf")}
-              className="flex justify-between w-full text-lg font-medium mb-2"
+              className="flex items-center gap-1 hover:text-primary"
             >
-              BTF <FaChevronDown />
-            </button>
+              BTF <FaChevronDown className="text-[10px]" />
+            </a>
             {openMobileDropdown === "btf" && (
               <div className="ml-4 mb-4 flex flex-col space-y-2">
                 <Link to="/team" className="block">
