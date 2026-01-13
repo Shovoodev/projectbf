@@ -1,5 +1,8 @@
 import express from "express";
-import { sendPdfOfPrepay } from "../controllers/pdf.routeController";
+import {
+  sendPdfOfInvoice,
+  sendPdfOfPrepay,
+} from "../controllers/pdf.routeController";
 import multer from "multer";
 
 const upload = multer({
@@ -11,4 +14,5 @@ export default (router: express.Router) => {
     upload.single("file"),
     sendPdfOfPrepay
   );
+  router.post("/api/send-invoice", sendPdfOfInvoice);
 };

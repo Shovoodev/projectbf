@@ -2,8 +2,9 @@ import { useNavigate } from "react-router";
 import PopupEnquirey from "./PopupEnquirey";
 import { useState } from "react";
 import { useUserFront } from "../../../utility/use-userFront";
+import Invoice from "./InvoicePdf";
 
-export function Actions({ totalPrice, geNext }) {
+export function Actions({ goNext }) {
   const navigate = useNavigate();
   const [activePopup, setActivePopup] = useState(null);
 
@@ -22,6 +23,13 @@ export function Actions({ totalPrice, geNext }) {
 
   const closePopup = () => {
     setActivePopup(null);
+    goNext();
+  };
+
+  const [invoiceItems, setInvoiceItems] = useState([]);
+
+  const addToInvoice = (item) => {
+    setInvoiceItems([...invoiceItems, item]);
   };
 
   return (
@@ -53,7 +61,6 @@ export function Actions({ totalPrice, geNext }) {
       >
         Prepay
       </button>
-
       {/* Agreement Popup */}
       <PopupEnquirey
         isOpen={activePopup === "agreement"}

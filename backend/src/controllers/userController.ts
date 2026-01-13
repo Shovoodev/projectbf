@@ -3,7 +3,7 @@ import { createUser, getUserByEmail, getUserBySessionToken } from "../db/user";
 import { authentication, invoiceId, random } from "../lib";
 import nodemailer from "nodemailer";
 import { AuthenticatedRequest } from "../lib/types";
-import SendEmail from "../lib/resend";
+// import SendEmail from "../lib/resend";
 import { getAttendenceByUserId } from "../db/attendence";
 import { getKinByUserId } from "../db/kinDetails";
 import { getDeceasedByUserId } from "../db/deceasedPerson";
@@ -149,59 +149,63 @@ export const logOut = async (
   }
 };
 
-export const sendAllRelatedDocuments = async (
-  req: AuthenticatedRequest,
-  res: express.Response
-): Promise<any> => {
-  try {
-    if (!req.identity) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+// export const sendAllRelatedDocuments = async (
+//   req: AuthenticatedRequest,
+//   res: express.Response
+// ): Promise<any> => {
+//   try {
+//     if (!req.identity) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
 
-    const userId = req.identity._id.toString();
+//     const userId = req.identity._id.toString();
 
-    console.log("USER ID:", userId);
+//     const attendence = await getAttendenceByUserId(userId);
+//     const kinDetails = await getKinByUserId(userId);
+//     const deceasedPerson = await getDeceasedByUserId(userId);
 
-    const attendence = await getAttendenceByUserId(userId);
-    const kinDetails = await getKinByUserId(userId);
-    const deceasedPerson = await getDeceasedByUserId(userId);
+//     console.log({ attendence, kinDetails, deceasedPerson });
+//     if (!req.file) {
+//       return res.status(400).json({ message: "PDF file missing" });
+//     }
 
-    console.log({ attendence, kinDetails, deceasedPerson });
-    // const response = SendEmail(userId);
+//     const pdfBuffer = req.file.buffer;
+//     // const send = SendEmail(req.identity.email, pdfBuffer);
+//     // const response = SendEmail(userId);
 
-    return res.status(200).json({
-      message: "Data fetched successfully",
-      data: { attendence, kinDetails, deceasedPerson },
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to fetch documents" });
-  }
-};
+//     return res.status(200).json({
+//       message: "Data fetched successfully",
+//       data: { send },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Failed to fetch documents" });
+//   }
+// };
 
-export const getAllSelectedServices = async (
-  req: AuthenticatedRequest,
-  res: express.Response
-): Promise<any> => {
-  try {
-    if (!req.identity) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+// export const getAllSelectedServices = async (
+//   req: AuthenticatedRequest,
+//   res: express.Response
+// ): Promise<any> => {
+//   try {
+//     if (!req.identity) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
 
-    const userId = req.identity._id.toString();
+//     const userId = req.identity._id.toString();
 
-    console.log("USER ID:", userId);
+//     console.log("USER ID:", userId);
 
-    const attendence = await getAttendenceByUserId(userId);
-    const kinDetails = await getKinByUserId(userId);
-    const deceasedPerson = await getDeceasedByUserId(userId);
+//     const attendence = await getAttendenceByUserId(userId);
+//     const kinDetails = await getKinByUserId(userId);
+//     const deceasedPerson = await getDeceasedByUserId(userId);
 
-    return res.status(200).json({
-      message: "Data fetched successfully",
-      data: { attendence, kinDetails, deceasedPerson },
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to fetch documents" });
-  }
-};
+//     return res.status(200).json({
+//       message: "Data fetched successfully",
+//       data: { attendence, kinDetails, deceasedPerson },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Failed to fetch documents" });
+//   }
+// };

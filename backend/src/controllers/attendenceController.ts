@@ -38,15 +38,16 @@ export const getAttendenceAnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const {
-      stationery,
-      bodypreparation,
-      coffin,
-      flowers,
-      urn,
-      collectionOfUrn,
-      totalPriceImpact = 0,
-    } = req.body;
+    const { selections, totalPriceImpact = 0 } = req.body;
+
+    const stationery = selections?.Stationery?.value;
+    const bodyPreparation = selections?.["Body Preparation"]?.value;
+    const coffin = selections?.Coffin?.value;
+    const flowers = selections?.["Flowers:"]?.value;
+    const urn = selections?.Urn?.value;
+    const collectionOfUrn = selections?.["Collection of Urn"]?.value;
+
+    console.log("REQ BODY:", req.body);
 
     let existingResponse = await FormResponseModel.findOne({
       userid: req.identity._id,
@@ -57,7 +58,7 @@ export const getAttendenceAnswers = async (
 
     if (existingResponse) {
       existingResponse.stationery = stationery;
-      existingResponse.bodyPreparation = bodypreparation;
+      existingResponse.bodyPreparation = bodyPreparation;
       existingResponse.coffin = coffin;
       existingResponse.flowers = flowers;
       existingResponse.urn = urn;
@@ -71,7 +72,7 @@ export const getAttendenceAnswers = async (
         reference: req.identity.reference,
         email: req.identity.email,
         stationery,
-        bodypreparation,
+        bodyPreparation,
         coffin,
         flowers,
         urn,
@@ -80,7 +81,7 @@ export const getAttendenceAnswers = async (
         status: "draft",
       });
     }
-
+    console.log("Selections received:", selections);
     const allResponses = await FormResponseModel.find({
       userid: req.identity._id,
     });

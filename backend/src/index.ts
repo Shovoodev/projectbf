@@ -6,7 +6,9 @@ import cookieParser from "cookie-parser";
 import router from "./router";
 import mongoose from "mongoose";
 import Stripe from "stripe";
+
 import { claudinaryConfig } from "./config/cloudinary";
+import { Resend } from "resend";
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;

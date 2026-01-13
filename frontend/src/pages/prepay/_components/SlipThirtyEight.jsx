@@ -90,10 +90,12 @@ const SlipThirtyEight = () => {
                     Signature of investor 1
                   </label>
                   <div className="pdf-signature-zone !py-4">
-                    {signature ? (
-                      <img src={signature} alt="Signature" className="mt-4" />
-                    ) : (
-                      ""
+                    {signature && (
+                      <img
+                        src={URL.createObjectURL(signature)}
+                        alt="Signature"
+                        className="mt-4"
+                      />
                     )}
                   </div>
                 </div>

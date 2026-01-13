@@ -5,6 +5,7 @@ const CORE = import.meta.env.VITE_API_URL;
 import SignatureField from "./_components/SignatureField";
 import { useNavigate } from "react-router";
 import base64ToFile from "../../utility";
+import { generatePdfBlob } from "../prepay/_components/ImageToPdf";
 
 // Reusable Form Field Components
 const FormLabel = ({ children, required }) => (
@@ -182,6 +183,23 @@ const AgreementFormPage = () => {
       return;
     }
 
+    // const pdfBlob = await generatePdfBlob(displayImage);
+
+    const formData = new FormData();
+    // formData.append("file", pdfBlob, "Invoice.pdf");
+    // const pdfFd = new FormData();
+
+    // deceased payload
+    const sendpdf = await fetch(`${CORE}/all-selected-services`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+    if (!sendpdf.ok) {
+      console.error(await resforkin.text());
+      return;
+    }
+
     navigate(`/${userid}/user`);
   };
 
@@ -197,7 +215,6 @@ const AgreementFormPage = () => {
               <h3 className="text-3xl text-center font-display font-bold text-gray-900 mb-6  pb-2">
                 Deceased Persons Details
               </h3>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Salutation */}
                 <div className="md:col-span-2 lg:col-span-1">
@@ -230,7 +247,6 @@ const AgreementFormPage = () => {
                     }
                   />
                 </div>
-
                 {/* Surname */}
                 <div className="md:col-span-2">
                   <FormLabel required>Surname / Family Name</FormLabel>

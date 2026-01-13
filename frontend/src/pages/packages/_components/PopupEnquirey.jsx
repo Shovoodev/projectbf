@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import img from "../../../images/loginpage.png";
 
 import {
@@ -13,6 +13,8 @@ import {
   FiUser,
   FiPhone,
 } from "react-icons/fi";
+import { pdf } from "@react-pdf/renderer";
+import InvoicePDF from "./InvoicePdf";
 const CORE = import.meta.env.VITE_API_URL;
 
 const PopupEnquirey = ({
@@ -41,6 +43,13 @@ const PopupEnquirey = ({
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const stationery = searchParams.get("stationery");
+  const bodypreparation = searchParams.get("bodypreparation");
+  const coffin = searchParams.get("coffin");
+  const flowers = searchParams.get("flowers");
+  const urn = searchParams.get("urn");
+  const collectionOfUrn = searchParams.get("collectionOfUrn");
 
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
@@ -98,7 +107,6 @@ const PopupEnquirey = ({
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     if (!userData.email.trim() || !userData.password.trim()) {
@@ -114,44 +122,94 @@ const PopupEnquirey = ({
     }
 
     try {
+      // 1️⃣ Register
       const response = await fetch(`${CORE}/blacktulipauth/newuser`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-      if (response.ok) {
-        showMessage("Registration successful!", "success");
 
-        if (onSuccess) {
-          onSuccess({ userData });
-        }
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Registration failed");
+      }
 
-        setUserData("");
+      // 2️⃣ Login
+      const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+        credentials: "include",
+      });
 
-        setTimeout(() => {
-          closePopup();
-        }, 2000);
-        const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
+      if (!loginRes.ok) throw new Error("Login failed");
+
+      const loginData = await loginRes.json();
+      localStorage.setItem("user", JSON.stringify(loginData));
+
+      // 3️⃣ Submit payload
+      const payload = {
+        stationery,
+        bodypreparation,
+        coffin,
+        flowers,
+        urn,
+        collectionOfUrn,
+      };
+
+      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payload }),
+        credentials: "include",
+      });
+
+      const blob = await pdf(<InvoicePDF invoiceData={payload} />).toBlob();
+
+      // 2. Convert blob to base64 for email attachment
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+
+      reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
+
+        // 3. Send to backend API
+        const response = await fetch("http://localhost:4000/api/send-invoice", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userData),
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...payload,
+            pdfAttachment: base64data,
+          }),
         });
 
-        const loginData = await loginRes.json();
-        if (!loginData._id) throw new Error("Login failed");
+        const result = await response.json();
 
-        localStorage.setItem("user", JSON.stringify(loginData));
+        if (response.ok) {
+          setMessage("Invoice sent successfully!");
+          // Reset form if needed
+          // setFormData({...initialState});
+        } else {
+          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+        }
+      };
 
+      // 4️⃣ Success UI actions
+      showMessage("Registration successful!", "success");
+
+      if (onSuccess) onSuccess(userData);
+
+      setUserData({ email: "", password: "" });
+
+      setTimeout(() => {
+        closePopup();
         navigate(`/${loginData._id}/fill-agreement-form`);
-      } else {
-        const error = await response.json();
-        showMessage(error.message || "Registration failed", "error");
-      }
+      }, 1500);
     } catch (error) {
-      showMessage("Network error. Please try again.", error);
+      console.error(error);
+      showMessage(error.message || "Network error. Please try again.", "error");
     } finally {
       setIsLoading(false);
     }
