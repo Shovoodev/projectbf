@@ -7,8 +7,10 @@ import {
   eighteen,
   eleven,
   fifteen,
-  fortySeven,
   five,
+  fortySeven,
+  fortyThree,
+  fortyTwo,
   four,
   fourteen,
   nine,
@@ -25,7 +27,6 @@ import {
   twelve,
   twenty,
   twentyEight,
-  fortyThree,
   twentyFive,
   twentyFour,
   twentyNine,
@@ -35,27 +36,26 @@ import {
   twentyThree,
   twentyTwo,
   two,
-  fortyTwo,
 } from "../../../images/index";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
 // import SlipFour from "./SlipFour";
 // import all the slips in order
-import SlipThirtyTwo from "./SlipThirtyTwo";
-import SlipThirtyThree from "./SlipThirtyThree";
-import SlipThirtyFour from "./SlipThirtyFour";
-import SlipThirtyFive from "./SlipThirtyFive";
-import SlipThirtySix from "./SlipThirtySix";
-import SlipThirtySeven from "./SlipThirtySeven";
-import SlipThirtyEight from "./SlipThirtyEight";
-import SlipFourtyOne from "./SlipFourtyOne";
-import SlipFourtyTwo from "./SlipFourtyTwo";
-import SlipThirtyNine from "./SlipThirtyNine";
-import SlipFourty from "./SlipFourty";
-import SlipFortySix from "./SlipFortySix";
-import SlipFourtyFive from "./SlipFourtyFive";
-import SlipFourtySeven from "./SlipFourtySeven";
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import SlipFortySix from "./SlipFortySix";
+import SlipFourty from "./SlipFourty";
+import SlipFourtyFive from "./SlipFourtyFive";
+import SlipFourtyOne from "./SlipFourtyOne";
+import SlipFourtySeven from "./SlipFourtySeven";
+import SlipFourtyTwo from "./SlipFourtyTwo";
+import SlipThirtyEight from "./SlipThirtyEight";
+import SlipThirtyFive from "./SlipThirtyFive";
+import SlipThirtyFour from "./SlipThirtyFour";
+import SlipThirtyNine from "./SlipThirtyNine";
+import SlipThirtySeven from "./SlipThirtySeven";
+import SlipThirtySix from "./SlipThirtySix";
+import SlipThirtyThree from "./SlipThirtyThree";
+import SlipThirtyTwo from "./SlipThirtyTwo";
 const displayImage = [
   cover,
   one,

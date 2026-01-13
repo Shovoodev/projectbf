@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { List, Select } from "../../components/common/Reusables";
-const CORE = import.meta.env.VITE_API_URL;
 import { Actions } from "./_components/Actions";
+const CORE = import.meta.env.VITE_API_URL;
 
-import RenderQuestion from "./_components/RenderQuestion";
 import { useUser } from "../../components/hooks/useUser";
+import RenderQuestion from "./_components/RenderQuestion";
 
 export function Card({ title, children }) {
   return (
@@ -54,7 +54,7 @@ const AttendenceCrementionPage = () => {
       return updated;
     });
   };
-  console.log({ CORE });
+
   const geNext = async (e) => {
     e.preventDefault();
 

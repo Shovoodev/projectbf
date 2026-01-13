@@ -9,7 +9,6 @@ function App() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const CORE = import.meta.env.VITE_API_URL;
-  console.log({ CORE });
 
   useEffect(() => {
     // 🔐 Define private routes
