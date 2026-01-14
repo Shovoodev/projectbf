@@ -5,7 +5,6 @@ const CORE = import.meta.env.VITE_API_URL;
 import SignatureField from "./_components/SignatureField";
 import { useNavigate } from "react-router";
 import base64ToFile from "../../utility";
-import { generatePdfBlob } from "../prepay/_components/ImageToPdf";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
 
 // Reusable Form Field Components
