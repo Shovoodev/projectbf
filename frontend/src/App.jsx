@@ -8,6 +8,7 @@ function App() {
   const { user } = useUserFront();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const CORE = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     // 🔐 Define private routes
@@ -28,6 +29,7 @@ function App() {
   return (
     <section>
       <Header />
+
       <main className="mx-auto">
         <Outlet />
       </main>

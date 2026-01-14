@@ -27,6 +27,3 @@ export function Select({ label, value, options, onChange }) {
     </div>
   );
 }
-
-const CORE = "http://localhost:4000";
-export default CORE;

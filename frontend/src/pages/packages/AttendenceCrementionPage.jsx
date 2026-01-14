@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { List, Select } from "../../components/common/Reusables"; // Ensure these match the clean look
+import { List, Select } from "../../components/common/Reusables";
 import { useUser } from "../../components/hooks/useUser";
-import { Actions } from "./_components/Actions";
+import InvoicePDF from "./_components/InvoicePdf";
 import RenderQuestion from "./_components/RenderQuestion";
 import AdditionalInfoSection from "./service-component/AdditionalInfoSection";
 import FloralGallerySection from "./service-component/FloralGallerySection";
 
 // Reusable Card Component matching the design
+// export function Card({ title, children, className = "" }) {
+
+const CORE = import.meta.env.VITE_API_URL;
+
+import { pdf } from "@react-pdf/renderer";
 export function Card({ title, children, className = "" }) {
   return (
     <div
@@ -31,9 +36,14 @@ const AttendenceCrementionPage = () => {
   const [error, setError] = useState(null);
 
   // Selections State
+
+  const [amount, setAmount] = useState(0);
+
+  const [message, setMessage] = useState("");
+
   const [selections, setSelections] = useState({
     stationery: { value: "", price: 0 },
-    bodypreparation: { value: "", price: 0 },
+    bodyPreparation: { value: "", price: 0 },
     coffin: { value: "", price: 0 },
     flowers: { value: "", price: 0 },
     urn: { value: "", price: 0 },
@@ -46,16 +56,110 @@ const AttendenceCrementionPage = () => {
   const [tissues, setTissues] = useState("Not Required");
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
+  const handleOptionChange = (index, value, priceImpact) => {
+    const keys = ["stationery", "bodypreparation", "coffin", "flowers", "urn"][
+      index
+    ];
+
+    const key = keys[index];
+
+    setSelections((prev) => {
+      const updated = { ...prev, [key]: { value, price: priceImpact } };
+      const totalPriceImpact = Object.values(updated).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0
+      );
+      setTotalPrice(BASE_PRICE + totalPriceImpact);
+
+      return updated;
+    });
+  };
+
+  const geNext = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...selections,
+          totalPriceImpact: Object.values(setSelections).reduce(
+            (sum, opt) => sum + (opt.price || 0),
+            0
+          ),
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+
+        console.error("Server Error:", text);
+        return;
+      }
+
+      const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
+
+      // 2. Convert blob to base64 for email attachment
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+
+      reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
+
+        // 3. Send to backend API
+        const response = await fetch("http://localhost:4000/api/send-invoice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...selections,
+            pdfAttachment: base64data,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setMessage("Invoice sent successfully!");
+          // Reset form if needed
+          // setFormData({...initialState});
+        } else {
+          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+        }
+      };
+      setLoading(false);
+      navigate(`/${user._id}/deceasedpersondetails`);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setSelections({
+        stationery: data[0].options[0]?.value || "No option selected",
+        bodypreparation: data[1]?.options[0]?.value || "No option selected",
+        coffin: data[2]?.options[0]?.value || "No opiton selected",
+        flowers: data[3]?.options[0]?.value || "No option selected",
+        urn: data[4]?.options[0]?.value || "No option selected",
+        collectionOfUrn: data[5]?.options[0]?.value || "No option selected",
+      });
+    }
+  }, [data]);
 
   // --- Fetch Options Data ---
   useEffect(() => {
     const fetchStepData = async () => {
       try {
-        // Replace with your actual endpoint
-        const response = await fetch(
-          "http://localhost:4000/newattendingservicecremation",
-          { credentials: "include" }
-        );
+        const response = await fetch(`${CORE}/newattendingservicecremation`, {
+          credentials: "include",
+        });
+
         if (!response.ok) throw new Error("Failed to fetch data");
         const result = await response.json();
         setData(result);
@@ -266,7 +370,15 @@ const AttendenceCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS FOOTER --- */}
-        <Actions goNext={goNext} totalPrice={totalPrice} />
+        {message && (
+          <div
+            className={`message ${
+              message.includes("Error") ? "error" : "success"
+            }`}
+          >
+            {message}
+          </div>
+        )}
       </div>
       <FloralGallerySection />
       <AdditionalInfoSection />

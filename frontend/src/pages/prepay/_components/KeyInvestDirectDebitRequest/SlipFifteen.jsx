@@ -1,6 +1,10 @@
+
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import { ReactSketchCanvas } from "react-sketch-canvas";
+
+import Signature from "../common/Signature";
+
 
 const SlipFifteen = () => {
   const declarations = [
@@ -19,6 +23,7 @@ const SlipFifteen = () => {
     "KeyInvest may refuse to accept authority or permit a person to transact or carry out a transaction under this agreement.",
     "KeyInvest can cancel or vary these conditions by giving you not less than seven (7) days written notice.",
   ];
+
 
   const sigPadRef = useRef(null);
   const [sigDataUrl, setSigDataUrl] = useState(null);
@@ -44,6 +49,8 @@ const SlipFifteen = () => {
     reader.onload = (ev) => setUploadedSig(ev.target.result);
     reader.readAsDataURL(file);
   };
+
+
 
   return (
     <div className="form-container-base">
@@ -174,9 +181,9 @@ const SlipFifteen = () => {
             </span>
           </div>
           <div className="flex gap-8 items-center">
-            <div className="hidden md:block">Version: July 2025</div>
+            <div className="hidden md:block">Version: July 2026</div>
             <div className="bg-[rgb(49,41,166)] text-white px-2 py-0.5 rounded text-[12px]">
-              37
+              46
             </div>
           </div>
         </div>

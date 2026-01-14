@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
+
 import LogOut from "../../../pages/packages/_components/LogOut";
 import { useUser } from "../../hooks/useUser";
 import logo from "./btf-logo.png";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
@@ -58,7 +60,6 @@ const Header = () => {
                 </Link>
               </div>
             </div>
-
             {/* BTF Dropdown */}
             <div className="relative group">
               <a
@@ -79,7 +80,6 @@ const Header = () => {
                 </Link>
               </div>
             </div>
-
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary">
                 Options <FaChevronDown className="text-[10px]" />
@@ -127,7 +127,6 @@ const Header = () => {
             <Link to="/agreement" className="hover:text-primary">
               Agreement
             </Link>
-            <LogOut />
           </nav>
 
           {/* Right Side */}

@@ -1,36 +1,7 @@
-import { useState } from "react";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
-const SlipTwo = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    surname: "",
-    givenNames: "",
-    dob: "",
-    gender: "",
-    res_unit: "",
-    res_streetNo: "",
-    res_streetName: "",
-    res_suburb: "",
-    res_state: "NSW",
-    res_postcode: "",
-    res_country: "AUSTRALIA",
-    mail_unit: "",
-    mail_streetNo: "",
-    mail_streetName: "",
-    mail_suburb: "",
-    mail_state: "NSW",
-    mail_postcode: "",
-    mail_country: "AUSTRALIA",
-    daytimeTelephone: "",
-    mobile: "",
-    daytimeAddress: "",
-    email: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const SlipThirtyThree = () => {
+  const { updateInvestor, handleChange } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">
@@ -41,7 +12,7 @@ const SlipTwo = () => {
         </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+      <form className="p-8 space-y-6" onSubmit={handleChange}>
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-full">
@@ -53,7 +24,9 @@ const SlipTwo = () => {
                     type="radio"
                     name="title"
                     value={t}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      updateInvestor("investorOne", ["gender"], e.target.value)
+                    }
                     className="pdf-radio-input"
                   />
                   <span className="text-gray-700 group-hover:text-blue-900">
@@ -69,8 +42,10 @@ const SlipTwo = () => {
             <input
               type="text"
               name="surname"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["surname"], e.target.value)
+              }
             />
           </div>
 
@@ -79,8 +54,10 @@ const SlipTwo = () => {
             <input
               type="text"
               name="givenNames"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["givenNames"], e.target.value)
+              }
             />
           </div>
 
@@ -89,8 +66,10 @@ const SlipTwo = () => {
             <input
               type="date"
               name="dob"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["givenNames"], e.target.value)
+              }
             />
           </div>
 
@@ -103,8 +82,10 @@ const SlipTwo = () => {
                     type="radio"
                     name="gender"
                     value={g}
-                    onChange={handleChange}
                     className="pdf-radio-input"
+                    onSelect={(e) =>
+                      updateInvestor("investorOne", ["gender"], e.target.value)
+                    }
                   />
                   <span className="text-gray-700">{g}</span>
                 </label>
@@ -127,7 +108,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_unit"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["unit"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -136,7 +119,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_streetNo"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["streetNo"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -145,7 +130,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_streetName"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["streetName"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -154,7 +141,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_suburb"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["suburb"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -163,6 +152,9 @@ const SlipTwo = () => {
             <input
               type="text"
               defaultValue="NSW"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["state"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -171,7 +163,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_postcode"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["postcode"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -179,8 +173,11 @@ const SlipTwo = () => {
             <label className="pdf-label-sm">Country</label>
             <input
               type="text"
-              defaultValue="AUSTRALIA"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["country"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
+              disabled
             />
           </div>
         </div>
@@ -196,7 +193,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_unit"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailunit"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -205,8 +204,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_streetNo"
-              onChange={handleChange}
-              className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailstreetNo"], e.target.value)
+              }
             />
           </div>
           <div className="col-span-3">
@@ -214,7 +214,13 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_streetName"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["mailstreetName"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -223,7 +229,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_suburb"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailsuburb"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -232,6 +240,9 @@ const SlipTwo = () => {
             <input
               type="text"
               defaultValue="NSW"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailstate"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -240,7 +251,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="res_postcode"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailpostcode"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -249,6 +262,9 @@ const SlipTwo = () => {
             <input
               type="text"
               defaultValue="AUSTRALIA"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailcountry"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -260,9 +276,15 @@ const SlipTwo = () => {
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
-              type="text"
+              type="number"
               name="daytimeTelephone"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["daytimeTelephone"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -271,7 +293,9 @@ const SlipTwo = () => {
             <input
               type="text"
               name="mobile"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mobile"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -280,7 +304,13 @@ const SlipTwo = () => {
             <input
               type="text"
               name="daytimeAddress"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["daytimeAddress"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -289,8 +319,9 @@ const SlipTwo = () => {
             <input
               type="email"
               name="email"
-              onChange={handleChange}
-              className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["email"], e.target.value)
+              }
             />
           </div>
         </div>
@@ -315,7 +346,7 @@ const SlipTwo = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 33</div>
         </div>
       </form>
@@ -323,4 +354,4 @@ const SlipTwo = () => {
   );
 };
 
-export default SlipTwo;
+export default SlipThirtyThree;

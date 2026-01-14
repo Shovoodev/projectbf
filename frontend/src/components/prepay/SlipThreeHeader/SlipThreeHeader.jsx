@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 const SlipThreeHeader = () => {
   const [formData, setFormData] = useState({
     contribution_amount: "",
@@ -10,6 +10,8 @@ const SlipThreeHeader = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const { paymentMethod, setPaymentMethod } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">
@@ -51,19 +53,14 @@ const SlipThreeHeader = () => {
                 <input
                   type="radio"
                   name="payment_method"
-                  disabled={method === "direct_debit" || method === "oheque"}
                   value={method}
-                  onChange={handleChange}
+                  checked={paymentMethod === method}
+                  disabled={method === "direct_debit" || method === "oheque"}
+                  onChange={() => setPaymentMethod(method)}
                   className="pdf-radio-input"
                 />
-                <span className="pdf-label mb-0 uppercase group-hover:text-blue-900">
-                  {method === "eft"
-                    ? "EFT"
-                    : method === "bpay"
-                    ? "BPAY"
-                    : method === "oheque"
-                    ? "OHEQUE"
-                    : "Direct Debit"}
+                <span className="pdf-label mb-0 uppercase">
+                  {method.toUpperCase()}
                 </span>
               </label>
             ))}
@@ -79,7 +76,7 @@ const SlipThreeHeader = () => {
 
         {/* Footnote */}
         <div className="pdf-footnote">
-          <sup className="pdf-footnote-sup">1</sup>
+          <sup className="pdf-footnote-sup"></sup>
           Where an initial service fee has been agreed to, the fee will be
           deducted from this amount before being invested in the Funeral Bond.
         </div>
@@ -89,7 +86,7 @@ const SlipThreeHeader = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 35</div>
         </div>
 

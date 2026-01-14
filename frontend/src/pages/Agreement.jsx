@@ -56,7 +56,6 @@ const AgreementForm = () => {
               <h3 className="text-3xl text-center font-display font-bold text-gray-900 mb-6  pb-2">
                 Deceased Persons Details
               </h3>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Salutation */}
                 <div className="md:col-span-2 lg:col-span-1">

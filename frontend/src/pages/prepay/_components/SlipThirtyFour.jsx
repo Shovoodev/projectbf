@@ -1,48 +1,21 @@
-import { useState } from "react";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
-const InvestorTwo = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    surname: "",
-    givenNames: "",
-    dob: "",
-    gender: "",
-    res_unit: "",
-    res_streetNo: "",
-    res_streetName: "",
-    res_suburb: "",
-    res_state: "NSW",
-    res_postcode: "",
-    res_country: "AUSTRALIA",
-    mail_unit: "",
-    mail_streetNo: "",
-    mail_streetName: "",
-    mail_suburb: "",
-    mail_state: "NSW",
-    mail_postcode: "",
-    mail_country: "AUSTRALIA",
-    daytimeTelephone: "",
-    mobile: "",
-    daytimeAddress: "",
-    email: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const SlipThirtyFour = () => {
+  const { updateInvestor, handleChange } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">
       <div className="form-header-area">
+        <h1 className=" flex items-center justify-center text-3xl text-red-700">
+          {" "}
+          Have to change everything for inverster 2
+        </h1>
         <p className="pdf-subtitle">
-          Investor 2 ((Only complete this section if this is to be a jointly
-          owned Policy, if being completed by a POA or if the policy is for a
-          Separate Life Insured))
+          Investor 2 (all correspondence will be sent to this person)
         </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+      <form className="p-8 space-y-6" onSubmit={handleChange}>
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-full">
@@ -54,7 +27,9 @@ const InvestorTwo = () => {
                     type="radio"
                     name="title"
                     value={t}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      updateInvestor("investorOne", ["gender"], e.target.value)
+                    }
                     className="pdf-radio-input"
                   />
                   <span className="text-gray-700 group-hover:text-blue-900">
@@ -70,8 +45,10 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="surname"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["surname"], e.target.value)
+              }
             />
           </div>
 
@@ -80,8 +57,10 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="givenNames"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["givenNames"], e.target.value)
+              }
             />
           </div>
 
@@ -90,8 +69,10 @@ const InvestorTwo = () => {
             <input
               type="date"
               name="dob"
-              onChange={handleChange}
               className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["givenNames"], e.target.value)
+              }
             />
           </div>
 
@@ -104,8 +85,10 @@ const InvestorTwo = () => {
                     type="radio"
                     name="gender"
                     value={g}
-                    onChange={handleChange}
                     className="pdf-radio-input"
+                    onSelect={(e) =>
+                      updateInvestor("investorOne", ["gender"], e.target.value)
+                    }
                   />
                   <span className="text-gray-700">{g}</span>
                 </label>
@@ -128,7 +111,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_unit"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["unit"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -137,7 +122,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_streetNo"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["streetNo"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -146,7 +133,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_streetName"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["streetName"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -155,7 +144,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_suburb"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["suburb"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -164,6 +155,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               defaultValue="NSW"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["state"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -172,7 +166,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_postcode"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["postcode"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -180,8 +176,11 @@ const InvestorTwo = () => {
             <label className="pdf-label-sm">Country</label>
             <input
               type="text"
-              defaultValue="AUSTRALIA"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["country"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
+              disabled
             />
           </div>
         </div>
@@ -197,7 +196,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_unit"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailunit"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -206,8 +207,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_streetNo"
-              onChange={handleChange}
-              className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailstreetNo"], e.target.value)
+              }
             />
           </div>
           <div className="col-span-3">
@@ -215,7 +217,13 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_streetName"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["mailstreetName"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -224,7 +232,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_suburb"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailsuburb"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -233,6 +243,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               defaultValue="NSW"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailstate"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -241,7 +254,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="res_postcode"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailpostcode"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -250,6 +265,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               defaultValue="AUSTRALIA"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mailcountry"], e.target.value)
+              }
               className="pdf-input pdf-input-readonly"
             />
           </div>
@@ -261,9 +279,15 @@ const InvestorTwo = () => {
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
-              type="text"
+              type="number"
               name="daytimeTelephone"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["daytimeTelephone"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -272,7 +296,9 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="mobile"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor("investorOne", ["mobile"], e.target.value)
+              }
               className="pdf-input"
             />
           </div>
@@ -281,7 +307,13 @@ const InvestorTwo = () => {
             <input
               type="text"
               name="daytimeAddress"
-              onChange={handleChange}
+              onChange={(e) =>
+                updateInvestor(
+                  "investorOne",
+                  ["daytimeAddress"],
+                  e.target.value
+                )
+              }
               className="pdf-input"
             />
           </div>
@@ -290,12 +322,13 @@ const InvestorTwo = () => {
             <input
               type="email"
               name="email"
-              onChange={handleChange}
-              className="pdf-input"
+              onChange={(e) =>
+                updateInvestor("investorOne", ["email"], e.target.value)
+              }
             />
           </div>
         </div>
-        {/* <div>
+        <div>
           <p className="pdf-intro-p">
             If the application is being completed under a Power of Attorney
             (POA), please include the attorney’s contact details under
@@ -310,18 +343,18 @@ const InvestorTwo = () => {
             or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
             Other
           </p>
-        </div> */}
+        </div>
         {/* Footer */}
         <div className="pdf-footer">
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
           <div>Version: July 2026</div>
-          <div>Page 33</div>
+          <div>Page 34</div>
         </div>
       </form>
     </div>
   );
 };
 
-export default InvestorTwo;
+export default SlipThirtyFour;

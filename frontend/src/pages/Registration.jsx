@@ -4,9 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
 
 import Input from "../components/common/Input";
-import CORE from "../components/common/Reusables";
+import InvoicePDF from "./packages/_components/InvoicePdf";
+const CORE = import.meta.env.VITE_API_URL;
 
-const Registrarion = () => {
+const Registration = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -20,13 +21,32 @@ const Registrarion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`${CORE}/blacktulipauth/newuser`, {
+    const payload = {
+      stationery,
+      bodypreparation,
+      coffin,
+      flowers,
+      urn,
+      collectionOfUrn,
+    };
+    const res = await fetch(`${CORE}/blacktulipauth/newuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
+    if (!res.ok) return alert("Failed to register new user");
+    await fetch(`${CORE}/newattendingservicecremationanswers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payload,
+      }),
+    });
+
     navigate(`/${userid}/fill-agreement-form`);
   };
   return (
@@ -69,4 +89,7 @@ const Registrarion = () => {
   );
 };
 
-export default Registrarion;
+export default Registration;
+
+
+

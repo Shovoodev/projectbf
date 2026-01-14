@@ -146,8 +146,6 @@ Text: Montserrat (Normal) */
   }
 
   /*  This is about for PDF  */
-
-  
 }
 
 @layer utilities {
@@ -163,4 +161,10 @@ Text: Montserrat (Normal) */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.pdf-safe * {
+  color: #000 !important;
+  background-color: #fff !important;
+  border-color: #000 !important;
 }

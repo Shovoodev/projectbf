@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SlipFive = () => {
+const SlipThirtySix = () => {
   const [userValue, setUserValue] = useState("");
   const maxValue = 25;
 
@@ -202,7 +202,7 @@ const SlipFive = () => {
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
           <div className="flex gap-8">
-            <div>Version: July 2025</div>
+            <div>Version: July 2026</div>
             <div className="font-bold">36</div>
           </div>
         </div>
@@ -213,4 +213,4 @@ const SlipFive = () => {
   );
 };
 
-export default SlipFive;
+export default SlipThirtySix;

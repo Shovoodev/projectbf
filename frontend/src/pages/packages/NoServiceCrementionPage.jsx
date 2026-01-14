@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { List } from "../../components/common/Reusables";
-import { useUser } from "../../components/hooks/useUser";
+import React, { useEffect, useState } from "react";
 import { Actions } from "./_components/Actions";
+import { List, Select } from "../../components/common/Reusables";
+const CORE = import.meta.env.VITE_API_URL;
+import { useNavigate } from "react-router";
+import { useUser } from "../../components/hooks/useUser";
 import RenderQuestion from "./_components/RenderQuestion";
 
 // Card Component matching the design (Light Gray Background)
@@ -44,10 +45,10 @@ const NoServiceCrementionPage = () => {
   useEffect(() => {
     const fetchStepData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:4000/noservicefunraldata",
-          { credentials: "include" }
-        );
+        const response = await fetch(`${CORE}/noservicefunraldata`, {
+          credentials: "include",
+        });
+
         if (!response.ok) throw new Error("Failed to fetch data");
         const result = await response.json();
         setData(result);
