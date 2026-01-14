@@ -6,6 +6,7 @@ import SignatureField from "./_components/SignatureField";
 import { useNavigate } from "react-router";
 import base64ToFile from "../../utility";
 import { generatePdfBlob } from "../prepay/_components/ImageToPdf";
+import { useServiceApi } from "../../utility/SelectedServiceProvider";
 
 // Reusable Form Field Components
 const FormLabel = ({ children, required }) => (
@@ -65,6 +66,7 @@ const AgreementFormPage = () => {
   const { userid } = useParams();
   const [hasNotPassedAway, setHasNotPassedAway] = useState(false);
   const navigate = useNavigate();
+  const { selections } = useServiceApi();
   const [deceasedFormValues, setDeceasedFormValues] = useState({
     salutation: "",
     givenName: "",
@@ -89,7 +91,7 @@ const AgreementFormPage = () => {
     sign: null,
   });
   const sigCanvasRef = useRef(null);
-
+  console.log({ selections });
   const saveSignature = async () => {
     if (!sigCanvasRef.current) return null;
 
@@ -152,7 +154,7 @@ const AgreementFormPage = () => {
       alert("Please provide a signature");
       return;
     }
-    console.log({ signFile });
+    console.log({ selections });
     await new Promise((r) => setTimeout(r, 0));
 
     const fd = new FormData();
@@ -190,13 +192,13 @@ const AgreementFormPage = () => {
     // const pdfFd = new FormData();
 
     // deceased payload
-    const sendpdf = await fetch(`${CORE}/all-selected-services`, {
+    const sendpdf = await fetch(`${CORE}/api/send-invoice"`, {
       method: "POST",
       credentials: "include",
       body: formData,
     });
     if (!sendpdf.ok) {
-      console.error(await resforkin.text());
+      console.error(await sendpdf.text());
       return;
     }
 

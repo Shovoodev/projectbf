@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { List, Select } from "../../components/common/Reusables";
 import { Actions } from "./_components/Actions";
