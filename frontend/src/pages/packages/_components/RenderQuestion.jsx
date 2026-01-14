@@ -5,23 +5,39 @@ const RenderQuestion = ({ item, selections, setSelections }) => {
 
   const handleChange = (value) => {
     const selectedOption = item.options.find((opt) => opt.label === value);
+    const price = selectedOption?.priceAdjustment || 0;
 
-    setSelections((prev) => ({
-      ...prev,
-      [item.question]: {
-        value,
-        price: selectedOption?.priceAdjustment || 0,
-      },
-    }));
+    console.log(`Selected ${item.question}: ${value}, Price: ${price}`);
+
+    // Call the parent function with the exact question name
+    setSelections(item.question, value, price);
   };
 
+  const currentValue =
+    selections[item.question]?.value || item.options[0]?.label || "";
+  const currentPrice = selections[item.question]?.price || 0;
+
   return (
-    <Select
-      label={item.question}
-      value={selections[item.question]?.value || item.options[0]?.label}
-      options={item.options.map((opt) => opt.label)}
-      onChange={handleChange}
-    />
+    <div className="mb-4">
+      <Select
+        label={item.question}
+        value={currentValue}
+        options={item.options.map((opt) => opt.label)}
+        onChange={handleChange}
+      />
+      <div className="text-sm text-gray-600 mt-1 flex justify-between">
+        <span>Price adjustment: ${currentPrice}</span>
+        {currentPrice !== 0 && (
+          <span
+            className={currentPrice > 0 ? "text-red-600" : "text-green-600"}
+          >
+            {currentPrice > 0
+              ? `+$${currentPrice}`
+              : `-$${Math.abs(currentPrice)}`}
+          </span>
+        )}
+      </div>
+    </div>
   );
 };
 

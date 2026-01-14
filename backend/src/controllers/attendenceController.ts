@@ -1,21 +1,7 @@
 import express from "express";
-import { attendenceData } from "../data/attandenceData";
 import { AuthenticatedRequest } from "../lib/types";
 import { FormResponseModel } from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
-
-export const getAttendenceData = async (
-  req: express.Request,
-  res: express.Response
-): Promise<any> => {
-  try {
-    const filtered = attendenceData;
-
-    res.json(filtered);
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 export const getNoServiceFunral = async (
   req: express.Request,
@@ -38,16 +24,59 @@ export const getAttendenceAnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { selections, totalPriceImpact = 0 } = req.body;
+    // Log the entire request body for debugging
+    console.log("REQ BODY:", JSON.stringify(req.body, null, 2));
 
-    const stationery = selections?.Stationery?.value;
-    const bodyPreparation = selections?.["Body Preparation"]?.value;
-    const coffin = selections?.Coffin?.value;
-    const flowers = selections?.["Flowers:"]?.value;
-    const urn = selections?.Urn?.value;
-    const collectionOfUrn = selections?.["Collection of Urn"]?.value;
+    const { selections, totalPrice = 0 } = req.body;
 
-    console.log("REQ BODY:", req.body);
+    if (!selections) {
+      return res.status(400).json({ message: "No selections provided" });
+    }
+
+    // Extract values and prices from selections
+    const stationeryValue = selections?.stationery?.value || "";
+    const stationeryPrice = parseFloat(selections?.stationery?.price) || 0;
+
+    const bodyPreparationValue = selections?.bodyPreparation?.value || "";
+    const bodyPreparationPrice =
+      parseFloat(selections?.bodyPreparation?.price) || 0;
+
+    const coffinValue = selections?.coffin?.value || "";
+    const coffinPrice = parseFloat(selections?.coffin?.price) || 0;
+
+    const flowersValue = selections?.flowers?.value || "";
+    const flowersPrice = parseFloat(selections?.flowers?.price) || 0;
+
+    const urnValue = selections?.urn?.value || "";
+    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+
+    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
+    const collectionOfUrnPrice =
+      parseFloat(selections?.collectionOfUrn?.price) || 0;
+
+    // Calculate total price impact
+    const totalPriceImpact =
+      stationeryPrice +
+      bodyPreparationPrice +
+      coffinPrice +
+      flowersPrice +
+      urnPrice +
+      collectionOfUrnPrice;
+
+    console.log("Extracted prices:", {
+      stationeryPrice,
+      bodyPreparationPrice,
+      coffinPrice,
+      flowersPrice,
+      urnPrice,
+      collectionOfUrnPrice,
+      totalPriceImpact,
+      receivedTotalPrice: totalPrice,
+    });
+
+    const BASE_PRICE = 4400; // Match frontend base price
+    const finalTotalPrice =
+      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
     let existingResponse = await FormResponseModel.findOne({
       userid: req.identity._id,
@@ -57,13 +86,14 @@ export const getAttendenceAnswers = async (
     let savedResponse;
 
     if (existingResponse) {
-      existingResponse.stationery = stationery;
-      existingResponse.bodyPreparation = bodyPreparation;
-      existingResponse.coffin = coffin;
-      existingResponse.flowers = flowers;
-      existingResponse.urn = urn;
-      existingResponse.collectionOfUrn = collectionOfUrn;
+      existingResponse.stationery = stationeryValue;
+      existingResponse.bodyPreparation = bodyPreparationValue;
+      existingResponse.coffin = coffinValue;
+      existingResponse.flowers = flowersValue;
+      existingResponse.urn = urnValue;
+      existingResponse.collectionOfUrn = collectionOfUrnValue;
       existingResponse.totalPriceImpact = totalPriceImpact;
+      existingResponse.totalPrice = finalTotalPrice;
 
       savedResponse = await existingResponse.save();
     } else {
@@ -71,35 +101,33 @@ export const getAttendenceAnswers = async (
         userid: req.identity._id,
         reference: req.identity.reference,
         email: req.identity.email,
-        stationery,
-        bodyPreparation,
-        coffin,
-        flowers,
-        urn,
-        collectionOfUrn,
+        stationery: stationeryValue,
+        bodyPreparation: bodyPreparationValue,
+        coffin: coffinValue,
+        flowers: flowersValue,
+        urn: urnValue,
+        collectionOfUrn: collectionOfUrnValue,
         totalPriceImpact,
+        totalPrice: finalTotalPrice,
         status: "draft",
       });
     }
-    console.log("Selections received:", selections);
-    const allResponses = await FormResponseModel.find({
-      userid: req.identity._id,
+
+    console.log("Saved response:", {
+      stationery: stationeryValue,
+      bodyPreparation: bodyPreparationValue,
+      coffin: coffinValue,
+      flowers: flowersValue,
+      urn: urnValue,
+      collectionOfUrn: collectionOfUrnValue,
+      totalPriceImpact,
+      totalPrice: finalTotalPrice,
     });
-
-    const totalPrice = allResponses.reduce(
-      (sum, r) => sum + (r.totalPriceImpact || 0),
-      0
-    );
-
-    await FormResponseModel.updateMany(
-      { userid: req.identity._id },
-      { totalPrice }
-    );
 
     return res.status(200).json({
       message: "Attendance response saved",
       data: savedResponse,
-      totalPrice,
+      totalPrice: savedResponse.totalPrice,
     });
   } catch (error) {
     console.error("ERROR:", error);
