@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { FaUpload } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
 const SlipThirtyNine = () => {
+  const { signature } = usePrePayServiceApi();
   const [formData, setFormData] = useState({
     funeral_director_name: "",
     funeral_director_phone: "",
@@ -104,17 +106,13 @@ const SlipThirtyNine = () => {
                   <label className="pdf-label-sm">
                     Signature of investor 1
                   </label>
-                  <img src="" alt="investor 1 signature" />
-                  {/* <div className="pdf-signature-zone !py-4">
-                    <FaUpload className="text-gray-300 text-2xl mb-2" />
-                    <input id="sig-nominate" type="file" className="hidden" />
-                    <label
-                      htmlFor="sig-nominate"
-                      className="pdf-upload-btn cursor-pointer"
-                    >
-                      Upload Signature
-                    </label>
-                  </div> */}
+                  {signature && (
+                    <img
+                      src={URL.createObjectURL(signature)}
+                      alt="Signature"
+                      className="mt-4"
+                    />
+                  )}
                 </div>
 
                 {/* Date Field */}
@@ -125,7 +123,6 @@ const SlipThirtyNine = () => {
                     name="investor1_date"
                     defaultValue="2026-01-08"
                     className="pdf-input"
-                    onChange={handleChange}
                   />
                 </div>
               </div>

@@ -4,8 +4,12 @@ import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
-import { claudinaryConfig } from "./config/cloudinary";
+
 import router from "./router";
+import Stripe from "stripe";
+
+import { claudinaryConfig } from "./config/cloudinary";
+import { Resend } from "resend";
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;

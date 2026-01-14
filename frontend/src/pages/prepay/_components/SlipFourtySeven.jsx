@@ -1,6 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
 const SlipFourtySeven = () => {
+  const { signature } = usePrePayServiceApi();
   const [formData, setFormData] = useState({
     investor1: {
       signature: "",
@@ -95,12 +97,13 @@ const SlipFourtySeven = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Signatureof Inverste 1 *
                         </label>
-                        <textarea
-                          value={formData.investor1.signature}
-                          placeholder="Type your full legal signature"
-                          className="w-full h-32 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none font-signature text-xl"
-                          required
-                        />
+                        {signature && (
+                          <img
+                            src={URL.createObjectURL(signature)}
+                            alt="Signature"
+                            className="mt-4"
+                          />
+                        )}
                         <p className="text-xs text-gray-500 mt-2">
                           This should match the signature on your official
                           identification documents

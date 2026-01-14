@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { List, Select } from "../../components/common/Reusables";
 import { Actions } from "./_components/Actions";
+import InvoicePDF from "./_components/InvoicePdf";
+import RenderQuestion from "./_components/RenderQuestion";
+import { useUser } from "../../components/hooks/useUser";
+
 const CORE = import.meta.env.VITE_API_URL;
 
-import { useUser } from "../../components/hooks/useUser";
-import RenderQuestion from "./_components/RenderQuestion";
-
+import { pdf } from "@react-pdf/renderer";
 export function Card({ title, children }) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
@@ -25,9 +27,10 @@ const AttendenceCrementionPage = () => {
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState(0);
   const { user } = useUser();
+  const [message, setMessage] = useState("");
   const [selections, setSelections] = useState({
     stationery: { value: "", price: 0 },
-    bodypreparation: { value: "", price: 0 },
+    bodyPreparation: { value: "", price: 0 },
     coffin: { value: "", price: 0 },
     flowers: { value: "", price: 0 },
     urn: { value: "", price: 0 },
@@ -66,7 +69,7 @@ const AttendenceCrementionPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...setSelections,
+          ...selections,
           totalPriceImpact: Object.values(setSelections).reduce(
             (sum, opt) => sum + (opt.price || 0),
             0
@@ -76,10 +79,43 @@ const AttendenceCrementionPage = () => {
 
       if (!res.ok) {
         const text = await res.text();
+
         console.error("Server Error:", text);
         return;
       }
 
+      const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
+
+      // 2. Convert blob to base64 for email attachment
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+
+      reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
+
+        // 3. Send to backend API
+        const response = await fetch("http://localhost:4000/api/send-invoice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...selections,
+            pdfAttachment: base64data,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setMessage("Invoice sent successfully!");
+          // Reset form if needed
+          // setFormData({...initialState});
+        } else {
+          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+        }
+      };
+      setLoading(false);
       navigate(`/${user._id}/deceasedpersondetails`);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -249,6 +285,15 @@ const AttendenceCrementionPage = () => {
         </Card>
       </div>
       <Actions goNext={geNext} totalPrice={amount} />
+      {message && (
+        <div
+          className={`message ${
+            message.includes("Error") ? "error" : "success"
+          }`}
+        >
+          {message}
+        </div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
 
 import Input from "../components/common/Input";
+import InvoicePDF from "./packages/_components/InvoicePdf";
 const CORE = import.meta.env.VITE_API_URL;
 
 const Registration = () => {
@@ -28,7 +29,6 @@ const Registration = () => {
       urn,
       collectionOfUrn,
     };
-    e.preventDefault();
     const res = await fetch(`${CORE}/blacktulipauth/newuser`, {
       method: "POST",
       headers: {
@@ -46,6 +46,7 @@ const Registration = () => {
         payload,
       }),
     });
+
     navigate(`/${userid}/fill-agreement-form`);
   };
   return (

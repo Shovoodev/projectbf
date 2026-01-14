@@ -15,16 +15,12 @@ export default (router: express.Router) => {
   router.get("/user", getUsers);
   router.post("/blacktulipauth/login", login);
   router.post("/blacktulipauth/newuser", registerUser);
-  router.post(
-    "/sendallrelateddocuments",
-    isAuthenticated,
-    sendAllRelatedDocuments
-  );
-  router.post(
-    "/all-selected-services",
-    isAuthenticated,
-    sendAllRelatedDocuments
-  );
+  // router.post(
+  //   "/sendallrelateddocuments",
+  //   isAuthenticated,
+  //   sendAllRelatedDocuments
+  // );
+  router.post("/all-selected-services", isAuthenticated); // to be completed
   router.post("/logout", logOut);
   // router.get("/report/:userId/pdf", isAuthenticated, pdfController);
 };

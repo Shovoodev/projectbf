@@ -130,20 +130,16 @@ export const PrePayServiceProvider = ({ children }) => {
   const [signature, setSignature] = useState("");
 
   const saveSignature = async () => {
-    if (!sigCanvasRef.current) return null;
+    if (!sigCanvasRef.current) return;
+    console.log("getting hear");
 
-    const isEmpty = await sigCanvasRef.current.isEmpty();
-    if (isEmpty) return;
+    const dataUrl = await sigCanvasRef.current.exportImage("png");
+    const file = base64ToFile(dataUrl, "signature.png");
+    console.log({ dataUrl, file });
 
-    try {
-      const dataUrl = await sigCanvasRef.current.exportImage("png");
-      setSignature(dataUrl); // ✅ base64 string
-      if (!dataUrl) return null;
-    } catch (error) {
-      console.error("Error saving signature:", error);
-      return null;
-    }
+    setSignature(file); // ✅ File object
   };
+
   const clearSignature = () => {
     if (sigCanvasRef.current) sigCanvasRef.current.clearCanvas();
   };

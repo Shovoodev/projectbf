@@ -51,7 +51,6 @@ const Header = () => {
                 </Link>
               </div>
             </div>
-
             {/* BTF Dropdown */}
             <div className="relative group">
               <a
@@ -72,7 +71,6 @@ const Header = () => {
                 </Link>
               </div>
             </div>
-
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary">
                 Options <FaChevronDown className="text-[10px]" />
