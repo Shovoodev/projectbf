@@ -3,6 +3,7 @@ import Header from "./components/layouts/Header/Header";
 import Footer from "./components/layouts/Footer/Footer";
 import { useEffect } from "react";
 import { useUserFront } from "./utility/use-userFront";
+import { PrePayServiceProvider } from "./utility/prePayServiceProvider";
 
 function App() {
   const { user } = useUserFront();
@@ -29,10 +30,11 @@ function App() {
   return (
     <section>
       <Header />
-
-      <main className="mx-auto">
-        <Outlet />
-      </main>
+      <PrePayServiceProvider>
+        <main className="mx-auto">
+          <Outlet />
+        </main>
+      </PrePayServiceProvider>
       <Footer />
     </section>
   );
