@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
+import { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import Signature from "../common/Signature";
 const SlipEleven = () => {
@@ -176,7 +176,7 @@ const SlipEleven = () => {
             </span>
           </div>
           <div className="flex gap-8 items-center">
-            <div className="hidden md:block">Version: July 2025</div>
+            <div className="hidden md:block">Version: July 2026</div>
             <div className="font-bold text-[rgb(49,41,166)]">42</div>
           </div>
         </div>

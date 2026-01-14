@@ -1,5 +1,9 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
+@import "tailwindcss";
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+}
 @layer base {
   p {
     @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
@@ -8,11 +12,11 @@
 @layer components {
   /* Root Layout and Sections */
   .form-container-base {
-    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
+    @apply w-full bg-white border border-gray-200 rounded-lg  font-roboto shadow-xl;
   }
 
   .form-header-area {
-    @apply bg-slate-50 p-6 border-b border-gray-200;
+    @apply p-6 border-b border-gray-200;
   }
 
   /* Typography */
@@ -74,7 +78,7 @@
   }
 
   .pdf-info-box {
-    @apply mt-6 p-4 border-l-4 border-blue-900 bg-blue-50 text-sm text-[rgb(49,41,166)]  leading-relaxed italic;
+    @apply mt-6 p-4  bg-blue-50 text-sm text-[rgb(49,41,166)]  leading-relaxed italic;
   }
 
   .pdf-footnote {
@@ -82,7 +86,7 @@
   }
 
   .pdf-footnote-sup {
-    @apply text-[rgb(49,41,166)]  font-bold mr-1;
+    @apply text-[rgb(49,41,166)] text-sm  font-bold mr-1;
   }
   /* The standard bold label */
   .pdf-label {
@@ -93,7 +97,7 @@
 
   /* Slip One */
   .pdf-intro-p {
-    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+    @apply text-sm text-[rgb(49,41,166)] font-roboto leading-relaxed mb-4;
   }
 
   .pdf-hr {
@@ -102,7 +106,7 @@
 
   /* Highlight Box (Instruction area) */
   .pdf-highlight-box {
-    @apply bg-[#F1F6F7] text-sm p-4 my-8 border-l-4 border-[#4BA6A6] text-[rgb(49,41,166)];
+    @apply bg-gray-100 text-sm p-4 my-8  text-[rgb(49,41,166)];
   }
 
   /* Questionnaire Specifics */
@@ -189,7 +193,7 @@
   /* Another for Slip Three */
 
   .form-container-base {
-    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
+    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-roboto shadow-xl;
     /* Reduce padding on mobile */
     @apply p-4 md:p-8;
   }
@@ -205,7 +209,7 @@
 
   /* Header responsiveness */
   .pdf-h2 {
-    @apply text-xl md:text-2xl font-bold text-[rgb(49,41,166)];
+    @apply text-xl md:text-2xl font-roboto font-bold text-[#00A99D];
   }
 
   /* Radio & Frequency Grid responsiveness */

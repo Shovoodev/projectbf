@@ -16,7 +16,10 @@ const SlipThirtySeven = () => {
     "My/Our financial adviser (where applicable), may process an application under the KeyInvest Funeral Bond using KeyInvest's online application portal;",
     "That my/our personal information will be collected, used and disclosed by KeyInvest in accordance with its Privacy Policy.",
   ];
-
+  const optionalCheckboxes = [
+    "If you do not wish to receive newsletters or information in relation to our other products and services, please mark this box",
+    "If you do not wish to receive newsletters or information about goods or services from other suppliers which Keylnvest reasonably consider may be of interest to you, please mark this box.",
+  ];
   return (
     <div className="form-container-base">
       <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
@@ -39,6 +42,14 @@ const SlipThirtySeven = () => {
 
           <div className="pdf-declaration-list">
             {declarations.map((text, index) => (
+              <label key={index} className="pdf-declaration-item">
+                <input type="checkbox" className="pdf-declaration-checkbox" />
+                <span className="pdf-declaration-text">{text}</span>
+              </label>
+            ))}
+          </div>
+          <div className="pdf-declaration-list mt-2 ml-4 border-t border-gray-300">
+            {optionalCheckboxes.map((text, index) => (
               <label key={index} className="pdf-declaration-item">
                 <input type="checkbox" className="pdf-declaration-checkbox" />
                 <span className="pdf-declaration-text">{text}</span>
@@ -68,7 +79,7 @@ const SlipThirtySeven = () => {
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
           <div className="flex gap-8">
-            <div>Version: July 2025</div>
+            <div>Version: July 2026</div>
             <div className="font-bold">37</div>
           </div>
         </div>

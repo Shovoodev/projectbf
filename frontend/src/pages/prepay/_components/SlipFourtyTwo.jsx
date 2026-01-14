@@ -1,4 +1,3 @@
-import React from "react";
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
 const SlipFourtyTwo = () => {
@@ -224,7 +223,7 @@ const SlipFourtyTwo = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 42</div>
         </div>
       </div>

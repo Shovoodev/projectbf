@@ -155,7 +155,7 @@ const SlipThirteen = ({ onBack }) => {
             </span>
           </div>
           <div className="flex gap-8 items-center">
-            <div className="hidden md:block italic">Version: July 2025</div>
+            <div className="hidden md:block italic">Version: July 2026</div>
           </div>
         </div>
 

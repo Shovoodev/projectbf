@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaChevronLeft, FaPaperPlane } from "react-icons/fa";
 
 const FormSubmitSlip = ({ onBack, onSubmitAll }) => {
@@ -82,7 +82,7 @@ const FormSubmitSlip = ({ onBack, onSubmitAll }) => {
               </span>
             </div>
             <div className="flex gap-8 items-center">
-              <div className="hidden md:block italic">Version: July 2025</div>
+              <div className="hidden md:block italic">Version: July 2026</div>
               <div className="font-bold text-[rgb(49,41,166)]">45</div>
             </div>
           </footer>

@@ -38,8 +38,6 @@ const SlipTen = () => {
 
   return (
     <div className="form-container-base">
-  
-
       <section className="p-4 md:p-10">
         <header className="mb-10">
           <h1 className="text-4xl font-bold text-[rgb(49,41,166)] leading-none mb-2">
@@ -279,7 +277,7 @@ const SlipTen = () => {
             <span className="text-[rgb(49,41,166)]">Direct Debit Request</span>
           </div>
           <div className="flex gap-8">
-            <div className="hidden md:block">Version: July 2025</div>
+            <div className="hidden md:block">Version: July 2026</div>
             <div className="font-bold text-[rgb(49,41,166)]">41</div>
           </div>
         </footer>
