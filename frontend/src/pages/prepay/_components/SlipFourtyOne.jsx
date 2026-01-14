@@ -3,7 +3,7 @@ import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
 const SlipFourtyOne = () => {
   const { directDebitForm, updateDirectDebitForm } = usePrePayServiceApi();
   return (
-    <div className="w-full min-h-screen bg-white text-[#2b2e83] px-10 py-12">
+    <div className="w-full  bg-white text-[#2b2e83] px-10 py-12">
       {/* Header */}
       <h1 className="text-4xl font-bold leading-tight">
         KeyInvest Direct
@@ -289,7 +289,7 @@ const SlipFourtyOne = () => {
         <div>
           <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
         </div>
-        <div>Version: July 2025</div>
+        <div>Version: July 2026</div>
         <div>Page 41</div>
       </div>
     </div>

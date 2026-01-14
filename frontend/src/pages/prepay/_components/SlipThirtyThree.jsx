@@ -346,7 +346,7 @@ const SlipThirtyThree = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 33</div>
         </div>
       </form>

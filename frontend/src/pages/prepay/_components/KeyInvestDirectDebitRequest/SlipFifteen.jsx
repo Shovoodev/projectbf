@@ -275,7 +275,7 @@ const SlipFifteen = () => {
             </span>
           </div>
           <div className="flex gap-8 items-center">
-            <div className="hidden md:block">Version: July 2025</div>
+            <div className="hidden md:block">Version: July 2026</div>
             <div className="bg-[rgb(49,41,166)] text-white px-2 py-0.5 rounded text-[12px]">
               46
             </div>

@@ -14,7 +14,9 @@ const SignatureField = ({ sigPadRef, clearSignature, saveSignature }) => {
 
   return (
     <div className="w-full">
-      <label className="block mb-2 font-medium text-gray-700">Signature</label>
+      <label className="block mb-2 font-medium text-gray-700">
+        Signature Of Investor 1
+      </label>
       <div ref={wrapperRef} className="border rounded bg-white w-full">
         {size.width > 0 && (
           <ReactSketchCanvas

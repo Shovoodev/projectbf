@@ -1,5 +1,5 @@
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
 const SlipThirtyFive = () => {
   const { setAspFrequency } = usePrePayServiceApi();
@@ -148,7 +148,7 @@ const SlipThirtyFive = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 35</div>
         </div>
       </div>

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+import { useState } from "react";
 
 const SlipFourtySeven = () => {
   const { signature } = usePrePayServiceApi();
@@ -145,7 +144,7 @@ const SlipFourtySeven = () => {
                 <span className="text-blue-900">KeyInvest</span> Funeral Bond
                 PDS
               </div>
-              <div>Version: July 2025</div>
+              <div>Version: July 2026</div>
               <div>Page 47</div>
             </div>
           </div>

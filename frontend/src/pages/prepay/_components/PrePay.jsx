@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-const CORE = import.meta.env.VITE_API_URL;
-
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
   cover,
   eight,
@@ -39,6 +38,7 @@ import {
 } from "../../../images/index";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
+const CORE = import.meta.env.VITE_API_URL;
 // import SlipFour from "./SlipFour";
 // import all the slips in order
 import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
@@ -229,7 +229,7 @@ const PrePay = () => {
   //debug
   console.log({ investors, directDebitForm });
   return (
-    <div className="relative">
+    <div className="relative font-roboto">
       <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
         <button
           onClick={handleToggleForm}
@@ -240,13 +240,9 @@ const PrePay = () => {
             : "Move back to the Documentation"}
         </button>
       </div>
-      {/* <div
-        className="fixed inset-0 -z-10 bg-cover bg-center blur-2xl scale-150 transition-all duration-700"
-        style={{ backgroundImage: `url(${bgImage})` }}
-      /> */}
+      <div className="fixed  bg-white bg-center blur-2xl " />
       {/* <Main /> */}
-      {/* <Main /> */}
-      <div className="fixed inset-0 -z-10 bg-black/40" />
+      <div className="fixed" />
       {/* 🔹 Flowing Images */}
       <div className="flex flex-col  items-center gap-10 py-3">
         {images.map((img, index) => (
@@ -271,47 +267,50 @@ const PrePay = () => {
   `}
       >
         <div
-          className="w-full h-full max-w-5xl mx-auto
-                overflow-y-auto px-6 py-10 space-y-3
-                bg-white rounded-none md:rounded-2xl shadow-2xl"
+          className="max-w-[800px] max-h-[850px]   mx-auto font-roboto
+                overflow-y-scroll px-6 py-10 space-y-3
+                bg-white rounded-none md:rounded-2xl shadow-2xl "
         >
           {slips[step]}
-        </div>
-        {step > 0 && (
-          <button
-            onClick={() => setStep(step - 1)}
-            className="fixed left-6 top-1/2 -translate-y-1/2 z-50
-                     bg-black/60 text-white p-4 rounded-full
-                     hover:bg-black transition"
-          >
-            ◀ Previous Secction
-          </button>
-        )}
 
-        {step < slips.length - 1 && (
-          <button
-            onClick={() => setStep(step + 1)}
-            className="fixed right-6 top-1/2 -translate-y-1/2 z-50
-                     bg-black/60 text-white p-4 rounded-full
-                     hover:bg-black transition"
-          >
-            Nect Section ▶
-          </button>
-        )}
-        {step === slips.length - 1 && (
-          <button
-            onClick={sendPdfByEmail}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-amber-400 p-5 rounded-2xl shadow-lg"
-          >
-            Finish your submittion
-          </button>
-        )}
-      <div id="page" className="scroll-mt-24 max-w-4xl mx-auto space-y-3   ">
-        <SlipOne />
-        <SlipTwo />
-        <InvestorTwo />
-        <SlipThree />
-        <SlipFive />
+          {/* Actions Section */}
+          <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-4 mt-6 border-t border-gray-100">
+            {/* Previous Section Button: Only shows if not on the first step */}
+            {step > 0 ? (
+              <button
+                type="button"
+                onClick={() => setStep(step - 1)}
+                className="btn-primary-pdf w-full  sm:w-auto justify-center"
+              >
+                <FaChevronLeft className="mr-2" /> Previous Section
+              </button>
+            ) : (
+              <div className="hidden sm:block" /> /* Keeps "Next" on the right when "Previous" is gone */
+            )}
+
+            {/* Next Section Button: Shows if there are more slips remaining */}
+            {step < slips.length - 1 && (
+              <button
+                type="button"
+                onClick={() => setStep(step + 1)}
+                className="btn-primary-pdf bg-[#3129a6] w-full sm:w-auto"
+              >
+                Next Section <FaChevronRight className="ml-2" />
+              </button>
+            )}
+
+            {/* Final Submit Button: Only shows on the very last slip */}
+            {step === slips.length - 1 && (
+              <button
+                type="button"
+                onClick={sendPdfByEmail}
+                className="btn-primary-pdf w-full sm:w-auto !bg-amber-500 hover:!bg-amber-600 border-none shadow-lg"
+              >
+                Finish your submission <FaChevronRight className="ml-2" />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

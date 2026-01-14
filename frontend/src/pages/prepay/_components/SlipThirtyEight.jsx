@@ -150,7 +150,7 @@ const SlipThirtyEight = () => {
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
           <div className="flex gap-8">
-            <div>Version: July 2025</div>
+            <div>Version: July 2026</div>
             <div className="font-bold">38</div>
           </div>
         </div>
