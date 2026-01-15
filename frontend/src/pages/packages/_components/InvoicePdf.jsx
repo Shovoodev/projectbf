@@ -8,137 +8,302 @@ import {
   Image,
 } from "@react-pdf/renderer";
 
-// Create styles
+// --- STYLES ---
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 40,
     fontFamily: "Helvetica",
+    fontSize: 10,
+    color: "#000",
+    position: "relative",
   },
-  header: {
+  // Background Watermark
+  watermarkContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: -1,
+  },
+  watermarkImage: {
+    width: 300,
+    opacity: 0.05, // Very faint
+  },
+  // Header Section
+  headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 40,
   },
-  companyInfo: {
-    fontSize: 10,
+  logoContainer: {
+    width: "40%",
+  },
+  logo: {
+    width: 60,
+    height: 60,
     marginBottom: 10,
+    // Replace with actual logo URL or import
+    backgroundColor: "#ccc",
   },
-  title: {
+  companyName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  companyPhone: {
+    marginTop: 4,
+    fontSize: 10,
+  },
+  invoiceHeaderRight: {
+    textAlign: "right",
+    width: "40%",
+  },
+  abnText: {
+    fontSize: 8,
+    marginBottom: 5,
+  },
+  invoiceTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
+    textTransform: "uppercase",
+    marginBottom: 5,
   },
-  section: {
-    marginVertical: 10,
+  companyAddress: {
+    fontSize: 9,
+    lineHeight: 1.4,
   },
-  row: {
+  // Middle Section (Banking & Customer)
+  middleSection: {
     flexDirection: "row",
-    marginVertical: 5,
+    justifyContent: "space-between",
+    marginBottom: 40,
+    alignItems: "flex-start",
   },
-  label: {
-    width: 150,
+  bankingBox: {
+    border: "1pt solid #D4AF37", // Gold-ish border
+    padding: 10,
+    width: "40%",
+  },
+  bankingTitle: {
+    fontSize: 9,
+    marginBottom: 4,
+    color: "#555",
+  },
+  bankingValue: {
     fontSize: 10,
     fontWeight: "bold",
+    marginBottom: 2,
   },
-  value: {
-    flex: 1,
-    fontSize: 10,
+  customerDetails: {
+    width: "50%",
   },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: 6,
+  },
+  detailLabel: {
+    fontWeight: "bold",
+    marginRight: 10,
+    textAlign: "right",
+  },
+  detailValue: {
+    width: 100, // Fixed width for alignment
+    textAlign: "right",
+    color: "#D9534F", // Reddish color for Invoice No.
+  },
+  detailValueNormal: {
+    width: 100,
+    textAlign: "right",
+  },
+  // Table Section
+  tableHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    paddingBottom: 5,
+    marginBottom: 10,
+  },
+  tableRow: {
+    flexDirection: "row",
+    marginBottom: 8,
+  },
+  colDesc: {
+    width: "70%",
+    fontWeight: "bold", // Headers bold
+  },
+  colAmount: {
+    width: "30%",
+    textAlign: "right",
+    fontWeight: "bold",
+  },
+  rowDesc: {
+    width: "70%",
+    fontWeight: "bold", // Item names bold in image
+  },
+  rowAmount: {
+    width: "30%",
+    textAlign: "right",
+  },
+  totalRow: {
+    flexDirection: "row",
+    borderTopWidth: 1,
+    borderTopColor: "#000",
+    paddingTop: 5,
+    marginTop: 200, // Pushes total to bottom of page section
+  },
+  // Footer
   footer: {
-    position: "absolute",
-    bottom: 30,
-    left: 30,
-    right: 30,
-    fontSize: 10,
+    marginTop: "auto", // Pushes to bottom
     textAlign: "center",
-  },
-  note: {
-    fontSize: 10,
-    marginTop: 20,
+    fontSize: 9,
     lineHeight: 1.5,
+    color: "#444",
+  },
+  highlightText: {
+    color: "#D9534F",
   },
 });
 
-const InvoicePDF = ({ invoiceData }) => {
+const InvoicePDFComponent = ({ invoiceData }) => {
+  // Use placeholder logo if none provided
+  const logoUrl = "https://via.placeholder.com/150";
+  const bgUrl = "https://via.placeholder.com/500"; // Demo background
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* ABN */}
-        <Text style={{ fontSize: 10, marginBottom: 10 }}>
-          ABN: 84 678 068 687
-        </Text>
-
-        {/* Title */}
-        <Text style={styles.title}>TAX INVOICE</Text>
-
-        {/* Company Info */}
-        <View style={styles.companyInfo}>
-          <Text>OVANTA PTY LTD</Text>
-          <Text>25 Renown Avenue</Text>
-          <Text>Oatley NSW 2223</Text>
+        {/* BACKGROUND IMAGE (Watermark) */}
+        <View style={styles.watermarkContainer}>
+          <Image src={bgUrl} style={styles.watermarkImage} />
         </View>
 
-        {/* Banking Details */}
-        <View style={styles.section}>
-          <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 5 }}>
-            Banking Details
+        {/* --- HEADER --- */}
+        <View style={styles.headerRow}>
+          {/* Left: Logo & Name */}
+          <View style={styles.logoContainer}>
+            {/* Replace with actual logo image */}
+            <Image src={logoUrl} style={styles.logo} />
+            <Text style={styles.companyName}>Black Tulip Funerals</Text>
+            <Text style={styles.companyPhone}>Ph: 1300 11 0031</Text>
+          </View>
+
+          {/* Right: Tax Invoice Details */}
+          <View style={styles.invoiceHeaderRight}>
+            <Text style={styles.abnText}>ABN: 84 678 068 687</Text>
+            <Text style={styles.invoiceTitle}>TAX INVOICE</Text>
+            <Text style={styles.companyAddress}>OVANTA PTY LTD</Text>
+            <Text style={styles.companyAddress}>25 Renown Avenue</Text>
+            <Text style={styles.companyAddress}>Oatley NSW 2223</Text>
+          </View>
+        </View>
+
+        {/* --- MIDDLE SECTION --- */}
+        <View style={styles.middleSection}>
+          {/* Banking Details Box */}
+          <View style={styles.bankingBox}>
+            <Text style={styles.bankingTitle}>Banking Details</Text>
+            <Text style={styles.bankingValue}>Commonwealth Bank</Text>
+            <Text style={styles.bankingValue}>Black Tulip Funerals</Text>
+            <Text style={styles.bankingValue}>BSB: 062-692</Text>
+            <Text style={styles.bankingValue}>ACC: 7617 6113</Text>
+          </View>
+
+          {/* Customer & Invoice Meta Data */}
+          <View style={styles.customerDetails}>
+            {/* Row 1: Customer & Invoice # */}
+            <View style={styles.detailRow}>
+              <View>
+                <Text style={styles.detailLabel}>Customer Details</Text>
+                <Text style={{ textAlign: "right", fontSize: 9 }}>
+                  Next of Kin
+                </Text>
+              </View>
+              <View style={{ marginLeft: 20 }}>
+                <Text style={styles.detailLabel}>Invoice Number</Text>
+                <Text style={styles.detailValue}>
+                  {invoiceData?.invoiceNumber || "BTF9BB3252"}
+                </Text>
+              </View>
+            </View>
+
+            {/* Spacer */}
+            <View style={{ height: 10 }} />
+
+            {/* Row 2: Reference & Due Date */}
+            <View style={styles.detailRow}>
+              <View>
+                <Text style={styles.detailLabel}>Reference</Text>
+                <Text style={{ textAlign: "right", fontSize: 9 }}>
+                  Deceased Name
+                </Text>
+              </View>
+              <View style={{ marginLeft: 20 }}>
+                <Text style={styles.detailLabel}>Due Date</Text>
+                <Text style={styles.detailValueNormal}>
+                  {invoiceData?.dueDate || "DD/MM/YYYY"}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* --- TABLE HEADER --- */}
+        <View style={styles.tableHeader}>
+          <Text style={styles.colDesc}>Description</Text>
+          <Text style={styles.colAmount}>Amount AUD</Text>
+        </View>
+
+        {/* --- TABLE ROWS --- */}
+        {/* Example Static Rows based on image, replace with dynamic map if needed */}
+        <View style={styles.tableRow}>
+          <Text style={styles.rowDesc}>No Service Cremation</Text>
+          <Text style={styles.rowAmount}>$2200.00</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.rowDesc}>Scattering Urn</Text>
+          <Text style={styles.rowAmount}>$0.00</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.rowDesc}>Australia Post Registered Mail</Text>
+          <Text style={styles.rowAmount}>$0.00</Text>
+        </View>
+
+        {/* --- TOTAL ROW --- */}
+        <View style={styles.totalRow}>
+          <Text
+            style={{ ...styles.colDesc, textAlign: "right", paddingRight: 20 }}
+          >
+            Amount Due AUD
           </Text>
-          <Text style={{ fontSize: 10 }}>Commonwealth Bank</Text>
-          <Text style={{ fontSize: 10 }}>Black Tulip Funerals</Text>
-          <Text style={{ fontSize: 10 }}>BSB: 062-692</Text>
-          <Text style={{ fontSize: 10 }}>ACC: 7617 6113</Text>
+          <Text style={styles.colAmount}>$2200.00</Text>
         </View>
 
-        {/* Customer Details */}
-        <View style={styles.section}>
-          <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 5 }}>
-            Customer Details
-          </Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Next of Kin:</Text>
-            <Text style={styles.value}>{invoiceData.nextOfKin}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Reference:</Text>
-            <Text style={styles.value}>{invoiceData.reference}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Deceased Name:</Text>
-            <Text style={styles.value}>{invoiceData.deceasedName}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Invoice Number:</Text>
-            <Text style={styles.value}>{invoiceData.invoiceNumber}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Due Date:</Text>
-            <Text style={styles.value}>{invoiceData.dueDate}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Email:</Text>
-            <Text style={styles.value}>{invoiceData.email}</Text>
-          </View>
-        </View>
-
-        {/* Image placeholder - You can add actual image if needed */}
-        <View style={{ marginVertical: 20 }}>
-          <Text style={{ fontSize: 10, color: "#666" }}>
-            [Image placeholder - Funeral service details would appear here]
-          </Text>
-        </View>
-
-        {/* Payment Note */}
-        <View style={styles.note}>
+        {/* --- FOOTER --- */}
+        <View style={styles.footer}>
           <Text>
-            Please use our invoice number {invoiceData.invoiceNumber} as your
-            payment reference. We kindly ask that payment is made immediately to
-            secure the funeral service date and time. Delays in full payment may
-            cause rescheduling of services. Please contact us if you have any
-            questions. Once paid, it would be appreciated if you could email
-            your remittance to accounts@blacktulipfunerals.com.au
+            Please use our invoice number{" "}
+            <Text style={styles.highlightText}>
+              {invoiceData?.invoiceNumber || "BTF9BB3252"}
+            </Text>{" "}
+            as your payment reference.
           </Text>
-          <Text style={{ marginTop: 10 }}>
+          <Text>
+            We kindly ask that payment is made immediately to secure the funeral
+            service date and time.
+          </Text>
+          <Text>
+            Delays in full payment may cause rescheduling of services. Please
+            contact us if you have any questions.
+          </Text>
+          <Text>
+            Once paid, it would be appreciated if you could email your
+            remittance to accounts@blacktulipfunerals.com.au
+          </Text>
+          <Text style={{ marginTop: 5, fontWeight: "bold" }}>
             Many thanks for your custom and understanding, Scott and the Black
             Tulip team.
           </Text>
@@ -148,4 +313,4 @@ const InvoicePDF = ({ invoiceData }) => {
   );
 };
 
-export default InvoicePDF;
+export default InvoicePDFComponent;

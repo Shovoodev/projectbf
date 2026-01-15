@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import Ash_Storage from "./pages/Ash_Storage";
+import Btf from "./pages/Btf";
 import Chapels from "./pages/Chapels";
 import Coffins from "./pages/Coffins";
 import Contact from "./pages/Contact";
@@ -20,18 +21,20 @@ import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
-import Btf from "./pages/Btf";
-import Btf from "./pages/Btf";
 // from Toukirul vai
 import BlankLayout from "./BlankLayout";
 
 import BlankLayout from "./BlankLayout";
 import AgreementForm from "./pages/Agreement";
 
-// import UserPage from "./pages/dashboard/UserPage";
+// import Pay_now from "./pages/Pay_now";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
-import DeceasedPersonPage from "./pages/packages/DeceasedPersonPage";
-import KinDetailsPage from "./pages/packages/KinDetailsPage";
+import Registrarion from "./pages/Registration";
+import LoginScreen from "./pages/SignIn";
+// import PaynowPage from "./pages/packages/PaynowPage";
+
+import UserPage from "./pages/dashboard/UserPage";
+
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -42,6 +45,9 @@ import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
 import Packages from "./pages/Packages";
+
+import InvoicePDF from "./pages/Invoicepdf";
+import Registration from "./pages/Registration";
 
 export const routes = createBrowserRouter([
   {
@@ -57,6 +63,10 @@ export const routes = createBrowserRouter([
       {
         path: "/team",
         element: <Team />,
+      },
+      {
+        path: "/invoicepdf",
+        element: <InvoicePDF />,
       },
       {
         path: "/news",

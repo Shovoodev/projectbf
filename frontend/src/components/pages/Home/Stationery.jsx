@@ -20,7 +20,7 @@ const Stationery = () => {
   });
 
   const items = Object.values(images);
-  console.log(items);
+
   return (
     <section className="section-padding bg-white border-t border-gray-100">
       <div className="section-container text-center">
