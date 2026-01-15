@@ -52,7 +52,7 @@ export const sendPdfOfInvoice = async (
     });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "shovoodev@gmail.com",
+      to: "mdathikhasan136@gmail.com",
       subject: `Thanks  hi beleaving us for trusting us `,
       text: "we get all you documents",
       html: `

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import img from "../../../images/loginpage.png";
 
 import {
@@ -13,8 +13,9 @@ import {
   FiUser,
   FiPhone,
 } from "react-icons/fi";
-import { pdf } from "@react-pdf/renderer";
+// import { pdf } from "@react-pdf/renderer";
 import InvoicePDF from "./InvoicePdf";
+import { useServiceApi } from "../../../utility/SelectedServiceProvider";
 const CORE = import.meta.env.VITE_API_URL;
 
 const PopupEnquirey = ({
@@ -43,14 +44,8 @@ const PopupEnquirey = ({
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const stationery = searchParams.get("stationery");
-  const bodypreparation = searchParams.get("bodypreparation");
-  const coffin = searchParams.get("coffin");
-  const flowers = searchParams.get("flowers");
-  const urn = searchParams.get("urn");
-  const collectionOfUrn = searchParams.get("collectionOfUrn");
 
+  const { selections } = useServiceApi();
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
   useEffect(() => {
@@ -120,6 +115,7 @@ const PopupEnquirey = ({
       setIsLoading(false);
       return;
     }
+    console.log({ selections });
 
     try {
       // 1️⃣ Register
@@ -148,53 +144,45 @@ const PopupEnquirey = ({
       localStorage.setItem("user", JSON.stringify(loginData));
 
       // 3️⃣ Submit payload
-      const payload = {
-        stationery,
-        bodypreparation,
-        coffin,
-        flowers,
-        urn,
-        collectionOfUrn,
-      };
 
       await fetch(`${CORE}/newattendingservicecremationanswers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payload }),
+        body: JSON.stringify({ selections }),
         credentials: "include",
       });
 
-      const blob = await pdf(<InvoicePDF invoiceData={payload} />).toBlob();
+      // const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
 
       // 2. Convert blob to base64 for email attachment
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
+      // const reader = new FileReader();
+      // reader.readAsDataURL(blob);
 
-      reader.onloadend = async () => {
-        const base64data = reader.result.split(",")[1];
+      // reader.onloadend = async () => {
+      //   const base64data = reader.result.split(",")[1];
 
-        // 3. Send to backend API
-        const response = await fetch("http://localhost:4000/api/send-invoice", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...payload,
-            pdfAttachment: base64data,
-          }),
-        });
+      //   // 3. Send to backend API
+      //   const response = await fetch("http://localhost:4000/api/send-invoice", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       ...payload,
+      //       pdfAttachment: base64data,
+      //     }),
+      //   });
 
-        const result = await response.json();
+      // const result = await response.json();
 
-        if (response.ok) {
-          setMessage("Invoice sent successfully!");
-          // Reset form if needed
-          // setFormData({...initialState});
-        } else {
-          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
-        }
-      };
+      //   if (response.ok) {
+      //     setMessage("Invoice sent successfully!");
+      //     // Reset form if needed
+      //     // setFormData({...initialState});
+      //   } else {
+      //     setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+      //   }
+      // };
 
       // 4️⃣ Success UI actions
       showMessage("Registration successful!", "success");
