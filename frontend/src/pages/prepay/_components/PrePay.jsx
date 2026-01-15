@@ -206,19 +206,41 @@ const PrePay = () => {
   console.log({ investors, directDebitForm });
   return (
     <div className="relative font-roboto">
-      <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
-        <button
-          onClick={handleToggleForm}
-          className="bg-green-700 text-xl p-3 text-white shadow-2xl rounded-2xl"
-        >
-          {buttonStatus
-            ? "Continue to fill in the form"
-            : "Move back to the Documentation"}
-        </button>
+      <div className="fixed right-6 top-10 z-[1100]">
+        <div className="bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[#2c5aa0]/30 w-full max-w-[400px] min-h-[200px] flex items-center p-[35px] text-center">
+          <div className="w-full flex-1">
+            {/* Dynamic Header */}
+            <h1 className="text-[#2c5aa0] text-[28px] font-semibold mb-[15px]">
+              {buttonStatus ? "Funeral Bond Information" : "Application Form"}
+            </h1>
+
+            {/* Dynamic Sub-text */}
+            <p className="text-[#666666] text-base leading-[1.5] mb-5">
+              {buttonStatus ? "Page 5 - Image 4 of 30" : "Section in Progress"}
+            </p>
+
+            {/* Conditional Instruction Text */}
+            {buttonStatus && (
+              <p className="text-[#666666] text-sm leading-[1.5] mb-5">
+                Swipe left/right or use arrow keys to navigate
+              </p>
+            )}
+
+            {/* The Functional Button */}
+            <button
+              onClick={handleToggleForm}
+              className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
+            >
+              {buttonStatus
+                ? "Continue to Application Form"
+                : "Move back to Documentation"}
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="fixed  bg-white bg-center blur-2xl " />
+      <div className="  bg-white bg-center blur-2xl " />
       {/* <Main /> */}
-      <div className="fixed" />
+      <div className="" />
       {/* 🔹 Flowing Images */}
       <div className="flex flex-col  items-center gap-10 py-3">
         {images.map((img, index) => (

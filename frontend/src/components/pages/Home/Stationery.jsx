@@ -20,14 +20,12 @@ const Stationery = () => {
   });
 
   const items = Object.values(images);
-  console.log(items);
+
   return (
     <section className="section-padding bg-white border-t border-gray-100">
       <div className="section-container text-center">
         <h2 className="heading-lg font-semibold">
-          SYDNEY'S LARGEST RANGE OF FUNERAL STATIONERY
-          <br />
-          TISSUE PACKS & COFFIN WRAPS
+          SYDNEY'S LARGEST RANGE OF FUNERAL STATIONERY & COFFIN WRAPS
         </h2>
         <Slider items={items} />
         {/* <div className="mt-12 grid grid-cols-2 md:grid-cols-5 gap-4">

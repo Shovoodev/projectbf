@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { List, Select } from "../../components/common/Reusables";
 import { useUser } from "../../components/hooks/useUser";
-import InvoicePDF from "./_components/InvoicePdf";
+// import InvoicePDF from "./_components/InvoicePdf";
 import RenderQuestion from "./_components/RenderQuestion";
 import AdditionalInfoSection from "./service-component/AdditionalInfoSection";
 import FloralGallerySection from "./service-component/FloralGallerySection";
@@ -13,6 +13,7 @@ import FloralGallerySection from "./service-component/FloralGallerySection";
 const CORE = import.meta.env.VITE_API_URL;
 
 import { pdf } from "@react-pdf/renderer";
+import { Actions } from "./_components/Actions";
 export function Card({ title, children, className = "" }) {
   return (
     <div
@@ -379,6 +380,7 @@ const AttendenceCrementionPage = () => {
             {message}
           </div>
         )}
+        <Actions />
       </div>
       <FloralGallerySection />
       <AdditionalInfoSection />

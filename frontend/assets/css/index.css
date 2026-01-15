@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
-
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"); */
 /* BTF Fonts:
 
 Title: Playfair Display (Semi Bold)
@@ -17,6 +17,7 @@ Text: Montserrat (Normal) */
   --font-body: "Lato", sans-serif;
   --font-montserrat: "Montserrat", sans-serif;
   --font-davidlibre: "David Libre", serif;
+  --font-roboto: "Roboto", sans-serif;
 
   /* --- EXISTING COLORS (Home Page) --- */
   --color-primary: #000000;
