@@ -1,18 +1,6 @@
-import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
 
 const SlipNine = () => {
-  const [formData, setFormData] = useState({
-    funeral_director_name: "",
-    funeral_director_phone: "",
-    investor1_date: "2026-01-08",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   return (
     <div className="form-container-base">
       <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
@@ -82,7 +70,6 @@ const SlipNine = () => {
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
             <div>
@@ -92,7 +79,6 @@ const SlipNine = () => {
                 name="investor1_date"
                 defaultValue="2026-01-08"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
           </div>
