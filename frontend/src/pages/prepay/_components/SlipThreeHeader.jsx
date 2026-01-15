@@ -1,15 +1,7 @@
-import { useState } from "react";
+import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
 const SlipThreeHeader = () => {
-  const [formData, setFormData] = useState({
-    contribution_amount: "",
-    payment_method: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { paymentMethod, setPaymentMethod } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">
@@ -60,10 +52,10 @@ const SlipThreeHeader = () => {
                   {method === "eft"
                     ? "EFT"
                     : method === "bpay"
-                    ? "BPAY"
-                    : method === "oheque"
-                    ? "OHEQUE"
-                    : "Direct Debit"}
+                      ? "BPAY"
+                      : method === "oheque"
+                        ? "OHEQUE"
+                        : "Direct Debit"}
                 </span>
               </label>
             ))}

@@ -1,5 +1,5 @@
-import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import SlipThreeHeader from "./SlipThreeHeader";
 
 const SlipThirtyFive = () => {
   const { setAspFrequency } = usePrePayServiceApi();
