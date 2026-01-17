@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipFourtySeven = () => {
   const { signature } = usePrePayServiceApi();

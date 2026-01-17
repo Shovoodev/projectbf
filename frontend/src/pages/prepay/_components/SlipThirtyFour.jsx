@@ -1,4 +1,4 @@
-import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyFour = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();

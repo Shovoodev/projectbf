@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
-import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyNine = () => {
   const { signature } = usePrePayServiceApi();

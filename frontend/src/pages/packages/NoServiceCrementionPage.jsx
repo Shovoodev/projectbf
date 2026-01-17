@@ -4,6 +4,7 @@ import { List } from "../../components/common/Reusables";
 import { useUser } from "../../components/hooks/useUser";
 import { Actions } from "./_components/Actions";
 import RenderQuestion from "./_components/RenderQuestion";
+import { useServiceApi } from "../../utility/SelectedServiceProvider";
 
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
@@ -20,13 +21,24 @@ export function Card({ title, children, className = "" }) {
 }
 
 const NoServiceCrementionPage = () => {
-  const BASE_PRICE = 2299;
+  const {
+    selections,
+    loading,
+    error,
+    amount,
+    setAmount,
+    message,
+    geNext,
+    setTotalPrice,
+    totalPrice,
+    handleSelectChange,
+    BASE_PRICE,
+    noServiceFunralData,
+  } = useServiceApi();
   const navigate = useNavigate();
   const { user } = useUser();
 
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Variable Selections
   const [selections, setSelections] = useState({
@@ -195,13 +207,39 @@ const NoServiceCrementionPage = () => {
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="space-y-4">
-                {data.map((item) => (
-                  <RenderQuestion
+                {attendenceData.map((item) => (
+                  <div
                     key={item.id}
-                    item={item}
-                    selections={selections}
-                    setSelections={setSelections}
-                  />
+                    className="flex justify-between items-center text-sm py-2 border-b last:border-none"
+                  >
+                    <label className="block text-sm font-medium text-gray-700">
+                      {item.question}
+                    </label>
+                    <select
+                      className="p-1 border rounded bg-gray-100 text-right w-48"
+                      onChange={(e) =>
+                        handleSelectChange(item.id, e.target.value)
+                      }
+                      value={(() => {
+                        const categoryKeyMap = {
+                          Urn: "urn",
+                          "Collection of Urn": "collectionOfUrn",
+                        };
+                        const key = categoryKeyMap[item.question];
+                        return selections[key]?.value || "";
+                      })()}
+                    >
+                      {item.options.map((option) => (
+                        <option
+                          className=""
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 ))}
               </div>
             </Card>
