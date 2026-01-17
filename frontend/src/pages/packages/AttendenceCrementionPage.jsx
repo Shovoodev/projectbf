@@ -1,299 +1,235 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { List, Select } from "../../components/common/Reusables";
+import { List } from "../../components/common/Reusables";
+import { useServiceApi } from "../../utility/SelectedServiceProvider";
 import { Actions } from "./_components/Actions";
-import InvoicePDF from "./_components/InvoicePdf";
-import RenderQuestion from "./_components/RenderQuestion";
-import { useUser } from "../../components/hooks/useUser";
 
-const CORE = import.meta.env.VITE_API_URL;
-
-import { pdf } from "@react-pdf/renderer";
-export function Card({ title, children }) {
+// --- Reusable Card Component ---
+export function Card({ title, children, className = "" }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <h3 className="font-semibold uppercase text-sm mb-4">{title}</h3>
+    <div
+      className={`bg-gray-50 rounded-xl p-8 border border-gray-100 h-full ${className}`}
+    >
+      <h3 className="font-display font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
+        {title}
+      </h3>
       {children}
     </div>
   );
 }
 
+// --- Reusable Row Select Component ---
+const RowSelect = ({ label, value, onChange, options, placeholder }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center border-b border-gray-200/60 last:border-0 pb-4 last:pb-0">
+    <label className="font-body font-medium text-gray-700 text-sm">
+      {label}:
+    </label>
+    <select
+      value={value}
+      onChange={onChange}
+      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5"
+    >
+      {placeholder && (
+        <option value="" disabled>
+          {placeholder}
+        </option>
+      )}
+      {options.map((opt, idx) => (
+        <option key={idx} value={opt.value || opt}>
+          {opt.label || opt}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
 const AttendenceCrementionPage = () => {
-  const BASE_PRICE = 4400;
+  const {
+    selections,
+    loading,
+    error,
+    amount,
+    setAmount,
+    message,
+    geNext,
+    setTotalPrice,
+    totalPrice,
+    handleSelectChange,
+    BASE_PRICE,
+    attendenceData,
+  } = useServiceApi();
 
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
-  const { user } = useUser();
-  const [message, setMessage] = useState("");
-  const [selections, setSelections] = useState({
-    stationery: { value: "", price: 0 },
-    bodyPreparation: { value: "", price: 0 },
-    coffin: { value: "", price: 0 },
-    flowers: { value: "", price: 0 },
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
-  });
+  // Static Options State
+  const [hearse, setHearse] = useState("No Hearse - Coffin in place");
+  const [water, setWater] = useState("Not Required");
+  const [tissues, setTissues] = useState("Not Required");
 
-  const [hearse, setHearse] = useState();
-  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  const handleOptionChange = (index, value, priceImpact) => {
-    const keys = ["stationery", "bodypreparation", "coffin", "flowers", "urn"][
-      index
-    ];
-
-    const key = keys[index];
-
-    setSelections((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceImpact } };
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0
-      );
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
-  };
-
-  const geNext = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch(`${CORE}/newattendingservicecremationanswers`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...selections,
-          totalPriceImpact: Object.values(setSelections).reduce(
-            (sum, opt) => sum + (opt.price || 0),
-            0
-          ),
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-
-        console.error("Server Error:", text);
-        return;
-      }
-
-      const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
-
-      // 2. Convert blob to base64 for email attachment
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-
-      reader.onloadend = async () => {
-        const base64data = reader.result.split(",")[1];
-
-        // 3. Send to backend API
-        const response = await fetch("http://localhost:4000/api/send-invoice", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...selections,
-            pdfAttachment: base64data,
-          }),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          setMessage("Invoice sent successfully!");
-          // Reset form if needed
-          // setFormData({...initialState});
-        } else {
-          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
-        }
-      };
-      setLoading(false);
-      navigate(`/${user._id}/deceasedpersondetails`);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (data.length > 0) {
-      setSelections({
-        stationery: data[0].options[0]?.value || "No option selected",
-        bodypreparation: data[1]?.options[0]?.value || "No option selected",
-        coffin: data[2]?.options[0]?.value || "No opiton selected",
-        flowers: data[3]?.options[0]?.value || "No option selected",
-        urn: data[4]?.options[0]?.value || "No option selected",
-        collectionOfUrn: data[5]?.options[0]?.value || "No option selected",
-      });
-    }
-  }, [data]);
-
-  useEffect(() => {
-    const fetchStepData = async () => {
-      try {
-        const response = await fetch(`${CORE}/newattendingservicecremation`, {
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch data");
-
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStepData();
-  }, []);
+  // Recalculate price when selections change
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
       0
     );
+    // Add any static option costs here if needed
+    const finalTotal = BASE_PRICE + totalPriceImpact;
 
-    const price = setTotalPrice(BASE_PRICE + totalPriceImpact);
-    setAmount(price);
-  }, [selections]);
+    setTotalPrice(finalTotal);
+    setAmount(finalTotal);
+  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
 
-  console.log(data);
-  useEffect(() => {
-    if (data.length > 0) {
-      setSelections({
-        stationery: data[0].options[0]?.value || "No option selected",
-        bodypreparation: data[1]?.options[0]?.value || "No option selected",
-        coffin: data[2]?.options[0]?.value || "No opiton selected",
-        flowers: data[3]?.options[0]?.value || "No option selected",
-        urn: data[4]?.options[0]?.value || "No option selected",
-        collectionOfUrn: data[5]?.options[0]?.value || "No option selected",
-      });
-    }
-  }, [data]);
-
-  // const geNext = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     navigate(
-  //       `/register?stationery=${selections.stationery}&bodypreparation=${selections.bodypreparation}&coffin=${selections.coffin}&flowers=${selections.flowers}&urn=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
-  //     );
-  //   } catch (err) {
-  //     console.error("Fetch error:", err);
-  //   }
-  // };
-
-  if (loading) return <p className="text-white">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error)
+    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className=" mx-20">
-      <div className="grid md:grid-cols-[1fr_auto] gap-8 items-start mb-10">
-        <div>
-          <h1 className="font-serif text-4xl mb-4">
-            Attending Service Cremation
-          </h1>
-          <p className="text-gray-600 max-w-2xl">
-            Black Tulip Funerals offers a respectful and simple farewell,
-            allowing family and close friends to be present during the cremation
-            service. It provides a meaningful opportunity to honor your loved
-            one in a calm, dignified, and supportive setting.
-          </p>
+    <div className="bg-white min-h-screen pb-20">
+      <div className="section-container max-w-7xl mx-auto px-6 py-16">
+        {/* --- HEADER --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-10">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+              Attending Service Cremation
+            </h1>
+            <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
+              Black Tulip Funerals offers a respectful and simple farewell,
+              allowing family and close friends to be present during the
+              cremation service. It provides a meaningful opportunity to honor
+              your loved one in a calm, dignified, and supportive setting.
+            </p>
+          </div>
+
+          {/* Price Box */}
+          <div className="bg-gray-50 border border-gray-100 rounded-xl p-8 text-center min-w-[220px] self-start">
+            <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
+              Price
+            </span>
+            <span className="text-6xl font-body font-bold text-gray-900">
+              ${totalPrice}
+            </span>
+          </div>
         </div>
 
-        <div className="bg-gray-100 rounded-lg px-8 py-6 text-center sticky top-6">
-          <div className="text-sm text-gray-500">Price</div>
-          <div className="text-4xl font-bold">${totalPrice}</div>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 gap-6 mb-10">
-        <Card title="Required Services">
-          <List
-            items={[
-              "Phone or Zoom Consultation",
-              "Administration Fees",
-              "Registration of Death",
-              "Celebrant or Host",
-              "Cremation Fee",
-              "Transfers from Place of Passing (Sydney Metro 24/7)",
-            ]}
-          />
-        </Card>
-        <Card title="Disbursements">
-          <List
-            items={[
-              "Medical Referee Certificate",
-              "Cremation Risk Advice",
-              "NSW Government Services Levy",
-              "Official Death Certificate Issued by BDM",
-            ]}
-          />
-        </Card>
-        ok
-        <Card title="Included Services">
-          <List
-            items={[
-              "Live Video Streaming",
-              "SMS Photo Invitation",
-              "Photo Slideshow",
-              "Photo for Screens in Chapel",
-            ]}
-          />
-        </Card>
-        <Card title="Included Variables">
-          {data.map((item) => (
-            <RenderQuestion
-              key={item.id}
-              item={item}
-              selections={selections}
-              setSelections={setSelections}
-              setTotalPrice={setTotalPrice}
-              BASE_PRICE={BASE_PRICE}
+        {/* --- TOP ROW: 3 COLUMNS --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* 1. Required Services */}
+          <Card title="Required Services">
+            <List
+              items={[
+                "Phone or Zoom Consultation",
+                "Administration Fees",
+                "Registration of Death",
+                "Celebrant or Host",
+                "Cremation Fee",
+                "Transfers from Place of Passing (Sydney Metro 24/7)",
+              ]}
             />
-          ))}
-        </Card>
-        <Card title="Options">
-          <Select
-            label="Hearse"
-            value={hearse}
-            onChange={setHearse}
-            options={[
-              "No Hearse - Coffin in place",
-              "Standard Hearse",
-              "Premium Hearse",
-            ]}
-          />
+          </Card>
 
-          <Select
-            label="Bottled Water 600ml"
-            value="Not Required"
-            options={["Not Required"]}
-          />
-          <Select
-            label="Personalised Tissue Packs"
-            value="Not Required"
-            options={["Not Required"]}
-          />
-        </Card>
-      </div>
-      <Actions goNext={geNext} totalPrice={amount} />
-      {message && (
-        <div
-          className={`message ${
-            message.includes("Error") ? "error" : "success"
-          }`}
-        >
-          {message}
+          {/* 2. Disbursements */}
+          <Card title="Disbursements">
+            <List
+              items={[
+                "Medical Referee Certificate",
+                "Cremation Risk Advice",
+                "NSW Government Services Levy",
+                "Official Death Certificate Issued by BDM",
+              ]}
+            />
+          </Card>
+
+          {/* 3. Included Services */}
+          <Card title="Included Services">
+            <List
+              items={[
+                "Live Video Streaming",
+                "SMS Photo Invitation",
+                "Photo Slideshow",
+                "Photo for Screens in Chapel",
+              ]}
+            />
+          </Card>
         </div>
-      )}
+
+        {/* --- BOTTOM ROW: 2 COLUMNS --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Left: Included Variables (Dynamic) */}
+          <Card title="Included Variables">
+            <div className="flex flex-col gap-4">
+              {attendenceData.map((item) => {
+                // Determine current value based on your mapping logic
+                const categoryKeyMap = {
+                  "Funeral Stationery": "stationery", // Fixed typo in key map if needed
+                  Stationery: "stationery",
+                  "Body Preparation": "bodyPreparation",
+                  Coffin: "coffin",
+                  Flowers: "flowers", // Removed colon for safer matching
+                  "Flowers:": "flowers",
+                  Urn: "urn",
+                  "Collection of Urn": "collectionOfUrn",
+                };
+                const key = categoryKeyMap[item.question] || item.question; // Fallback
+                const currentValue = selections[key]?.value || "";
+
+                return (
+                  <RowSelect
+                    key={item.id}
+                    label={item.question}
+                    value={currentValue}
+                    onChange={(e) =>
+                      handleSelectChange(item.id, e.target.value)
+                    }
+                    options={item.options}
+                    placeholder="Select an option"
+                  />
+                );
+              })}
+            </div>
+          </Card>
+
+          {/* Right: Options (Static) */}
+          <Card title="Options">
+            <div className="flex flex-col gap-4">
+              <RowSelect
+                label="Hearse"
+                value={hearse}
+                onChange={(e) => setHearse(e.target.value)}
+                options={[
+                  "No Hearse - Coffin in place",
+                  "Standard Hearse",
+                  "Premium Hearse",
+                ]}
+              />
+              <RowSelect
+                label="Bottled Water 600ml"
+                value={water}
+                onChange={(e) => setWater(e.target.value)}
+                options={["Not Required", "10 Bottles", "20 Bottles"]}
+              />
+              <RowSelect
+                label="Personalised Tissue Packs"
+                value={tissues}
+                onChange={(e) => setTissues(e.target.value)}
+                options={["Not Required", "50 Packs", "100 Packs"]}
+              />
+            </div>
+          </Card>
+        </div>
+
+        {/* --- ACTIONS --- */}
+        <Actions goNext={geNext} totalPrice={amount} />
+
+        {/* Message Display */}
+        {message && (
+          <div
+            className={`mt-6 p-4 rounded text-center font-medium ${
+              message.includes("Error")
+                ? "bg-red-50 text-red-600 border border-red-100"
+                : "bg-green-50 text-green-600 border border-green-100"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
