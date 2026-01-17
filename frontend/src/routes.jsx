@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import Ash_Storage from "./pages/Ash_Storage";
+import Btf from "./pages/Btf";
 import Chapels from "./pages/Chapels";
 import Coffins from "./pages/Coffins";
 import Contact from "./pages/Contact";
@@ -20,19 +21,16 @@ import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
 import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
-import Btf from "./pages/Btf";
 // from Toukirul vai
 
 import BlankLayout from "./BlankLayout";
 import AgreementForm from "./pages/Agreement";
 
 // import Pay_now from "./pages/Pay_now";
-import Registrarion from "./pages/Registration";
 import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage";
+import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
-
-import UserPage from "./pages/dashboard/UserPage";
 
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
@@ -43,7 +41,13 @@ import PrePayindex from "./pages/prepay";
 import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
+
+import Packages from "./pages/Packages";
+
 import Registration from "./pages/Registration";
+import UserPage from "./pages/dashboard/UserPage";
+import StaticInvoicePDF from "./pages/packages/_components/InvoicePdf";
+import InvoicePage from "./pages/pay/InvoicePage";
 
 export const routes = createBrowserRouter([
   {
@@ -125,6 +129,10 @@ export const routes = createBrowserRouter([
         element: <Expansion />,
       },
       {
+        path: "/packages",
+        element: <Packages />,
+      },
+      {
         path: "/agreement",
         element: <AgreementForm />,
       },
@@ -138,7 +146,7 @@ export const routes = createBrowserRouter([
       },
       // from Toukirul
       {
-        path: "/packages/basic",
+        path: "/packages/attending-service-cremation",
         element: <AttendenceCrementionPage />,
       },
       {
@@ -170,6 +178,7 @@ export const routes = createBrowserRouter([
       //   path: "/:totalPrice/packages/basic/prepage",
       //   element: <PaynowPage />,
       // },
+
       {
         path: "/:userid/user",
         element: <UserPage />,
@@ -180,6 +189,11 @@ export const routes = createBrowserRouter([
         element: <AgreementFormPage />,
         isPrivate: true,
       },
+      {
+        path: "/pay-now",
+        element: <InvoicePage />,
+        isPrivate: true,
+      },
     ],
   },
   {
@@ -188,6 +202,11 @@ export const routes = createBrowserRouter([
       {
         path: "/:userid/prepay",
         element: <PrePayindex />,
+        isPrivate: true,
+      },
+      {
+        path: "/invoicePdf",
+        element: <StaticInvoicePDF />,
         isPrivate: true,
       },
     ],

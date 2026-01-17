@@ -1,23 +1,23 @@
 import express from "express";
 import { AuthenticatedRequest } from "../lib/types";
-import { SendInvoice } from "../lib/resend";
+import { SendInvoice, SendPrePayBond } from "../lib/resend";
 import nodemailer from "nodemailer";
 
 export const sendPdfOfPrepay = async (
-  req: AuthenticatedRequest,
-  // req: express.Request,
+  // req: AuthenticatedRequest,
+  req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const response = req.identity;
+    // const response = req.identity;
 
-    if (!response) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    // if (!response) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
     const pdfBuffer = req.file.buffer;
-    // const send = SendEmail(response.email, pdfBuffer);
+    const send = SendPrePayBond(pdfBuffer);
 
-    res.status(200).json({ success: true, data: pdfBuffer });
+    res.status(200).json({ success: true, data: send });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Email failed" });
@@ -76,10 +76,6 @@ export const sendPdfOfInvoice = async (
 
               <div class="content">
                 <h2>Invoice Details</h2>
-                <p><strong>Next of Kin:</strong> ${stationery}</p>
-                <p><strong>Reference:</strong> ${coffin}</p>
-                <p><strong>Deceased Name:</strong> ${collectionOfUrn}</p>
-                <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
 
                 <p>Please find your tax invoice attached as a PDF.</p>
                 <p>We kindly ask that payment is made immediately to secure the funeral service date and time.</p>

@@ -1,7 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { List } from "../../components/common/Reusables";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
 import { Actions } from "./_components/Actions";
+import InvoicePDF from "./_components/InvoicePdf";
+import { useServiceApi } from "../../utility/SelectedServiceProvider";
+
+export function Card({ title, children }) {
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -18,14 +23,7 @@ export function Card({ title, children, className = "" }) {
 }
 
 // --- Reusable Row Select Component ---
-const RowSelect = ({
-  label,
-  value,
-  onChange,
-  options,
-  placeholder,
-  hasError,
-}) => (
+const RowSelect = ({ label, value, onChange, options, placeholder }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center border-b border-gray-200/60 last:border-0 pb-4 last:pb-0">
     <label className="font-body font-medium text-gray-700 text-sm">
       {label}:
@@ -33,13 +31,7 @@ const RowSelect = ({
     <select
       value={value}
       onChange={onChange}
-      className={`bg-white border text-sm rounded-lg block w-full p-2.5
-        ${
-          hasError
-            ? "border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:ring-black"
-        }
-      `}
+      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5"
     >
       {placeholder && (
         <option value="" disabled>
@@ -68,8 +60,6 @@ const AttendenceCrementionPage = () => {
     totalPrice,
     handleSelectChange,
     BASE_PRICE,
-    validationError,
-    validateSelections,
     attendenceData,
   } = useServiceApi();
 
@@ -77,10 +67,7 @@ const AttendenceCrementionPage = () => {
   const [hearse, setHearse] = useState("No Hearse - Coffin in place");
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
-  const handleNext = () => {
-    if (!validateSelections()) return;
-    geNext();
-  };
+
   // Recalculate price when selections change
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
@@ -125,142 +112,110 @@ const AttendenceCrementionPage = () => {
             </span>
           </div>
         </div>
-
-        {/* --- TOP ROW: 3 COLUMNS --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* 1. Required Services */}
-          <Card title="Required Services">
-            <List
-              items={[
-                "Phone or Zoom Consultation",
-                "Administration Fees",
-                "Registration of Death",
-                "Celebrant or Host",
-                "Cremation Fee",
-                "Transfers from Place of Passing (Sydney Metro 24/7)",
-              ]}
-            />
-          </Card>
-
-          {/* 2. Disbursements */}
-          <Card title="Disbursements">
-            <List
-              items={[
-                "Medical Referee Certificate",
-                "Cremation Risk Advice",
-                "NSW Government Services Levy",
-                "Official Death Certificate Issued by BDM",
-              ]}
-            />
-          </Card>
-
-          {/* 3. Included Services */}
-          <Card title="Included Services">
-            <List
-              items={[
-                "Live Video Streaming",
-                "SMS Photo Invitation",
-                "Photo Slideshow",
-                "Photo for Screens in Chapel",
-              ]}
-            />
-          </Card>
-        </div>
-
-        {/* --- BOTTOM ROW: 2 COLUMNS --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Left: Included Variables (Dynamic) */}
-          <Card title="Included Variables">
-            <div className="flex flex-col gap-4">
-              {attendenceData.map((item) => {
-                // Determine current value based on your mapping logic
-                const categoryKeyMap = {
-                  "Funeral Stationery": "stationery", // Fixed typo in key map if needed
-                  Stationery: "stationery",
-                  "Body Preparation": "bodyPreparation",
-                  Coffin: "coffin",
-                  Flowers: "flowers", // Removed colon for safer matching
-                  "Flowers:": "flowers",
-                  Urn: "urn",
-                  "Collection of Urn": "collectionOfUrn",
-                };
-                const key = categoryKeyMap[item.question] || item.question; // Fallback
-                const currentValue = selections[key]?.value || "";
-
-                return (
-                  <RowSelect
-                    key={item.id}
-                    label={item.question}
-                    value={currentValue}
-                    hasError={validationError && !currentValue}
-                    onChange={(e) =>
-                      handleSelectChange(item.id, e.target.value)
-                    }
-                    options={item.options}
-                    placeholder="Select an option"
-                  />
-                );
-              })}
-            </div>
-          </Card>
-
-          {/* Right: Options (Static) */}
-          <Card title="Options">
-            <div className="flex flex-col gap-4">
-              <RowSelect
-                label="Hearse"
-                hasError={validationError && !hearse}
-                value={hearse}
-                onChange={(e) => setHearse(e.target.value)}
-                options={[
-                  "No Hearse - Coffin in place",
-                  "Standard Hearse",
-                  "Premium Hearse",
-                ]}
-              />
-              <RowSelect
-                label="Bottled Water 600ml"
-                hasError={validationError && !water}
-                value={water}
-                onChange={(e) => setWater(e.target.value)}
-                options={["Not Required", "10 Bottles", "20 Bottles"]}
-              />
-              <RowSelect
-                label="Personalised Tissue Packs"
-                value={tissues}
-                onChange={(e) => setTissues(e.target.value)}
-                options={["Not Required", "50 Packs", "100 Packs"]}
-              />
-            </div>
-          </Card>
-        </div>
-
-        {/* --- ACTIONS --- */}
-        {validationError && (
-          <div className="mt-6 p-4 rounded text-center font-medium bg-red-50 text-red-600 border border-red-100">
-            {validationError}
-          </div>
-        )}
-        <Actions
-          goNext={handleNext}
-          totalPrice={amount}
-          hasError={!!validationError}
-          errorMessage={validationError}
-        />
-
-        {/* Message Display */}
-        {message && (
-          <div
-            className={`mt-6 p-4 rounded text-center font-medium ${
-              message.includes("Error")
-                ? "bg-red-50 text-red-600 border border-red-100"
-                : "bg-green-50 text-green-600 border border-green-100"
-            }`}
-          >
-            {message}
-          </div>
-        )}
       </div>
+      <div className="grid lg:grid-cols-3 gap-6 mb-10">
+        <Card title="Required Services">
+          <List
+            items={[
+              "Phone or Zoom Consultation",
+              "Administration Fees",
+              "Registration of Death",
+              "Celebrant or Host",
+              "Cremation Fee",
+              "Transfers from Place of Passing (Sydney Metro 24/7)",
+            ]}
+          />
+        </Card>
+        <Card title="Disbursements">
+          <List
+            items={[
+              "Medical Referee Certificate",
+              "Cremation Risk Advice",
+              "NSW Government Services Levy",
+              "Official Death Certificate Issued by BDM",
+            ]}
+          />
+        </Card>
+        <Card title="Included Services">
+          <List
+            items={[
+              "Live Video Streaming",
+              "SMS Photo Invitation",
+              "Photo Slideshow",
+              "Photo for Screens in Chapel",
+            ]}
+          />
+        </Card>
+        <Card title="Included Variables">
+          {attendenceData.map((item) => (
+            <div
+              key={item.id}
+              className="flex justify-between items-center text-sm py-2 border-b last:border-none"
+            >
+              <label className="block text-sm font-medium text-gray-700">
+                {item.question}
+              </label>
+              <select
+                className="p-1 border rounded bg-gray-100 text-right w-48"
+                onChange={(e) => handleSelectChange(item.id, e.target.value)}
+                value={(() => {
+                  const categoryKeyMap = {
+                    Stationery: "stationery",
+                    "Body Preparation": "bodyPreparation",
+                    Coffin: "coffin",
+                    "Flowers:": "flowers",
+                    Urn: "urn",
+                    "Collection of Urn": "collectionOfUrn",
+                  };
+                  const key = categoryKeyMap[item.question];
+                  return selections[key]?.value || "";
+                })()}
+              >
+                {item.options.map((option) => (
+                  <option className="" key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </Card>
+        <Card title="Options">
+          <Select
+            label="Hearse"
+            value={hearse}
+            onChange={setHearse}
+            options={[
+              "No Hearse - Coffin in place",
+              "Standard Hearse",
+              "Premium Hearse",
+            ]}
+          />
+
+          <Select
+            label="Bottled Water 600ml"
+            value="Not Required"
+            options={["Not Required"]}
+          />
+          <Select
+            label="Personalised Tissue Packs"
+            value="Not Required"
+            options={["Not Required"]}
+          />
+        </Card>
+      </div>
+      <Actions goNext={geNext} totalPrice={amount} />
+      {message && (
+        <div
+          className={`p-4 mb-4 rounded ${
+            message.includes("Error")
+              ? "bg-red-100 text-red-700"
+              : "bg-green-100 text-green-700"
+          }`}
+        >
+          {message}
+        </div>
+      )}
     </div>
   );
 };

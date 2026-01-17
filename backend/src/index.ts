@@ -1,10 +1,11 @@
-import express from "express";
-import cors from "cors";
-import http from "http";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import router from "./router";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import http from "http";
 import mongoose from "mongoose";
+
+import router from "./router";
 import Stripe from "stripe";
 
 import { claudinaryConfig } from "./config/cloudinary";

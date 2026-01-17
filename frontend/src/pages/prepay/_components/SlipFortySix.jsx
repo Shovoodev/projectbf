@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Sign } from "../../../images";
 
 const SlipFortySix = () => {
@@ -132,7 +132,7 @@ const SlipFortySix = () => {
                 <span className="text-blue-900">KeyInvest</span> Funeral Bond
                 PDS
               </div>
-              <div>Version: July 2025</div>
+              <div>Version: July 2026</div>
               <div>Page 46</div>
             </div>
           </div>

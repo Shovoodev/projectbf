@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
 
 import Input from "../components/common/Input";
-import InvoicePDF from "./packages/_components/InvoicePdf";
+// import InvoicePDF from "./packages/_components/InvoicePdf";
 const CORE = import.meta.env.VITE_API_URL;
 
 const Registration = () => {

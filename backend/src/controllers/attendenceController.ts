@@ -1,6 +1,6 @@
 import express from "express";
 import { AuthenticatedRequest } from "../lib/types";
-import { FormResponseModel } from "../db/attendence";
+import { FormResponseModel, getAttendenceByReference } from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
 
 export const getNoServiceFunral = async (
@@ -135,5 +135,52 @@ export const getAttendenceAnswers = async (
       message: "Server error",
       error: error instanceof Error ? error.message : error,
     });
+  }
+};
+
+export const getdeatilByReference = async (
+  req: express.Request,
+  res: express.Response
+): Promise<any> => {
+  try {
+    console.log("Request body:", JSON.stringify(req.body, null, 2));
+    if (!req.body) {
+      res.status(400).json({
+        success: false,
+        error: "Request body is required",
+        message: "Please provide reference data in the request body",
+      });
+      return;
+    }
+    const { reference } = req.body;
+
+    if (!reference) {
+      res.status(400).json({
+        success: false,
+        error: "Missing required field",
+        message: "reference is required in the request body",
+        field: "reference",
+      });
+      return;
+    }
+
+    const referenceIdRegex = /^[A-Za-z0-9-]+$/;
+    if (!referenceIdRegex.test(reference)) {
+      res.status(400).json({
+        success: false,
+        error: "Invalid format",
+        message: "referenceId contains invalid characters",
+        validFormat: "Alphanumeric characters and hyphens only",
+      });
+      return;
+    }
+    const filtered = await getAttendenceByReference(reference);
+
+    res.json({
+      success: true,
+      data: filtered,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -1,4 +1,4 @@
-import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
 
 const SlipThirtyFour = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
@@ -349,7 +349,7 @@ const SlipThirtyFour = () => {
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>
-          <div>Version: July 2025</div>
+          <div>Version: July 2026</div>
           <div>Page 34</div>
         </div>
       </form>
