@@ -1,6 +1,5 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
 
 const SlipThirtyFive = () => {
   const { setAspFrequency } = usePrePayServiceApi();
@@ -19,7 +18,6 @@ const SlipThirtyFive = () => {
 
   return (
     <>
-      <SlipThreeHeader />
       <div className="form-container-base">
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>

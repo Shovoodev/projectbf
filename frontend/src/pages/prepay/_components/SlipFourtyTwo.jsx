@@ -1,5 +1,5 @@
 import React from "react";
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
 
 const SlipFourtyTwo = () => {
   const { updateDeptRequest } = usePrePayServiceApi();

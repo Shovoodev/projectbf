@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaUpload } from "react-icons/fa";
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
 
 const SlipThirtyEight = () => {
   const [formData, setFormData] = useState({

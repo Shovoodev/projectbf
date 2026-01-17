@@ -1,4 +1,5 @@
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+
 import SignatureField from "../../packages/_components/SignatureField";
 
 const SlipThirtySeven = () => {

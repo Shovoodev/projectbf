@@ -41,7 +41,7 @@ import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
 // import SlipFour from "./SlipFour";
 // import all the slips in order
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
 import SlipFourtyFive from "./SlipFourtyFive";
