@@ -14,8 +14,9 @@ import {
   FiPhone,
 } from "react-icons/fi";
 // import { pdf } from "@react-pdf/renderer";
-import InvoicePDF from "./InvoicePdf";
 import { useServiceApi } from "../../../utility/SelectedServiceProvider";
+import { pdf } from "@react-pdf/renderer";
+import StaticInvoicePDF from "./InvoicePdf";
 const CORE = import.meta.env.VITE_API_URL;
 
 const PopupEnquirey = ({
@@ -152,37 +153,39 @@ const PopupEnquirey = ({
         credentials: "include",
       });
 
-      // const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
+      const blob = await pdf(
+        <StaticInvoicePDF invoiceData={selections} />
+      ).toBlob();
 
       // 2. Convert blob to base64 for email attachment
-      // const reader = new FileReader();
-      // reader.readAsDataURL(blob);
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
 
-      // reader.onloadend = async () => {
-      //   const base64data = reader.result.split(",")[1];
+      reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
 
-      //   // 3. Send to backend API
-      //   const response = await fetch("http://localhost:4000/api/send-invoice", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       ...payload,
-      //       pdfAttachment: base64data,
-      //     }),
-      //   });
+        // 3. Send to backend API
+        const response = await fetch("http://localhost:4000/api/send-invoice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...selections,
+            pdfAttachment: base64data,
+          }),
+        });
 
-      // const result = await response.json();
+        const result = await response.json();
 
-      //   if (response.ok) {
-      //     setMessage("Invoice sent successfully!");
-      //     // Reset form if needed
-      //     // setFormData({...initialState});
-      //   } else {
-      //     setMessage(`Error: ${result.error || "Failed to send invoice"}`);
-      //   }
-      // };
+        if (response.ok) {
+          setMessage("Invoice sent successfully!");
+          // Reset form if needed
+          // setFormData({...initialState});
+        } else {
+          setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+        }
+      };
 
       // 4️⃣ Success UI actions
       showMessage("Registration successful!", "success");

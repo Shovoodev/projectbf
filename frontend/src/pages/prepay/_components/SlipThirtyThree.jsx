@@ -1,4 +1,4 @@
-import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
 
 const SlipThirtyThree = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
@@ -218,7 +218,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["mailstreetName"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"
@@ -282,7 +282,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeTelephone"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"
@@ -308,7 +308,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeAddress"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"

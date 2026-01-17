@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserFront } from "../../../utility/use-userFront";
 import PopupEnquirey from "./PopupEnquirey";
-
 export function Actions({ goNext }) {
   const navigate = useNavigate();
   const [activePopup, setActivePopup] = useState(null);

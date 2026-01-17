@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
-import { usePrePayServiceApi } from "@/utility/prepay-service-provider";
+import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
 
-const SlipThirtyEight = () => {
+const SlipThirtyEight = forwardRef((props, ref) => {
   const [formData, setFormData] = useState({
     funeral_director_name: "",
     funeral_director_phone: "",
@@ -159,6 +159,6 @@ const SlipThirtyEight = () => {
       </form>
     </div>
   );
-};
+});
 
 export default SlipThirtyEight;
