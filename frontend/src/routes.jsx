@@ -32,8 +32,6 @@ import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
 
-import UserPage from "./pages/dashboard/UserPage";
-
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -46,8 +44,10 @@ import AgreementFormPage from "./pages/packages/Agreement";
 
 import Packages from "./pages/Packages";
 
-import InvoicePDF from "./pages/Invoicepdf";
 import Registration from "./pages/Registration";
+import UserPage from "./pages/dashboard/UserPage";
+import StaticInvoicePDF from "./pages/packages/_components/InvoicePdf";
+import InvoicePage from "./pages/pay/InvoicePage";
 
 export const routes = createBrowserRouter([
   {
@@ -63,10 +63,6 @@ export const routes = createBrowserRouter([
       {
         path: "/team",
         element: <Team />,
-      },
-      {
-        path: "/invoicepdf",
-        element: <InvoicePDF />,
       },
       {
         path: "/news",
@@ -193,6 +189,11 @@ export const routes = createBrowserRouter([
         element: <AgreementFormPage />,
         isPrivate: true,
       },
+      {
+        path: "/pay-now",
+        element: <InvoicePage />,
+        isPrivate: true,
+      },
     ],
   },
   {
@@ -201,6 +202,11 @@ export const routes = createBrowserRouter([
       {
         path: "/:userid/prepay",
         element: <PrePayindex />,
+        isPrivate: true,
+      },
+      {
+        path: "/invoicePdf",
+        element: <StaticInvoicePDF />,
         isPrivate: true,
       },
     ],

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
   cover,
@@ -41,7 +41,6 @@ import { generatePdfBlob } from "./ImageToPdf";
 const CORE = import.meta.env.VITE_API_URL;
 // import SlipFour from "./SlipFour";
 // import all the slips in order
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
 import SlipFourtyFive from "./SlipFourtyFive";
@@ -56,6 +55,9 @@ import SlipThirtySeven from "./SlipThirtySeven";
 import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
+import * as htmlToImage from "html-to-image";
+import { useRef } from "react";
+
 const displayImage = [
   cover,
   one,
@@ -89,33 +91,78 @@ const displayImage = [
   twentyNine,
   thirty,
 ];
-
 const PrePay = () => {
-  const [bgImage, setBgImage] = useState(displayImage[0]);
   // const [images, setImages] = useState([]);
   const [images, setImages] = useState(displayImage);
   const { user } = useUserFront();
+  const slipRefs = useRef([]);
+
   // const handleImageChange = () => {
   //   setImages(displayImage);
   // };
-  const refs = useRef([]);
-  const { investors, directDebitForm } = usePrePayServiceApi();
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
 
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const sendPdfByEmail = async () => {
-    setImages(displayImage);
-    const pdfBlob = await generatePdfBlob(displayImage);
+    try {
+      setIsGeneratingPdf(true);
+      setLoadingText("Rendering application pages…");
 
-    const formData = new FormData();
-    formData.append("file", pdfBlob, "policy.pdf");
-    formData.append("email", ` ${user.email}`);
+      // 1️⃣ Convert slips to images
+      const slipImages = [];
 
-    await fetch(`${CORE}/${user._id}/send-pdf-on-email`, {
-      method: "POST",
-      body: formData,
-    });
+      for (let i = 0; i < slipRefs.current.length; i++) {
+        setLoadingText(
+          `Processing page ${i + 1} of ${slipRefs.current.length}…`
+        );
+
+        const node = slipRefs.current[i];
+        if (!node) continue;
+
+        const img = await htmlToImage.toPng(node, {
+          pixelRatio: 1,
+          quality: 0.5,
+        });
+
+        slipImages.push(img);
+      }
+
+      setLoadingText("Generating PDF document…");
+
+      // 2️⃣ Merge images
+      const allImagesForPdf = [...displayImage, ...slipImages];
+
+      // 3️⃣ Generate PDF
+      const pdfBlob = await generatePdfBlob(allImagesForPdf);
+
+      setLoadingText("Sending document to your email…");
+
+      // 4️⃣ Send PDF
+      const formData = new FormData();
+      formData.append("file", pdfBlob, "policy.pdf");
+      formData.append("email", user.email);
+
+      await fetch(`${CORE}/${user._id}/send-pdf-on-email`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`, // or credentials: "include"
+        },
+        body: formData,
+        credentials: "include",
+      });
+
+      setLoadingText("Completed successfully 🎉");
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      alert("Something went wrong while generating the PDF.");
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
+
   const [step, setStep] = useState(0);
   const slips = [
     <SlipThirtyTwo />,
@@ -136,19 +183,6 @@ const PrePay = () => {
     <SlipFourtySeven />,
     <img src={fortySeven} />,
   ];
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const index = Math.min(
-        Math.floor(scrollY / window.innerHeight),
-        images.length - 1
-      );
-      setBgImage(images[index]);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [images]);
   useEffect(() => {
     if (formActive) {
       document.body.style.overflow = "hidden";
@@ -173,10 +207,6 @@ const PrePay = () => {
       // 🔒 Disable scroll, go to form
       setFormActive(true);
       setButtonStatus(false);
-
-      document.getElementById("CompleteForm")?.scrollIntoView({
-        behavior: "smooth",
-      });
     }
   };
   useEffect(() => {
@@ -186,24 +216,7 @@ const PrePay = () => {
       document.body.style.overflow = "auto";
     };
   }, [formActive]);
-  // all component to image conversion
-  const downloadAll = async () => {
-    for (let i = 0; i < refs.current.length; i++) {
-      const node = refs.current[i];
-      if (!node) continue;
 
-      const dataUrl = await htmlToImage.toPng(node, {
-        pixelRatio: 2,
-      });
-
-      const link = document.createElement("a");
-      link.download = `card-${i + 1}.png`;
-      link.href = dataUrl;
-      link.click();
-    }
-  };
-  //debug
-  console.log({ investors, directDebitForm });
   return (
     <div className="relative font-roboto">
       <div className="fixed right-6 top-10 z-[1100]">
@@ -256,60 +269,91 @@ const PrePay = () => {
       <div
         id="CompleteForm"
         className={`fixed inset-0 z-40 flex items-center justify-center
-    transition-all duration-500
-    ${
-      formActive
-        ? "opacity-100 pointer-events-auto"
-        : "opacity-0 pointer-events-none"
-    }
-  `}
+  bg-black/50 backdrop-blur-sm
+  transition-all duration-300
+  ${
+    formActive
+      ? "opacity-100 pointer-events-auto"
+      : "opacity-0 pointer-events-none"
+  }`}
       >
         <div
-          className="max-w-[800px] max-h-[850px]   mx-auto font-roboto
-                overflow-y-scroll px-6 py-10 space-y-3
-                bg-white rounded-none md:rounded-2xl shadow-2xl "
+          className="max-w-[800px] max-h-[850px] mx-auto font-roboto
+  overflow-y-scroll px-6 py-10 space-y-3
+  bg-white rounded-none md:rounded-2xl shadow-2xl"
         >
-          {slips[step]}
+          <div className="flex-1 overflow-hidden px-6 py-6">{slips[step]}</div>
 
-          {/* Actions Section */}
-          <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-4 mt-6 border-t border-gray-100">
-            {/* Previous Section Button: Only shows if not on the first step */}
-            {step > 0 ? (
-              <button
-                type="button"
-                onClick={() => setStep(step - 1)}
-                className="btn-primary-pdf w-full  sm:w-auto justify-center"
-              >
-                <FaChevronLeft className="mr-2" /> Previous Section
-              </button>
-            ) : (
-              <div className="hidden sm:block" /> /* Keeps "Next" on the right when "Previous" is gone */
-            )}
+          <div className="border-t border-gray-200 px-6 py-4 bg-white sticky bottom-0">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              {step > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => setStep(step - 1)}
+                  className="btn-primary-pdf w-full sm:w-auto justify-center"
+                >
+                  <FaChevronLeft className="mr-2" /> Previous Section
+                </button>
+              ) : (
+                <div className="hidden sm:block" />
+              )}
 
-            {/* Next Section Button: Shows if there are more slips remaining */}
-            {step < slips.length - 1 && (
-              <button
-                type="button"
-                onClick={() => setStep(step + 1)}
-                className="btn-primary-pdf bg-[#3129a6] w-full sm:w-auto"
-              >
-                Next Section <FaChevronRight className="ml-2" />
-              </button>
-            )}
+              {step < slips.length - 1 && (
+                <button
+                  type="button"
+                  onClick={() => setStep(step + 1)}
+                  className="btn-primary-pdf bg-[#3129a6] w-full sm:w-auto"
+                >
+                  Next Section <FaChevronRight className="ml-2" />
+                </button>
+              )}
 
-            {/* Final Submit Button: Only shows on the very last slip */}
-            {step === slips.length - 1 && (
-              <button
-                type="button"
-                onClick={sendPdfByEmail}
-                className="btn-primary-pdf w-full sm:w-auto !bg-amber-500 hover:!bg-amber-600 border-none shadow-lg"
-              >
-                Finish your submission <FaChevronRight className="ml-2" />
-              </button>
-            )}
+              {step === slips.length - 1 && (
+                <button
+                  type="button"
+                  onClick={sendPdfByEmail}
+                  disabled={isGeneratingPdf}
+                  className={`btn-primary-pdf w-full sm:w-auto border-none shadow-lg
+          ${
+            isGeneratingPdf
+              ? "bg-gray-400 cursor-not-allowed"
+              : "!bg-amber-500 hover:!bg-amber-600"
+          }`}
+                >
+                  {isGeneratingPdf
+                    ? "Generating PDF…"
+                    : "Finish your submission"}
+                  {!isGeneratingPdf && <FaChevronRight className="ml-2" />}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
+      <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+        {slips.map((SlipComponent, index) => (
+          <div
+            key={index}
+            ref={(el) => (slipRefs.current[index] = el)}
+            className="w-[794px] bg-white"
+          >
+            {SlipComponent}
+          </div>
+        ))}
+      </div>
+      {isGeneratingPdf && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center">
+          <div className="bg-white rounded-2xl px-10 py-8 text-center shadow-2xl max-w-sm">
+            <div className="animate-spin rounded-full h-14 w-14 border-4 border-[#2c5aa0] border-t-transparent mx-auto mb-6"></div>
+
+            <h2 className="text-xl font-semibold text-[#2c5aa0] mb-2">
+              Please wait
+            </h2>
+
+            <p className="text-gray-600 text-sm">{loadingText}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

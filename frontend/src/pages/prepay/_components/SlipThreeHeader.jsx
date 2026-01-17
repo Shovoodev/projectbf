@@ -1,4 +1,4 @@
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
 
 const SlipThreeHeader = () => {
   const { paymentMethod, setPaymentMethod } = usePrePayServiceApi();

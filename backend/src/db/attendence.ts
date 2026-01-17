@@ -98,6 +98,9 @@ export const createResponseAttandence = (values: Record<string, any>) =>
 export const getAttendenceByUserId = (userId: string) =>
   FormResponseModel.findOne({ userid: userId });
 
+export const getAttendenceByReference = (reference: string) =>
+  FormResponseModel.findOne({ reference: reference });
+
 export const updateAttendenceByUserId = (
   id: string,
   values: Record<string, any>
