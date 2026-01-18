@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect } from "react";
 import { List } from "../../components/common/Reusables";
-import { useUser } from "../../components/hooks/useUser";
 import { Actions } from "./_components/Actions";
-import RenderQuestion from "./_components/RenderQuestion";
+import { useServiceApi } from "../../utility/SelectedServiceProvider";
 
+const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
@@ -18,63 +17,77 @@ export function Card({ title, children, className = "" }) {
     </div>
   );
 }
+export const viewingAndCremention = [
+  {
+    id: 5,
+    question: "Urn",
+    type: "select",
+    options: [
+      {
+        label: "BTF Preferred Adult Urn",
+        value: "BTF Preferred Adult Urn",
+        priceAdjustment: 0,
+      },
+      {
+        label: "BTF Preferred Scattering Tube",
+        value: "BTF Preferred Scattering Tube",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+  {
+    id: 6,
+    question: "Collection of Urn",
+    type: "select",
+    options: [
+      {
+        label: "Collect in Person",
+        value: "Collect in Person",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Australia Post Registered Mail",
+        value: "Australia Post Registered Mail",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+];
 
 const ViewingAndCrementionPage = () => {
+  const {
+    selections,
+    loading,
+    error,
+    setTotalPrice,
+    setAmount,
+    totalPrice,
+    transferPrice,
+    setSelections,
+    setTransferPrice,
+    setTransferOption,
+  } = useServiceApi();
   const BASE_PRICE = 3599;
-  const navigate = useNavigate();
-  const { user } = useUser();
-
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Variable Selections
-  const [selections, setSelections] = useState({
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
-  });
-
-  // Transfer Dropdown State
-  const [transferPrice, setTransferPrice] = useState(0);
-  const [transferOption, setTransferOption] = useState("Sydney Metro");
-
-  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-
-  // --- Fetch Data ---
-  useEffect(() => {
-    const fetchStepData = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:4000/noservicefunraldata",
-          { credentials: "include" },
-        );
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStepData();
-  }, []);
 
   // --- Initialize Selections ---
   useEffect(() => {
-    if (data.length > 0) {
+    if (viewingAndCremention.length > 0) {
       setSelections({
         urn: {
-          value: data[0]?.options[0]?.value || "",
-          price: data[0]?.options[0]?.priceImpact || 0,
+          value: viewingAndCremention[0]?.options[0]?.value || "",
+          price: viewingAndCremention[0]?.options[0]?.priceImpact || 0,
         },
         collectionOfUrn: {
-          value: data[1]?.options[0]?.value || "",
-          price: data[1]?.options[0]?.priceImpact || 0,
+          value: viewingAndCremention[1]?.options[0]?.value || "",
+          price: viewingAndCremention[1]?.options[0]?.priceImpact || 0,
+        },
+        transferOption: {
+          value: viewingAndCremention[2]?.options[0]?.value || "",
+          price: viewingAndCremention[2]?.options[0]?.priceImpact || 0,
         },
       });
     }
-  }, [data]);
+  }, [viewingAndCremention]);
 
   // --- Calculate Total Price ---
   useEffect(() => {
@@ -86,29 +99,98 @@ const ViewingAndCrementionPage = () => {
     setTotalPrice(BASE_PRICE + variableTotal + Number(transferPrice));
   }, [selections, transferPrice]);
 
-  // --- Handle Transfer Change ---
   const handleTransferChange = (e) => {
     const price = Number(e.target.value);
     const index = e.target.selectedIndex;
     const label = e.target.options[index].text;
-    console.log("target", e.target.selectedIndex);
+
     setTransferPrice(price);
     setTransferOption(label);
+
+    const variableTotal = Object.values(selections).reduce(
+      (sum, opt) => sum + (opt.price || 0),
+      0,
+    );
+
+    const total = BASE_PRICE + variableTotal + price;
+
+    setTotalPrice(total);
+    setAmount(total);
   };
 
+  const handleOptionChange = (category, value, priceAdjustment) => {
+    const categoryKeyMap = {
+      Urn: "urn",
+      "Collection of Urn": "collectionOfUrn",
+    };
+
+    const key = categoryKeyMap[category];
+    if (!key) return;
+
+    setSelections((prev) => {
+      const updated = {
+        ...prev,
+        [key]: {
+          value,
+          price: Number(priceAdjustment) || 0,
+        },
+      };
+
+      const variableTotal = Object.values(updated).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0,
+      );
+
+      const total = BASE_PRICE + variableTotal + transferPrice;
+
+      setTotalPrice(total);
+      setAmount(total);
+
+      return updated;
+    });
+  };
+
+  const handleSelectChange = (itemId, selectedValue) => {
+    const item = viewingAndCremention.find((data) => data.id === itemId);
+    if (!item) return;
+
+    const selectedOption = item.options.find(
+      (opt) => opt.value === selectedValue,
+    );
+    if (!selectedOption) return;
+
+    // Make sure priceAdjustment is being used
+    const price = selectedOption.priceAdjustment || 0;
+
+    handleOptionChange(item.question, selectedValue, price);
+  };
   // --- Submit ---
   const goNext = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...selections,
-        transfer: { option: transferOption, price: transferPrice },
-        totalPrice,
-      };
+      const totalPriceImpact = Object.values(selections).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0,
+      );
 
-      // Navigate with data (or save to context/DB first)
-      console.log("Submitting:", payload);
-      navigate(`/register`); // Add params if needed
+      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
+      const res = await fetch(`${CORE}/new-view-and-service-cremation`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selections,
+          totalPrice: finalTotalPrice,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server Error:", text);
+        return;
+      }
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -196,13 +278,39 @@ const ViewingAndCrementionPage = () => {
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="space-y-4">
-                {data.map((item) => (
-                  <RenderQuestion
+                {viewingAndCremention.map((item) => (
+                  <div
                     key={item.id}
-                    item={item}
-                    selections={selections}
-                    setSelections={setSelections}
-                  />
+                    className="flex justify-between items-center text-sm py-2 border-b last:border-none"
+                  >
+                    <label className="block text-sm font-medium text-gray-700">
+                      {item.question}
+                    </label>
+                    <select
+                      className="p-1 border rounded bg-gray-100 text-right w-48"
+                      onChange={(e) =>
+                        handleSelectChange(item.id, e.target.value)
+                      }
+                      value={(() => {
+                        const categoryKeyMap = {
+                          Urn: "urn",
+                          "Collection of Urn": "collectionOfUrn",
+                        };
+                        const key = categoryKeyMap[item.question];
+                        return selections[key]?.value || "";
+                      })()}
+                    >
+                      {item.options.map((option) => (
+                        <option
+                          className=""
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 ))}
               </div>
             </Card>

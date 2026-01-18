@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect } from "react";
 import { List } from "../../components/common/Reusables";
-import { useUser } from "../../components/hooks/useUser";
 import { Actions } from "./_components/Actions";
-import RenderQuestion from "./_components/RenderQuestion";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
 
+const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
@@ -19,74 +17,78 @@ export function Card({ title, children, className = "" }) {
     </div>
   );
 }
-
+const noServiceFunralData = [
+  {
+    id: 5,
+    question: "Urn",
+    type: "select",
+    options: [
+      {
+        label: "BTF Preferred Adult Urn",
+        value: "BTF Preferred Adult Urn",
+        priceAdjustment: 0,
+      },
+      {
+        label: "BTF Preferred Scattering Tube",
+        value: "BTF Preferred Scattering Tube",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+  {
+    id: 6,
+    question: "Collection of Urn",
+    type: "select",
+    options: [
+      {
+        label: "Collect in Person",
+        value: "Collect in Person",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Australia Post Registered Mail",
+        value: "Australia Post Registered Mail",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+];
 const NoServiceCrementionPage = () => {
   const {
-    selections,
     loading,
     error,
-    amount,
-    setAmount,
-    message,
-    geNext,
     setTotalPrice,
     totalPrice,
-    handleSelectChange,
-    BASE_PRICE,
-    noServiceFunralData,
+    setSelections,
+    selections,
+    setAmount,
+    setError,
+    setTransferPrice,
+    setTransferOption,
+    transferPrice,
+    transferOption,
   } = useServiceApi();
-  const navigate = useNavigate();
-  const { user } = useUser();
-
-  const [data, setData] = useState([]);
-
-  // Variable Selections
-  const [selections, setSelections] = useState({
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
-  });
-
+  const BASE_PRICE = 2290;
   // Transfer Dropdown State
-  const [transferPrice, setTransferPrice] = useState(0);
-  const [transferOption, setTransferOption] = useState("Sydney Metro");
 
-  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-
-  // --- Fetch Data ---
   useEffect(() => {
-    const fetchStepData = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:4000/noservicefunraldata",
-          { credentials: "include" },
-        );
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStepData();
-  }, []);
-
-  // --- Initialize Selections ---
-  useEffect(() => {
-    if (data.length > 0) {
+    if (noServiceFunralData.length > 0) {
       setSelections({
         urn: {
-          value: data[0]?.options[0]?.value || "",
-          price: data[0]?.options[0]?.priceImpact || 0,
+          value: noServiceFunralData[0]?.options[0]?.value || "",
+          price: noServiceFunralData[0]?.options[0]?.priceImpact || 0,
         },
         collectionOfUrn: {
-          value: data[1]?.options[0]?.value || "",
-          price: data[1]?.options[0]?.priceImpact || 0,
+          value: noServiceFunralData[1]?.options[0]?.value || "",
+          price: noServiceFunralData[1]?.options[0]?.priceImpact || 0,
+        },
+        transferOption: {
+          value: noServiceFunralData[2]?.options[0]?.value || "",
+          price: noServiceFunralData[2]?.options[0]?.priceImpact || 0,
         },
       });
     }
-  }, [data]);
+  }, [noServiceFunralData]);
 
   // --- Calculate Total Price ---
   useEffect(() => {
@@ -109,21 +111,116 @@ const NoServiceCrementionPage = () => {
   };
 
   // --- Submit ---
-  const goNext = async (e) => {
+  const geNext = async (e) => {
     e.preventDefault();
-    try {
-      const payload = {
-        ...selections,
-        transfer: { option: transferOption, price: transferPrice },
-        totalPrice,
-      };
 
-      // Navigate with data (or save to context/DB first)
-      console.log("Submitting:", payload);
-      navigate(`/register`); // Add params if needed
+    try {
+      const totalPriceImpact = Object.values(selections).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0,
+      );
+
+      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
+
+      console.log("Sending to backend:", {
+        selections,
+        transferOption,
+        totalPrice: finalTotalPrice,
+        totalPriceImpact,
+        basePrice: BASE_PRICE,
+      });
+      const res = await fetch(`${CORE}/new-no-service-cremation`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selections,
+          totalPrice: finalTotalPrice,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server Error:", text);
+        return;
+      }
+
+      //   // PDF generation code...
+      //   const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
+
+      //   const reader = new FileReader();
+      //   reader.readAsDataURL(blob);
+
+      //   reader.onloadend = async () => {
+      //     const base64data = reader.result.split(",")[1];
+
+      //     const response = await fetch("http://localhost:4000/api/send-invoice", {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         ...selections,
+      //         pdfAttachment: base64data,
+      //       }),
+      //     });
+
+      //     const result = await response.json();
+
+      //     if (response.ok) {
+      //       setMessage("Invoice sent successfully!");
+      //     } else {
+      //       setMessage(`Error: ${result.error || "Failed to send invoice"}`);
+      //     }
+      //   };
+
+      //   setLoading(false);
     } catch (err) {
       console.error("Fetch error:", err);
+      setError(err.message);
     }
+  };
+
+  const handleOptionChange = (category, value, priceAdjustment) => {
+    const categoryKeyMap = {
+      transferOption: "Sydney Metro",
+      Urn: "urn",
+      "Collection of Urn": "collectionOfUrn",
+    };
+
+    const key = categoryKeyMap[category];
+
+    setSelections((prev) => {
+      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
+
+      // Calculate total price impact
+      const totalPriceImpact = Object.values(updated).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0,
+      );
+
+      setTotalPrice(BASE_PRICE + totalPriceImpact);
+      setAmount(BASE_PRICE + totalPriceImpact);
+
+      return updated;
+    });
+  };
+
+  const handleSelectChange = (itemId, selectedValue) => {
+    const item = noServiceFunralData.find((data) => data.id === itemId);
+    if (!item) return;
+
+    const selectedOption = item.options.find(
+      (opt) => opt.value === selectedValue,
+    );
+    if (!selectedOption) return;
+
+    // Make sure priceAdjustment is being used
+    const price = selectedOption.priceAdjustment || 0;
+
+    handleOptionChange(item.question, selectedValue, price);
   };
 
   if (loading) return <div className="p-20 text-center">Loading...</div>;
@@ -207,7 +304,7 @@ const NoServiceCrementionPage = () => {
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="space-y-4">
-                {attendenceData.map((item) => (
+                {noServiceFunralData.map((item) => (
                   <div
                     key={item.id}
                     className="flex justify-between items-center text-sm py-2 border-b last:border-none"
@@ -247,7 +344,7 @@ const NoServiceCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS FOOTER --- */}
-        <Actions goNext={goNext} totalPrice={totalPrice} />
+        <Actions goNext={geNext} totalPrice={totalPrice} />
       </div>
     </div>
   );
