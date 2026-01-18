@@ -2,18 +2,21 @@ import express from "express";
 import { AuthenticatedRequest } from "../lib/types";
 import { SendInvoice, SendPrePayBond } from "../lib/resend";
 import nodemailer from "nodemailer";
+import { getAttendenceByUserId } from "../db/attendence";
+import { getVandCByUserId } from "../db/viewingAndCremention";
+import { getNoCreByUserId } from "../db/noViewingCremention";
 
 export const sendPdfOfPrepay = async (
-  // req: AuthenticatedRequest,
-  req: express.Request,
+  req: AuthenticatedRequest,
+  // req: express.Request,
   res: express.Response,
 ): Promise<any> => {
   try {
-    // const response = req.identity;
+    const response = req.identity;
 
-    // if (!response) {
-    //   return res.status(401).json({ message: "Unauthorized" });
-    // }
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const pdfBuffer = req.file.buffer;
     const send = SendPrePayBond(pdfBuffer);
 
@@ -25,22 +28,20 @@ export const sendPdfOfPrepay = async (
 };
 
 export const sendPdfOfInvoice = async (
-  // req: AuthenticatedRequest,
-  req: express.Request,
+  req: AuthenticatedRequest,
   res: express.Response,
 ): Promise<any> => {
   try {
-    const {
-      stationery,
-      coffin,
-      collectionOfUrn,
-      invoiceNumber,
-      pdfAttachment,
-    } = req.body;
+    const { pdfAttachment } = req.body;
+    const response = req.identity;
 
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const reference = response.reference;
     // Convert base64 to buffer for attachment
     const pdfBuffer = Buffer.from(pdfAttachment, "base64");
-    // Send email with Resend
+
     const transporter = nodemailer.createTransport({
       host: "smtp.resend.com",
       port: 465,
@@ -52,7 +53,7 @@ export const sendPdfOfInvoice = async (
     });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "shovoodev@gmail.com",
+      to: "mdathikhasan136@gmail.com",
       subject: `Thanks  hi beleaving us for trusting us `,
       text: "we get all you documents",
       html: `
@@ -71,7 +72,7 @@ export const sendPdfOfInvoice = async (
             <div class="container">
               <div class="header">
                 <h1>Tax Invoice</h1>
-                <p>Invoice Number: ${invoiceNumber}</p>
+                <p>Invoice Number: ${reference}</p>
               </div>
 
               <div class="content">
@@ -91,7 +92,7 @@ export const sendPdfOfInvoice = async (
       `,
       attachments: [
         {
-          filename: `invoice-${invoiceNumber}.pdf`,
+          filename: `invoice-${reference}.pdf`,
           content: pdfBuffer,
         },
       ],
@@ -106,5 +107,42 @@ export const sendPdfOfInvoice = async (
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Failed to send invoice" });
+  }
+};
+
+export const sendAttendenceServiceSelection = async (
+  req: AuthenticatedRequest,
+  res: express.Response,
+) => {
+  try {
+    const response = req.identity;
+
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const userId = response._id;
+    const doc =
+      (await getAttendenceByUserId(userId)) ||
+      (await getVandCByUserId(userId)) ||
+      (await getNoCreByUserId(userId));
+
+    const data = {
+      baseTotal: doc.baseTotal,
+      service: doc.service,
+      reference: doc.reference,
+      email: doc.email,
+      urn: doc.urn,
+      collectionOfUrn: doc.collectionOfUrn,
+      totalPriceImpact: doc.totalPriceImpact,
+      totalPrice: doc.totalPrice,
+    };
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
   }
 };

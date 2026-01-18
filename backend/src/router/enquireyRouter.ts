@@ -7,5 +7,5 @@ import {
 
 export default (router: express.Router) => {
   router.get("/get-all-enquires", getAllEnquires);
-  router.post("/new-client-enquirey", newClientEnquirey);
+  router.post("/new-client-enquiry", newClientEnquirey);
 };

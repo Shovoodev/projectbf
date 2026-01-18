@@ -77,7 +77,7 @@ const Registration = () => {
             className="ml-5 text-lgpy-2 px-4 py-1 rounded-md hover:bg-blue-600  bg-blue-500 text-white"
             onClick={() => {
               navigate(
-                `/login?stationery=${stationery}&bodypreparation=${bodypreparation}&coffin=${coffin}&flowers=${flowers}&urn=${urn}&collectionOfUrn=${collectionOfUrn}`
+                `/login?stationery=${stationery}&bodypreparation=${bodypreparation}&coffin=${coffin}&flowers=${flowers}&urn=${urn}&collectionOfUrn=${collectionOfUrn}`,
               );
             }}
           >

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { useParams } from "react-router";
 const CORE = import.meta.env.VITE_API_URL;
 
 import SignatureField from "./_components/SignatureField";
@@ -64,10 +63,10 @@ const AgreementFormPage = () => {
     "Dr",
     "Other",
   ];
-  const { userid } = useParams();
   const [hasNotPassedAway, setHasNotPassedAway] = useState(false);
   const navigate = useNavigate();
   const { selections } = useServiceApi();
+  const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [deceasedFormValues, setDeceasedFormValues] = useState({
     salutation: "",
     givenName: "",
@@ -92,7 +91,6 @@ const AgreementFormPage = () => {
     sign: null,
   });
   const sigCanvasRef = useRef(null);
-  console.log({ selections });
   const saveSignature = async () => {
     if (!sigCanvasRef.current) return null;
 
@@ -130,81 +128,98 @@ const AgreementFormPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
-      userid,
-      ...deceasedFormValues,
-    };
+    // const payload = {
+    //   ...deceasedFormValues,
+    // };
 
-    const res = await fetch(`${CORE}/desencepersondetailsanswer`, {
+    // const res = await fetch(`${CORE}/desencepersondetailsanswer`, {
+    //   method: "POST",
+    //   credentials: "include",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(payload),
+    // });
+
+    // if (!res.ok) {
+    //   const text = await res.text();
+    //   console.error("Server Error:", text);
+    //   return;
+    // }
+
+    // const signFile = await saveSignature();
+    // if (!signFile) {
+    //   alert("Please provide a signature");
+    //   return;
+    // }
+    // console.log({ selections });
+    // await new Promise((r) => setTimeout(r, 0));
+
+    // const fd = new FormData();
+
+    // fd.append("salutation", formKinValues.salutation);
+    // fd.append("givenName", formKinValues.givenName);
+    // fd.append("surname", formKinValues.surname);
+    // fd.append("currentAddress", formKinValues.currentAddress);
+    // fd.append("mobile", formKinValues.mobile);
+    // fd.append("email", formKinValues.email);
+    // fd.append("relation", formKinValues.relation);
+
+    // if (formKinValues.photo instanceof File) {
+    //   fd.append("photo", formKinValues.photo);
+    // }
+
+    // fd.append("sign", signFile);
+
+    // const resforkin = await fetch(`${CORE}/next-to-keen-details`, {
+    //   method: "POST",
+    //   credentials: "include",
+    //   body: fd,
+    // });
+
+    // if (!resforkin.ok) {
+    //   console.error(await resforkin.text());
+    //   return;
+    // }
+
+    // // const pdfBlob = await generatePdfBlob(displayImage);
+
+    // // formData.append("file", pdfBlob, "Invoice.pdf");
+    // // const pdfFd = new FormData();
+    const resSelections = await fetch(`${CORE}/all-selected-selections`, {
+      credentials: "include",
+    });
+    if (!resSelections.ok) {
+      throw new Error(`HTTP error! status:  ${resSelections.status}`);
+    }
+    const data = await resSelections.json();
+
+    setTimeout(() => {
+      setInvoiceDetails(data.data);
+    }, 800);
+    console.log({ invoiceDetails, setInvoiceDetails });
+
+    const blob = await pdf(
+      <StaticInvoicePDF invoiceDetails={invoiceDetails} />,
+    ).toBlob();
+
+    const base64data = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const base64 = reader.result?.toString().split(",")[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+    });
+
+    // Send invoice
+    const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Server Error:", text);
-      return;
-    }
-
-    const signFile = await saveSignature();
-    if (!signFile) {
-      alert("Please provide a signature");
-      return;
-    }
-    console.log({ selections });
-    await new Promise((r) => setTimeout(r, 0));
-
-    const fd = new FormData();
-
-    fd.append("salutation", formKinValues.salutation);
-    fd.append("givenName", formKinValues.givenName);
-    fd.append("surname", formKinValues.surname);
-    fd.append("currentAddress", formKinValues.currentAddress);
-    fd.append("mobile", formKinValues.mobile);
-    fd.append("email", formKinValues.email);
-    fd.append("relation", formKinValues.relation);
-
-    if (formKinValues.photo instanceof File) {
-      fd.append("photo", formKinValues.photo);
-    }
-
-    fd.append("sign", signFile);
-    fd.append("userid", userid);
-
-    const resforkin = await fetch(`${CORE}/${userid}/next-to-keen-details`, {
-      method: "POST",
-      credentials: "include",
-      body: fd,
-    });
-
-    if (!resforkin.ok) {
-      console.error(await resforkin.text());
-      return;
-    }
-
-    // const pdfBlob = await generatePdfBlob(displayImage);
-
-    // formData.append("file", pdfBlob, "Invoice.pdf");
-    // const pdfFd = new FormData();
-
-    const blob = await pdf(
-      <StaticInvoicePDF invoiceData={selections} />,
-    ).toBlob();
-
-    const base64data = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => resolve(reader.result.split(",")[1]);
-    });
-
-    // Send invoice
-    const invoiceRes = await fetch("http://localhost:4000/api/send-invoice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         selections,
         pdfAttachment: base64data,
@@ -213,10 +228,10 @@ const AgreementFormPage = () => {
 
     if (!invoiceRes.ok) {
       const err = await invoiceRes.json();
-      throw new Error(err.error || "Invoice failed");
+      throw new Error(err.error || "Invoice email failed");
     }
 
-    navigate(`/${userid}/user`);
+    // navigate(`/user`);
   };
 
   return (
@@ -252,7 +267,7 @@ const AgreementFormPage = () => {
                 <div className="md:col-span-2 lg:col-span-1">
                   <FormLabel required>Given Names</FormLabel>
                   <InputField
-                    required
+                    // required
                     type="text"
                     defaultValue="dddddd"
                     change={(e) =>
@@ -267,7 +282,7 @@ const AgreementFormPage = () => {
                 <div className="md:col-span-2">
                   <FormLabel required>Surname / Family Name</FormLabel>
                   <InputField
-                    required
+                    // required
                     defaultValue="dddddd"
                     type="text"
                     change={(e) =>
@@ -283,7 +298,7 @@ const AgreementFormPage = () => {
                 <div>
                   <FormLabel required>Date of Birth</FormLabel>
                   <InputField
-                    required
+                    // required
                     defaultValue={new Date()}
                     type="date"
                     change={(e) =>
@@ -448,7 +463,7 @@ const AgreementFormPage = () => {
                   <FormLabel required>Given Names</FormLabel>
                   <InputField
                     defaultValue="dddddd"
-                    required
+                    // required
                     change={(e) =>
                       setFormKinValues({
                         ...formKinValues,

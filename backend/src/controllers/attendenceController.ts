@@ -1,6 +1,10 @@
 import express from "express";
 import { AuthenticatedRequest } from "../lib/types";
-import { FormResponseModel, getAttendenceByReference } from "../db/attendence";
+import {
+  FormResponseModel,
+  getAttendenceByReference,
+  getAttendenceByUserId,
+} from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
 import { FormVandCResponseModel } from "../db/viewingAndCremention";
 import { FormNoServiceResponseModel } from "../db/noViewingCremention";
@@ -25,9 +29,7 @@ export const getAttendenceAnswers = async (
     if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     // Log the entire request body for debugging
-    console.log("REQ BODY:", JSON.stringify(req.body, null, 2));
 
     const { selections, totalPrice = 0 } = req.body;
 
@@ -64,17 +66,6 @@ export const getAttendenceAnswers = async (
       flowersPrice +
       urnPrice +
       collectionOfUrnPrice;
-
-    console.log("Extracted prices:", {
-      stationeryPrice,
-      bodyPreparationPrice,
-      coffinPrice,
-      flowersPrice,
-      urnPrice,
-      collectionOfUrnPrice,
-      totalPriceImpact,
-      receivedTotalPrice: totalPrice,
-    });
 
     const BASE_PRICE = 4400; // Match frontend base price
     const finalTotalPrice =
@@ -115,17 +106,6 @@ export const getAttendenceAnswers = async (
       });
     }
 
-    console.log("Saved response:", {
-      stationery: stationeryValue,
-      bodyPreparation: bodyPreparationValue,
-      coffin: coffinValue,
-      flowers: flowersValue,
-      urn: urnValue,
-      collectionOfUrn: collectionOfUrnValue,
-      totalPriceImpact,
-      totalPrice: finalTotalPrice,
-    });
-
     return res.status(200).json({
       message: "Attendance response saved",
       data: savedResponse,
@@ -150,7 +130,6 @@ export const getVandCnswers = async (
     }
 
     // Log the entire request body for debugging
-    console.log("REQ BODY:", JSON.stringify(req.body, null, 2));
 
     const { selections, totalPrice = 0 } = req.body;
 
@@ -169,14 +148,7 @@ export const getVandCnswers = async (
     // Calculate total price impact
     const totalPriceImpact = urnPrice + collectionOfUrnPrice;
 
-    console.log("Extracted prices:", {
-      urnPrice,
-      collectionOfUrnPrice,
-      totalPriceImpact,
-      receivedTotalPrice: totalPrice,
-    });
-
-    const BASE_PRICE = 4400; // Match frontend base price
+    const BASE_PRICE = 3599; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -208,13 +180,6 @@ export const getVandCnswers = async (
       });
     }
 
-    console.log("Saved response:", {
-      urn: urnValue,
-      collectionOfUrn: collectionOfUrnValue,
-      totalPriceImpact,
-      totalPrice: finalTotalPrice,
-    });
-
     return res.status(200).json({
       message: "Viewing And Cremention response saved",
       data: savedResponse,
@@ -239,7 +204,6 @@ export const getNoServiceCrementionnswers = async (
     }
 
     // Log the entire request body for debugging
-    console.log("REQ BODY:", JSON.stringify(req.body, null, 2));
 
     const { selections, totalPrice = 0 } = req.body;
 
@@ -259,15 +223,7 @@ export const getNoServiceCrementionnswers = async (
     // Calculate total price impact
     const totalPriceImpact = urnPrice + collectionOfUrnPrice;
 
-    console.log("Extracted prices:", {
-      urnPrice,
-      collectionOfUrnPrice,
-      totalPriceImpact,
-      transferOptionValue,
-      receivedTotalPrice: totalPrice,
-    });
-
-    const BASE_PRICE = 4400;
+    const BASE_PRICE = 2290;
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -300,14 +256,6 @@ export const getNoServiceCrementionnswers = async (
         status: "draft",
       });
     }
-
-    console.log("Saved response:", {
-      urn: urnValue,
-      collectionOfUrn: collectionOfUrnValue,
-      totalPriceImpact,
-      transferOptionValue,
-      totalPrice: finalTotalPrice,
-    });
 
     return res.status(200).json({
       message: "No Service Cremention response saved",
@@ -368,4 +316,16 @@ export const getdeatilByReference = async (
   } catch (error) {
     console.log(error);
   }
+};
+export const getAllServiceData = async (
+  req: AuthenticatedRequest,
+  res: express.Response,
+) => {
+  if (!req.identity) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = req.identity._id;
+  const data = await getAttendenceByUserId(userId);
+
+  res.json({ data });
 };

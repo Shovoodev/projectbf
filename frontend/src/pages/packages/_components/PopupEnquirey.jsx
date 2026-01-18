@@ -27,19 +27,13 @@ const PopupEnquirey = ({
   showFeatures = false,
   autoOpen = false,
   autoOpenDelay = 1000,
-  path = "newattendingservicecremationanswers",
+  path = "",
   mode = "registration", // "registration", "enquirey", or "default"
   children,
   triggerText = "Complete Registration",
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [userData, setUserData] = useState({ email: "", password: "" });
-  const [enquireyData, setEnquireyData] = useState({
-    enquireEmail: "",
-    enquiryMessage: "",
-    name: "",
-    phone: "",
-  });
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -89,7 +83,6 @@ const PopupEnquirey = ({
       onClose();
     }
     setUserData("");
-    setEnquireyData("");
     setMessage({ text: "", type: "" });
   };
 
@@ -145,44 +138,10 @@ const PopupEnquirey = ({
       });
       setTimeout(() => {
         closePopup();
-        navigate(`/${loginData._id}/fill-agreement-form`);
+        navigate(`/fill-agreement-form`);
       }, 1500);
     } catch (err) {
       showMessage(err.message, "error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEnquirySubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`${CORE}/new-client-enquirey`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(enquireyData),
-      });
-
-      if (response.ok) {
-        showMessage(
-          "Enquiry submitted successfully! We'll contact you shortly.",
-          "success",
-        );
-
-        setEnquireyData("");
-
-        setTimeout(() => {
-          closePopup();
-        }, 2000);
-      } else {
-        showMessage("Failed to submit enquiry. Please try again.", "error");
-      }
-    } catch (error) {
-      showMessage("Network error. Please try again.", error);
     } finally {
       setIsLoading(false);
     }
@@ -291,136 +250,6 @@ const PopupEnquirey = ({
             <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-500">
               <FiShield className="h-4 w-4 text-green-500" />
               <span>Your information is 100% secure. We won't spam you.</span>
-            </div>
-          </form>
-        );
-
-      case "enquirey":
-        return (
-          <form onSubmit={handleEnquirySubmit} className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    value={enquireyData.enquireEmail}
-                    onChange={(e) =>
-                      setEnquireyData({
-                        ...enquireyData,
-                        enquireEmail: e.target.value,
-                      })
-                    }
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Name
-                </label>
-                <div className="relative">
-                  <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    value={enquireyData.name}
-                    onChange={(e) =>
-                      setEnquireyData({
-                        ...enquireyData,
-                        name: e.target.value,
-                      })
-                    }
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Phone
-                </label>
-                <div className="relative">
-                  <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <input
-                    type="text"
-                    placeholder="Enter your Phone number"
-                    value={enquireyData.phone}
-                    onChange={(e) =>
-                      setEnquireyData({
-                        ...enquireyData,
-                        phone: e.target.value,
-                      })
-                    }
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Your Message
-                </label>
-                <textarea
-                  placeholder="Tell us about your enquiry..."
-                  value={enquireyData.enquiryMessage}
-                  onChange={(e) =>
-                    setEnquireyData({
-                      ...enquireyData,
-                      enquiryMessage: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 min-h-[120px] resize-none"
-                  rows="4"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-gradient-to-r from-green-600 to-teal-600 text-white py-3 px-6 rounded-xl font-medium hover:from-green-700 hover:to-teal-700 transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-            >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Sending...</span>
-                </>
-              ) : (
-                <>
-                  <span>Submit Enquiry</span>
-                  <FiArrowRight className="h-5 w-5" />
-                </>
-              )}
-            </button>
-
-            {message.text && (
-              <div
-                className={`mt-4 p-3 rounded-lg text-center font-medium transition-all duration-300 ${
-                  message.type === "error"
-                    ? "bg-red-50 text-red-600 border border-red-200"
-                    : "bg-green-50 text-green-600 border border-green-200"
-                }`}
-              >
-                {message.text}
-              </div>
-            )}
-
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <p className="text-center text-gray-600 text-sm">
-                We typically respond within 24 hours
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-              <FiShield className="h-4 w-4 text-green-500" />
-              <span>All enquiries are confidential and secure</span>
             </div>
           </form>
         );

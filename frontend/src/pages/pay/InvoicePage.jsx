@@ -67,7 +67,7 @@ const InvoicePage = () => {
         <p className="text-gray-600 text-lg">
           Review your details and complete your payment securely.
         </p>
-        <div className=" flex items-center text-green-600">
+        <div className=" flex items-center gap-1 text-green-600">
           <FaLock className="h-5 w-5" />
           <span className="text-sm font-medium">
             All transactions are encrypted and protected
@@ -142,7 +142,7 @@ const InvoicePage = () => {
                           <span className="text-gray-600">Date:</span>
                           <span className="text-gray-900">
                             {new Date(
-                              invoiceDetails.createdAt
+                              invoiceDetails.createdAt,
                             ).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "long",
@@ -156,7 +156,7 @@ const InvoicePage = () => {
                           <span className="text-gray-600">Due Date:</span>
                           <span className="text-gray-900">
                             {new Date(
-                              invoiceDetails.updatedAt
+                              invoiceDetails.updatedAt,
                             ).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "long",
@@ -192,8 +192,8 @@ const InvoicePage = () => {
                               invoiceDetails.status === "Paid"
                                 ? "bg-green-100 text-green-800"
                                 : invoiceDetails.status === "draft"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
                             }`}
                           >
                             {invoiceDetails.status?.charAt(0).toUpperCase() +
@@ -210,7 +210,7 @@ const InvoicePage = () => {
                       <h4 className="text-md font-semibold text-gray-900 mb-4">
                         Service Details
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="flex-row gap-1">
                         <div className="bg-white p-3 rounded-lg border border-gray-200">
                           <span className="text-sm text-gray-500 block">
                             Stationery
@@ -287,7 +287,7 @@ const InvoicePage = () => {
                           <p className="text-xs text-gray-400 mt-1">
                             Created:{" "}
                             {new Date(
-                              invoiceDetails.createdAt
+                              invoiceDetails.createdAt,
                             ).toLocaleString()}
                           </p>
                         </div>
@@ -298,8 +298,8 @@ const InvoicePage = () => {
                     <PaynowPage
                       amount={Math.round(
                         Number(
-                          invoiceDetails.totalPrice || invoiceDetails.amount
-                        ) * 100
+                          invoiceDetails.totalPrice || invoiceDetails.amount,
+                        ) * 100,
                       )}
                     />
                   </div>

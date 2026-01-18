@@ -7,6 +7,7 @@ import {
   FiUser,
   FiMenu,
 } from "react-icons/fi";
+import { useUserFront } from "../../../utility/use-userFront";
 
 const menuItems = [
   { name: "Dashboard Overview", icon: FiGrid },
@@ -17,10 +18,12 @@ const menuItems = [
 ];
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useUserFront();
+  console.log(user);
 
   return (
     <div
-      className={`h-screen bg-white border-r transition-all duration-300
+      className={`h-screen bg-gray-100 transition-all duration-300
       ${collapsed ? "w-20" : "w-64"}`}
     >
       {/* Header */}
@@ -30,7 +33,7 @@ export default function Sidebar() {
             C
           </div>
           {!collapsed && (
-            <span className="text-lg font-semibold">ClientHub</span>
+            <span className="text-lg font-semibold">{user?.email}</span>
           )}
         </div>
 

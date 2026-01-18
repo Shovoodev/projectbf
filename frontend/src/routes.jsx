@@ -44,7 +44,6 @@ import Registration from "./pages/Registration";
 import UserPage from "./pages/dashboard/UserPage";
 import StaticInvoicePDF from "./pages/packages/_components/InvoicePdf";
 import InvoicePage from "./pages/pay/InvoicePage";
-
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -176,12 +175,7 @@ export const routes = createBrowserRouter([
       // },
 
       {
-        path: "/:userid/user",
-        element: <UserPage />,
-        isPrivate: true,
-      },
-      {
-        path: "/:userid/fill-agreement-form",
+        path: "/fill-agreement-form",
         element: <AgreementFormPage />,
         isPrivate: true,
       },
@@ -196,13 +190,18 @@ export const routes = createBrowserRouter([
     element: <BlankLayout />,
     children: [
       {
-        path: "/:userid/prepay",
+        path: "/prepay",
         element: <PrePayindex />,
         isPrivate: true,
       },
       {
         path: "/invoicePdf",
         element: <StaticInvoicePDF />,
+        isPrivate: true,
+      },
+      {
+        path: "/user",
+        element: <UserPage />,
         isPrivate: true,
       },
     ],
