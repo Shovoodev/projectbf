@@ -24,12 +24,6 @@ export function Actions({ goNext }) {
     goNext();
   };
 
-  const [invoiceItems, setInvoiceItems] = useState([]);
-
-  const addToInvoice = (item) => {
-    setInvoiceItems([...invoiceItems, item]);
-  };
-
   return (
     <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
       {/* Make Agreement button */}

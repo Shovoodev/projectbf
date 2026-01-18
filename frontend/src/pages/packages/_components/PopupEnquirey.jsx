@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import img from "../../../images/loginpage.png";
 
@@ -15,8 +15,6 @@ import {
 } from "react-icons/fi";
 // import { pdf } from "@react-pdf/renderer";
 import { useServiceApi } from "../../../utility/SelectedServiceProvider";
-import { pdf } from "@react-pdf/renderer";
-import StaticInvoicePDF from "./InvoicePdf";
 const CORE = import.meta.env.VITE_API_URL;
 
 const PopupEnquirey = ({
@@ -29,6 +27,7 @@ const PopupEnquirey = ({
   showFeatures = false,
   autoOpen = false,
   autoOpenDelay = 1000,
+  path = "newattendingservicecremationanswers",
   mode = "registration", // "registration", "enquirey", or "default"
   children,
   triggerText = "Complete Registration",
@@ -138,41 +137,12 @@ const PopupEnquirey = ({
       localStorage.setItem("user", JSON.stringify(loginData));
 
       // Save selections
-      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+      await fetch(`${CORE}/${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ selections }),
         credentials: "include",
       });
-
-      // Generate PDF
-      const blob = await pdf(
-        <StaticInvoicePDF invoiceData={selections} />,
-      ).toBlob();
-
-      const base64data = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => resolve(reader.result.split(",")[1]);
-      });
-
-      // Send invoice
-      const invoiceRes = await fetch("http://localhost:4000/api/send-invoice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          selections,
-          pdfAttachment: base64data,
-        }),
-      });
-
-      if (!invoiceRes.ok) {
-        const err = await invoiceRes.json();
-        throw new Error(err.error || "Invoice failed");
-      }
-
-      showMessage("Registration & invoice sent successfully!", "success");
-
       setTimeout(() => {
         closePopup();
         navigate(`/${loginData._id}/fill-agreement-form`);

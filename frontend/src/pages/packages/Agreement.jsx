@@ -5,8 +5,9 @@ const CORE = import.meta.env.VITE_API_URL;
 import SignatureField from "./_components/SignatureField";
 import { useNavigate } from "react-router";
 import base64ToFile from "../../utility";
-import { generatePdfBlob } from "../prepay/_components/ImageToPdf";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
+import { pdf } from "@react-pdf/renderer";
+import StaticInvoicePDF from "./_components/InvoicePdf";
 
 // Reusable Form Field Components
 const FormLabel = ({ children, required }) => (
@@ -187,19 +188,32 @@ const AgreementFormPage = () => {
 
     // const pdfBlob = await generatePdfBlob(displayImage);
 
-    const formData = new FormData();
     // formData.append("file", pdfBlob, "Invoice.pdf");
     // const pdfFd = new FormData();
 
-    // deceased payload
-    const sendpdf = await fetch(`${CORE}/api/send-invoice"`, {
-      method: "POST",
-      credentials: "include",
-      body: formData,
+    const blob = await pdf(
+      <StaticInvoicePDF invoiceData={selections} />,
+    ).toBlob();
+
+    const base64data = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
     });
-    if (!sendpdf.ok) {
-      console.error(await sendpdf.text());
-      return;
+
+    // Send invoice
+    const invoiceRes = await fetch("http://localhost:4000/api/send-invoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        selections,
+        pdfAttachment: base64data,
+      }),
+    });
+
+    if (!invoiceRes.ok) {
+      const err = await invoiceRes.json();
+      throw new Error(err.error || "Invoice failed");
     }
 
     navigate(`/${userid}/user`);

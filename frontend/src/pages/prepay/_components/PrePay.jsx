@@ -132,7 +132,7 @@ const PrePay = () => {
       setLoadingText("Generating PDF document…");
 
       // 2️⃣ Merge images
-      const allImagesForPdf = [...images, ...slipImages];
+      const allImagesForPdf = [...slipImages];
 
       // 3️⃣ Generate PDF
       const pdfBlob = await generatePdfBlob(allImagesForPdf);
@@ -181,13 +181,6 @@ const PrePay = () => {
     <SlipFortySix />,
     <SlipFourtySeven />,
     <img src={fortySeven} />,
-    <SlipTen />,
-    <SlipEleven />,
-    <SlipTwelve />,
-    <SlipThirteen />,
-    <SlipFourteen />,
-    <SlipFifteen />,
-    <SlipSixteen />,
   ];
   useEffect(() => {
     if (formActive) {

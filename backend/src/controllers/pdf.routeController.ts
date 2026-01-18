@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 export const sendPdfOfPrepay = async (
   // req: AuthenticatedRequest,
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     // const response = req.identity;
@@ -27,7 +27,7 @@ export const sendPdfOfPrepay = async (
 export const sendPdfOfInvoice = async (
   // req: AuthenticatedRequest,
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const {
@@ -52,7 +52,7 @@ export const sendPdfOfInvoice = async (
     });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "mdathikhasan136@gmail.com",
+      to: "shovoodev@gmail.com",
       subject: `Thanks  hi beleaving us for trusting us `,
       text: "we get all you documents",
       html: `

@@ -23,8 +23,6 @@ import Team from "./pages/Team";
 import Testimonials from "./pages/Testimonials";
 // from Toukirul vai
 import BlankLayout from "./BlankLayout";
-
-import BlankLayout from "./BlankLayout";
 import AgreementForm from "./pages/Agreement";
 
 // import Pay_now from "./pages/Pay_now";
@@ -37,8 +35,6 @@ import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import PrePayindex from "./pages/prepay";
-import Registrarion from "./pages/Registration";
-import LoginScreen from "./pages/SignIn";
 import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
 import AgreementFormPage from "./pages/packages/Agreement";
