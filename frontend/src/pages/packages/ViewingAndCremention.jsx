@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { List } from "../../components/common/Reusables";
-import { Actions } from "./_components/Actions";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
+import PopupEnquirey from "./_components/PopupEnquirey";
+import { useNavigate } from "react-router-dom";
 
-const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
@@ -66,9 +66,13 @@ const ViewingAndCrementionPage = () => {
     setSelections,
     setTransferPrice,
     setTransferOption,
+    openPopup,
+    activePopup,
+    closePopup,
   } = useServiceApi();
   const BASE_PRICE = 3599;
 
+  const navigate = useNavigate();
   // --- Initialize Selections ---
   useEffect(() => {
     if (viewingAndCremention.length > 0) {
@@ -89,6 +93,13 @@ const ViewingAndCrementionPage = () => {
     }
   }, [viewingAndCremention]);
 
+  const handlePress = () => {
+    try {
+      navigate(`/prepay`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // --- Calculate Total Price ---
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
@@ -163,37 +174,6 @@ const ViewingAndCrementionPage = () => {
     const price = selectedOption.priceAdjustment || 0;
 
     handleOptionChange(item.question, selectedValue, price);
-  };
-  // --- Submit ---
-  const goNext = async (e) => {
-    e.preventDefault();
-    try {
-      const totalPriceImpact = Object.values(selections).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
-      const res = await fetch(`${CORE}/new-view-and-service-cremation`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          selections,
-          totalPrice: finalTotalPrice,
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Server Error:", text);
-        return;
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
   };
 
   if (loading) return <div className="p-20 text-center">Loading...</div>;
@@ -318,7 +298,47 @@ const ViewingAndCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS FOOTER --- */}
-        <Actions goNext={goNext} totalPrice={totalPrice} />
+        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
+          {/* Make Agreement button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => openPopup("agreement")}
+            >
+              Make Agreement Now
+            </button>
+          </div>
+
+          {/* Enquiry button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => navigate("/contact")}
+            >
+              Enquire Now
+            </button>
+          </div>
+
+          {/* PrePay button */}
+          <button className="btn-primary normal" onClick={handlePress}>
+            Prepay
+          </button>
+          {/* Agreement Popup */}
+          <PopupEnquirey
+            isOpen={activePopup === "agreement"}
+            onClose={closePopup}
+            // mode={() => (activePopup ? "registartion" : "login")}
+            mode="registration"
+            path="new-view-and-service-cremation"
+            title="Register to complete your aggrement"
+            subtitle="Register to save your selections and complete the process"
+            onSuccess={(userData) => {
+              console.log("User registered:", userData);
+              closePopup();
+              navigate("/fill-agreement-form");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

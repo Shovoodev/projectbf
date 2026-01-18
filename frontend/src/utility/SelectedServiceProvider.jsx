@@ -33,6 +33,48 @@ export const SelectedServiceProvider = ({ children }) => {
     phone: "",
   });
 
+  const [activePopup, setActivePopup] = useState(null);
+
+  const openPopup = (popupType) => {
+    setActivePopup(popupType);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
+
+  const goNext = async (path) => {
+    try {
+      const totalPriceImpact = Object.values(selections).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0,
+      );
+
+      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
+
+      const res = await fetch(`${CORE}/${path}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selections,
+          totalPrice: finalTotalPrice,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server Error:", text);
+        return;
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError(err.message);
+    }
+  };
+
   const ctxValue = useMemo(
     () => ({
       selections,
@@ -58,6 +100,11 @@ export const SelectedServiceProvider = ({ children }) => {
       setEnquireyData,
       internalIsOpen,
       setInternalIsOpen,
+      openPopup,
+      activePopup,
+      setActivePopup,
+      closePopup,
+      goNext,
     }),
     [
       selections,
@@ -84,6 +131,11 @@ export const SelectedServiceProvider = ({ children }) => {
       setTransferOption,
       internalIsOpen,
       setInternalIsOpen,
+      openPopup,
+      activePopup,
+      setActivePopup,
+      closePopup,
+      goNext,
     ],
   );
 

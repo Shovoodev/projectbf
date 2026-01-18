@@ -1,20 +1,19 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { FaPhoneVolume } from "react-icons/fa6";
+const CORE = import.meta.env.VITE_API_URL;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
     email: "",
-    suburb: "",
-    source: "Google",
+    phone: "",
     message: "",
+    source: "Google",
   });
 
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-
   const [status, setStatus] = useState({
     loading: false,
     success: null,
@@ -27,20 +26,15 @@ const Contact = () => {
   const validateField = (name, value) => {
     switch (name) {
       case "name":
-        if (!value.trim()) return "Name is required.";
-        return "";
+        return value.trim() ? "" : "Name is required.";
       case "email":
         if (!value.trim()) return "Email is required.";
-        if (!emailRegex.test(value))
-          return "Please enter a valid email address.";
+        if (!emailRegex.test(value)) return "Invalid email address.";
         return "";
       case "message":
-        if (!value.trim()) return "Message is required.";
-        return "";
+        return value.trim() ? "" : "Message is required.";
       case "phone":
-        if (value && !phoneRegex.test(value))
-          return "Phone contains invalid characters.";
-        return "";
+        return value && !phoneRegex.test(value) ? "Invalid phone number." : "";
       default:
         return "";
     }
@@ -56,105 +50,70 @@ const Contact = () => {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const isFormReady = () => {
-    // basic readiness: required fields filled and no current validation errors
-    return (
-      formData.name.trim() &&
-      formData.email.trim() &&
-      formData.message.trim() &&
-      !errors.name &&
-      !errors.email &&
-      !errors.message &&
-      !errors.phone
-    );
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // If the field has been touched, re-validate it on change
-    if (touched[name]) {
-      const err = validateField(name, value);
-      setErrors((prev) => ({ ...prev, [name]: err }));
-    }
-  };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    const err = validateField(name, value);
-    setErrors((prev) => ({ ...prev, [name]: err }));
+    setTouched((p) => ({ ...p, [name]: true }));
+    setErrors((p) => ({ ...p, [name]: validateField(name, value) }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // mark all fields touched so errors show if present
-    const allTouched = Object.keys(formData).reduce(
-      (acc, k) => ({ ...acc, [k]: true }),
-      {}
+    setTouched(
+      Object.keys(formData).reduce((a, k) => ({ ...a, [k]: true }), {}),
     );
-    setTouched(allTouched);
 
-    const isValid = validateForm();
-    if (!isValid) {
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Please fix the errors in the form.",
-      });
-      return;
-    }
+    if (!validateForm()) return;
 
     setStatus({ loading: true, success: null, error: null });
 
-    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceID || !templateID || !publicKey) {
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Email service not configured (check env vars).",
-      });
-      return;
-    }
-
-    const templateParams = {
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      suburb: formData.suburb,
-      source: formData.source,
-      message: formData.message,
-    };
-
     try {
-      await emailjs.send(serviceID, templateID, templateParams, publicKey);
+      const res = await fetch(`${CORE}/new-client-enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+
+        credentials: "include",
+      });
+      if (res.ok) {
+        console.log(
+          "Enquiry submitted successfully! We'll contact you shortly.",
+          "success",
+        );
+      }
+      // await emailjs.send(
+      //   import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      //   import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      //   formData,
+      //   import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      // );
+
       setStatus({
         loading: false,
-        success: "Message sent. We will contact you shortly.",
+        success: "Message sent successfully!",
         error: null,
       });
+
       setFormData({
         name: "",
-        phone: "",
         email: "",
+        phone: "",
+        message: "",
         suburb: "",
         source: "Google",
-        message: "",
       });
     } catch (err) {
-      console.error("EmailJS error:", err);
+      console.log(err);
+
       setStatus({
         loading: false,
         success: null,
-        error: "Failed to send message. Please try again later.",
+        error: "Something went wrong. Please try again.",
       });
     }
   };
+
+  const isFormReady = formData.name && formData.email && formData.message;
 
   return (
     <section className="bg-white py-16 md:py-24">
@@ -172,27 +131,20 @@ const Contact = () => {
             </h1>
 
             <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-              {/* Form-level error summary for screen readers and visual users */}
-              {Object.keys(errors).length > 0 &&
-                Object.keys(touched).length > 0 && (
-                  <div
-                    className="p-2 bg-red-50 border border-red-200 text-red-700 rounded"
-                    role="alert"
-                    aria-live="assertive"
-                  >
-                    Please fix the highlighted fields below.
-                  </div>
-                )}
-
               {/* Name */}
               <div>
                 <input
                   name="name"
+                  type="email"
+                  placeholder="Enter your Name"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      name: e.target.value,
+                    })
+                  }
                   onBlur={handleBlur}
-                  type="text"
-                  placeholder="Name"
                   aria-invalid={errors.name && touched.name ? "true" : "false"}
                   aria-describedby={
                     errors.name && touched.name ? "name-error" : undefined
@@ -219,11 +171,16 @@ const Contact = () => {
               <div>
                 <input
                   name="phone"
+                  type="tel"
+                  placeholder="Enter your Phone number"
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      phone: e.target.value,
+                    })
+                  }
                   onBlur={handleBlur}
-                  type="text"
-                  placeholder="Phone"
                   aria-invalid={
                     errors.phone && touched.phone ? "true" : "false"
                   }
@@ -251,11 +208,16 @@ const Contact = () => {
               <div>
                 <input
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   type="email"
-                  placeholder="E-mail"
+                  placeholder="Enter your email address"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      email: e.target.value,
+                    })
+                  }
+                  onBlur={handleBlur}
                   aria-invalid={
                     errors.email && touched.email ? "true" : "false"
                   }
@@ -280,18 +242,6 @@ const Contact = () => {
                 )}
               </div>
 
-              {/* Suburb */}
-              <div>
-                <input
-                  name="suburb"
-                  value={formData.suburb}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Suburb"
-                  className="w-full bg-white border border-gray-400 text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none focus:border-black transition-colors"
-                />
-              </div>
-
               {/* How did you hear about us? */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
@@ -300,8 +250,15 @@ const Contact = () => {
                 <div className="relative">
                   <select
                     name="source"
+                    type="email"
+                    placeholder="How did you Hear about us"
                     value={formData.source}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        source: e.target.value,
+                      })
+                    }
                     className="w-full bg-white border border-gray-400 text-gray-900 text-sm rounded-sm p-3 focus:outline-none focus:border-black transition-colors appearance-none cursor-pointer"
                   >
                     <option>Google</option>
@@ -335,11 +292,17 @@ const Contact = () => {
                 </label>
                 <textarea
                   name="message"
+                  type="text"
+                  placeholder="Your Message"
                   value={formData.message}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      message: e.target.value,
+                    })
+                  }
                   onBlur={handleBlur}
                   rows="4"
-                  placeholder="Message"
                   aria-invalid={
                     errors.message && touched.message ? "true" : "false"
                   }
@@ -391,7 +354,7 @@ const Contact = () => {
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={status.loading || !isFormReady()}
+                  disabled={status.loading || !isFormReady}
                   className="bg-black text-white px-8 py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {status.loading ? "Sending..." : "Submit"}

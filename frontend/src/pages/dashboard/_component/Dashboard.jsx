@@ -1,5 +1,5 @@
 // src/components/Dashboard.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaCheckCircle,
   FaFileAlt,
@@ -9,8 +9,37 @@ import {
   FaQuestionCircle,
   FaEnvelope,
 } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
+const CORE = import.meta.env.VITE_API_URL;
 
 const Dashboard = () => {
+  const [searchParams] = useSearchParams();
+  const userid = searchParams.get("userid");
+
+  console.log(userid);
+
+  const [invoiceDetails, setInvoiceDetails] = useState(null);
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        const res = await fetch(`${CORE}/all-service-data`, {
+          credentials: "include",
+        });
+        if (!res.ok) {
+          throw new Error(`HTTP error! status:  ${res.status}`);
+        }
+        const data = await res.json();
+
+        setTimeout(() => {
+          setInvoiceDetails(data.data);
+        }, 800);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleSearch();
+  }, []);
+  console.log(invoiceDetails);
   // Stats data
   const stats = [
     {
@@ -44,19 +73,6 @@ const Dashboard = () => {
   ];
 
   // Recent forms data
-  const recentForms = [
-    {
-      name: "Service Agreement",
-      submissionDate: "2024-01-15",
-      status: "Submitted",
-    },
-    { name: "Project Brief", submissionDate: "2024-01-18", status: "Reviewed" },
-    {
-      name: "Feedback Survey",
-      submissionDate: "2024-01-20",
-      status: "Pending",
-    },
-  ];
 
   // Recent invoices data
   const recentInvoices = [
@@ -143,7 +159,7 @@ const Dashboard = () => {
           <div className="p-6 border-b border-gray-100">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold text-gray-900">
-                Recent Forms
+                All Selectes Services
               </h2>
               <button className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-1">
                 <FaEye className="h-4 w-4" />
@@ -154,27 +170,47 @@ const Dashboard = () => {
           <div className="p-6">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead>
-                  <tr className="text-left text-gray-500 text-sm">
-                    <th className="pb-3 font-medium">Form Name</th>
-                    <th className="pb-3 font-medium">Submission Date</th>
-                    <th className="pb-3 font-medium">Status</th>
-                  </tr>
-                </thead>
                 <tbody>
-                  {recentForms.map((form, index) => (
-                    <tr key={index} className="border-t border-gray-100">
-                      <td className="py-4">
-                        <p className="font-medium text-gray-900">{form.name}</p>
-                      </td>
-                      <td className="py-4 text-gray-600">
-                        {form.submissionDate}
-                      </td>
-                      <td className="py-4">
-                        <StatusBadge status={form.status} />
-                      </td>
-                    </tr>
-                  ))}
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">
+                      Stationery
+                    </span>
+                    <span className="font-medium">
+                      {invoiceDetails?.stationery}
+                    </span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">
+                      Body Preparation
+                    </span>
+                    <span className="font-medium">
+                      {invoiceDetails?.bodyPreparation}
+                    </span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">Coffin</span>
+                    <span className="font-medium">
+                      {invoiceDetails?.coffin}
+                    </span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">Flowers</span>
+                    <span className="font-medium">
+                      {invoiceDetails?.flowers}
+                    </span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">Urn</span>
+                    <span className="font-medium">{invoiceDetails?.urn}</span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <span className="text-sm text-gray-500 block">
+                      Urn Collection
+                    </span>
+                    <span className="font-medium">
+                      {invoiceDetails?.collectionOfUrn}
+                    </span>
+                  </div>
                 </tbody>
               </table>
             </div>

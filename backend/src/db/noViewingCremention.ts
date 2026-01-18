@@ -32,6 +32,9 @@ const formNoServiceSchema = new mongoose.Schema(
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
+    baseTotal: { type: Number, default: 2290 },
+    service: { type: String, default: "No Viewing Cremention" },
+
     submittedAt: { type: Date },
   },
   {
@@ -47,11 +50,11 @@ export const FormNoServiceResponseModel = mongoose.model(
 export const createResponseVandC = (values: Record<string, any>) =>
   new FormNoServiceResponseModel(values).save().then((user) => user.toObject());
 
-export const getVandCByUserId = (userId: string) =>
+export const getNoCreByUserId = (userId: string) =>
   FormNoServiceResponseModel.findOne({ userid: userId });
 
-export const getVandCByReference = (reference: string) =>
+export const getNoCreByReference = (reference: string) =>
   FormNoServiceResponseModel.findOne({ reference: reference });
 
-export const updateVandCByUserId = (id: string, values: Record<string, any>) =>
+export const updateNoCreByUserId = (id: string, values: Record<string, any>) =>
   FormNoServiceResponseModel.findByIdAndUpdate(id, values);

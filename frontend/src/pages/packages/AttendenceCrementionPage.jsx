@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { List, Select } from "../../components/common/Reusables";
-import { Actions } from "./_components/Actions";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
+import { useNavigate } from "react-router-dom";
+import PopupEnquirey from "./_components/PopupEnquirey";
 
-const CORE = import.meta.env.VITE_API_URL;
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
   return (
@@ -385,20 +385,22 @@ const AttendenceCrementionPage = () => {
     selections,
     loading,
     error,
-    amount,
+    openPopup,
+    activePopup,
+    closePopup,
     setAmount,
     message,
     setTotalPrice,
     totalPrice,
     BASE_PRICE,
     setSelections,
-    setError,
   } = useServiceApi();
 
   // Static Options State
   const [hearse, setHearse] = useState("No Hearse - Coffin in place");
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
+  const navigate = useNavigate();
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
       Stationery: "stationery",
@@ -453,78 +455,14 @@ const AttendenceCrementionPage = () => {
     setTotalPrice(finalTotal);
     setAmount(finalTotal);
   }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
-  const goNext = async (e) => {
-    e.preventDefault();
 
+  const handlePress = () => {
     try {
-      const totalPriceImpact = Object.values(selections).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
-
-      console.log("Sending to backend:", {
-        selections,
-        totalPrice: finalTotalPrice,
-        totalPriceImpact,
-        basePrice: BASE_PRICE,
-      });
-      const res = await fetch(`${CORE}/newattendingservicecremationanswers`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          selections,
-          totalPrice: finalTotalPrice,
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Server Error:", text);
-        return;
-      }
-
-      //   // PDF generation code...
-      //   const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
-
-      //   const reader = new FileReader();
-      //   reader.readAsDataURL(blob);
-
-      //   reader.onloadend = async () => {
-      //     const base64data = reader.result.split(",")[1];
-
-      //     const response = await fetch("http://localhost:4000/api/send-invoice", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         ...selections,
-      //         pdfAttachment: base64data,
-      //       }),
-      //     });
-
-      //     const result = await response.json();
-
-      //     if (response.ok) {
-      //       setMessage("Invoice sent successfully!");
-      //     } else {
-      //       setMessage(`Error: ${result.error || "Failed to send invoice"}`);
-      //     }
-      //   };
-
-      //   setLoading(false);
-      //   navigate(`/${user._id}/deceasedpersondetails`);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError(err.message);
+      navigate(`/prepay`);
+    } catch (error) {
+      console.log(error);
     }
   };
-
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
     return <div className="p-20 text-center text-red-500">Error: {error}</div>;
@@ -664,7 +602,47 @@ const AttendenceCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS --- */}
-        <Actions goNext={goNext} totalPrice={amount} />
+        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
+          {/* Make Agreement button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => openPopup("agreement")}
+            >
+              Make Agreement Now
+            </button>
+          </div>
+
+          {/* Enquiry button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => navigate("/contact")}
+            >
+              Enquire Now
+            </button>
+          </div>
+
+          {/* PrePay button */}
+          <button className="btn-primary normal" onClick={handlePress}>
+            Prepay
+          </button>
+          {/* Agreement Popup */}
+          <PopupEnquirey
+            isOpen={activePopup === "agreement"}
+            onClose={closePopup}
+            // mode={() => (activePopup ? "registartion" : "login")}
+            mode="registration"
+            path="newattendingservicecremationanswers"
+            title="Register to complete your aggrement"
+            subtitle="Register to save your selections and complete the process"
+            onSuccess={(userData) => {
+              console.log("User registered:", userData);
+              closePopup();
+              navigate("/fill-agreement-form");
+            }}
+          />
+        </div>
 
         {/* Message Display */}
         {message && (

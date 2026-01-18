@@ -27,6 +27,9 @@ const formVandCSchema = new mongoose.Schema(
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
+    baseTotal: { type: Number, default: 3599 },
+    service: { type: String, default: "Viewing and Cremention" },
+
     submittedAt: { type: Date },
   },
   {

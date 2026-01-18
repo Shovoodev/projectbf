@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { List } from "../../components/common/Reusables";
-import { Actions } from "./_components/Actions";
 import { useServiceApi } from "../../utility/SelectedServiceProvider";
+import { useNavigate } from "react-router-dom";
+import PopupEnquirey from "./_components/PopupEnquirey";
 
 const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
@@ -62,14 +63,16 @@ const NoServiceCrementionPage = () => {
     setSelections,
     selections,
     setAmount,
-    setError,
     setTransferPrice,
     setTransferOption,
     transferPrice,
-    transferOption,
+    openPopup,
+    activePopup,
+    closePopup,
   } = useServiceApi();
   const BASE_PRICE = 2290;
   // Transfer Dropdown State
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (noServiceFunralData.length > 0) {
@@ -99,6 +102,13 @@ const NoServiceCrementionPage = () => {
     // Base + Variables + Transfer Cost
     setTotalPrice(BASE_PRICE + variableTotal + Number(transferPrice));
   }, [selections, transferPrice]);
+  const handlePress = () => {
+    try {
+      navigate(`/prepay`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // --- Handle Transfer Change ---
   const handleTransferChange = (e) => {
@@ -108,79 +118,6 @@ const NoServiceCrementionPage = () => {
     console.log("target", e.target.selectedIndex);
     setTransferPrice(price);
     setTransferOption(label);
-  };
-
-  // --- Submit ---
-  const geNext = async (e) => {
-    e.preventDefault();
-
-    try {
-      const totalPriceImpact = Object.values(selections).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
-
-      console.log("Sending to backend:", {
-        selections,
-        transferOption,
-        totalPrice: finalTotalPrice,
-        totalPriceImpact,
-        basePrice: BASE_PRICE,
-      });
-      const res = await fetch(`${CORE}/new-no-service-cremation`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          selections,
-          totalPrice: finalTotalPrice,
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Server Error:", text);
-        return;
-      }
-
-      //   // PDF generation code...
-      //   const blob = await pdf(<InvoicePDF invoiceData={selections} />).toBlob();
-
-      //   const reader = new FileReader();
-      //   reader.readAsDataURL(blob);
-
-      //   reader.onloadend = async () => {
-      //     const base64data = reader.result.split(",")[1];
-
-      //     const response = await fetch("http://localhost:4000/api/send-invoice", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         ...selections,
-      //         pdfAttachment: base64data,
-      //       }),
-      //     });
-
-      //     const result = await response.json();
-
-      //     if (response.ok) {
-      //       setMessage("Invoice sent successfully!");
-      //     } else {
-      //       setMessage(`Error: ${result.error || "Failed to send invoice"}`);
-      //     }
-      //   };
-
-      //   setLoading(false);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError(err.message);
-    }
   };
 
   const handleOptionChange = (category, value, priceAdjustment) => {
@@ -344,7 +281,47 @@ const NoServiceCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS FOOTER --- */}
-        <Actions goNext={geNext} totalPrice={totalPrice} />
+        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
+          {/* Make Agreement button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => openPopup("agreement")}
+            >
+              Make Agreement Now
+            </button>
+          </div>
+
+          {/* Enquiry button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => navigate("/contact")}
+            >
+              Enquire Now
+            </button>
+          </div>
+
+          {/* PrePay button */}
+          <button className="btn-primary normal" onClick={handlePress}>
+            Prepay
+          </button>
+          {/* Agreement Popup */}
+          <PopupEnquirey
+            isOpen={activePopup === "agreement"}
+            onClose={closePopup}
+            // mode={() => (activePopup ? "registartion" : "login")}
+            mode="registration"
+            path="new-view-and-service-cremation"
+            title="Register to complete your aggrement"
+            subtitle="Register to save your selections and complete the process"
+            onSuccess={(userData) => {
+              console.log("User registered:", userData);
+              closePopup();
+              navigate("/fill-agreement-form");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

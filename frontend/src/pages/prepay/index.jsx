@@ -1,6 +1,6 @@
 import React from "react";
 import PrePay from "./_components/PrePay";
-import { PrePayServiceProvider } from "@/utility/prepay-service-provider";
+import { PrePayServiceProvider } from "../../utility/prepay-service-provider";
 
 const PrePayindex = () => {
   return (

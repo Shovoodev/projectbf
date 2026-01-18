@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getAllServiceData,
   getAttendenceAnswers,
   getdeatilByReference,
   getNoServiceCrementionnswers,
@@ -10,6 +11,7 @@ import { isAuthenticated } from "../middlewear";
 
 export default (router: express.Router) => {
   router.get("/noservicefunraldata", getNoServiceFunral);
+  router.get("/all-service-data", isAuthenticated, getAllServiceData);
   router.post("/service-details", getdeatilByReference);
   router.post(
     "/newattendingservicecremationanswers",

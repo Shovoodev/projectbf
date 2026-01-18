@@ -51,7 +51,7 @@ const SlipFourtyTwo = () => {
                 defaultValue={5000}
                 className="pdf-input"
                 onChange={() => {
-                  updateDeptRequest(["lumpSum", "amount"], "5000");
+                  updateDeptRequest(["lumpSum", "amount"], "5000"); // coming form last page
                 }}
               />
             </div>

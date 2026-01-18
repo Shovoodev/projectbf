@@ -4,18 +4,18 @@ import express from "express";
 import { Request, Response } from "express";
 
 export const newClientEnquirey = async (
-  req: Request,
-  res: Response
+  req: express.Request,
+  res: express.Response,
 ): Promise<Response> => {
   try {
-    const { enquireEmail, Source, message, name, phone } = req.body;
+    const { email, source, message, name, phone } = req.body;
 
     const savedResponse = await creatEnquirey({
-      enquireEmail,
-      Source,
-      message,
       name,
+      email,
       phone,
+      message,
+      source,
     });
 
     return res.status(201).json({
@@ -34,7 +34,7 @@ export const newClientEnquirey = async (
 
 export const getAllEnquires = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const filtered = await getEnquirey();

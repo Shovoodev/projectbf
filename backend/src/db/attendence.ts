@@ -30,12 +30,12 @@ const formAttendenceSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const formAttendenceModel = mongoose.model(
   "attendencequestion",
-  formAttendenceSchema
+  formAttendenceSchema,
 );
 
 export const getformAttendencedata = (userId: string) =>
@@ -73,6 +73,7 @@ const formResponseSchema = new mongoose.Schema(
       required: true,
       default: "Collect in Person",
     },
+    baseTotal: { type: Number, default: 4899 },
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
     status: {
@@ -80,16 +81,17 @@ const formResponseSchema = new mongoose.Schema(
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
+    service: { type: String, default: "Attending Service Cremation" },
     submittedAt: { type: Date },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const FormResponseModel = mongoose.model(
   "attendenceresponse",
-  formResponseSchema
+  formResponseSchema,
 );
 
 export const createResponseAttandence = (values: Record<string, any>) =>
@@ -103,5 +105,5 @@ export const getAttendenceByReference = (reference: string) =>
 
 export const updateAttendenceByUserId = (
   id: string,
-  values: Record<string, any>
+  values: Record<string, any>,
 ) => FormResponseModel.findByIdAndUpdate(id, values);

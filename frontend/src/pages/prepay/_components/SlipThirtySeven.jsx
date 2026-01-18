@@ -60,6 +60,7 @@ const SlipThirtySeven = () => {
 
         {/* Signature Section */}
         <div className="">
+          {/* <<file upload */}
           <SignatureField
             sigPadRef={sigCanvasRef}
             saveSignature={saveSignature}
