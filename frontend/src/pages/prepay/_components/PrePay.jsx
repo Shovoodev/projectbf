@@ -94,6 +94,8 @@ const PrePay = () => {
   const [bgImage, setBgImage] = useState(displayImage[0]);
   // const [images, setImages] = useState([]);
   const [images, setImages] = useState(displayImage);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [zoom, setZoom] = useState(1);
   const { user } = useUserFront();
   // const handleImageChange = () => {
   //   setImages(displayImage);
@@ -137,19 +139,6 @@ const PrePay = () => {
     <img src={fortySeven} />,
   ];
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const index = Math.min(
-        Math.floor(scrollY / window.innerHeight),
-        images.length - 1
-      );
-      setBgImage(images[index]);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [images]);
-  useEffect(() => {
     if (formActive) {
       document.body.style.overflow = "hidden";
     } else {
@@ -179,6 +168,24 @@ const PrePay = () => {
       });
     }
   };
+
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    setZoom((prev) => Math.max(0.5, Math.min(3, prev + delta)));
+  };
+
+  useEffect(() => {
+    setZoom(1); // Reset zoom when image changes
+  }, [currentIndex]);
   useEffect(() => {
     document.body.style.overflow = formActive ? "hidden" : "auto";
 
@@ -203,7 +210,7 @@ const PrePay = () => {
     }
   };
   //debug
-  console.log({ investors, directDebitForm });
+
   return (
     <div className="relative font-roboto">
       <div className="fixed right-6 top-10 z-[1100]">
@@ -215,9 +222,9 @@ const PrePay = () => {
             </h1>
 
             {/* Dynamic Sub-text */}
-            <p className="text-[#666666] text-base leading-[1.5] mb-5">
+            {/* <p className="text-[#666666] text-base leading-[1.5] mb-5">
               {buttonStatus ? "Page 5 - Image 4 of 30" : "Section in Progress"}
-            </p>
+            </p> */}
 
             {/* Conditional Instruction Text */}
             {buttonStatus && (
@@ -242,17 +249,32 @@ const PrePay = () => {
       {/* <Main /> */}
       <div className="" />
       {/* 🔹 Flowing Images */}
-      <div className="flex flex-col  items-center gap-10 py-3">
-        {images.map((img, index) => (
+      {buttonStatus && (
+        <div
+          className="flex items-center justify-center gap-10 py-3 cursor-zoom-in"
+          onWheel={handleWheel}
+          onDoubleClick={() => setZoom(1)}
+          style={{ transform: `scale(${zoom})` }}
+        >
+          <button
+            onClick={prevImage}
+            className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+          >
+            <FaChevronLeft size={24} />
+          </button>
           <img
-            key={index}
-            src={img}
+            src={images[currentIndex]}
             alt="Gallery item"
             className="max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl"
           />
-        ))}
-      </div>
-
+          <button
+            onClick={nextImage}
+            className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+          >
+            <FaChevronRight size={24} />
+          </button>
+        </div>
+      )}
       <div
         id="CompleteForm"
         className={`fixed inset-0 z-40 flex items-center justify-center
