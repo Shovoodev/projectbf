@@ -44,6 +44,8 @@ import Registration from "./pages/Registration";
 import UserPage from "./pages/dashboard/UserPage";
 import StaticInvoicePDF from "./pages/packages/_components/InvoicePdf";
 import InvoicePage from "./pages/pay/InvoicePage";
+import BlogPage from "./pages/packages/blog/BlogPage";
+import BlogDetails from "./pages/packages/blog/_component/BlogDetails";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -178,6 +180,15 @@ export const routes = createBrowserRouter([
         path: "/fill-agreement-form",
         element: <AgreementFormPage />,
         isPrivate: true,
+      },
+      {
+        path: "/blogs",
+        element: <BlogPage />,
+        isPrivate: false,
+      },
+      {
+        path: "/blog/:id",
+        element: <BlogDetails />,
       },
       {
         path: "/pay-now",

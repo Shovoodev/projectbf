@@ -116,7 +116,7 @@ const Header = () => {
                 <Link to="/upcoming-funerals" className="dropdown-item">
                   Upcoming Funerals
                 </Link>
-                <Link to="/music" className="dropdown-item">
+                <Link to="/blogs" className="dropdown-item">
                   Blog
                 </Link>
               </div>
