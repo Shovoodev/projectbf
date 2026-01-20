@@ -105,7 +105,7 @@ const TeamList = () => {
     },
     {
       name: "Patrick Harrison",
-      role: "(Professional Pianist)",
+      role: "(Pianist & Live Music Coordinator)",
       desc: "Patrick Harrison is a highly skilled pianist with nearly two decades of experience. He holds a Diploma of Music Performance and a Bachelor of Music Performance, specialising in Classical, Jazz, Blues, and Contemporary piano. Since completing his studies, Patrick has showcased his talent at a wide range of events, including weddings, funerals, private functions, corporate events, bars, festivals, and on cruise ships.",
       imgLarge: team6,
       theme: "light",

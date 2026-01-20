@@ -1,14 +1,12 @@
 import ceoimg from "./images/ceo.png";
 
-import { FaSpa } from "react-icons/fa6";
+import separator from "./images/separator.png";
 
 const CeoProfile = () => {
   return (
     <>
-      <div className="flex items-center justify-center py-4 opacity-70 mb-12">
-        <div className="h-px bg-gray-400 w-1/4"></div>
-        <FaSpa className="mx-4 text-2xl text-gray-800" />
-        <div className="h-px bg-gray-400 w-1/4"></div>
+      <div className="flex items-center justify-center py-4  mb-12">
+        <img src={separator} alt="" />
       </div>
 
       <section className="flex flex-col md:flex-row gap-10 items-center">
