@@ -394,6 +394,7 @@ const AttendenceCrementionPage = () => {
     totalPrice,
     BASE_PRICE,
     setSelections,
+    handleTransferChange,
   } = useServiceApi();
 
   // Static Options State
@@ -418,7 +419,7 @@ const AttendenceCrementionPage = () => {
       // Calculate total price impact
       const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0,
+        0
       );
 
       setTotalPrice(BASE_PRICE + totalPriceImpact);
@@ -433,7 +434,7 @@ const AttendenceCrementionPage = () => {
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
+      (opt) => opt.value === selectedValue
     );
     if (!selectedOption) return;
 
@@ -446,7 +447,7 @@ const AttendenceCrementionPage = () => {
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0,
+      0
     );
     // Add any static option costs here if needed
     const finalTotal = BASE_PRICE + totalPriceImpact;
@@ -505,9 +506,26 @@ const AttendenceCrementionPage = () => {
                 "Registration of Death",
                 "Celebrant or Host",
                 "Cremation Fee",
-                "Transfers from Place of Passing (Sydney Metro 24/7)",
               ]}
             />
+            {/* Transfers Dropdown (Styled to match list) */}
+            <button
+              onChange={handleTransferChange}
+              className=" flex flex-row items-center justify-between gap-4"
+            >
+              <span className="flex items-center gap-3 text-gray-700 text-lg">
+                • Transfers from Place of Passing
+              </span>
+
+              <select
+                // onChange={handleTransferChange}
+                className="p-2  rounded bg-gray-100 text-left w-2/3"
+              >
+                <option value="0">Sydney Metro</option>
+                <option value="220">Zone 2 (+ $220)</option>
+                <option value="385">Zone 3 (+ $385)</option>
+              </select>
+            </button>
           </Card>
 
           {/* 2. Disbursements */}
@@ -574,7 +592,6 @@ const AttendenceCrementionPage = () => {
           {/* Right: Options (Static) */}
           <Card title="Options">
             <div className="flex flex-col gap-4">
-              
               <RowSelect
                 label="Bottled Water 600ml"
                 value={water}

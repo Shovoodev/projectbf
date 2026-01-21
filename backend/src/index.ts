@@ -10,8 +10,8 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;
 const app = express();
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 const server = http.createServer(app);
@@ -26,7 +26,7 @@ app.use(
       "Authorization",
       "Access-Control-Allow-Origin",
     ],
-  }),
+  })
 );
 
 mongoose.Promise = Promise;

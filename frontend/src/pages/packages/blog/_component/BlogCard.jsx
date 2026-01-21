@@ -13,9 +13,9 @@ const BlogCard = ({ blog }) => {
       {/* Image Container */}
       <div className="h-56 overflow-hidden relative group">
         <img
-          src={blog.image}
+          src={blog.images?.[0]}
           alt={blog.title}
-          className="w-full h-full object-fit transform group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover  transform group-hover:scale-110 transition-transform duration-700"
         />
         {/* Overlay for hover effect (optional, adds polish) */}
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

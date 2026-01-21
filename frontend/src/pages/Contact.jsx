@@ -1,5 +1,5 @@
 import emailjs from "@emailjs/browser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPhoneVolume } from "react-icons/fa6";
 const CORE = import.meta.env.VITE_API_URL;
 
@@ -56,11 +56,14 @@ const Contact = () => {
     setErrors((p) => ({ ...p, [name]: validateField(name, value) }));
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setTouched(
-      Object.keys(formData).reduce((a, k) => ({ ...a, [k]: true }), {}),
+      Object.keys(formData).reduce((a, k) => ({ ...a, [k]: true }), {})
     );
 
     if (!validateForm()) return;
@@ -78,7 +81,7 @@ const Contact = () => {
       if (res.ok) {
         console.log(
           "Enquiry submitted successfully! We'll contact you shortly.",
-          "success",
+          "success"
         );
       }
       // await emailjs.send(

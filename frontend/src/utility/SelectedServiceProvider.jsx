@@ -34,7 +34,24 @@ export const SelectedServiceProvider = ({ children }) => {
   });
 
   const [activePopup, setActivePopup] = useState(null);
+  const handleTransferChange = (e) => {
+    const price = Number(e.target.value);
+    const index = e.target.selectedIndex;
+    const label = e.target.options[index].text;
 
+    setTransferPrice(price);
+    setTransferOption(label);
+
+    const variableTotal = Object.values(selections).reduce(
+      (sum, opt) => sum + (opt.price || 0),
+      0
+    );
+
+    const total = BASE_PRICE + variableTotal + price;
+
+    setTotalPrice(total);
+    setAmount(total);
+  };
   const openPopup = (popupType) => {
     setActivePopup(popupType);
   };
@@ -47,7 +64,7 @@ export const SelectedServiceProvider = ({ children }) => {
     try {
       const totalPriceImpact = Object.values(selections).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0,
+        0
       );
 
       const finalTotalPrice = BASE_PRICE + totalPriceImpact;
@@ -105,6 +122,7 @@ export const SelectedServiceProvider = ({ children }) => {
       setActivePopup,
       closePopup,
       goNext,
+      handleTransferChange,
     }),
     [
       selections,
@@ -136,7 +154,8 @@ export const SelectedServiceProvider = ({ children }) => {
       setActivePopup,
       closePopup,
       goNext,
-    ],
+      handleTransferChange,
+    ]
   );
 
   return (
@@ -151,7 +170,7 @@ export function useServiceApi() {
 
   if (context === null) {
     throw new Error(
-      "The component must be rendered as child of Home component",
+      "The component must be rendered as child of Home component"
     );
   }
 

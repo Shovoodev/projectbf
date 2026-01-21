@@ -11,7 +11,7 @@ import { FormNoServiceResponseModel } from "../db/noViewingCremention";
 
 export const getNoServiceFunral = async (
   req: express.Request,
-  res: express.Response,
+  res: express.Response
 ): Promise<any> => {
   try {
     const filtered = noServiceFunralData;
@@ -23,7 +23,7 @@ export const getNoServiceFunral = async (
 };
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
     if (!req.identity) {
@@ -57,6 +57,9 @@ export const getAttendenceAnswers = async (
     const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
     const collectionOfUrnPrice =
       parseFloat(selections?.collectionOfUrn?.price) || 0;
+    const transferOption = selections?.transferOption?.value || "";
+    const transferOptionPrice =
+      parseFloat(selections?.transferOption?.price) || 0;
 
     // Calculate total price impact
     const totalPriceImpact =
@@ -65,9 +68,10 @@ export const getAttendenceAnswers = async (
       coffinPrice +
       flowersPrice +
       urnPrice +
-      collectionOfUrnPrice;
+      collectionOfUrnPrice +
+      transferOptionPrice;
 
-    const BASE_PRICE = 4400; // Match frontend base price
+    const BASE_PRICE = 4899; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -87,6 +91,7 @@ export const getAttendenceAnswers = async (
       existingResponse.collectionOfUrn = collectionOfUrnValue;
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
+      existingResponse.transferOption = transferOption;
 
       savedResponse = await existingResponse.save();
     } else {
@@ -101,6 +106,7 @@ export const getAttendenceAnswers = async (
         urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
         totalPriceImpact,
+        transferOption,
         totalPrice: finalTotalPrice,
         status: "draft",
       });
@@ -122,7 +128,7 @@ export const getAttendenceAnswers = async (
 
 export const getVandCnswers = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
     if (!req.identity) {
@@ -144,9 +150,13 @@ export const getVandCnswers = async (
     const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
     const collectionOfUrnPrice =
       parseFloat(selections?.collectionOfUrn?.price) || 0;
+    const transferOption = selections?.transferOption?.value || "";
+    const transferOptionPrice =
+      parseFloat(selections?.transferOption?.price) || 0;
 
     // Calculate total price impact
-    const totalPriceImpact = urnPrice + collectionOfUrnPrice;
+    const totalPriceImpact =
+      urnPrice + collectionOfUrnPrice + transferOptionPrice;
 
     const BASE_PRICE = 3599; // Match frontend base price
     const finalTotalPrice =
@@ -164,6 +174,7 @@ export const getVandCnswers = async (
       existingResponse.collectionOfUrn = collectionOfUrnValue;
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
+      existingResponse.transferOption = transferOption;
 
       savedResponse = await existingResponse.save();
     } else {
@@ -196,7 +207,7 @@ export const getVandCnswers = async (
 
 export const getNoServiceCrementionnswers = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
     if (!req.identity) {
@@ -220,8 +231,13 @@ export const getNoServiceCrementionnswers = async (
     const collectionOfUrnPrice =
       parseFloat(selections?.collectionOfUrn?.price) || 0;
 
+    const transferOption = selections?.transferOption?.value || "";
+    const transferOptionPrice =
+      parseFloat(selections?.transferOption?.price) || 0;
+
     // Calculate total price impact
-    const totalPriceImpact = urnPrice + collectionOfUrnPrice;
+    const totalPriceImpact =
+      urnPrice + collectionOfUrnPrice + transferOptionPrice;
 
     const BASE_PRICE = 2290;
     const finalTotalPrice =
@@ -273,7 +289,7 @@ export const getNoServiceCrementionnswers = async (
 
 export const getdeatilByReference = async (
   req: express.Request,
-  res: express.Response,
+  res: express.Response
 ): Promise<any> => {
   try {
     console.log("Request body:", JSON.stringify(req.body, null, 2));
@@ -319,7 +335,7 @@ export const getdeatilByReference = async (
 };
 export const getAllServiceData = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   if (!req.identity) {
     return res.status(401).json({ message: "Unauthorized" });
