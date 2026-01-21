@@ -84,7 +84,7 @@ const ViewingAndCrementionPage = () => {
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Base + Variables + Transfer Cost
     setTotalPrice(BASE_PRICE + variableTotal + Number(transferPrice));
@@ -95,7 +95,7 @@ const ViewingAndCrementionPage = () => {
     const price = Number(e.target.value);
     const index = e.target.selectedIndex;
     const label = e.target.options[index].text;
-    console.log("target", e.target.selectedIndex);
+
     setTransferPrice(price);
     setTransferOption(label);
   };

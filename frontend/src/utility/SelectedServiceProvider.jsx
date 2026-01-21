@@ -4,7 +4,7 @@ const SelectedServiceProviderContext = createContext();
 const CORE = import.meta.env.VITE_API_URL;
 
 export const SelectedServiceProvider = ({ children }) => {
-  const BASE_PRICE = 4400;
+  const BASE_PRICE = 4899;
   const attendenceData = [
     {
       id: 1,
@@ -363,7 +363,7 @@ export const SelectedServiceProvider = ({ children }) => {
     try {
       const totalPriceImpact = Object.values(selections).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0
+        0,
       );
 
       const finalTotalPrice = BASE_PRICE + totalPriceImpact;
@@ -447,7 +447,7 @@ export const SelectedServiceProvider = ({ children }) => {
       // Calculate total price impact
       const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0
+        0,
       );
 
       setTotalPrice(BASE_PRICE + totalPriceImpact);
@@ -462,7 +462,7 @@ export const SelectedServiceProvider = ({ children }) => {
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue
+      (opt) => opt.value === selectedValue,
     );
     if (!selectedOption) return;
 
@@ -511,7 +511,7 @@ export const SelectedServiceProvider = ({ children }) => {
       handleSelectChange,
       BASE_PRICE,
       attendenceData,
-    ]
+    ],
   );
 
   return (
@@ -526,7 +526,7 @@ export function useServiceApi() {
 
   if (context === null) {
     throw new Error(
-      "The component must be rendered as child of Home component"
+      "The component must be rendered as child of Home component",
     );
   }
 

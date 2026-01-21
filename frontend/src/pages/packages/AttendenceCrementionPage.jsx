@@ -67,7 +67,7 @@ const AttendenceCrementionPage = () => {
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Add any static option costs here if needed
     const finalTotal = BASE_PRICE + totalPriceImpact;
@@ -119,9 +119,23 @@ const AttendenceCrementionPage = () => {
                 "Registration of Death",
                 "Celebrant or Host",
                 "Cremation Fee",
-                "Transfers from Place of Passing (Sydney Metro 24/7)",
               ]}
             />
+            {/* Transfers Dropdown (Styled to match list) */}
+            <div className=" flex flex-row items-center justify-between gap-4">
+              <span className="flex items-center gap-3 text-gray-700 text-lg">
+                • Transfers from Place of Passing
+              </span>
+
+              <select
+                // onChange={handleTransferChange}
+                className="p-2  rounded bg-gray-100 text-left w-2/3"
+              >
+                <option value="0">Sydney Metro</option>
+                <option value="220">Zone 2 (+ $220)</option>
+                <option value="385">Zone 3 (+ $385)</option>
+              </select>
+            </div>
           </Card>
 
           {/* 2. Disbursements */}
