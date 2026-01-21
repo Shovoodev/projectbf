@@ -21,6 +21,25 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [blogData, setBlogData] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const getBlogs = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const data = await res.json();
+        setBlogData(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getBlogs();
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -100,16 +119,27 @@ const BlogDetails = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      <div>
-        {article.title && (
-          <div>
-            <p className="text-lg text-gray-700 italic">{article.title}</p>
-          </div>
-        )}
-      </div>
       {/* 2. Main Content Layout */}
 
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
+        <div>
+          {article.title && (
+            <div>
+              <p className="text-lg text-gray-700 italic">{article.title}</p>
+            </div>
+          )}
+          {/* Blog Stats */}
+          <div className="bg-white  border-gray-200 rounded-xl mb-8">
+            <ul className="space-y-3 flex">
+              <li className="flex justify-between py-2 border-gray-100">
+                <span className="font-medium">By {article.author} /</span>
+              </li>
+              <li className="flex justify-between py-2  border-gray-100">
+                <span className="font-medium">{article.date}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* --- LEFT COLUMN: Article Content (8 cols) --- */}
           <main className="lg:col-span-8">
@@ -130,7 +160,7 @@ const BlogDetails = () => {
 
             {/* Excerpt */}
             {article.excerpt && (
-              <div className="mb-8 p-6 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+              <div className="mb-8 p-6">
                 <p className="text-lg text-gray-700 italic">
                   {article.excerpt}
                 </p>
@@ -188,7 +218,7 @@ const BlogDetails = () => {
             <div className="mt-12 pt-8 border-t border-gray-200">
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <Link
-                  to="/blogs"
+                  to="/blog"
                   className="flex items-center gap-3 text-gray-500 hover:text-black transition-colors group"
                 >
                   <span className="p-3 rounded-full bg-gray-50 group-hover:bg-gray-100 transition-colors">
@@ -217,6 +247,22 @@ const BlogDetails = () => {
 
           {/* --- RIGHT COLUMN: Sidebar (4 cols) --- */}
           <aside className="lg:col-span-4 lg:pl-8">
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-3">
+              <h3 className="font-bold text-lg mb-4">Search Blogs</h3>
+              <form className="relative">
+                <input
+                  type="text"
+                  placeholder="Search articles..."
+                  className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
+                >
+                  <FaSearch />
+                </button>
+              </form>
+            </div>
             {/* Author Bio Card */}
             <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-8">
               <div className="flex items-center gap-4 mb-4">
@@ -235,49 +281,19 @@ const BlogDetails = () => {
               </p>
             </div>
 
-            {/* Blog Stats */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
-              <h3 className="font-bold text-lg mb-4">Post Details</h3>
-              <ul className="space-y-3">
-                <li className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Category</span>
-                  <span className="font-medium">{article.category}</span>
-                </li>
-                <li className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Published</span>
-                  <span className="font-medium">{article.date}</span>
-                </li>
-                <li className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Images</span>
-                  <span className="font-medium">
-                    {article.images?.length || 0}
-                  </span>
-                </li>
-                <li className="flex justify-between py-2">
-                  <span className="text-gray-600">Word Count</span>
-                  <span className="font-medium">
-                    {article.content ? article.content.split(" ").length : 0}
-                  </span>
-                </li>
-              </ul>
-            </div>
+            {/* resent blogs */}
 
-            {/* Search Widget */}
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-              <h3 className="font-bold text-lg mb-4">Search Blogs</h3>
-              <form className="relative">
-                <input
-                  type="text"
-                  placeholder="Search articles..."
-                  className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
-                >
-                  <FaSearch />
-                </button>
-              </form>
+            <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
+              <h1 className="font-bold text-xl">Recent Posts</h1>
+              <ul className="space-y-3">
+                {blogData.map((item) => {
+                  return (
+                    <li className="flex justify-between text-lg text-blue-500 py-2 border-b border-gray-100">
+                      <span className="font-medium">{item.title}</span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </aside>
         </div>

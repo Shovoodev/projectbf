@@ -183,7 +183,7 @@ export const routes = createBrowserRouter([
         isPrivate: true,
       },
       {
-        path: "/blogs",
+        path: "/blog",
         element: <BlogPage />,
         isPrivate: false,
       },

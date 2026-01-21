@@ -6,10 +6,6 @@ const SlipThirtyFour = () => {
   return (
     <div className="form-container-base">
       <div className="form-header-area">
-        <h1 className=" flex items-center justify-center text-3xl text-red-700">
-          {" "}
-          Have to change everything for inverster 2
-        </h1>
         <p className="pdf-subtitle">
           Investor 2 (all correspondence will be sent to this person)
         </p>
@@ -221,7 +217,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["mailstreetName"],
-                  e.target.value,
+                  e.target.value
                 )
               }
               className="pdf-input"
@@ -285,7 +281,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeTelephone"],
-                  e.target.value,
+                  e.target.value
                 )
               }
               className="pdf-input"
@@ -311,7 +307,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeAddress"],
-                  e.target.value,
+                  e.target.value
                 )
               }
               className="pdf-input"

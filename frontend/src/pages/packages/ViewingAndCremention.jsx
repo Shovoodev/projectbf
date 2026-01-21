@@ -64,11 +64,10 @@ const ViewingAndCrementionPage = () => {
     totalPrice,
     transferPrice,
     setSelections,
-    setTransferPrice,
-    setTransferOption,
     openPopup,
     activePopup,
     closePopup,
+    handleTransferChange,
   } = useServiceApi();
   const BASE_PRICE = 3599;
 
@@ -104,30 +103,11 @@ const ViewingAndCrementionPage = () => {
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0,
+      0
     );
     // Base + Variables + Transfer Cost
     setTotalPrice(BASE_PRICE + variableTotal + Number(transferPrice));
   }, [selections, transferPrice]);
-
-  const handleTransferChange = (e) => {
-    const price = Number(e.target.value);
-    const index = e.target.selectedIndex;
-    const label = e.target.options[index].text;
-
-    setTransferPrice(price);
-    setTransferOption(label);
-
-    const variableTotal = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
-    );
-
-    const total = BASE_PRICE + variableTotal + price;
-
-    setTotalPrice(total);
-    setAmount(total);
-  };
 
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
@@ -149,7 +129,7 @@ const ViewingAndCrementionPage = () => {
 
       const variableTotal = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0,
+        0
       );
 
       const total = BASE_PRICE + variableTotal + transferPrice;
@@ -166,7 +146,7 @@ const ViewingAndCrementionPage = () => {
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
+      (opt) => opt.value === selectedValue
     );
     if (!selectedOption) return;
 

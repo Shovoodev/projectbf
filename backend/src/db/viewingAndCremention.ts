@@ -28,18 +28,20 @@ const formVandCSchema = new mongoose.Schema(
       default: "draft",
     },
     baseTotal: { type: Number, default: 3599 },
+    transferOption: { type: Number, default: 0 },
+
     service: { type: String, default: "Viewing and Cremention" },
 
     submittedAt: { type: Date },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export const FormVandCResponseModel = mongoose.model(
   "ViewingAndCremention",
-  formVandCSchema,
+  formVandCSchema
 );
 
 export const createResponseVandC = (values: Record<string, any>) =>

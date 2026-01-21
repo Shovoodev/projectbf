@@ -30,7 +30,7 @@ export const createBlog = async (
       author: author || "Anonymous",
       category: category || "Uncategorized",
       excerpt: excerpt || "",
-      images, // ✅ MULTIPLE IMAGES
+      images,
     });
 
     res.status(201).json(blog);

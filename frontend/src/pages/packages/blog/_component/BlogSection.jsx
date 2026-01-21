@@ -24,6 +24,7 @@ const BlogSection = () => {
 
     getBlogs();
   }, []);
+  console.log([blogData]);
 
   return (
     <section className="bg-white py-16 md:py-24">
@@ -100,7 +101,7 @@ const BlogSection = () => {
                       content: item.content,
                       category: item.category,
                       excerpt: item.excerpt,
-                      image: item.image,
+                      images: item.images,
                       date: item.createdAt || item.date,
                     }}
                   />
