@@ -1,243 +1,98 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaCalendarAlt, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-// 1. Sidebar Component
-// const Sidebar = () => {
-//   // In a real app, you might fetch these lists from an API
-//   const categories = [
-//     "BTF News",
-//     "Funeral Services",
-//     "Planning",
-//     "Grief Support",
-//   ];
-
-//   return (
-//     <aside className="space-y-12">
-//       {/* Search Widget */}
-//       <div className="bg-gray-50 p-8 rounded-xl border border-gray-100">
-//         <h3 className="font-display font-bold text-lg mb-4">Search</h3>
-//         <form className="relative">
-//           <label htmlFor="search" className="sr-only">
-//             Search
-//           </label>
-//           <input
-//             type="text"
-//             id="search"
-//             placeholder="Search topics..."
-//             className="w-full p-4 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm"
-//           />
-//           <button
-//             type="submit"
-//             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black"
-//           >
-//             <FaSearch />
-//           </button>
-//         </form>
-//       </div>
-
-//       {/* Recent Posts Widget */}
-//       <div>
-//         <h3 className="font-display font-bold text-lg mb-6 border-b border-gray-200 pb-2">
-//           Recent Posts
-//         </h3>
-//         <ul className="space-y-4">
-//           {recentPosts.map((post) => (
-//             <li key={post.id}>
-//               <Link to={`/news/${post.id}`} className="group block">
-//                 <h4 className="font-body text-gray-700 font-medium group-hover:text-black group-hover:underline transition-colors line-clamp-2">
-//                   {post.title}
-//                 </h4>
-//                 <span className="text-xs text-gray-400 mt-1 block">
-//                   {post.date}
-//                 </span>
-//               </Link>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-
-//       <div>
-//         <h3 className="font-display font-bold text-lg mb-6 border-b border-gray-200 pb-2">
-//           Categories
-//         </h3>
-//         <ul className="space-y-3">
-//           {categories.map((cat, index) => (
-//             <li key={index}>
-//               <Link
-//                 to="#"
-//                 className="flex justify-between items-center text-gray-600 hover:text-black transition-colors"
-//               >
-//                 <span>{cat}</span>
-//                 <span className="text-gray-300 text-sm">(0)</span>
-//               </Link>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-
-//       {/* Brand Widget */}
-//       <div className="text-center pt-8">
-//         <img
-//           src="https://blacktulipfunerals.com.au/wp-content/uploads/2025/10/BTF-Logo-Horizontal.png"
-//           alt="Black Tulip Funerals"
-//           className="w-48 mx-auto opacity-80"
-//         />
-//       </div>
-//     </aside>
-//   );
-// };
 
 const CommentSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    website: "",
-    comment: "",
-    saveInfo: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted:", formData);
-    alert("Comment submitted for approval.");
-    setFormData({
-      name: "",
-      email: "",
-      website: "",
-      comment: "",
-      saveInfo: false,
-    });
-  };
-
-  return (
-    <div className="mt-16 pt-10 border-t border-gray-100">
-      <h3 className="text-2xl font-display font-bold text-gray-900 mb-2">
-        Leave a Comment
-      </h3>
-      <p className="text-sm text-gray-500 mb-8">
-        Your email address will not be published. Required fields are marked *
-      </p>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="comment" className="sr-only">
-            Comment*
-          </label>
-          <textarea
-            id="comment"
-            name="comment"
-            rows="6"
-            required
-            placeholder="Type here..."
-            value={formData.comment}
-            onChange={handleChange}
-            className="w-full p-4 border border-gray-300 rounded-xl focus:ring-1 focus:ring-black focus:border-black outline-none bg-white text-gray-700"
-          ></textarea>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <input
-            type="text"
-            name="name"
-            required
-            placeholder="Name*"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-black focus:border-black outline-none"
-          />
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="Email*"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-black focus:border-black outline-none"
-          />
-          <input
-            type="url"
-            name="website"
-            placeholder="Website"
-            value={formData.website}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-black focus:border-black outline-none"
-          />
-        </div>
-
-        <div className="flex items-center gap-3">
-          <input
-            id="saveInfo"
-            name="saveInfo"
-            type="checkbox"
-            checked={formData.saveInfo}
-            onChange={handleChange}
-            className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
-          />
-          <label htmlFor="saveInfo" className="text-sm text-gray-600">
-            Save my name, email, and website in this browser for the next time I
-            comment.
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          className="bg-black text-white font-bold py-3 px-8 rounded-md hover:bg-gray-800 transition-all uppercase text-xs tracking-widest"
-        >
-          Post Comment
-        </button>
-      </form>
-    </div>
-  );
+  // ... (keep your existing CommentSection code)
 };
 
-// --- MAIN PAGE ---
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
 const BlogDetails = () => {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log({ id });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     const fetchBlog = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/publish-blog/${id}`);
+        setLoading(true);
+        setError(null);
 
-        if (!res.ok) throw new Error("Blog not found");
+        const res = await fetch(`http://localhost:4000/single-blog-data/${id}`);
+
+        if (!res.ok) {
+          throw new Error(
+            `Failed to fetch blog: ${res.status} ${res.statusText}`
+          );
+        }
 
         const data = await res.json();
-        setArticle(data);
+
+        // Transform API data to match component expectations
+        const transformedData = {
+          ...data,
+          // Use the first image from images array as main image, or placeholder
+          image:
+            data.images && data.images.length > 0
+              ? data.images[0]
+              : "https://via.placeholder.com/800x400?text=No+Image",
+          // Format the createdAt date
+          date: data.createdAt ? formatDate(data.createdAt) : "Unknown date",
+          // Ensure author has a default value
+          author: data.author || "Anonymous",
+          // Ensure category has a default value
+          category: data.category || "Uncategorized",
+          // Ensure excerpt exists
+          excerpt: data.excerpt || data.content?.substring(0, 150) + "...",
+        };
+
+        setArticle(transformedData);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching blog:", error);
+        setError(error.message);
         setArticle(null);
       } finally {
         setLoading(false);
       }
     };
-    console.log([article]);
 
     fetchBlog();
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-32">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading blog post...</p>
+        </div>
+      </div>
+    );
   }
 
-  if (!article) {
+  if (error || !article) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-32 text-center">
         <h2 className="text-3xl font-bold mb-4">Article Not Found</h2>
-        <Link to="/blogs" className="underline">
-          Return to blogs
+        <p className="text-gray-600 mb-6">
+          {error || "The requested blog post could not be found."}
+        </p>
+        <Link
+          to="/blogs"
+          className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-all"
+        >
+          <FaArrowLeft /> Return to blogs
         </Link>
       </div>
     );
@@ -245,72 +100,114 @@ const BlogDetails = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* 1. Article Header (Hero Style) */}
-      <header className="bg-gray-50 py-16 md:py-24 border-b border-gray-100">
-        <div className="section-container max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-block bg-white border border-gray-200 rounded-full px-4 py-1 mb-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
-              {article.category || "BTF News"}
-            </span>
+      <div>
+        {article.title && (
+          <div>
+            <p className="text-lg text-gray-700 italic">{article.title}</p>
           </div>
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-6 leading-tight">
-            {article.title}
-          </h1>
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-500 font-medium">
-            <span className="flex items-center gap-2">
-              <FaUser className="text-gray-400" /> {article.author}
-            </span>
-            <span className="flex items-center gap-2">
-              <FaCalendarAlt className="text-gray-400" /> {article.date}
-            </span>
-          </div>
-        </div>
-      </header>
-
+        )}
+      </div>
       {/* 2. Main Content Layout */}
+
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* --- LEFT COLUMN: Article Content (8 cols) --- */}
           <main className="lg:col-span-8">
             {/* Featured Image */}
-            <div className="rounded-2xl overflow-hidden shadow-sm mb-10 aspect-video">
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            {article.image && (
+              <div className="rounded-2xl overflow-hidden shadow-sm mb-10">
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-auto object-cover"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/800x400?text=Image+Not+Found";
+                  }}
+                />
+              </div>
+            )}
 
-            {/* Content Body (Prose for HTML styling) */}
-            <article className="prose prose-lg prose-gray max-w-none prose-headings:font-display prose-headings:font-bold prose-a:text-blue-600 hover:prose-a:text-blue-800 text-justify">
-              {/* If your data has HTML content, render it safely here */}
-              {/* <div dangerouslySetInnerHTML={{ __html: article.content }} /> */}
+            {/* Excerpt */}
+            {article.excerpt && (
+              <div className="mb-8 p-6 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                <p className="text-lg text-gray-700 italic">
+                  {article.excerpt}
+                </p>
+              </div>
+            )}
 
-              {/* Fallback for plain text data structure */}
-              <p className="lead text-xl text-gray-600 mb-8">
-                {article.excerpt}
-              </p>
-              <div className="whitespace-pre-line">{article.content}</div>
+            {/* Content Body - Render HTML content safely */}
+            <article
+              className="prose prose-lg prose-gray max-w-none 
+                            prose-headings:font-display prose-headings:font-bold 
+                            prose-a:text-blue-600 hover:prose-a:text-blue-800 
+                            prose-img:rounded-lg prose-img:shadow-md
+                            prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50
+                            prose-blockquote:py-2 prose-blockquote:px-4"
+            >
+              {/* Render HTML content if it exists */}
+              {article.content &&
+              typeof article.content === "string" &&
+              article.content.includes("<") ? (
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+              ) : (
+                /* Fallback for plain text */
+                <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+                  {article.content}
+                </div>
+              )}
             </article>
+
+            {/* Additional Images Gallery */}
+            {article.images && article.images.length > 1 && (
+              <div className="mt-12 pt-10 border-t border-gray-200">
+                <h3 className="text-xl font-bold mb-6">More Images</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {article.images.slice(1).map((img, index) => (
+                    <div
+                      key={index}
+                      className="rounded-lg overflow-hidden shadow-sm"
+                    >
+                      <img
+                        src={img}
+                        alt={`${article.title} - Image ${index + 2}`}
+                        className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src =
+                            "https://via.placeholder.com/300x200?text=Image";
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Post Footer / Navigation */}
             <div className="mt-12 pt-8 border-t border-gray-200">
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <Link
-                  to="/news"
+                  to="/blogs"
                   className="flex items-center gap-3 text-gray-500 hover:text-black transition-colors group"
                 >
-                  <span className="p-3 rounded-full bg-gray-50 group-hover:bg-gray-100">
+                  <span className="p-3 rounded-full bg-gray-50 group-hover:bg-gray-100 transition-colors">
                     <FaArrowLeft />
                   </span>
                   <div>
                     <span className="block text-xs uppercase tracking-wider text-gray-400">
-                      Previous
+                      Back to
                     </span>
-                    <span className="font-bold text-sm">Back to News</span>
+                    <span className="font-bold text-sm">All Blogs</span>
                   </div>
                 </Link>
-                {/* Logic for Next Post could go here */}
+
+                {/* Share buttons can be added here */}
+                <div className="flex gap-3">
+                  <button className="text-gray-500 hover:text-blue-600 transition-colors">
+                    Share
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -319,11 +216,70 @@ const BlogDetails = () => {
           </main>
 
           {/* --- RIGHT COLUMN: Sidebar (4 cols) --- */}
-          <div className="lg:col-span-4 pl-0 lg:pl-8">
-            {/* <div className="sticky top-24">
-              <Sidebar />
-            </div> */}
-          </div>
+          <aside className="lg:col-span-4 lg:pl-8">
+            {/* Author Bio Card */}
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-8">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  <FaUser className="text-blue-600 text-xl" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">{article.author}</h3>
+                  <p className="text-sm text-gray-500">Author</p>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                {article.author === "Anonymous"
+                  ? "This post was written by an anonymous contributor."
+                  : `Writer and contributor at Black Tulip Funerals.`}
+              </p>
+            </div>
+
+            {/* Blog Stats */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
+              <h3 className="font-bold text-lg mb-4">Post Details</h3>
+              <ul className="space-y-3">
+                <li className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-600">Category</span>
+                  <span className="font-medium">{article.category}</span>
+                </li>
+                <li className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-600">Published</span>
+                  <span className="font-medium">{article.date}</span>
+                </li>
+                <li className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-600">Images</span>
+                  <span className="font-medium">
+                    {article.images?.length || 0}
+                  </span>
+                </li>
+                <li className="flex justify-between py-2">
+                  <span className="text-gray-600">Word Count</span>
+                  <span className="font-medium">
+                    {article.content ? article.content.split(" ").length : 0}
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Search Widget */}
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <h3 className="font-bold text-lg mb-4">Search Blogs</h3>
+              <form className="relative">
+                <input
+                  type="text"
+                  placeholder="Search articles..."
+                  className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
+                >
+                  <FaSearch />
+                </button>
+              </form>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

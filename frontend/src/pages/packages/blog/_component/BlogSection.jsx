@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
-import { LogoPdf } from "../../../../images";
-import PopupEnquirey from "../../_components/PopupEnquirey";
 import { useNavigate } from "react-router-dom";
 
 const BlogSection = () => {
-  const [activePopup, setActivePopup] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [blogData, setBlogData] = useState([]);
@@ -27,14 +24,6 @@ const BlogSection = () => {
 
     getBlogs();
   }, []);
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
-
-  const closePopup = () => {
-    setActivePopup(null);
-  };
-  console.log({ blogData });
 
   return (
     <section className="bg-white py-16 md:py-24">
@@ -52,7 +41,7 @@ const BlogSection = () => {
           </div>
 
           <button
-            onClick={() => openPopup("createblog")}
+            onClick={() => navigate("/create-new-blog")}
             className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
           >
             New blog
@@ -121,17 +110,6 @@ const BlogSection = () => {
           </>
         )}
       </div>
-
-      <PopupEnquirey
-        isOpen={activePopup === "createblog"}
-        onClose={() => {
-          closePopup();
-        }}
-        mode="createblog"
-        title="Create Post"
-        mainTitle="Create New Blog Post"
-        description="Write and publish your new article"
-      />
     </section>
   );
 };

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
-import LogOut from "../../../pages/packages/_components/LogOut";
 import { useUser } from "../../hooks/useUser";
 import logo from "./btf-logo.png";
 const Header = () => {
