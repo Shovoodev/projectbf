@@ -46,6 +46,7 @@ import StaticInvoicePDF from "./pages/packages/_components/InvoicePdf";
 import InvoicePage from "./pages/pay/InvoicePage";
 import BlogPage from "./pages/packages/blog/BlogPage";
 import BlogDetails from "./pages/packages/blog/_component/BlogDetails";
+import CreateBlog from "./pages/packages/blog/_component/CreateBlog";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -184,6 +185,11 @@ export const routes = createBrowserRouter([
       {
         path: "/blogs",
         element: <BlogPage />,
+        isPrivate: false,
+      },
+      {
+        path: "/create-new-blog",
+        element: <CreateBlog />,
         isPrivate: false,
       },
       {

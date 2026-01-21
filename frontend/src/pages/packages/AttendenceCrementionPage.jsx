@@ -397,7 +397,6 @@ const AttendenceCrementionPage = () => {
   } = useServiceApi();
 
   // Static Options State
-  const [hearse, setHearse] = useState("No Hearse - Coffin in place");
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
   const navigate = useNavigate();
@@ -575,16 +574,7 @@ const AttendenceCrementionPage = () => {
           {/* Right: Options (Static) */}
           <Card title="Options">
             <div className="flex flex-col gap-4">
-              <RowSelect
-                label="Hearse"
-                value={hearse}
-                onChange={(e) => setHearse(e.target.value)}
-                options={[
-                  "No Hearse - Coffin in place",
-                  "Standard Hearse",
-                  "Premium Hearse",
-                ]}
-              />
+              
               <RowSelect
                 label="Bottled Water 600ml"
                 value={water}
