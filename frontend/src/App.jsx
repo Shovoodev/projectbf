@@ -1,9 +1,11 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import Header from "./components/layouts/Header/Header";
-import Footer from "./components/layouts/Footer/Footer";
 import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useUserFront } from "./utility/use-userFront";
 
+import Footer from "./components/layouts/Footer/Footer";
+import Header from "./components/layouts/Header/Header";
+import Intro_video from "./pages/Intro_video";
+const isVideo = true;
 function App() {
   const { user } = useUserFront();
   const navigate = useNavigate();
@@ -26,14 +28,24 @@ function App() {
     }
   }, [user, pathname, navigate]);
 
+  const location = useLocation();
+
+  const isHomeRoute = location.pathname === "/";
   return (
     <section>
-      <Header />
+      {isHomeRoute ? (
+        <Intro_video />
+      ) : (
+        <>
+          <Header />
 
-      <main className="mx-auto">
-        <Outlet />
-      </main>
-      <Footer />
+          <main className="mx-auto">
+            <Outlet />
+          </main>
+
+          <Footer />
+        </>
+      )}
     </section>
   );
 }

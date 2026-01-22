@@ -46,6 +46,7 @@ import AgreementFormPage from "./pages/packages/Agreement";
 
 import Packages from "./pages/Packages";
 
+import Intro_video from "./pages/Intro_video";
 import InvoicePDF from "./pages/Invoicepdf";
 import Registration from "./pages/Registration";
 
@@ -56,13 +57,17 @@ export const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
+        path: "/home",
         element: <Home />,
         isPrivate: false,
       },
       {
         path: "/team",
         element: <Team />,
+      },
+      {
+        path: "/video",
+        element: <Intro_video />,
       },
       {
         path: "/invoicepdf",

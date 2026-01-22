@@ -165,7 +165,7 @@ const Header = () => {
           }`}
         >
           <div className="p-6">
-            <Link to="/" className="block text-lg font-bold mb-6">
+            <Link to="/home" className="block text-lg font-bold mb-6">
               Home
             </Link>
 
