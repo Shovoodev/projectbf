@@ -96,6 +96,9 @@ const PrePay = () => {
   const [images, setImages] = useState(displayImage);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [zoom, setZoom] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const { user } = useUserFront();
   // const handleImageChange = () => {
   //   setImages(displayImage);
@@ -185,7 +188,25 @@ const PrePay = () => {
 
   useEffect(() => {
     setZoom(1); // Reset zoom when image changes
+    setDragOffset({ x: 0, y: 0 }); // Reset drag offset when image changes
   }, [currentIndex]);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setDragOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
   useEffect(() => {
     document.body.style.overflow = formActive ? "hidden" : "auto";
 
@@ -213,7 +234,8 @@ const PrePay = () => {
 
   return (
     <div className="relative font-roboto">
-      <div className="fixed right-6 top-10 z-[1100]">
+      {/* Desktop View - Fixed Box */}
+      <div className="hidden md:block fixed right-6 top-10 z-[1100]">
         <div className="bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[#2c5aa0]/30 w-full max-w-[400px] min-h-[200px] flex items-center p-[35px] text-center">
           <div className="w-full flex-1">
             {/* Dynamic Header */}
@@ -245,35 +267,103 @@ const PrePay = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile View - Bottom Button */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1100] p-4 bg-white border-t border-[#2c5aa0]/20">
+        <button
+          onClick={handleToggleForm}
+          className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
+        >
+          {buttonStatus
+            ? "Continue to Application Form"
+            : "Move back to Documentation"}
+        </button>
+      </div>
       <div className="  bg-white bg-center blur-2xl " />
       {/* <Main /> */}
       <div className="" />
       {/* 🔹 Flowing Images */}
       {buttonStatus && (
-        <div
-          className="flex items-center justify-center gap-10 py-3 cursor-zoom-in"
-          onWheel={handleWheel}
-          onDoubleClick={() => setZoom(1)}
-          style={{ transform: `scale(${zoom})` }}
-        >
-          <button
-            onClick={prevImage}
-            className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+        <>
+          {/* Desktop View - Buttons on sides */}
+          <div
+            className="hidden md:flex items-center justify-center gap-10 py-3"
+            onWheel={handleWheel}
+            style={{
+              transform: `scale(${zoom}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+            }}
           >
-            <FaChevronLeft size={24} />
-          </button>
-          <img
-            src={images[currentIndex]}
-            alt="Gallery item"
-            className="max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl"
-          />
-          <button
-            onClick={nextImage}
-            className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+            <button
+              onClick={prevImage}
+              className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+            >
+              <FaChevronLeft size={24} />
+            </button>
+            <img
+              src={images[currentIndex]}
+              alt="Gallery item"
+              className={`max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl ${
+                isDragging ? "cursor-grabbing" : "cursor-grab"
+              }`}
+              draggable="false"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onDoubleClick={() => {
+                setZoom(1);
+                setDragOffset({ x: 0, y: 0 });
+              }}
+            />
+            <button
+              onClick={nextImage}
+              className="bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+            >
+              <FaChevronRight size={24} />
+            </button>
+          </div>
+
+          {/* Mobile View - Buttons below */}
+          <div
+            className="md:hidden flex flex-col items-center justify-center py-3"
+            onWheel={handleWheel}
+            style={{
+              transform: `scale(${zoom}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+            }}
           >
-            <FaChevronRight size={24} />
-          </button>
-        </div>
+            <img
+              src={images[currentIndex]}
+              alt="Gallery item"
+              className={`max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl ${
+                isDragging ? "cursor-grabbing" : "cursor-grab"
+              }`}
+              draggable="false"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onDoubleClick={() => {
+                setZoom(1);
+                setDragOffset({ x: 0, y: 0 });
+              }}
+            />
+            {/* Navigation Buttons Below Image */}
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={prevImage}
+                className="bg-[#2c5aa0] text-white p-2 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+              >
+                <FaChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextImage}
+                className="bg-[#2c5aa0] text-white p-2 rounded-full shadow-lg hover:bg-[#1e3a5f] transition-colors"
+              >
+                <FaChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </>
       )}
       <div
         id="CompleteForm"
