@@ -16,6 +16,7 @@
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.6.0",
     "@tailwindcss/vite": "^4.0.17",
+    "@tiptap/core": "^3.16.0",
     "@tiptap/extension-image": "^3.16.0",
     "@tiptap/extension-link": "^3.16.0",
     "@tiptap/extension-text-align": "^3.16.0",

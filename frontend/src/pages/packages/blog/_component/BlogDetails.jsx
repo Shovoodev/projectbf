@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaArrowLeft, FaCalendarAlt, FaSearch, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 
 const CommentSection = () => {
@@ -52,7 +52,7 @@ const BlogDetails = () => {
 
         if (!res.ok) {
           throw new Error(
-            `Failed to fetch blog: ${res.status} ${res.statusText}`
+            `Failed to fetch blog: ${res.status} ${res.statusText}`,
           );
         }
 
@@ -125,17 +125,19 @@ const BlogDetails = () => {
         <div>
           {article.title && (
             <div>
-              <p className="text-lg text-gray-700 italic">{article.title}</p>
+              <h1 className="text-4xl font-bold text-black text-body">
+                {article.title}
+              </h1>
             </div>
           )}
           {/* Blog Stats */}
           <div className="bg-white  border-gray-200 rounded-xl mb-8">
             <ul className="space-y-3 flex">
               <li className="flex justify-between py-2 border-gray-100">
-                <span className="font-medium">By {article.author} /</span>
+                <span className="font-bold">By {article.author} /</span>
               </li>
               <li className="flex justify-between py-2  border-gray-100">
-                <span className="font-medium">{article.date}</span>
+                <span className="font-bold">{article.date}</span>
               </li>
             </ul>
           </div>
@@ -161,9 +163,7 @@ const BlogDetails = () => {
             {/* Excerpt */}
             {article.excerpt && (
               <div className="mb-8 p-6">
-                <p className="text-lg text-gray-700 italic">
-                  {article.excerpt}
-                </p>
+                <p className="text-lg text-gray-700 ">{article.excerpt}</p>
               </div>
             )}
 
