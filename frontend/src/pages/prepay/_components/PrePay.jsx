@@ -57,6 +57,7 @@ import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
 import * as htmlToImage from "html-to-image";
 import { useRef } from "react";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const images = [
   cover,
@@ -95,7 +96,7 @@ const PrePay = () => {
   // const [images, setImages] = useState([]);
   const { user } = useUserFront();
   const slipRefs = useRef([]);
-
+  const { submitInvestment } = usePrePayServiceApi();
   // const handleImageChange = () => {
   //   setImages(displayImage);
   // };
@@ -108,6 +109,7 @@ const PrePay = () => {
   const sendPdfByEmail = async () => {
     try {
       setIsGeneratingPdf(true);
+      await submitInvestment();
       setLoadingText("Rendering application pages…");
 
       // 1️⃣ Convert slips to images
@@ -115,7 +117,7 @@ const PrePay = () => {
 
       for (let i = 0; i < slipRefs.current.length; i++) {
         setLoadingText(
-          `Processing page ${i + 1} of ${slipRefs.current.length}…`,
+          `Processing page ${i + 1} of ${slipRefs.current.length}…`
         );
 
         const node = slipRefs.current[i];

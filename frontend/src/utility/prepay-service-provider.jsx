@@ -118,13 +118,8 @@ export const PrePayServiceProvider = ({ children }) => {
   });
 
   const [contributionamount, setContributionamount] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState([
-    "direct_debit",
-    "oheque",
-    "EFT",
-    "BPAY",
-  ]);
-  const [aspFrequency, setAspFrequency] = useState(0);
+  const paymentMethod = ["direct_debit", "cheque", "EFT", "BPAY"];
+  const [aspFrequency, setAspFrequency] = useState(false);
 
   const sigCanvasRef = useRef(null);
   const [signature, setSignature] = useState("");
@@ -144,19 +139,15 @@ export const PrePayServiceProvider = ({ children }) => {
     if (sigCanvasRef.current) sigCanvasRef.current.clearCanvas();
   };
 
-  const handleChange = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
-      investors,
-      directDebitForm,
-      contributionamount,
-    };
-    console.log("hello");
-    fetch("", {
-      method: "POST",
-      headers: "application/json",
-      body: payload,
-    });
+    try {
+      await submitInvestment();
+      alert("Investment saved successfully");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   const updateDeptRequest = (path, value) => {
@@ -198,6 +189,33 @@ export const PrePayServiceProvider = ({ children }) => {
       return updated;
     });
   };
+  const submitInvestment = async () => {
+    const payload = {
+      investors,
+      directDebitForm,
+      deptRequest,
+      contributionAmount: contributionamount,
+      aspFrequency,
+      paymentMethod,
+    };
+
+    const res = await fetch("http://localhost:4000/save-investment-prepay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Submission failed");
+    }
+
+    return data;
+  };
 
   const updateInvestor = (investorKey, path, value) => {
     setInvestors((prev) => {
@@ -222,19 +240,14 @@ export const PrePayServiceProvider = ({ children }) => {
     () => ({
       investors,
       updateInvestor,
-      setInvestors,
-      handleChange,
+      submitInvestment,
+      handleSubmit,
       contributionamount,
       setContributionamount,
       paymentMethod,
-      setPaymentMethod,
       aspFrequency,
-      setAspFrequency,
       directDebitForm,
-      setDirectDebitForm,
       deptRequest,
-      updateDirectDebitForm,
-      updateDeptRequest,
       sigCanvasRef,
       saveSignature,
       clearSignature,
@@ -242,19 +255,11 @@ export const PrePayServiceProvider = ({ children }) => {
     }),
     [
       investors,
-      deptRequest,
       contributionamount,
-      setContributionamount,
       paymentMethod,
-      setPaymentMethod,
       aspFrequency,
-      setAspFrequency,
       directDebitForm,
-      setDirectDebitForm,
-      handleChange,
-      sigCanvasRef,
-      saveSignature,
-      clearSignature,
+      deptRequest,
       signature,
     ]
   );
