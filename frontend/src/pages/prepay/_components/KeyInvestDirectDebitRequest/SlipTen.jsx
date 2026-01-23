@@ -38,9 +38,7 @@ const SlipTen = () => {
 
   return (
     <div className="form-container-base">
-  
-
-      <section className="p-4 md:p-10">
+      <section className="md:p-10">
         <header className="mb-10">
           <h1 className="text-4xl font-bold text-[rgb(49,41,166)] leading-none mb-2">
             KeyInvest Direct

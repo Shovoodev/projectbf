@@ -17,7 +17,7 @@ const SlipThirtyNine = () => {
 
   return (
     <div className="form-container-base">
-      <div className="p-4 md:p-10">
+      <div className=" md:p-10">
         {/* Main Header */}
         <div className="mb-8">
           <h2 className="pdf-h2">

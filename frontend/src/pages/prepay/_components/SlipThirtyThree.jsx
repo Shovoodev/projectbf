@@ -12,7 +12,7 @@ const SlipThirtyThree = () => {
         </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={handleChange}>
+      <form className="space-y-6" onSubmit={handleChange}>
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-full">
@@ -218,7 +218,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["mailstreetName"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"
@@ -282,7 +282,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeTelephone"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"
@@ -308,7 +308,7 @@ const SlipThirtyThree = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeAddress"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="pdf-input"

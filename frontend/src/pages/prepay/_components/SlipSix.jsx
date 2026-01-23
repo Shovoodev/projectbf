@@ -54,7 +54,7 @@ const SlipSix = () => {
         </div>
       </div> */}
 
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form className="md:p-10" onSubmit={(e) => e.preventDefault()}>
         <h1 className="pdf-h2 text-3xl mb-6">5. Application</h1>
 
         <div className="pdf-info-box mb-8 bg-blue-50/50 border-blue-900">

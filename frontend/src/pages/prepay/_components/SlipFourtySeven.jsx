@@ -44,7 +44,7 @@ const SlipFourtySeven = () => {
   const currentDate = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 font-sans">
+    <div className="md:p-8 font-sans">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Section Header */}

@@ -28,8 +28,8 @@ const SlipFourtyFive = () => {
   const [isSecondInvestor, setIsSecondInvestor] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 font-sans">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50  md:p-8 font-sans">
+      <div className="mx-auto">
         <div>
           <h3 className="text-lg font-bold">ADVISER ONLY</h3>
         </div>

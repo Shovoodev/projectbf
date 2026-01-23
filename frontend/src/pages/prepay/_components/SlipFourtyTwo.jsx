@@ -3,8 +3,8 @@ import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 const SlipFourtyTwo = () => {
   const { updateDeptRequest } = usePrePayServiceApi();
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+    <div className="form-container-base bg-gray-50 p-4 md:p-8 font-sans">
+      <div className="mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
         {/* Header */}
         <div className="mb-8 border-b pb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">

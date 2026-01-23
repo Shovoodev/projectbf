@@ -16,7 +16,7 @@ const SlipFortySix = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 p-4 md:p-8 font-sans">
-      <div className="max-w-4xl mx-auto">
+      <div className="mx-auto">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Header */}
           <div className="px-2 py-3 text-white">

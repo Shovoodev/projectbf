@@ -1,7 +1,4 @@
-
-import { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
+// import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
 
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
@@ -22,9 +19,8 @@ const SlipThirtyFive = () => {
 
   return (
     <>
-      <SlipThreeHeader />
+      {/* <SlipThreeHeader /> */}
       <div className="form-container-base">
-
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>
         </div>
@@ -43,7 +39,7 @@ const SlipThirtyFive = () => {
             </div>
 
             {/* Table with Horizontal Scroll Wrapper */}
-            <div className="pdf-table-wrapper border border-gray-100 rounded-lg">
+            {/* <div className="pdf-table-wrapper border border-gray-100 rounded-lg">
               <table className="pdf-table">
                 <thead className="pdf-table-thead">
                   <tr>
@@ -99,7 +95,7 @@ const SlipThirtyFive = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div> */}
 
             {/* Footnote Responsiveness */}
             <p className="pdf-footnote text-blue-800 font-bold mt-6 text-[10px] md:text-xs">

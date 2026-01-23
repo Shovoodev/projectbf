@@ -269,7 +269,46 @@ const PrePay = () => {
       </div>
 
       {/* Mobile View - Bottom Button */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1100] p-4 bg-white border-t border-[#2c5aa0]/20">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1100] p-1 bg-white border-t border-[#2c5aa0]/20">
+        {/* Actions Section - Mobile with Icon Buttons */}
+        {!buttonStatus && (
+          <div className="sm:hidden flex flex-row justify-between items-center gap-2 border-t border-gray-100 px-4 py-4   bg-white">
+            {/* Previous Arrow Button - Mobile */}
+            {step > 0 ? (
+              <button
+                type="button"
+                onClick={() => setStep(step - 1)}
+                className="bg-[#2c5aa0] text-white p-3 rounded-lg shadow-lg hover:bg-[#1e3a5f] transition-colors"
+              >
+                <FaChevronLeft size={18} />
+              </button>
+            ) : (
+              <div className="w-12" /> /* Placeholder to keep layout consistent */
+            )}
+
+            {/* Submit Button - Mobile (center) */}
+            {step === slips.length - 1 && (
+              <button
+                type="button"
+                onClick={sendPdfByEmail}
+                className="btn-primary-pdf flex-1 !bg-amber-500 hover:!bg-amber-600 border-none shadow-lg text-sm py-2"
+              >
+                Submit
+              </button>
+            )}
+
+            {/* Next Arrow Button - Mobile */}
+            {step < slips.length - 1 && (
+              <button
+                type="button"
+                onClick={() => setStep(step + 1)}
+                className="bg-[#3129a6] text-white p-3 rounded-lg shadow-lg hover:bg-[#2420a0] transition-colors"
+              >
+                <FaChevronRight size={18} />
+              </button>
+            )}
+          </div>
+        )}
         <button
           onClick={handleToggleForm}
           className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
@@ -279,6 +318,7 @@ const PrePay = () => {
             : "Move back to Documentation"}
         </button>
       </div>
+
       <div className="  bg-white bg-center blur-2xl " />
       {/* <Main /> */}
       <div className="" />
@@ -377,14 +417,15 @@ const PrePay = () => {
   `}
       >
         <div
-          className="max-w-[800px] max-h-[850px]   mx-auto font-roboto
-                overflow-y-scroll px-6 py-10 space-y-3
-                bg-white rounded-none md:rounded-2xl shadow-2xl "
+          className="flex flex-col max-w-[800px] max-h-[600px] md:max-h-[850px] mx-auto font-roboto
+                bg-white rounded-none md:rounded-2xl shadow-2xl pb-32 md:pb-0"
         >
-          {slips[step]}
+          <div className="overflow-y-scroll flex-1 px-1 md:px-6 py-1 md:py-10 space-y-3">
+            {slips[step]}
+          </div>
 
-          {/* Actions Section */}
-          <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-4 mt-6 border-t border-gray-100">
+          {/* Actions Section - Fixed at bottom - Desktop */}
+          <div className="hidden sm:flex flex-row justify-between items-center pt-8 gap-4 mt-6 border-t border-gray-100 px-1 md:px-6 py-4 bg-white">
             {/* Previous Section Button: Only shows if not on the first step */}
             {step > 0 ? (
               <button

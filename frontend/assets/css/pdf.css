@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 @import "tailwindcss";
@@ -19,7 +18,7 @@
   }
 
   .form-header-area {
-    @apply p-6 border-b border-gray-200;
+    @apply p-2 border-b border-gray-200;
   }
 
   /* Typography */
@@ -196,7 +195,7 @@
   /* Another for Slip Three */
 
   .form-container-base {
-    @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-roboto shadow-xl;
+    @apply w-full bg-white border border-gray-200 rounded-lg pt-16 font-roboto shadow-xl;
     /* Reduce padding on mobile */
     @apply p-4 md:p-8;
   }

@@ -3,7 +3,7 @@ import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 const SlipFourtyOne = () => {
   const { directDebitForm, updateDirectDebitForm } = usePrePayServiceApi();
   return (
-    <div className="w-full  bg-white text-[#2b2e83] px-10 py-12">
+    <div className="w-full  bg-white text-[#2b2e83]  py-12">
       {/* Header */}
       <h1 className="text-4xl font-bold leading-tight">
         KeyInvest Direct
@@ -44,7 +44,7 @@ const SlipFourtyOne = () => {
                 onChange={() =>
                   updateDirectDebitForm(
                     ["accountHolders", "holderOne", "title"],
-                    t
+                    t,
                   )
                 }
               />
@@ -64,7 +64,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "holderOne", "surnameOrEntityName"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -77,7 +77,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "holderOne", "givenNames"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -101,7 +101,7 @@ const SlipFourtyOne = () => {
                 onChange={() =>
                   updateDirectDebitForm(
                     ["accountHolders", "holderOne", "title"],
-                    t
+                    t,
                   )
                 }
               />
@@ -121,7 +121,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "holderTwo", "surnameOrEntityName"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -134,7 +134,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "holderTwo", "givenNames"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -154,7 +154,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "addressabn"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -167,7 +167,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "suburbabn"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -180,7 +180,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "stateabn"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -193,7 +193,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "postcodeabn"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -223,7 +223,7 @@ const SlipFourtyOne = () => {
             onChange={(e) =>
               updateDirectDebitForm(
                 ["accountHolders", "institutionName"],
-                e.target.value
+                e.target.value,
               )
             }
           />
@@ -236,7 +236,7 @@ const SlipFourtyOne = () => {
             onChange={(e) =>
               updateDirectDebitForm(
                 ["accountHolders", "branch"],
-                e.target.value
+                e.target.value,
               )
             }
           />
@@ -249,7 +249,7 @@ const SlipFourtyOne = () => {
             onChange={(e) =>
               updateDirectDebitForm(
                 ["accountHolders", "accountName"],
-                e.target.value
+                e.target.value,
               )
             }
           />
@@ -263,7 +263,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "bsbNumber"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />
@@ -276,7 +276,7 @@ const SlipFourtyOne = () => {
               onChange={(e) =>
                 updateDirectDebitForm(
                   ["accountHolders", "accountNumber"],
-                  e.target.value
+                  e.target.value,
                 )
               }
             />

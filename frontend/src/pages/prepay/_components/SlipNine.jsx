@@ -15,7 +15,7 @@ const SlipNine = () => {
 
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form className="md:p-10" onSubmit={(e) => e.preventDefault()}>
         {/* Main Header */}
         <div className="mb-8">
           <h2 className="pdf-h2">

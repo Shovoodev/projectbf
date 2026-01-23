@@ -3,18 +3,18 @@ const SlipThirtyTwo = () => {
     <div className="form-container-base ">
       {/* Decorative Brand Top Border */}
 
-      <section className="p-10">
+      <section className="">
         {/* Main Header */}
-        <header className="mb-2">
-          <h1 className="text-5xl font-black text-blue-900 leading-tight">
+        <div className="mb-2">
+          <h1 className="text-xl md:text-5xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />
-            <span className="text-5xl font-black text-blue-900 leading-tight">
+            <span className="text-xl md:text-5xl font-black text-blue-900 leading-tight">
               application form
             </span>
           </h1>
           <hr className="pdf-hr" />
-        </header>
+        </div>
 
         {/* Introduction Text */}
         <div className="space-y-4">

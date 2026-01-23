@@ -22,7 +22,7 @@ const SlipThirtySeven = () => {
   ];
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form className="md:p-10" onSubmit={(e) => e.preventDefault()}>
         <h1 className="pdf-h2 text-3xl mb-6">5. Application</h1>
 
         {/* Info */}
