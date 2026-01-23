@@ -1,4 +1,4 @@
-// import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
+import SlipThreeHeader from "./SlipThreeHeader";
 
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
 
@@ -19,7 +19,7 @@ const SlipThirtyFive = () => {
 
   return (
     <>
-      {/* <SlipThreeHeader /> */}
+      <SlipThreeHeader />
       <div className="form-container-base">
         <div className="form-header-area">
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>
