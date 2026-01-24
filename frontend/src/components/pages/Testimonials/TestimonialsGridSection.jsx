@@ -57,8 +57,8 @@ const TestimonialsGridSection = () => {
       text: "We are writing this review to give others in the most sensitive time in their life ,some peace of mind... Scott at Afterlife went above & beyond to help us and cater to our specific requests... Thankyou Scott & your Special team who cared for our mum so kindly & professionally.",
     },
     {
-      name: "Bigfoot Online",
-      text: "Great company to deal with. Very efficient and professional.",
+      name: "Butsaraphon phiromnak",
+      text: "I would like to thank Scott and his staff for assisting in my Aunt’s funeral. The dedication to assisting from the first phone call, through to the personalized photo coffin wrap was exceptional... I hope not to see you again soon, but we will surely recommend your services.",
     },
     {
       name: "Jagged Playz",

@@ -4,6 +4,7 @@ import Musicians from "../components/pages/Home/Musicians";
 import Packages from "../components/pages/Home/Packages";
 import ServiceArea from "../components/pages/Home/ServiceArea";
 import Stationery from "../components/pages/Home/Stationery";
+import TestimonialsCarousel from "../components/pages/Home/Testimonials";
 
 function Home() {
   return (
@@ -14,6 +15,7 @@ function Home() {
       <Musicians />
       <Facilities />
       <ServiceArea />
+      <TestimonialsCarousel />
     </section>
   );
 }
