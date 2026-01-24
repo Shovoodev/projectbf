@@ -1,6 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
-import { FaPhoneVolume } from "react-icons/fa6";
+import { FaPhone, FaPhoneVolume } from "react-icons/fa6";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -93,7 +93,7 @@ const Contact = () => {
     // mark all fields touched so errors show if present
     const allTouched = Object.keys(formData).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
-      {}
+      {},
     );
     setTouched(allTouched);
 
@@ -167,7 +167,7 @@ const Contact = () => {
             </h2>
             {/* Using italic font-display to mimic the script look, 
                 or you can import a script font like 'Great Vibes' */}
-            <h1 className="text-4xl md:text-5xl font-display italic font-bold text-gray-900 mb-8">
+            <h1 className="text-4xl md:text-5xl font-display  font-bold text-gray-900 mb-8">
               Black Tulip Funerals
             </h1>
 
@@ -425,12 +425,11 @@ const Contact = () => {
                 The Black Tulip Funeral's team are available 24/7
               </p>
               <div className="flex items-center gap-3 mt-1">
-                <FaPhoneVolume className="text-pink-600 text-2xl md:text-3xl rotate-[-10deg]" />
                 <a
                   href="tel:1300110031"
-                  className="text-3xl md:text-4xl font-bold text-gray-900 hover:text-gray-700 transition-colors font-display"
+                  className=" sm:inline-flex items-center px-4 py-2 border border-gray-300 rounded-full text-sm font-bold text-gray-900 hover:bg-gray-50"
                 >
-                  1300 11 0031
+                  <FaPhone className="mr-2 text-primary" /> 1300 11 0031
                 </a>
               </div>
             </div>
