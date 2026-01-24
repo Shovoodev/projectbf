@@ -112,7 +112,7 @@ Text: Montserrat (Normal) */
 
   /* Typography for Team Page */
   .heading-hero {
-    @apply text-6xl md:text-6xl font-display font-bold text-gray-800 mb-2;
+    @apply text-4xl md:text-6xl font-display font-bold text-gray-800 mb-2;
   }
 
   .heading-section {
