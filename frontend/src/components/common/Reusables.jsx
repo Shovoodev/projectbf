@@ -2,7 +2,7 @@ export function List({ items }) {
   return (
     <ul className="space-y-2 text-lg text-gray-700">
       {items?.map((item, i) => (
-        <li key={i}>• {item}</li>
+        <li key={i} className="whitespace-nowrap">• {item}</li>
       ))}
     </ul>
   );

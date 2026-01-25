@@ -3,7 +3,7 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourtyOne = () => {
   const { directDebitForm, updateDirectDebitForm } = usePrePayServiceApi();
   return (
-    <div className="w-full  bg-white text-[#2b2e83] px-10 py-12">
+    <div className="w-full  bg-white text-[#2b2e83] px-5 py-6">
       {/* Header */}
       <h1 className="text-4xl font-bold leading-tight">
         KeyInvest Direct
@@ -29,7 +29,7 @@ const SlipFourtyOne = () => {
       </h2>
 
       {/* Account Holder 1 */}
-      <section className="mt-6 space-y-4">
+      <section className="mt-3 space-y-1">
         <h3 className="font-semibold">Account Holder 1</h3>
 
         {/* Title */}
@@ -54,7 +54,7 @@ const SlipFourtyOne = () => {
         </div>
 
         {/* Name Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="block text-sm mb-1">
               Surname/Company/Trust Name:
@@ -86,7 +86,7 @@ const SlipFourtyOne = () => {
       </section>
 
       {/* Account Holder 2 */}
-      <section className="mt-10 space-y-4">
+      <section className="mt-5 space-y-1">
         <h3 className="font-semibold">Account Holder 2</h3>
 
         {/* Title */}
@@ -111,7 +111,7 @@ const SlipFourtyOne = () => {
         </div>
 
         {/* Name Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="block text-sm mb-1">
               Surname/Company/Trust Name:
@@ -146,7 +146,7 @@ const SlipFourtyOne = () => {
       <section className="mt-10 space-y-4">
         <p className="text-sm font-semibold">If company ABN or Trust</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="block text-sm mb-1">Address:</label>
             <input
@@ -213,7 +213,7 @@ const SlipFourtyOne = () => {
         2. Nominated financial institution account
       </h2>
 
-      <section className="mt-6 space-y-6">
+      <section >
         <div>
           <label className="block text-sm mb-1">
             Name of financial institution:
@@ -255,7 +255,7 @@ const SlipFourtyOne = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="block text-sm mb-1">BSB Number:</label>
             <input

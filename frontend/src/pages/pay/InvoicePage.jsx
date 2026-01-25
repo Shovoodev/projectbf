@@ -127,7 +127,7 @@ const InvoicePage = () => {
                     Invoice Details
                   </h3>
                   <div className="bg-gray-50 rounded-xl p-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div className="space-y-4">
                         {/* Map _id to Invoice ID */}
                         <div className="flex items-center justify-between">

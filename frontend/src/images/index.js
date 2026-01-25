@@ -49,6 +49,7 @@ import fortySeven from "./funeral/47.jpg";
 import Sign from "./funeral/ScottHarrisSign.png"
 import LogoPdf from "./invoicepdf/BTF.png"
 import btficon from "./invoicepdf/btficon.png"
+import invoice from "./invoicepdf/invoice.jpg"
 
 export {
     cover, one, two, three, four, five, six, seven, eight, nine, ten,
@@ -58,5 +59,5 @@ export {
     twentyNine, thirty, thirtyOne, thirtyTwo, thirtyThree, thirtyFour,
     thirtyFive, thirtySix, thirtySeven, thirtyEight, thirtyNine,
     forty, fortyOne, fortyTwo, fortyThree, fortyFour, fortyFive,
-    fortySix, fortySeven ,Sign ,LogoPdf ,btficon
+    fortySix, fortySeven ,Sign ,LogoPdf ,btficon,invoice
 };

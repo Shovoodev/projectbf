@@ -28,7 +28,7 @@ const SlipFourtyFive = () => {
   const [isSecondInvestor, setIsSecondInvestor] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans">
       <div className="max-w-5xl mx-auto">
         <div>
           <h3 className="text-lg font-bold">ADVISER ONLY</h3>
@@ -36,7 +36,7 @@ const SlipFourtyFive = () => {
 
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Header */}
-          <div className=" px-6 py-8 text-white">
+          <div className=" px-2 py-3 text-white">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-4xl font-semibold text-blue-300">
@@ -49,8 +49,8 @@ const SlipFourtyFive = () => {
           </div>
 
           {/* Instructions Section */}
-          <div className="p-6 md:p-8">
-            <div className="mb-3">
+          <div className="p-2 md:p-3">
+            <div >
               <div className=" rounded-lg p-5 mb-6">
                 <h4 className="font-bold  mb-2">Instructions:</h4>
                 <p className="text-gray-700 leading-relaxed">
@@ -78,13 +78,14 @@ const SlipFourtyFive = () => {
             </div>
 
             {/* Section 1: Investor Details */}
-            <div className="mb-12">
-              <h3 className="text-2xl font-bold text-gray-800 mb-8 pb-3 border-b border-gray-300">
+            <div 
+            >
+              <h3 className="text-2xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-300">
                 1. Investor details
               </h3>
 
               {/* Investor 1 */}
-              <div className="mb-10">
+              <div className="mb-5">
                 <div className="flex items-center mb-6">
                   <div className="w-8 h-8 flex items-center justify-center mr-3">
                     1
@@ -94,8 +95,8 @@ const SlipFourtyFive = () => {
                   </h4>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Full Name *
@@ -124,7 +125,7 @@ const SlipFourtyFive = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
                       Address
                     </label>
                     <input
@@ -135,16 +136,16 @@ const SlipFourtyFive = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
                         Company ABN (if available)
                       </label>
                       <input
                         type="text"
                         value={formData.investor1.companyABN}
                         placeholder="XX XXX XXX XXX"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        className="w-full px-1 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       />
                     </div>
 
@@ -165,7 +166,7 @@ const SlipFourtyFive = () => {
               </div>
 
               {/* Investor 2 Toggle */}
-              <div className="mb-8">
+              <div className="mb-2">
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center">
                     <input
@@ -190,7 +191,7 @@ const SlipFourtyFive = () => {
 
               {/* Investor 2 (Conditional) */}
               {isSecondInvestor && (
-                <div className="mt-8 p-6 border-2 border-blue-100 rounded-xl bg-blue-50">
+                <div className="mt-2 p-2 border-2 border-blue-100 rounded-xl bg-blue-50">
                   <div className="flex items-center mb-6">
                     <div className="flex items-center justify-center font-bold mr-3">
                       2
@@ -200,8 +201,8 @@ const SlipFourtyFive = () => {
                     </h4>
                   </div>
 
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Full Name *
@@ -216,7 +217,7 @@ const SlipFourtyFive = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 ">
                           Email Address *
                         </label>
                         <input
@@ -230,7 +231,7 @@ const SlipFourtyFive = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 ">
                         Address
                       </label>
                       <input
@@ -241,7 +242,7 @@ const SlipFourtyFive = () => {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Company ABN (if available)
@@ -263,7 +264,7 @@ const SlipFourtyFive = () => {
                           value={formData.investor2.postcode}
                           placeholder="XXXX"
                           maxLength={4}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                          className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         />
                       </div>
                     </div>
@@ -281,7 +282,7 @@ const SlipFourtyFive = () => {
                 2. Financial adviser details
               </h3>
 
-              <div className="space-y-8">
+              <div className="space-y-2">
                 {/* First Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
@@ -312,7 +313,7 @@ const SlipFourtyFive = () => {
                 </div>
 
                 {/* Second Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Licensee Dealer Group AFSL No.
@@ -321,7 +322,7 @@ const SlipFourtyFive = () => {
                       type="text"
                       value={formData.adviser.licenseeAFSLNo}
                       placeholder="AFSL number"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
                   </div>
 
@@ -333,7 +334,7 @@ const SlipFourtyFive = () => {
                       type="text"
                       value={formData.adviser.keyinvestAdviserCode}
                       placeholder="Adviser code"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
                   </div>
                 </div>

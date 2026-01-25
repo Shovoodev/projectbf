@@ -43,7 +43,7 @@ const SlipTwo = () => {
 
       <form className="p-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="col-span-full">
             <label className="pdf-label mb-3">Title:</label>
             <div className="pdf-radio-group">
@@ -121,7 +121,7 @@ const SlipTwo = () => {
           </span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -190,7 +190,7 @@ const SlipTwo = () => {
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -256,7 +256,7 @@ const SlipTwo = () => {
 
         {/* Contact Details */}
         <h3 className="pdf-section-title">Contact Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input

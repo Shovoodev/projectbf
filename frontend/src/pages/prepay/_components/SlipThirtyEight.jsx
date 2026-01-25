@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import {  useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
@@ -17,7 +17,7 @@ const SlipThirtyEight = () => {
 
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()}>
         {/* Main Header */}
         <div className="mb-8">
           <h2 className="pdf-h2">
@@ -26,7 +26,7 @@ const SlipThirtyEight = () => {
         </div>
 
         {/* Instructions */}
-        <div className="pdf-info-box mb-8 border-blue-900 bg-blue-50/50">
+        <div className="pdf-info-box border-blue-900 bg-blue-50/50">
           <p className="pdf-instruction-bold">
             This section should only be completed and signed if the Funeral Bond
             is being 'NOMINATED' and by the Investor(s) only.
@@ -39,12 +39,12 @@ const SlipThirtyEight = () => {
         </div>
 
         {/* Director Details */}
-        <div className="space-y-6 mb-10">
+        <div>
           <h3 className="pdf-section-title border-none mb-0 text-[#00A99D]">
             Nominated to:
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="col-span-full">
               <label className="pdf-label">Name of Funeral Director:</label>
               <input
@@ -81,7 +81,7 @@ const SlipThirtyEight = () => {
             </p>
           </div>
 
-          <div className="p-6 border border-gray-200 rounded-lg bg-slate-50/30">
+          <div className=" border border-gray-200 rounded-lg bg-slate-50/30">
             <div className=" grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="flex flex-col  gap-6 mt-4 items-stretch">
                 {/* Signature Upload Area */}

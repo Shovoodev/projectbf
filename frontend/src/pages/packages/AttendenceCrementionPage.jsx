@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { List, Select } from "../../components/common/Reusables";
-import { useServiceApi } from "../../utility/SelectedServiceProvider";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
+import RowSelect from "./_components/RowSelect";
+const CORE = import.meta.env.VITE_API_URL;
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -20,6 +21,28 @@ export function Card({ title, children, className = "" }) {
 const attendenceData = [
   {
     id: 1,
+    question: "Transfers from Place of Passing",
+    type: "select",
+    options: [
+      {
+        label: "Sydney Metro",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Zone 2 (+ $220)",
+        value: "Zone 2 (+ $220)",
+        priceAdjustment: 220,
+      },
+      {
+        label: "Zone 3 (+ $385)",
+        value: "Zone 3 (+ $385",
+        priceAdjustment: 385,
+      },
+    ],
+  },
+  {
+    id: 2,
     question: "Stationery",
     type: "select",
     options: [
@@ -86,7 +109,7 @@ const attendenceData = [
     ],
   },
   {
-    id: 2,
+    id: 3,
     question: "Body Preparation",
     type: "select",
     options: [
@@ -104,7 +127,7 @@ const attendenceData = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     question: "Coffin",
     type: "select",
     options: [
@@ -298,7 +321,7 @@ const attendenceData = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     question: "Flowers:",
     type: "select",
     options: [
@@ -320,7 +343,7 @@ const attendenceData = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     question: "Urn",
     type: "select",
     options: [
@@ -337,7 +360,7 @@ const attendenceData = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     question: "Collection of Urn",
     type: "select",
     options: [
@@ -353,56 +376,50 @@ const attendenceData = [
       },
     ],
   },
+
 ];
 
 // --- Reusable Row Select Component ---
-const RowSelect = ({ label, value, onChange, options, placeholder }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center border-b border-gray-200/60 last:border-0 pb-4 last:pb-0">
-    <label className="font-body font-medium text-gray-700 text-sm">
-      {label}:
-    </label>
-    <select
-      value={value}
-      onChange={onChange}
-      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5"
-    >
-      {placeholder && (
-        <option value="" disabled>
-          {placeholder}
-        </option>
-      )}
-      {options.map((opt, idx) => (
-        <option key={idx} value={opt.value || opt}>
-          {opt.label || opt}
-        </option>
-      ))}
-    </select>
-  </div>
-);
+
+
 
 const AttendenceCrementionPage = () => {
-  const {
-    selections,
-    loading,
-    error,
-    openPopup,
-    activePopup,
-    closePopup,
-    setAmount,
-    message,
-    setTotalPrice,
-    totalPrice,
-    BASE_PRICE,
-    setSelections,
-    handleTransferChange,
-  } = useServiceApi();
+
+  const BASE_PRICE = 4490;
+  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
+  const [selections, setSelections] = useState({
+    transformOption: { value: "", price: 0 },
+    stationery: { value: "", price: 0 },
+    bodyPreparation: { value: "", price: 0 },
+    coffin: { value: "", price: 0 },
+    flowers: { value: "", price: 0 },
+    urn: { value: "", price: 0 },
+    collectionOfUrn: { value: "", price: 0 },
+  });
+  const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
+  const [error, setError] = useState(null);
+  const [amount, setAmount] = useState(0);
+  //   const { user } = useUserFront();
+  const [message, setMessage] = useState("");
+  //popup
+
 
   // Static Options State
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
+
+  const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
+  const openPopup = (popupType) => {
+    setActivePopup(popupType);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
+      "Transfers from Place of Passing": "transferOption",
       Stationery: "stationery",
       "Body Preparation": "bodyPreparation",
       Coffin: "coffin",
@@ -412,22 +429,26 @@ const AttendenceCrementionPage = () => {
     };
 
     const key = categoryKeyMap[category];
+    if (!key) return;
 
-    setSelections((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
-
-      // Calculate total price impact
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0
-      );
-
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-      setAmount(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
+    setSelections((prev) => ({
+      ...prev,
+      [key]: { value, price: Number(priceAdjustment) || 0 },
+    }));
   };
+
+  useEffect(() => {
+    const extras = Object.values(selections || {}).reduce(
+      (sum, opt) => sum + Number(opt?.price || 0),
+      0
+    );
+
+    const finalPrice = BASE_PRICE + extras;
+
+    setTotalPrice(finalPrice);
+    setAmount(finalPrice);
+  }, [selections]);
+
 
   const handleSelectChange = (itemId, selectedValue) => {
     const item = attendenceData.find((data) => data.id === itemId);
@@ -443,29 +464,81 @@ const AttendenceCrementionPage = () => {
 
     handleOptionChange(item.question, selectedValue, price);
   };
-  // Recalculate price when selections change
-  useEffect(() => {
-    const totalPriceImpact = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0
-    );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
 
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
 
-  const handlePress = () => {
+  const handlePrepaySubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      navigate(`/prepay`);
-    } catch (error) {
-      console.log(error);
+
+      // Register
+      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
+      }
+
+      // Save selections
+      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selections }),
+        credentials: "include",
+      });
+      setTimeout(() => {
+        navigate(`/prepay`);
+      }, 1500);
+    } catch (err) {
+      showMessage(err.message, "error");
+    } finally {
+      setLoading(false);
     }
   };
+
+
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
     return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+
+
+  const handleRegistrationSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+
+      // Register
+      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
+      }
+
+      // Save selections
+      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selections }),
+        credentials: "include",
+      });
+      setTimeout(() => {
+        navigate(`/fill-agreement-form`);
+      }, 1500);
+    } catch (err) {
+      setMessage(err.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -508,24 +581,7 @@ const AttendenceCrementionPage = () => {
                 "Cremation Fee",
               ]}
             />
-            {/* Transfers Dropdown (Styled to match list) */}
-            <button
-              onChange={handleTransferChange}
-              className=" flex flex-row items-center justify-between gap-4"
-            >
-              <span className="flex items-center gap-3 text-gray-700 text-lg">
-                • Transfers from Place of Passing
-              </span>
 
-              <select
-                // onChange={handleTransferChange}
-                className="p-2  rounded bg-gray-100 text-left w-2/3"
-              >
-                <option value="0">Sydney Metro</option>
-                <option value="220">Zone 2 (+ $220)</option>
-                <option value="385">Zone 3 (+ $385)</option>
-              </select>
-            </button>
           </Card>
 
           {/* 2. Disbursements */}
@@ -554,58 +610,63 @@ const AttendenceCrementionPage = () => {
         </div>
 
         {/* --- BOTTOM ROW: 2 COLUMNS --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Left: Included Variables (Dynamic) */}
-          <Card title="Included Variables">
-            <div className="flex flex-col gap-4">
-              {attendenceData.map((item) => {
-                // Determine current value based on your mapping logic
-                const categoryKeyMap = {
-                  "Funeral Stationery": "stationery", // Fixed typo in key map if needed
-                  Stationery: "stationery",
-                  "Body Preparation": "bodyPreparation",
-                  Coffin: "coffin",
-                  Flowers: "flowers", // Removed colon for safer matching
-                  "Flowers:": "flowers",
-                  Urn: "urn",
-                  "Collection of Urn": "collectionOfUrn",
-                };
-                const key = categoryKeyMap[item.question] || item.question; // Fallback
-                const currentValue = selections[key]?.value || "";
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+          {/* Left: Included Variables (Dynamic) - 70% */}
+          <div className="lg:col-span-8"> {/* 8/12 = 66.67% ≈ 70% */}
+            <Card title="Included Variables">
+              <div className="flex flex-col gap-2">
+                {attendenceData.map((item) => {
+                  // Determine current value based on your mapping logic
+                  const categoryKeyMap = {
+                    "Transfers from Place of Passing": "transferOption",
+                    "Funeral Stationery": "stationery", // Fixed typo in key map if needed
+                    Stationery: "stationery",
+                    "Body Preparation": "bodyPreparation",
+                    Coffin: "coffin",
+                    Flowers: "flowers", // Removed colon for safer matching
+                    "Flowers:": "flowers",
+                    Urn: "urn",
+                    "Collection of Urn": "collectionOfUrn",
+                  };
+                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+                  const currentValue = selections[key]?.value || "";
 
-                return (
-                  <RowSelect
-                    key={item.id}
-                    label={item.question}
-                    value={currentValue}
-                    onChange={(e) =>
-                      handleSelectChange(item.id, e.target.value)
-                    }
-                    options={item.options}
-                    placeholder="Select an option"
-                  />
-                );
-              })}
-            </div>
-          </Card>
+                  return (
+                    <RowSelect
+                      key={item.id}
+                      label={item.question}
+                      value={currentValue}
+                      onChange={(e) =>
+                        handleSelectChange(item.id, e.target.value)
+                      }
+                      options={item.options}
+                      placeholder="Select an option"
+                    />
+                  );
+                })}
+              </div>
+            </Card>
+          </div>
 
-          {/* Right: Options (Static) */}
-          <Card title="Options">
-            <div className="flex flex-col gap-4">
-              <RowSelect
-                label="Bottled Water 600ml"
-                value={water}
-                onChange={(e) => setWater(e.target.value)}
-                options={["Not Required", "10 Bottles", "20 Bottles"]}
-              />
-              <RowSelect
-                label="Personalised Tissue Packs"
-                value={tissues}
-                onChange={(e) => setTissues(e.target.value)}
-                options={["Not Required", "50 Packs", "100 Packs"]}
-              />
-            </div>
-          </Card>
+          {/* Right: Options (Static) - 30% */}
+          <div className="lg:col-span-4"> {/* 4/12 = 33.33% ≈ 30% */}
+            <Card title="Options">
+              <div className="flex flex-col gap-4">
+                <RowSelect
+                  label="Bottled Water 600ml"
+                  value={water}
+                  onChange={(e) => setWater(e.target.value)}
+                  options={["Not Required", "10 Bottles", "20 Bottles"]}
+                />
+                <RowSelect
+                  label="Personalised Tissue Packs"
+                  value={tissues}
+                  onChange={(e) => setTissues(e.target.value)}
+                  options={["Not Required", "50 Packs", "100 Packs"]}
+                />
+              </div>
+            </Card>
+          </div>
         </div>
 
         {/* --- ACTIONS --- */}
@@ -614,7 +675,7 @@ const AttendenceCrementionPage = () => {
           <div>
             <button
               className="btn-primary normal"
-              onClick={() => openPopup("agreement")}
+              onClick={handleRegistrationSubmit}
             >
               Make Agreement Now
             </button>
@@ -624,41 +685,39 @@ const AttendenceCrementionPage = () => {
           <div>
             <button
               className="btn-primary normal"
-              onClick={() => navigate("/contact")}
+              onClick={() => openPopup("enquirey")}
             >
               Enquire Now
             </button>
+            <PopupEnquirey
+              isOpen={activePopup === "enquirey"}
+              onClose={closePopup}
+              mode="enquirey"
+              mainTitle="Please tell us what you whant to know about us"
+              description="We'll get back to you shortly"
+              title="Make an Enquiry"
+              subtitle="We'll get back to you shortly"
+              onSuccess={(userData) => {
+                console.log("Enquiry submitted:", userData);
+                closePopup();
+                // Handle enquiry submission
+              }}
+            />
           </div>
 
           {/* PrePay button */}
-          <button className="btn-primary normal" onClick={handlePress}>
+          <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
-          {/* Agreement Popup */}
-          <PopupEnquirey
-            isOpen={activePopup === "agreement"}
-            onClose={closePopup}
-            // mode={() => (activePopup ? "registartion" : "login")}
-            mode="registration"
-            path="newattendingservicecremationanswers"
-            title="Register to complete your aggrement"
-            subtitle="Register to save your selections and complete the process"
-            onSuccess={(userData) => {
-              console.log("User registered:", userData);
-              closePopup();
-              navigate("/fill-agreement-form");
-            }}
-          />
         </div>
 
         {/* Message Display */}
         {message && (
           <div
-            className={`mt-6 p-4 rounded text-center font-medium ${
-              message.includes("Error")
-                ? "bg-red-50 text-red-600 border border-red-100"
-                : "bg-green-50 text-green-600 border border-green-100"
-            }`}
+            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
+              ? "bg-red-50 text-red-600 border border-red-100"
+              : "bg-green-50 text-green-600 border border-green-100"
+              }`}
           >
             {message}
           </div>

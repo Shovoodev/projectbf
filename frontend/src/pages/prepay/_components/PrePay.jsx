@@ -39,7 +39,6 @@ import {
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
 const CORE = import.meta.env.VITE_API_URL;
-// import SlipFour from "./SlipFour";
 // import all the slips in order
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
@@ -106,14 +105,19 @@ const PrePay = () => {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const [loadingText, setLoadingText] = useState("Preparing your documents…");
+  useEffect(() => {
+    document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
+  }, [isGeneratingPdf]);
+
+
   const sendPdfByEmail = async () => {
     try {
       setIsGeneratingPdf(true);
-      await submitInvestment();
+      // await submitInvestment(),
       setLoadingText("Rendering application pages…");
 
-      // 1️⃣ Convert slips to images
       const slipImages = [];
+
 
       for (let i = 0; i < slipRefs.current.length; i++) {
         setLoadingText(
@@ -123,17 +127,30 @@ const PrePay = () => {
         const node = slipRefs.current[i];
         if (!node) continue;
 
+        const originalOverflow = node.style.overflow;
+        node.style.overflow = 'visible';
+
         const img = await htmlToImage.toPng(node, {
           pixelRatio: 1,
           quality: 0.5,
+          backgroundColor: '#ffffff',
+          height: node.scrollHeight, // Capture full height
+          width: node.scrollWidth, // Capture full width
+          style: {
+            transform: 'none', // Prevent scaling issues
+            overflow: 'visible'
+          }
         });
+
+        // Restore original overflow
+        node.style.overflow = originalOverflow;
 
         slipImages.push(img);
       }
 
       setLoadingText("Generating PDF document…");
 
-      // 2️⃣ Merge images
+      // 2️⃣ Merge images with dynamic height calculation
       const allImagesForPdf = [...slipImages];
 
       // 3️⃣ Generate PDF
@@ -174,8 +191,8 @@ const PrePay = () => {
     <SlipThirtySeven />,
     <SlipThirtyEight />,
     <SlipThirtyNine />,
-    <SlipFourty />,
-    <SlipFourtyOne />,
+    <SlipFourty />, //hide
+    <SlipFourtyOne />, //hide
     <SlipFourtyTwo />,
     <img src={fortyTwo} />,
     <img src={fortyThree} />,
@@ -205,7 +222,6 @@ const PrePay = () => {
         behavior: "smooth",
       });
     } else {
-      // 🔒 Disable scroll, go to form
       setFormActive(true);
       setButtonStatus(false);
     }
@@ -272,21 +288,24 @@ const PrePay = () => {
         className={`fixed inset-0 z-40 flex items-center justify-center
   bg-black/50 backdrop-blur-sm
   transition-all duration-300
-  ${
-    formActive
-      ? "opacity-100 pointer-events-auto"
-      : "opacity-0 pointer-events-none"
-  }`}
+  ${formActive
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+          }`}
       >
         <div
           className="max-w-[800px] max-h-[850px] mx-auto font-roboto
-  overflow-y-scroll px-6 py-10 space-y-3
-  bg-white rounded-none md:rounded-2xl shadow-2xl"
+  bg-white rounded-none md:rounded-2xl shadow-2xl
+  flex flex-col"
         >
-          <div className="flex-1 overflow-hidden px-6 py-6">{slips[step]}</div>
+          {/* SCROLLABLE CONTENT */}
+          <div className="flex-1 overflow-y-scroll ">
+            {slips[step]}
+          </div>
 
-          <div className="border-t border-gray-200 px-6 py-4 bg-white sticky bottom-0">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {/* STICKY BUTTON BAR */}
+          <div className="sticky bottom-0  bg-transparent border-t shadow-md p-4">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
               {step > 0 ? (
                 <button
                   type="button"
@@ -315,21 +334,19 @@ const PrePay = () => {
                   onClick={sendPdfByEmail}
                   disabled={isGeneratingPdf}
                   className={`btn-primary-pdf w-full sm:w-auto border-none shadow-lg
-          ${
-            isGeneratingPdf
-              ? "bg-gray-400 cursor-not-allowed"
-              : "!bg-amber-500 hover:!bg-amber-600"
-          }`}
+            ${isGeneratingPdf
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "!bg-amber-500 hover:!bg-amber-600"
+                    }`}
                 >
-                  {isGeneratingPdf
-                    ? "Generating PDF…"
-                    : "Finish your submission"}
+                  {isGeneratingPdf ? "Generating PDF…" : "Finish your submission"}
                   {!isGeneratingPdf && <FaChevronRight className="ml-2" />}
                 </button>
               )}
             </div>
           </div>
         </div>
+
       </div>
       <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
         {slips.map((SlipComponent, index) => (
@@ -360,3 +377,5 @@ const PrePay = () => {
 };
 
 export default PrePay;
+
+

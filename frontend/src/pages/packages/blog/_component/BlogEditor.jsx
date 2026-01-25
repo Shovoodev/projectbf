@@ -32,27 +32,27 @@ const FontSize = Extension.create({
     return {
       setFontSize:
         (fontSize) =>
-        ({ chain }) =>
-          chain().setMark("textStyle", { fontSize }).run(),
+          ({ chain }) =>
+            chain().setMark("textStyle", { fontSize }).run(),
 
       unsetFontSize:
         () =>
-        ({ chain }) =>
-          chain()
-            .setMark("textStyle", { fontSize: null })
-            .removeEmptyTextStyle()
-            .run(),
+          ({ chain }) =>
+            chain()
+              .setMark("textStyle", { fontSize: null })
+              .removeEmptyTextStyle()
+              .run(),
     };
   },
 });
 
 const fontSizeOptions = [
-  { label: "Small", value: "12px" },
-  { label: "Normal", value: "16px" },
-  { label: "Medium", value: "18px" },
-  { label: "Large", value: "24px" },
-  { label: "XL", value: "32px" },
-  { label: "XXL", value: "48px" },
+  { label: "12px", value: "12px" },
+  { label: "16px", value: "16px" },
+  { label: "18px", value: "18px" },
+  { label: "24px", value: "24px" },
+  { label: "32px", value: "32px" },
+  { label: "48px", value: "48px" },
 ];
 
 const ToolbarButton = ({
@@ -100,6 +100,8 @@ const ToolbarSelect = ({
 );
 
 const BlogEditor = ({ value, onChange }) => {
+  const imageInputRef = useRef(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -113,7 +115,7 @@ const BlogEditor = ({ value, onChange }) => {
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-blue-600 underline hover:text-blue-800",
+          class: "text-blue-600 font-samibold hover:text-blue-800",
         },
       }),
       TextAlign.configure({
@@ -138,8 +140,6 @@ const BlogEditor = ({ value, onChange }) => {
       </div>
     );
   }
-
-  const imageInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
