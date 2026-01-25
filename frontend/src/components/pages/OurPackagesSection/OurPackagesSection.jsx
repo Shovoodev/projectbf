@@ -87,25 +87,25 @@ const OurPackagesSection = () => {
       description:
         "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process. We handle your loved one’s remains with the utmost respect and dignity, offering a simplified farewell that honours your wishes.",
       image: img1,
-      link: "https://blacktulipfunerals.com.au/no-service-cremation/",
+      link: "/packages/no-service-cremention/",
       isTopRated: true,
     },
     {
       title: "Private Viewing & Cremation",
-      price: "$3599",
+      price: "$3399",
       description:
         "The Black Tulip Private Viewing & Cremation Package provides families with a dignified, compassionate, and cost-effective option during a difficult time. This package allows for a respectful farewell in a private setting that brings comfort to family and friends. Maximum 30 Guests.",
       image: img2,
-      link: "https://blacktulipfunerals.com.au/viewing-cremation/",
+      link: "/packages/viewing-and-cremention/",
       isPopular: false,
     },
     {
       title: "Attending Service & Cremation",
-      price: "$4899",
+      price: "$4499",
       description:
         "A lavish, all‑inclusive cremation package in our exclusive 288‑seat auditorium chapel. Includes quality coffin, flowers, celebrant, audio‑visual tribute, livestream, printed stationery, all cremation costs, death certificate and preparation of your loved one. Every detail is handled for a truly memorable farewell.",
       image: img3,
-      link: "https://blacktulipfunerals.com.au/attending-service-cremation/",
+      link: "/packages/attending-service-cremation/",
       isPopular: true,
     },
   ];
