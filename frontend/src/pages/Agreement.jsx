@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
+import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import SignatureCanvas from "react-signature-canvas";
+
 import Hero from "../components/common/Hero";
+import { DeceasedDetails } from "./AgreementComponent/DeceasedDetails";
+import NextOfKinDetails from "./AgreementComponent/NextOfKinDetails";
+import Paragraph from "./AgreementComponent/Paragraph";
+import { SignatureDetails } from "./AgreementComponent/SignatureDetails";
 
 /* ================= Reusable Components ================= */
 
@@ -61,12 +64,15 @@ const AgreementForm = () => {
   //
   const [DeaceasedImages, setDeaceasedImages] = useState([]);
   const sigPadRef = useRef(null);
+  const [isEnglish, setIsEnglish] = useState(true); // English default
 
-  const nameLabel = firstName ? firstName : "the deceased";
-  const kinNameValue = kinFirstName ? kinFirstName : "Next of kin";
+  const Deceased = isEnglish ? "the deceased" : "去世";
+
+  const nameLabel = firstName ? firstName : Deceased;
+  const NextOfKin = isEnglish ? "the next of kin" : "近亲";
+  const kinNameValue = kinFirstName ? kinFirstName : NextOfKin;
   // for mobile camera feature
-  const [isMobile, setIsMobile] = useState(false);
-  const [showPicker, setShowPicker] = useState(false);
+
   //  for  Deaceased images
   const handleDeaceasedIdUpload = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -127,12 +133,6 @@ const AgreementForm = () => {
     setUploadError(""); // Clear error on success
   };
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia("(pointer: coarse)").matches);
-    };
-    checkMobile();
-  }, []);
   // for signature
   const signatureHandler = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -163,6 +163,7 @@ const AgreementForm = () => {
     setUploadError(""); // Clear error on success
   };
 
+  // function for remove image
   const removeImage = (index, type) => {
     if (type === "deceased") {
       setDeaceasedImages(DeaceasedImages.filter((_, i) => i !== index));
@@ -181,472 +182,70 @@ const AgreementForm = () => {
         title={"BTF 's Consent and Agreement Form"}
         subtitle={"Agreement"}
       />
-
-      <section className="py-8 w-full md:max-w-5xl mx-auto px-6">
-        <div className="rounded-xl p-8">
-          {/* Content */}
-          <div className="w-full space-y-4 text-black text-center  font-medium  font-body leading-relaxed ">
-            <p className="text-lg text-black ">
-              I authorise{" "}
-              <strong className="text-gray-900">BLACK TULIP FUNERALS</strong> to
-              conduct the given funeral. I understand that I have been given a
-              general quote on the entire service and note that there might be
-              variations given the condition of the deceased once transferred
-              into our care.
-            </p>
-
-            <p className="text-lg text-black ">
-              All data that I provide in the “Firehawk Link” will be entered
-              correctly and is true to the best of my knowledge. I will check
-              all fields upon completion and note that I will be liable for any
-              costs that incur if an error is presented and/or needs amendment.
-            </p>
-
-            <p className="text-lg text-black ">
-              I consent to the transfer of the deceased by{" "}
-              <strong className="text-gray-900">BLACK TULIP FUNERALS</strong> or
-              their nominated transfer companies.
-            </p>
-
-            <p className="text-lg text-black ">
-              I consent for the services to proceed without any delays and note
-              that if I choose to delay the service, cost variations may occur.
-            </p>
-          </div>
-        </div>
-      </section>
+      <Paragraph />
       <section className="py-8 md:py-16  bg-gray-50">
         <div className="max-w-4xl mx-auto  md:px-6">
           <div className="bg-white p-8 md:p-12 rounded-2xl shadow border border-gray-300 ">
+            <div className="mb-8">
+              <FormLabel required>Select Your Preferred Language</FormLabel>
+              <select
+                value={isEnglish ? "english" : "chinese"}
+                onChange={(e) => setIsEnglish(e.target.value === "english")}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+              >
+                <option value="english">English</option>
+                <option value="chinese">Chinese</option>
+              </select>
+            </div>
+
             <form className="space-y-12">
               {/* ================= DECEASED DETAILS ================= */}
-
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  Deceased Persons Details
-                </h3>
-
-                {/* Explicit mobile-first grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <FormLabel required>Salutation</FormLabel>
-                    <SelectField options={salutations} required />
-                  </div>
-
-                  <div>
-                    <FormLabel required>First given name</FormLabel>
-                    <InputField
-                      required
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel>Other given name(s)</FormLabel>
-                    <InputField />
-                  </div>
-
-                  <div>
-                    <FormLabel required>Surname / Family Name</FormLabel>
-                    <InputField required />
-                  </div>
-
-                  <div>
-                    <FormLabel required>Date of Birth</FormLabel>
-                    <DatePicker
-                      selected={dob}
-                      onChange={setDob}
-                      dateFormat="dd/MM/yyyy"
-                      placeholderText="dd/mm/yyyy"
-                      className="w-full p-3 border rounded-md"
-                      required
-                    />
-                  </div>
-
-                  {/* Checkbox row FIXED */}
-                  <div className="flex items-center w-full md:col-span-2">
-                    <input
-                      type="checkbox"
-                      checked={notPassed}
-                      onChange={(e) => setNotPassed(e.target.checked)}
-                      className="w-5 h-5 mr-2"
-                    />
-                    <span className="font-medium">
-                      Person Has Not Passed Away
-                    </span>
-                  </div>
-
-                  {!notPassed && (
-                    <div>
-                      <FormLabel required>Date of Death</FormLabel>
-                      <DatePicker
-                        selected={dod}
-                        onChange={setDod}
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="dd/mm/yyyy"
-                        className="w-full p-3 border rounded-md"
-                        required
-                      />
-                    </div>
-                  )}
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Last registered address of {nameLabel}
-                    </FormLabel>
-                    <InputField
-                      required
-                      placeholder="This is the address they have resided at for the last 3 months."
-                    />
-                  </div>
-
-                  {!notPassed && (
-                    <div className="md:col-span-2">
-                      <FormLabel required>
-                        Where did {nameLabel} pass away?
-                      </FormLabel>
-                      <InputField required />
-                    </div>
-                  )}
-
-                  {!notPassed && (
-                    <div className="md:col-span-2">
-                      <FormLabel required>Where is {nameLabel} now?</FormLabel>
-                      <InputField placeholder="Eg: Home / Hospital" required />
-                    </div>
-                  )}
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Does {nameLabel} have any battery powered devices?
-                    </FormLabel>
-                    <InputField
-                      required
-                      placeholder="This includes all forms of pacemakers and defibrillators"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Who is the {nameLabel}’s regular doctor (GP) & surgery
-                      address
-                    </FormLabel>
-                    <InputField
-                      required
-                      placeholder="Eg: Dr Adam Brown, Strathfield"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Upload photo identification for {nameLabel}
-                    </FormLabel>
-
-                    {/* Upload Box */}
-                    <div
-                      onClick={() => {
-                        if (isMobile) {
-                          setShowPicker(true);
-                        } else {
-                          document.getElementById("galleryInput").click();
-                        }
-                      }}
-                      className="flex flex-col items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1"
-                    >
-                      <div className="flex flex-col items-center justify-center text-center">
-                        <svg
-                          className="w-8 h-8 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          Drag & drop files here, or click to upload
-                        </p>
-                        <p className="text-sm text-gray-500 ">
-                          You can upload up to 2 images <br />
-                          (Only .jpg, .jpeg, .png, .heic files are allowed)
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Hidden Inputs */}
-                    {isMobile && (
-                      <input
-                        id="cameraInput"
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        multiple
-                        onChange={handleDeaceasedIdUpload}
-                        className="hidden"
-                      />
-                    )}
-
-                    <input
-                      id="galleryInput"
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleDeaceasedIdUpload}
-                      className="hidden"
-                    />
-
-                    {/* Mobile Bottom Sheet */}
-                    {isMobile && showPicker && (
-                      <div className="fixed inset-0 z-50 flex items-end bg-black/40">
-                        <div className="w-full bg-white rounded-t-xl p-4">
-                          <button
-                            onClick={() => {
-                              document.getElementById("cameraInput").click();
-                              setShowPicker(false);
-                            }}
-                            className="w-full py-3 text-lg font-semibold"
-                          >
-                            📷 Take Photo
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              document.getElementById("galleryInput").click();
-                              setShowPicker(false);
-                            }}
-                            className="w-full py-3 text-lg font-semibold"
-                          >
-                            🖼️ Upload Photo
-                          </button>
-
-                          <button
-                            onClick={() => setShowPicker(false)}
-                            className="w-full py-3 text-gray-500"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
+              <DeceasedDetails
+                salutations={salutations}
+                firstName={firstName}
+                setFirstName={setFirstName}
+                dob={dob}
+                setDob={setDob}
+                dod={dod}
+                setDod={setDod}
+                notPassed={notPassed}
+                setNotPassed={setNotPassed}
+                nameLabel={nameLabel}
+                DeaceasedImages={DeaceasedImages}
+                handleDeaceasedIdUpload={handleDeaceasedIdUpload}
+                removeImage={removeImage}
+                uploadError={uploadError}
+                isEnglish={isEnglish}
+                FormLabel={FormLabel}
+                InputField={InputField}
+                SelectField={SelectField}
+              />
               {/* ================= NEXT OF KIN ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  Next of Kin Details
-                </h3>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <FormLabel required>Salutation</FormLabel>
-                    <SelectField options={salutations} required />
-                  </div>
-
-                  <div className="">
-                    <FormLabel required>First given name</FormLabel>
-                    <InputField
-                      onChange={(e) => setKinFirstName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <FormLabel>Other given name(s)</FormLabel>
-                    <InputField />
-                  </div>
-                  <div className="">
-                    <FormLabel required>Surname / Family Name</FormLabel>
-                    <InputField required />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>Current Address</FormLabel>
-                    <InputField required />
-                  </div>
-
-                  <div>
-                    <FormLabel required>Mobile</FormLabel>
-                    <InputField type="tel" required />
-                  </div>
-
-                  <div>
-                    <FormLabel required>Email</FormLabel>
-                    <InputField type="email" required />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Your relationship to {nameLabel}
-                    </FormLabel>
-                    <InputField required />
-                  </div>
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      Upload photo identification for {kinNameValue}
-                    </FormLabel>
-
-                    <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
-                      <div className="flex flex-col items-center justify-center text-center p-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          Drag & drop files here, or click to upload
-                        </p>
-                        <p className="text-sm text-gray-500 mb-4">
-                          You can upload up to 2 images <br /> (Only .jpg,
-                          .jpeg, .png, .heic files are allowed)
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        multiple
-                        required
-                        accept="image/*"
-                        onChange={handleKinIdUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                  {uploadError && (
-                    <p className="text-red-500 mt-2 text-sm ">{uploadError}</p>
-                  )}
-                  <div className="md:col-span-2">
-                    <div className="flex flex-wrap gap-2">
-                      {kinIdImages.map((file, index) => (
-                        <div key={index} className="relative inline-block">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index + 1}`}
-                            className="w-52 object-cover border rounded"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => removeImage(index, "kin")}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <NextOfKinDetails
+                salutations={salutations}
+                setKinFirstName={setKinFirstName}
+                nameLabel={nameLabel}
+                kinNameValue={kinNameValue}
+                kinIdImages={kinIdImages}
+                handleKinIdUpload={handleKinIdUpload}
+                removeImage={removeImage}
+                uploadError={uploadError}
+                isEnglish={isEnglish}
+                FormLabel={FormLabel}
+                InputField={InputField}
+                SelectField={SelectField}
+              />
               {/* ================= SIGNATURE ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  Signature
-                </h3>
-                <div>
-                  <FormLabel required>Choose Your Signature Type</FormLabel>
-                  <select
-                    value={signatureType}
-                    onChange={(e) => setSignatureType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option value="Digital Signature">Screen Signature</option>
-                    <option value="Upload Photo">Upload Photo</option>
-                  </select>
-                </div>
-
-                {signatureType === "Upload Photo" && (
-                  <div className="mt-4">
-                    <FormLabel required>Upload Your Signature Here</FormLabel>
-                    <label className="flex flex-col items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
-                      <div className="flex flex-col items-center justify-center text-center py-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-                        <p className="font-semibold text-gray-900">
-                          Drag & drop files here, or click to upload
-                        </p>
-                        <p className="text-sm text-gray-500 mb-4">
-                          (Only .jpg, .jpeg, .png, .heic files are allowed)
-                        </p>
-                      </div>
-                      <input
-                        type="file"
-                        multiple
-                        required
-                        accept="image/*"
-                        onChange={signatureHandler}
-                        className="hidden"
-                      />
-                    </label>
-                    <div className="md:col-span-2 mt-4">
-                      <div className="flex flex-wrap gap-2">
-                        {signatureImage.map((file, index) => (
-                          <div key={index} className="relative inline-block">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
-                              className="w-52 object-cover border rounded"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeImage(index, "signature")}
-                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {signatureType === "Digital Signature" && (
-                  <div className="mt-4">
-                    <FormLabel required>Sign Your Name Here</FormLabel>
-                    <div className="border rounded-md bg-gray-50 p-2">
-                      <SignatureCanvas
-                        ref={sigPadRef}
-                        penColor="black"
-                        canvasProps={{ className: "w-full h-32" }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => sigPadRef.current.clear()}
-                        className="mt-2 text-sm text-red-500"
-                      >
-                        Clear Signature
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <SignatureDetails
+                signatureType={signatureType}
+                setSignatureType={setSignatureType}
+                signatureHandler={signatureHandler}
+                signatureImage={signatureImage}
+                removeImage={removeImage}
+                sigPadRef={sigPadRef}
+                isEnglish={isEnglish}
+                FormLabel={FormLabel}
+              />
 
               {/* ================= SUBMIT ================= */}
               <button
