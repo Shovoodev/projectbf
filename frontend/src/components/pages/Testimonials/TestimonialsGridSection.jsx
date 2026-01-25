@@ -1,4 +1,3 @@
-import React from "react";
 import { FaQuoteLeft } from "react-icons/fa6";
 
 const TestimonialCard = ({ name, text }) => (
@@ -144,6 +143,7 @@ const TestimonialsGridSection = () => {
 
   return (
     <section className="bg-surface py-16 md:py-24">
+      {/* <GoogleReviews /> */}
       <div className="section-container">
         {/* Header */}
         <div className="text-center mb-16 max-w-4xl mx-auto">
