@@ -3,8 +3,8 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourtyTwo = () => {
   const { updateDeptRequest } = usePrePayServiceApi();
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+    <div className="min-h-screen bg-gray-50 font-sans">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-2 md:p-3">
         {/* Header */}
         <div className="mb-8 border-b pb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -58,7 +58,7 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* Regular Savings Plan */}
-          <div className="mb-8">
+          <div className="mb-3">
             <div className="flex items-start mb-4">
               <div className="min-w-6 h-6 mt-0.5">
                 <input
@@ -110,7 +110,7 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* RSP End Condition */}
-          <div className="mb-4">
+          <div className="mb-2">
             <p className="text-gray-700 mb-3">
               Please end my RSP when total contributions reach $
             </p>
@@ -126,13 +126,13 @@ const SlipFourtyTwo = () => {
         </div>
 
         {/* Section 4: Declarations */}
-        <div className="mb-10">
+        <div className="mb-5">
           <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b">
             4. Declarations
           </h2>
 
           {/* Declaration Text */}
-          <div className="mb-8">
+          <div className="mb-4">
             <p className="text-gray-700 mb-4 leading-relaxed">
               I/We request and authorise KeyInvest Ltd - Identification Number
               113657 to arrange for any amount KeyInvest Ltd may debit or charge
@@ -158,13 +158,13 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* Signature Sections */}
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Account Holder 1 */}
             <div className="border-t pt-6">
               <h3 className="font-medium text-gray-800 mb-4">
                 Signature of Account Holder 1
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Signature
@@ -184,11 +184,11 @@ const SlipFourtyTwo = () => {
             </div>
 
             {/* Account Holder 2 */}
-            <div className="border-t pt-6">
+            <div className="border-t pt-3">
               <h3 className="font-medium text-gray-800 mb-4">
                 Signature of Account Holder 2
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Signature

@@ -390,14 +390,16 @@ const CreateBlog = () => {
             </div>
 
             {/* Content Editor */}
-            <div>
+            <div className="h-[400px] overflow-y-auto">
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Blog Content *
               </label>
-              <BlogEditor
-                value={blogData.content}
-                onChange={(content) => setBlogData({ ...blogData, content })}
-              />
+              <div className="">
+                <BlogEditor
+                  value={blogData.content}
+                  onChange={(content) => setBlogData({ ...blogData, content })}
+                />
+              </div>
               <p className="text-xs text-gray-500 mt-2">
                 Tip: Images added in the editor will be automatically converted
                 for permanent storage.

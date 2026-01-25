@@ -15,7 +15,7 @@ const SlipFortySix = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 font-sans">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Header */}
@@ -41,11 +41,11 @@ const SlipFortySix = () => {
                 <div className="space-y-5">
                   <div className="flex items-start">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-bold">—</span>
+                      <div className="w-6 h-6  rounded-full flex items-center justify-center">
+                        <span className=" font-bold">—</span>
                       </div>
                     </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
+                    <p className=" text-gray-700 leading-relaxed">
                       <span className="font-medium">
                         Be bound by the terms and conditions
                       </span>{" "}
@@ -55,11 +55,11 @@ const SlipFortySix = () => {
 
                   <div className="flex items-start">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-bold">—</span>
+                      <div className="w-6 h-6  rounded-full flex items-center justify-center">
+                        <span className=" font-bold">—</span>
                       </div>
                     </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
+                    <p className=" text-gray-700 leading-relaxed">
                       <span className="font-medium">
                         Only provide instructions to KeyInvest
                       </span>{" "}
@@ -69,11 +69,11 @@ const SlipFortySix = () => {
 
                   <div className="flex items-start">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-bold">—</span>
+                      <div className="w-6 h-6  rounded-full flex items-center justify-center">
+                        <span className=" font-bold">—</span>
                       </div>
                     </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
+                    <p className=" text-gray-700 leading-relaxed">
                       <span className="font-medium">
                         Inform KeyInvest immediately
                       </span>{" "}
@@ -84,11 +84,11 @@ const SlipFortySix = () => {
 
                   <div className="flex items-start">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-bold">—</span>
+                      <div className="w-6 h-6  rounded-full flex items-center justify-center">
+                        <span className=" font-bold">—</span>
                       </div>
                     </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
+                    <p className=" text-gray-700 leading-relaxed">
                       <span className="font-medium">
                         Notify KeyInvest immediately
                       </span>{" "}

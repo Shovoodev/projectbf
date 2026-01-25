@@ -7,13 +7,34 @@ const SlipThirtyFour = () => {
     <div className="form-container-base">
       <div className="form-header-area">
         <p className="pdf-subtitle">
-          Investor 2 (all correspondence will be sent to this person)
+        Investor 2 (Only complete this section if this is to be a jointly owned Policy, if being completed by a POA or if the policy is
+          for a Separate Life Insured)
         </p>
+        <div className="pdf-radio-group">
+              {["Joint application ", "Separate Life Insured", "Power of Attorney"].map((t) => (
+                <label key={t} className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name="title"
+                    value={t}
+                    onChange={(e) =>
+                      updateInvestor("investorOne", ["gender"], e.target.value)
+                    }
+                    className="pdf-radio-input"
+                  />
+                  <span className="text-gray-700 group-hover:text-blue-900">
+                    {t}
+                  </span>
+                </label>
+              ))}
+            </div>
+        <p>Before making a joint application please read page 7 of the PDS. To make 2 single applications please complete a
+        separate Application Form for each Investor.</p>
       </div>
 
       <form className="p-8 space-y-6" onSubmit={handleChange}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="col-span-full">
             <label className="pdf-label mb-3">Title:</label>
             <div className="pdf-radio-group">
@@ -101,7 +122,7 @@ const SlipThirtyFour = () => {
           </span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -186,7 +207,7 @@ const SlipThirtyFour = () => {
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -271,7 +292,7 @@ const SlipThirtyFour = () => {
 
         {/* Contact Details */}
         <h3 className="pdf-section-title">Contact Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
@@ -324,22 +345,7 @@ const SlipThirtyFour = () => {
             />
           </div>
         </div>
-        <div>
-          <p className="pdf-intro-p">
-            If the application is being completed under a Power of Attorney
-            (POA), please include the attorney’s contact details under
-          </p>
-          <h3 className="pdf-section-title">Queensland residents only</h3>
-          <p className="pdf-intro-p">
-            Queensland State legislation requires all ‘selling agents’ of
-            Funeral Bonds to provide clients with a ‘Client Care Statement. We
-            are not permitted to accept Keylnvest Funeral Bond Applications from
-            Queensland residents without receiving a completed Client Care
-            Statement. A Client Care Statement can be obtained from our website
-            or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
-            Other
-          </p>
-        </div>
+
         {/* Footer */}
         <div className="pdf-footer">
           <div>

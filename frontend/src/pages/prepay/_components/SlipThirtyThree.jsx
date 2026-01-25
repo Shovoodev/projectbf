@@ -1,20 +1,23 @@
+import { useEffect } from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyThree = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
-
+  useEffect(()=> {
+    window.scroll(0.0)
+  }, [])
   return (
     <div className="form-container-base">
-      <div className="form-header-area">
+      <div >
         <h2 className="pdf-h2">1. Investor details</h2>
         <p className="pdf-subtitle">
           Investor 1 (all correspondence will be sent to this person)
         </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={handleChange}>
+      <form  onSubmit={handleChange}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="col-span-full">
             <label className="pdf-label mb-3">Title:</label>
             <div className="pdf-radio-group">
@@ -102,7 +105,7 @@ const SlipThirtyThree = () => {
           </span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -187,7 +190,7 @@ const SlipThirtyThree = () => {
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
             <input
@@ -272,7 +275,7 @@ const SlipThirtyThree = () => {
 
         {/* Contact Details */}
         <h3 className="pdf-section-title">Contact Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
@@ -325,22 +328,12 @@ const SlipThirtyThree = () => {
             />
           </div>
         </div>
-        <div>
+       
           <p className="pdf-intro-p">
             If the application is being completed under a Power of Attorney
             (POA), please include the attorney’s contact details under
           </p>
-          <h3 className="pdf-section-title">Queensland residents only</h3>
-          <p className="pdf-intro-p">
-            Queensland State legislation requires all ‘selling agents’ of
-            Funeral Bonds to provide clients with a ‘Client Care Statement. We
-            are not permitted to accept Keylnvest Funeral Bond Applications from
-            Queensland residents without receiving a completed Client Care
-            Statement. A Client Care Statement can be obtained from our website
-            or by contacting Keylnvest. Mr Mrs Ms Miss Dr Other Female Male
-            Other
-          </p>
-        </div>
+          
         {/* Footer */}
         <div className="pdf-footer">
           <div>

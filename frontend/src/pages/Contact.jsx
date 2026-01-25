@@ -390,8 +390,8 @@ const Contact = () => {
               <p className="text-base md:text-lg font-bold text-gray-900">
                 The Black Tulip Funeral's team are available 24/7
               </p>
-              <div className="flex items-center gap-3 mt-1">
-                <FaPhoneVolume className="text-pink-600 text-2xl md:text-3xl rotate-[-10deg]" />
+              <div className="flex items-center justify-center gap-3 mt-1">
+                <FaPhoneVolume className="text-2xl md:text-3xl flex items-center rotate-[-10deg]" />
                 <a
                   href="tel:1300110031"
                   className="text-3xl md:text-4xl font-bold text-gray-900 hover:text-gray-700 transition-colors font-display"

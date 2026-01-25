@@ -252,6 +252,7 @@ export const PrePayServiceProvider = ({ children }) => {
       saveSignature,
       clearSignature,
       signature,
+      setAspFrequency
     }),
     [
       investors,
@@ -261,6 +262,7 @@ export const PrePayServiceProvider = ({ children }) => {
       directDebitForm,
       deptRequest,
       signature,
+      setAspFrequency
     ]
   );
 

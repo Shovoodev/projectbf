@@ -4,10 +4,9 @@ const SelectedServiceProviderContext = createContext();
 const CORE = import.meta.env.VITE_API_URL;
 
 export const SelectedServiceProvider = ({ children }) => {
-  const BASE_PRICE = 4899;
 
-  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
+    transformOption: { value: "", price: 0 },
     stationery: { value: "", price: 0 },
     bodyPreparation: { value: "", price: 0 },
     coffin: { value: "", price: 0 },
@@ -20,9 +19,6 @@ export const SelectedServiceProvider = ({ children }) => {
   const [amount, setAmount] = useState(0);
   //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
-
-  const [transferPrice, setTransferPrice] = useState(0);
-  const [transferOption, setTransferOption] = useState("Sydney Metro");
   //popup
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [userData, setUserData] = useState({ email: "", password: "" });
@@ -33,71 +29,10 @@ export const SelectedServiceProvider = ({ children }) => {
     phone: "",
   });
 
-  const [activePopup, setActivePopup] = useState(null);
-  const handleTransferChange = (e) => {
-    const price = Number(e.target.value);
-    const index = e.target.selectedIndex;
-    const label = e.target.options[index].text;
-
-    setTransferPrice(price);
-    setTransferOption(label);
-
-    const variableTotal = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0
-    );
-
-    const total = BASE_PRICE + variableTotal + price;
-
-    setTotalPrice(total);
-    setAmount(total);
-  };
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
-
-  const closePopup = () => {
-    setActivePopup(null);
-  };
-
-  const goNext = async (path) => {
-    try {
-      const totalPriceImpact = Object.values(selections).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0
-      );
-
-      const finalTotalPrice = BASE_PRICE + totalPriceImpact;
-
-      const res = await fetch(`${CORE}/${path}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          selections,
-          totalPrice: finalTotalPrice,
-        }),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Server Error:", text);
-        return;
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError(err.message);
-    }
-  };
-
   const ctxValue = useMemo(
     () => ({
       selections,
       setSelections,
-      totalPrice,
-      setTotalPrice,
       loading,
       setLoading,
       error,
@@ -106,23 +41,13 @@ export const SelectedServiceProvider = ({ children }) => {
       setAmount,
       message,
       setMessage,
-      BASE_PRICE,
-      transferPrice,
-      setTransferPrice,
-      transferOption,
-      setTransferOption,
       userData,
       setUserData,
       enquireyData,
       setEnquireyData,
       internalIsOpen,
       setInternalIsOpen,
-      openPopup,
-      activePopup,
-      setActivePopup,
-      closePopup,
-      goNext,
-      handleTransferChange,
+      CORE
     }),
     [
       selections,
@@ -135,26 +60,13 @@ export const SelectedServiceProvider = ({ children }) => {
       setAmount,
       message,
       setMessage,
-      totalPrice,
-      setTotalPrice,
-      setTotalPrice,
-      BASE_PRICE,
-      transferPrice,
-      setTransferPrice,
-      transferOption,
       userData,
       setUserData,
       enquireyData,
       setEnquireyData,
-      setTransferOption,
       internalIsOpen,
       setInternalIsOpen,
-      openPopup,
-      activePopup,
-      setActivePopup,
-      closePopup,
-      goNext,
-      handleTransferChange,
+      CORE
     ]
   );
 

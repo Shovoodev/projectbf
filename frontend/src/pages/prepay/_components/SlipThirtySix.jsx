@@ -7,12 +7,12 @@ const SlipThirtySix = () => {
   return (
     <div className="form-container-base">
       <form
-        className="p-4 md:p-10 space-y-10"
+       
         onSubmit={(e) => e.preventDefault()}
       >
         {/* Section 2.2: RSP Increase */}
         <section>
-          <h2 className="pdf-h2 text-[#00A99D] mb-6">
+          <h2 className="pdf-h2 text-[#00A99D]">
             2.2. Automatically increase the RSP contribution amount each year?
           </h2>
 
@@ -56,7 +56,7 @@ const SlipThirtySix = () => {
             </span>
           </h2>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-3 space-y-1">
             <h3 className="font-bold text-[rgb(49,41,166)] text-sm">
               Initial Service Fee
             </h3>
@@ -67,7 +67,7 @@ const SlipThirtySix = () => {
               contribution.
             </p>
 
-            <div className="space-y-6 pt-4">
+            <div className="space-y-2 pt-1">
               <div className="flex items-center gap-3">
                 <span className="pdf-label mb-0 min-w-[140px]">
                   Fixed dollar amount:
@@ -177,7 +177,7 @@ const SlipThirtySix = () => {
               <input type="text" className="pdf-inline-input flex-1" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="pdf-adviser-row">
                 <span className="pdf-adviser-label">AFS Licence number:</span>
                 <input type="text" className="pdf-inline-input flex-1" />

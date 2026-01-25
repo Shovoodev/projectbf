@@ -14,7 +14,7 @@ const SlipFourty = () => {
 
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form  onSubmit={(e) => e.preventDefault()}>
         {/* Main Header */}
         <div className="mb-8">
           <h2 className="pdf-h2">
@@ -22,7 +22,7 @@ const SlipFourty = () => {
           </h2>
         </div>
         {/* Instructions */}
-        <div className="pdf-info-box mb-8 border-blue-900 bg-blue-50/50">
+        <div className="pdf-info-box border-blue-900 bg-blue-50/50">
           <p className="pdf-instruction-bold">
             This section should only be completed and signed if the bond is
             being assigned to a funeral director
@@ -53,7 +53,7 @@ const SlipFourty = () => {
         </div>
 
         {/* Director Details */}
-        <div className="space-y-6 mb-10">
+        <div>
           <h3 className="pdf-section-title border-none mb-0 text-[#00A99D]">
             Authorised Signature of Funeral Director:
           </h3>
@@ -64,7 +64,7 @@ const SlipFourty = () => {
               <img src={img} alt="" />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="col-span-full">
               <label className="pdf-label">Name of Funeral Director:</label>
               <input

@@ -44,7 +44,7 @@ const SlipFourtySeven = () => {
   const currentDate = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 font-sans">
+    <div className="min-h-screen font-sans">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Section Header */}
@@ -55,8 +55,8 @@ const SlipFourtySeven = () => {
           </div>
 
           {/* Declarations List */}
-          <div className="p-6 md:p-8">
-            <div className="space-y-1 mb-10">
+          <div className="p-2 md:p-2">
+            <div className="space-y-1 mb-2">
               <p className="text-gray-700 font-medium mb-4">
                 You authorise the nominated financial adviser, or authorised
                 delegate:
@@ -65,14 +65,14 @@ const SlipFourtySeven = () => {
               <div className="space-y-3">
                 {declarations.map((declaration, index) => (
                   <div key={index} className="flex items-start">
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-700 font-bold text-sm">
+                    <div className="flex-shrink-0 justify-center items-center">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center">
+                        <span className=" font-bold text-sm">
                           —
                         </span>
                       </div>
                     </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
+                    <p className=" text-gray-700 leading-relaxed">
                       {declaration}
                     </p>
                   </div>

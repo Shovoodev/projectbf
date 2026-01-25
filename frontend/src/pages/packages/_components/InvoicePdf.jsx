@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import { btficon, LogoPdf } from "../../../images";
+import { btficon, invoice } from "../../../images";
 
 const styles = StyleSheet.create({
   page: {
@@ -91,10 +91,10 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.container}>
-          <Image src={btficon} style={styles.bgImage} />
+          <Image src={invoice} style={styles.bgImage} />
           {/* HEADER */}
           <View style={styles.header}>
-            <Image src={LogoPdf} style={styles.logo} />
+            <Image src={btficon} style={styles.icon} />
             <View style={styles.headerRight}>
               <Text>ABN: 84 678 068 687</Text>
               <Text style={styles.invoiceTitle}>TAX INVOICE</Text>
@@ -145,7 +145,17 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
             <Text>
               Please use invoice reference{" "}
               <Text style={{ color: "red" }}>{invoiceDetails.reference}</Text>{" "}
-              when making payment.
+              when making payment. We kindly ask that payment is made
+              immediately to secure the funeral service date and time. Delays in
+              full payment may cause rescheduling of services. Please contact us
+              if you have any questions. Once paid, it would be appreciated if
+              you could email your remittance to
+              accounts@blacktulipfunerals.com.au Many thanks for your custom and
+              understanding, Scott and the Black Tulip team. Banking Details
+              Commonwealth Bank Black Tulip Funerals BSB : 062-692 ACC: 7617
+              6113 Description Amount AUD No Service Cremation Scattering Urn
+              Australia Post Registered Mail $2200.00 $0.00 $0.00 Amount Due AUD
+              $2200.00
             </Text>
           </View>
         </View>

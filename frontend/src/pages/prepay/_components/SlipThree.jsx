@@ -31,7 +31,7 @@ const SlipThree = () => {
           <h2 className="pdf-h2">2.1. Investment option(s)</h2>
         </div>
 
-        <div className="p-4 md:p-8">
+        <div>
           <form onSubmit={(e) => e.preventDefault()}>
             {/* Responsive Instruction Text */}
             <div className="space-y-2 mb-6">

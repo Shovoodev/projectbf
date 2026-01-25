@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { List } from "../../components/common/Reusables";
-import { useServiceApi } from "../../utility/SelectedServiceProvider";
+import { useEffect, useState } from "react";
+import { List, RowSelect } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import { useNavigate } from "react-router-dom";
+const CORE = import.meta.env.VITE_API_URL;
 
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
@@ -19,7 +19,30 @@ export function Card({ title, children, className = "" }) {
 }
 export const viewingAndCremention = [
   {
-    id: 5,
+    id: 1,
+    question: "Transfers from Place of Passing",
+    type: "select",
+    options: [
+      {
+        label: "Sydney Metro",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Zone 2 (+ $220)",
+        value: "Zone 2 (+ $220)",
+        priceAdjustment: 220,
+      },
+      {
+        label: "Zone 3 (+ $385)",
+        value: "Zone 3 (+ $385",
+        priceAdjustment: 385,
+      },
+    ],
+  },
+  {
+
+    id: 2,
     question: "Urn",
     type: "select",
     options: [
@@ -36,7 +59,7 @@ export const viewingAndCremention = [
     ],
   },
   {
-    id: 6,
+    id: 3,
     question: "Collection of Urn",
     type: "select",
     options: [
@@ -52,95 +75,74 @@ export const viewingAndCremention = [
       },
     ],
   },
+
 ];
 
 const ViewingAndCrementionPage = () => {
-  const {
-    selections,
-    loading,
-    error,
-    setTotalPrice,
-    setAmount,
-    totalPrice,
-    transferPrice,
-    setSelections,
-    openPopup,
-    activePopup,
-    closePopup,
-    handleTransferChange,
-  } = useServiceApi();
+
   const BASE_PRICE = 3599;
 
+  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();
-  // --- Initialize Selections ---
-  useEffect(() => {
-    if (viewingAndCremention.length > 0) {
-      setSelections({
-        urn: {
-          value: viewingAndCremention[0]?.options[0]?.value || "",
-          price: viewingAndCremention[0]?.options[0]?.priceImpact || 0,
-        },
-        collectionOfUrn: {
-          value: viewingAndCremention[1]?.options[0]?.value || "",
-          price: viewingAndCremention[1]?.options[0]?.priceImpact || 0,
-        },
-        transferOption: {
-          value: viewingAndCremention[2]?.options[0]?.value || "",
-          price: viewingAndCremention[2]?.options[0]?.priceImpact || 0,
-        },
-      });
-    }
-  }, [viewingAndCremention]);
-
-  const handlePress = () => {
-    try {
-      navigate(`/prepay`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [selections, setSelections] = useState({
+    transformOption: { value: "", price: 0 },
+    urn: { value: "", price: 0 },
+    collectionOfUrn: { value: "", price: 0 },
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [amount, setAmount] = useState(0);
+  //   const { user } = useUserFront();
+  const [message, setMessage] = useState("");
   // --- Calculate Total Price ---
+  const [activePopup, setActivePopup] = useState(null);
+  const openPopup = (popupType) => {
+    setActivePopup(popupType);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
       0
     );
     // Base + Variables + Transfer Cost
-    setTotalPrice(BASE_PRICE + variableTotal + Number(transferPrice));
-  }, [selections, transferPrice]);
+    setTotalPrice(BASE_PRICE + variableTotal);
+  }, [selections]);
+
+
+
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error)
+    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+
 
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
+      "Transfers from Place of Passing": "transferOption",
       Urn: "urn",
       "Collection of Urn": "collectionOfUrn",
     };
 
     const key = categoryKeyMap[category];
-    if (!key) return;
 
     setSelections((prev) => {
-      const updated = {
-        ...prev,
-        [key]: {
-          value,
-          price: Number(priceAdjustment) || 0,
-        },
-      };
+      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
 
-      const variableTotal = Object.values(updated).reduce(
+      // Calculate total price impact
+      const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
         0
       );
 
-      const total = BASE_PRICE + variableTotal + transferPrice;
-
-      setTotalPrice(total);
-      setAmount(total);
+      setTotalPrice(BASE_PRICE + totalPriceImpact);
+      setAmount(BASE_PRICE + totalPriceImpact);
 
       return updated;
     });
-  };
-
+  }
   const handleSelectChange = (itemId, selectedValue) => {
     const item = viewingAndCremention.find((data) => data.id === itemId);
     if (!item) return;
@@ -156,9 +158,88 @@ const ViewingAndCrementionPage = () => {
     handleOptionChange(item.question, selectedValue, price);
   };
 
-  if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+
+  const handleRegistrationSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+
+      // Register
+      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
+      }
+
+      // Save selections
+      await fetch(`${CORE}/new-view-and-service-cremation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selections }),
+        credentials: "include",
+      });
+      setTimeout(() => {
+        navigate(`/fill-agreement-form`);
+      }, 1500);
+    } catch (err) {
+      setMessage(err.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  const handlePrepaySubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+
+      // Register
+      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
+      }
+
+      // Save selections
+      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selections }),
+        credentials: "include",
+      });
+      setTimeout(() => {
+        navigate(`/prepay`);
+      }, 1500);
+    } catch (err) {
+      showMessage(err.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const totalPriceImpact = Object.values(selections).reduce(
+      (sum, opt) => sum + (opt.price || 0),
+      0
+    );
+    // Add any static option costs here if needed
+    const finalTotal = BASE_PRICE + totalPriceImpact;
+
+    setTotalPrice(finalTotal);
+    setAmount(finalTotal);
+  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -204,22 +285,6 @@ const ViewingAndCrementionPage = () => {
                 "Cremation Fee",
               ]}
             />
-
-            {/* Transfers Dropdown (Styled to match list) */}
-            <div className=" flex flex-row items-center justify-between gap-4">
-              <span className="flex items-center gap-3 text-gray-700 text-lg">
-                • Transfers from Place of Passing
-              </span>
-
-              <select
-                onChange={handleTransferChange}
-                className="p-2  rounded bg-gray-100 text-left w-1/3"
-              >
-                <option value="0">Sydney Metro</option>
-                <option value="220">Zone 2 (+ $220)</option>
-                <option value="385">Zone 3 (+ $385)</option>
-              </select>
-            </div>
           </Card>
 
           {/* 2. Disbursements */}
@@ -237,41 +302,29 @@ const ViewingAndCrementionPage = () => {
           {/* 3. Included Variables (Full Width) */}
           <div className="md:col-span-2">
             <Card title="Included Variables">
-              <div className="space-y-4">
-                {viewingAndCremention.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center text-sm py-2 border-b last:border-none"
-                  >
-                    <label className="block text-sm font-medium text-gray-700">
-                      {item.question}
-                    </label>
-                    <select
-                      className="p-1 border rounded bg-gray-100 text-right w-48"
+              <div className="flex flex-col gap-2">
+                {viewingAndCremention.map((item) => {
+                  const categoryKeyMap = {
+                    "Transfers from Place of Passing": "transferOption",
+                    Urn: "urn",
+                    "Collection of Urn": "collectionOfUrn",
+                  };
+                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+                  const currentValue = selections[key]?.value || "";
+
+                  return (
+                    <RowSelect
+                      key={item.id}
+                      label={item.question}
+                      value={currentValue}
                       onChange={(e) =>
                         handleSelectChange(item.id, e.target.value)
                       }
-                      value={(() => {
-                        const categoryKeyMap = {
-                          Urn: "urn",
-                          "Collection of Urn": "collectionOfUrn",
-                        };
-                        const key = categoryKeyMap[item.question];
-                        return selections[key]?.value || "";
-                      })()}
-                    >
-                      {item.options.map((option) => (
-                        <option
-                          className=""
-                          key={option.value}
-                          value={option.value}
-                        >
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                ))}
+                      options={item.options}
+                      placeholder="Select an option"
+                    />
+                  );
+                })}
               </div>
             </Card>
           </div>
@@ -283,7 +336,7 @@ const ViewingAndCrementionPage = () => {
           <div>
             <button
               className="btn-primary normal"
-              onClick={() => openPopup("agreement")}
+              onClick={handleRegistrationSubmit}
             >
               Make Agreement Now
             </button>
@@ -293,31 +346,31 @@ const ViewingAndCrementionPage = () => {
           <div>
             <button
               className="btn-primary normal"
-              onClick={() => navigate("/contact")}
+              onClick={() => openPopup("enquirey")}
             >
               Enquire Now
             </button>
+            <PopupEnquirey
+              isOpen={activePopup === "enquirey"}
+              onClose={closePopup}
+              mode="enquirey"
+              mainTitle="Please tell us what you whant to know about us"
+              description="We'll get back to you shortly"
+              title="Make an Enquiry"
+              subtitle="We'll get back to you shortly"
+              onSuccess={(userData) => {
+                console.log("Enquiry submitted:", userData);
+                closePopup();
+                // Handle enquiry submission
+              }}
+            />
           </div>
 
           {/* PrePay button */}
-          <button className="btn-primary normal" onClick={handlePress}>
+          <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
-          {/* Agreement Popup */}
-          <PopupEnquirey
-            isOpen={activePopup === "agreement"}
-            onClose={closePopup}
-            // mode={() => (activePopup ? "registartion" : "login")}
-            mode="registration"
-            path="new-view-and-service-cremation"
-            title="Register to complete your aggrement"
-            subtitle="Register to save your selections and complete the process"
-            onSuccess={(userData) => {
-              console.log("User registered:", userData);
-              closePopup();
-              navigate("/fill-agreement-form");
-            }}
-          />
+
         </div>
       </div>
     </div>

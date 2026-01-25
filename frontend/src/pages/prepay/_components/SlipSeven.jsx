@@ -15,16 +15,16 @@ const SlipSeven = () => {
 
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()}>
         {/* Main Header */}
-        <div className="mb-8">
+        <div >
           <h2 className="pdf-h2">
             6. Nominate a funeral director to perform the funeral
           </h2>
         </div>
 
         {/* Instructions */}
-        <div className="pdf-info-box mb-8 border-blue-900 bg-blue-50/50">
+        <div className="pdf-info-box border-blue-900 bg-blue-50/50">
           <p className="pdf-instruction-bold">
             This section should only be completed and signed if the Funeral Bond
             is being 'NOMINATED' and by the Investor(s) only.
@@ -37,12 +37,12 @@ const SlipSeven = () => {
         </div>
 
         {/* Director Details */}
-        <div className="space-y-6 mb-10">
+        <div className="space-y-2">
           <h3 className="pdf-section-title border-none mb-0 text-[#00A99D]">
             Nominated to:
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="col-span-full">
               <label className="pdf-label">Name of Funeral Director:</label>
               <input
@@ -71,7 +71,7 @@ const SlipSeven = () => {
         </div>
 
         {/* Acknowledgement and Signature */}
-        <div className="space-y-6">
+        <div className="space-y-2">
           <div className="pdf-highlight-box !my-0 !border-[#4BA6A6] bg-[#F1F6F7]">
             <p className="font-bold text-[rgb(49,41,166)]">
               Acknowledgement of nomination – Investor 1 and Investor 2 (where
@@ -79,7 +79,7 @@ const SlipSeven = () => {
             </p>
           </div>
 
-          <div className="p-6 border border-gray-200 rounded-lg bg-slate-50/30">
+          <div className=" border border-gray-200 rounded-lg bg-slate-50/30">
             <h4 className="pdf-label text-base mb-4">Signature of Investor</h4>
 
             <div className=" grid grid-cols-1 md:grid-cols-2 gap-3">

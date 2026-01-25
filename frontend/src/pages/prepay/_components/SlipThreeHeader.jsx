@@ -1,7 +1,7 @@
 import { usePrePayServiceApi } from "../../../utility/PrePayServiceProvider";
 
 const SlipThreeHeader = () => {
-  const { paymentMethod, setPaymentMethod } = usePrePayServiceApi();
+  const { paymentMethod } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">

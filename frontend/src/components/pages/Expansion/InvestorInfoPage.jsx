@@ -131,7 +131,7 @@ const ContentSection = ({ id, title, features, imageSrc, imageAlt }) => (
       <h2 className="heading-lg">{title}</h2>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
         {/* Left Side: Feature Boxes Grid */}
-        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-2">
           {features.map((feature, idx) => (
             <FeatureBox key={idx} {...feature} />
           ))}
@@ -215,7 +215,7 @@ const InvestorInfoPage = () => {
         <div className="">
           <h2 className="heading-lg">Vision & Mission</h2>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
-            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-2">
               <FeatureBox {...visionMissionFeatures[0]} />
               <FeatureBox {...visionMissionFeatures[1]} />
               <div className="md:col-span-2">
