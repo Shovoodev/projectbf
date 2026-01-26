@@ -15,13 +15,13 @@ export default (router: express.Router) => {
     "/:userid/send-pdf-on-email",
     upload.single("file"),
     isAuthenticated,
-    sendPdfOfPrepay,
+    sendPdfOfPrepay
   );
   router.post("/api/send-invoice", isAuthenticated, sendPdfOfInvoice);
   router.get(
     "/all-selected-selections",
     isAuthenticated,
-    sendAttendenceServiceSelection,
+    sendAttendenceServiceSelection
   );
   // router.get(
   //   "/all-vandc-selected-selections",

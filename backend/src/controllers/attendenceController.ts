@@ -6,8 +6,8 @@ import {
   getAttendenceByUserId,
 } from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
-import { FormVandCResponseModel } from "../db/viewingAndCremention";
 import { FormNoServiceResponseModel } from "../db/noViewingCremention";
+import { FormVandCResponseModel } from "../db/viewingAndCremention";
 
 export const getNoServiceFunral = async (
   req: express.Request,
@@ -21,6 +21,7 @@ export const getNoServiceFunral = async (
     console.log(error);
   }
 };
+
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -71,7 +72,7 @@ export const getAttendenceAnswers = async (
       collectionOfUrnPrice +
       transferOptionPrice;
 
-    const BASE_PRICE = 4899; // Match frontend base price
+    const BASE_PRICE = 4499; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -126,6 +127,7 @@ export const getAttendenceAnswers = async (
   }
 };
 
+
 export const getVandCnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -158,7 +160,7 @@ export const getVandCnswers = async (
     const totalPriceImpact =
       urnPrice + collectionOfUrnPrice + transferOptionPrice;
 
-    const BASE_PRICE = 3599; // Match frontend base price
+    const BASE_PRICE = 3399; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -205,6 +207,7 @@ export const getVandCnswers = async (
   }
 };
 
+
 export const getNoServiceCrementionnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -214,35 +217,49 @@ export const getNoServiceCrementionnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Log the entire request body for debugging
-
     const { selections, totalPrice = 0 } = req.body;
-
+    const normalizeSelection = (field: any, fallback: string) => {
+      if (!field) return fallback;
+      if (typeof field === "string" && field.trim() !== "") return field;
+      if (typeof field === "object" && typeof field.value === "string" && field.value.trim() !== "") {
+        return field.value;
+      }
+      return fallback;
+    };
+    
     if (!selections) {
       return res.status(400).json({ message: "No selections provided" });
     }
-
+    const BASE_PRICE = 2299;
     // Extract values and prices from selections
-    const urnValue = selections?.urn?.value || "";
-    const transferOptionValue = selections?.transferOption?.value || "";
     const urnPrice = parseFloat(selections?.urn?.price) || 0;
 
-    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
     const collectionOfUrnPrice =
       parseFloat(selections?.collectionOfUrn?.price) || 0;
 
-    const transferOption = selections?.transferOption?.value || "";
     const transferOptionPrice =
       parseFloat(selections?.transferOption?.price) || 0;
-
+      const urnValue = normalizeSelection(
+        selections?.urn,
+        "Funera Preferred Adult Urn"
+      );
+      
+      const collectionOfUrnValue = normalizeSelection(
+        selections?.collectionOfUrn,
+        "Collect in Person"
+      );
+      
+      const transferOptionValue = normalizeSelection(
+        selections?.transferOption,
+        "Sydney Metro"
+      );
+      
     // Calculate total price impact
     const totalPriceImpact =
       urnPrice + collectionOfUrnPrice + transferOptionPrice;
-
-    const BASE_PRICE = 2290;
-    const finalTotalPrice =
+      const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
-
+      
     let existingResponse = await FormNoServiceResponseModel.findOne({
       userid: req.identity._id,
       reference: req.identity.reference,
@@ -253,9 +270,9 @@ export const getNoServiceCrementionnswers = async (
     if (existingResponse) {
       existingResponse.urn = urnValue;
       existingResponse.collectionOfUrn = collectionOfUrnValue;
-      existingResponse.totalPriceImpact = totalPriceImpact;
-      existingResponse.totalPrice = finalTotalPrice;
       existingResponse.transferOption = transferOptionValue;
+      existingResponse.totalPriceImpact = totalPriceImpact;
+      existingResponse.totalPrice = finalTotalPrice;      
 
       savedResponse = await existingResponse.save();
     } else {
@@ -263,18 +280,18 @@ export const getNoServiceCrementionnswers = async (
         userid: req.identity._id,
         reference: req.identity.reference,
         email: req.identity.email,
-
+      
         urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
+        transferOption: transferOptionValue,
         totalPriceImpact,
-        transferOptionValue,
         totalPrice: finalTotalPrice,
         status: "draft",
       });
     }
 
     return res.status(200).json({
-      message: "No Service Cremention response saved",
+      message: "Viewing And Cremention response saved",
       data: savedResponse,
       totalPrice: savedResponse.totalPrice,
     });
@@ -345,3 +362,4 @@ export const getAllServiceData = async (
 
   res.json({ data });
 };
+

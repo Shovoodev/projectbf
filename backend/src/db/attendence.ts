@@ -73,7 +73,7 @@ const formResponseSchema = new mongoose.Schema(
       required: true,
       default: "Collect in Person",
     },
-    baseTotal: { type: Number, default: 4899 },
+    baseTotal: { type: Number, default: 4499 },
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
     transferOption: { type: Number, default: 0 },

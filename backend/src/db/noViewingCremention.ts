@@ -6,23 +6,23 @@ const formNoServiceSchema = new mongoose.Schema(
     reference: { type: String, required: true, unique: true },
     email: {
       type: String,
-      required: true,
+     
       lowercase: true,
       trim: true,
     },
     urn: {
       type: String,
-      required: true,
+     
       default: "Funera Preferred Adult Urn",
     },
     transferOption: {
       type: String,
-      required: true,
+    
       default: "Sydney Metro",
     },
     collectionOfUrn: {
       type: String,
-      required: true,
+     
       default: "Collect in Person",
     },
     totalPriceImpact: { type: Number, default: 0 },
@@ -32,7 +32,7 @@ const formNoServiceSchema = new mongoose.Schema(
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
-    baseTotal: { type: Number, default: 2290 },
+    baseTotal: { type: Number, default: 2299 },
     service: { type: String, default: "No Viewing Cremention" },
 
     submittedAt: { type: Date },

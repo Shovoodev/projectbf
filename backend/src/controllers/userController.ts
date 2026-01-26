@@ -1,5 +1,10 @@
 import express from "express";
-import { createUser, getUserByEmail, getUserBySessionToken } from "../db/user";
+import {
+  createUser,
+  getUserByEmail,
+  getUserBySessionToken,
+  userModel,
+} from "../db/user";
 import { authentication, invoiceId, random } from "../lib";
 import nodemailer from "nodemailer";
 import { AuthenticatedRequest } from "../lib/types";
@@ -96,6 +101,43 @@ export const login = async (req: express.Request, res: express.Response) => {
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: "Something went wrong" });
+  }
+};
+
+export const guestLogin = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    // create a random reference for tracking
+    const reference = `GUEST-${Date.now()}`;
+
+    const user = await userModel.create({
+      email: null, // optional
+      reference,
+      authentication: {
+        salt: random(),
+      },
+    });
+
+    const sessionToken = authentication(random(), user._id.toString());
+
+    user.authentication.sessionToken = sessionToken;
+    await user.save();
+
+    res.cookie("sessionToken", sessionToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
+
+    return res.status(200).json({
+      message: "Guest session created",
+      reference,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to create guest session" });
   }
 };
 

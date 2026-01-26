@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const deceasedPersonSchema = new mongoose.Schema(
   {
     userid: { type: String, required: true },
-    salutation: { type: String, required: true },
-    givenName: { type: String, required: true },
-    surname: { type: String, required: true },
+    salutation: { type: String, },
+    givenName: { type: String,},
+    surname: { type: String,  },
     dateofdeath: { type: String },
     dateofbirth: { type: String },
     deceasedpersonaddress: { type: String },
@@ -13,6 +13,8 @@ const deceasedPersonSchema = new mongoose.Schema(
     deceasedNow: { type: String },
     batterypowereddevices: { type: String },
     regulardoctoraddress: { type: String },
+    photo: [{ type: String }] // array of strings
+
   },
   {
     timestamps: true,
