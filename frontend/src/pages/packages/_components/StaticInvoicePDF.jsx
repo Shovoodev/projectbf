@@ -107,6 +107,51 @@ const styles = StyleSheet.create({
     color: "#D9534F",
     fontWeight: "bold",
   },
+  bankingBox: {
+    border: "1px solid #D18B47",
+    padding: 10,
+    width: 220,
+  },
+
+  bankingTitle: {
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+
+  rightBox: {
+    width: 260,
+  },
+
+  rightRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 14,
+  },
+
+  rightCol: {
+    width: 120,
+    textAlign: "right",
+  },
+
+  label: {
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+
+  tableDivider: {
+    borderBottom: "1px solid #000",
+    marginVertical: 8,
+  },
+
+  amountRight: {
+    textAlign: "right",
+  },
+
+  footerText: {
+    fontSize: 9,
+    lineHeight: 1.5,
+  },
+
 });
 
 const StaticInvoicePDF = ({ invoiceDetails }) => {
@@ -140,67 +185,67 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
           </View>
 
           <View style={styles.rowBetween}>
-            {/* BANKING + DETAILS */}
+            {/* BANKING DETAILS */}
             <View style={styles.bankingBox}>
-              <Text style={styles.bankingTitle}>BANKING DETAILS</Text>
+              <Text style={styles.bankingTitle}>Banking Details</Text>
               <Text>Commonwealth Bank</Text>
               <Text style={{ fontWeight: "bold" }}>Black Tulip Funerals</Text>
               <Text>BSB: 062-692</Text>
               <Text>ACC: 7617 6113</Text>
             </View>
-            {/* Customer Details */}
-            {/* <View style={styles.detailsBox}> */}
-            <View style={styles.detailRow}>
-              <View style={styles.detailLeft}>
-                <Text style={{ fontWeight: "bold" }}>CUSTOMER DETAILS</Text>
-                <Text>Sarah Jenkins</Text>
-                <Text>Next of Kin</Text>
-              </View>
-              <View style={styles.detailRight}>
-                <Text style={{ fontWeight: "bold" }}>INVOICE NO</Text>
-                <Text style={styles.red}>BTF9BB3252</Text>
-              </View>
-            </View>
 
-            <View style={styles.detailRow}>
-              <View style={styles.detailLeft}>
-                <Text style={{ fontWeight: "bold" }}>REFERENCE</Text>
-                <Text>Robert Jenkins</Text>
+            {/* CUSTOMER / INVOICE */}
+            <View style={styles.rightBox}>
+              <View style={styles.rightRow}>
+                <View>
+                  <Text style={styles.label}>Customer Details</Text>
+                  <Text>Next of Kin</Text>
+                </View>
+                <View style={styles.rightCol}>
+                  <Text style={styles.label}>Invoice Number</Text>
+                  <Text style={styles.red}>BTF9BB3252</Text>
+                </View>
               </View>
-              <View style={styles.detailRight}>
-                <Text style={{ fontWeight: "bold" }}>DUE DATE</Text>
-                <Text>17/01/2026</Text>
+
+              <View style={styles.rightRow}>
+                <View>
+                  <Text style={styles.label}>Reference</Text>
+                  <Text>Deceased Name</Text>
+                </View>
+                <View style={styles.rightCol}>
+                  <Text style={styles.label}>Due Date</Text>
+                  <Text>DD/MM/YYYY</Text>
+                </View>
               </View>
             </View>
-            {/* </View> */}
           </View>
 
           {/* TABLE */}
           <View>
             <View style={styles.tableHeader}>
               <Text>Description</Text>
-              <Text>Amount (AUD)</Text>
+              <Text>Amount AUD</Text>
             </View>
 
             {rows.map((row, idx) => (
               <View style={styles.tableRow} key={idx}>
                 <Text>{row.label}</Text>
-                <Text>
-                  {typeof row.value === "number"
-                    ? `$${row.value.toFixed(2)}`
-                    : row.value}
+                <Text style={styles.amountRight}>
+                  ${row.value.toFixed(2)}
                 </Text>
               </View>
             ))}
 
-            {/* TOTAL */}
+            <View style={styles.tableDivider} />
+
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total Amount Due</Text>
+              <Text>Amount Due AUD</Text>
               <Text style={styles.totalAmount}>
-                ${Number(invoiceDetails.totalPrice).toFixed(2)}
+                ${invoiceDetails.totalPrice.toFixed(2)}
               </Text>
             </View>
           </View>
+
 
           {/* FOOTER */}
           <View style={styles.footer}>

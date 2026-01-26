@@ -72,7 +72,7 @@ export const getAttendenceAnswers = async (
       collectionOfUrnPrice +
       transferOptionPrice;
 
-    const BASE_PRICE = 4899; // Match frontend base price
+    const BASE_PRICE = 4499; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -161,7 +161,7 @@ export const getVandCnswers = async (
     const totalPriceImpact =
       urnPrice + collectionOfUrnPrice + transferOptionPrice;
 
-    const BASE_PRICE = 3599; // Match frontend base price
+    const BASE_PRICE = 3399; // Match frontend base price
     const finalTotalPrice =
       totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
 
@@ -219,29 +219,48 @@ export const getNoServiceCrementionnswers = async (
     }
 
     const { selections, totalPrice = 0 } = req.body;
-
+    const normalizeSelection = (field: any, fallback: string) => {
+      if (!field) return fallback;
+      if (typeof field === "string" && field.trim() !== "") return field;
+      if (typeof field === "object" && typeof field.value === "string" && field.value.trim() !== "") {
+        return field.value;
+      }
+      return fallback;
+    };
+    
     if (!selections) {
       return res.status(400).json({ message: "No selections provided" });
     }
-
+    const BASE_PRICE = 2299;
     // Extract values and prices from selections
-    const urnValue = selections?.urn?.value || "";
     const urnPrice = parseFloat(selections?.urn?.price) || 0;
 
-    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
     const collectionOfUrnPrice =
       parseFloat(selections?.collectionOfUrn?.price) || 0;
 
-    const transferOption = selections?.transferOption?.value || "";
     const transferOptionPrice =
       parseFloat(selections?.transferOption?.price) || 0;
-
+      const urnValue = normalizeSelection(
+        selections?.urn,
+        "Funera Preferred Adult Urn"
+      );
+      
+      const collectionOfUrnValue = normalizeSelection(
+        selections?.collectionOfUrn,
+        "Collect in Person"
+      );
+      
+      const transferOptionValue = normalizeSelection(
+        selections?.transferOption,
+        "Sydney Metro"
+      );
+      
     // Calculate total price impact
     const totalPriceImpact =
       urnPrice + collectionOfUrnPrice + transferOptionPrice;
-    const finalTotalPrice =
-      totalPrice > 0 ? totalPrice : totalPrice + totalPriceImpact;
-
+      const finalTotalPrice =
+      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+      
     let existingResponse = await FormNoServiceResponseModel.findOne({
       userid: req.identity._id,
       reference: req.identity.reference,
@@ -252,9 +271,9 @@ export const getNoServiceCrementionnswers = async (
     if (existingResponse) {
       existingResponse.urn = urnValue;
       existingResponse.collectionOfUrn = collectionOfUrnValue;
+      existingResponse.transferOption = transferOptionValue;
       existingResponse.totalPriceImpact = totalPriceImpact;
-      existingResponse.totalPrice = finalTotalPrice;
-      existingResponse.transferOption = transferOption;
+      existingResponse.totalPrice = finalTotalPrice;      
 
       savedResponse = await existingResponse.save();
     } else {
@@ -262,9 +281,10 @@ export const getNoServiceCrementionnswers = async (
         userid: req.identity._id,
         reference: req.identity.reference,
         email: req.identity.email,
-
+      
+        urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
-        transferOption: transferOption,       
+        transferOption: transferOptionValue,
         totalPriceImpact,
         totalPrice: finalTotalPrice,
         status: "draft",
@@ -331,6 +351,8 @@ export const getdeatilByReference = async (
     console.log(error);
   }
 };
+
+
 export const getAllServiceData = async (
   req: AuthenticatedRequest,
   res: express.Response

@@ -385,7 +385,7 @@ const attendenceData = [
 
 const AttendenceCrementionPage = () => {
 
-  const BASE_PRICE = 4490;
+  const BASE_PRICE = 4499;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },

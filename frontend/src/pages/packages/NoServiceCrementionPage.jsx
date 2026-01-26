@@ -79,7 +79,7 @@ const noServiceFunralData = [
 ];
 const NoServiceCrementionPage = () => {
 
-  const BASE_PRICE = 2290
+  const BASE_PRICE = 2299
   const [selections, setSelections] = useState({
     transformOption: { value: "", price: 0 },
     urn: { value: "", price: 0 },

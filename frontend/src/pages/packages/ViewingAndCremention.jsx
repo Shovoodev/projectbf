@@ -19,6 +19,7 @@ export function Card({ title, children, className = "" }) {
     </div>
   );
 }
+
 export const viewingAndCremention = [
   {
     id: 1,
@@ -82,7 +83,7 @@ export const viewingAndCremention = [
 
 const ViewingAndCrementionPage = () => {
 
-  const BASE_PRICE = 3599;
+  const BASE_PRICE = 3399;
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();
@@ -212,7 +213,7 @@ const ViewingAndCrementionPage = () => {
         navigate(`/prepay`);
       }, 1500);
     } catch (err) {
-      showMessage(err.message, "error");
+      message(err.message, "error");
     } finally {
       setLoading(false);
     }
