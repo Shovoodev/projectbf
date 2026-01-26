@@ -71,7 +71,7 @@ export const DeceasedDetails = ({
             className="w-5 h-5 mr-2"
           />
           <span className="font-medium">
-            {isEnglish ? "Person Has Passed Away" : "还未过世"}
+            {isEnglish ? "Person Has not Passed Away" : "还未过世"}
           </span>
         </div>
 
