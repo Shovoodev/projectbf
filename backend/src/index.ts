@@ -14,6 +14,8 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+
 const server = http.createServer(app);
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
 app.use(

@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  reference: { type: String, required: true },
-  email: { type: String, required: true },
+  reference: { type: String },
+  email: { type: String },
   authentication: {
-    password: { type: String, required: true, select: false },
+    password: { type: String, select: false },
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },

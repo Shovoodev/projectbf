@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import { btficon, invoice } from "../../../images";
+import { LogoPdf, btficon } from "../../../images";
 
 const styles = StyleSheet.create({
   page: {
@@ -19,16 +19,21 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#222",
   },
-  bgImage: {
+  watermark: {
     position: "absolute",
-    top: 120,
+    top: 0,
     left: 0,
     right: 0,
-    margin: "auto",
+    bottom: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: -1, // Send to back
+  },
+  watermarkImage: {
     width: 400,
     height: 400,
     opacity: 0.08,
-    zIndex: -1,
   },
   header: {
     flexDirection: "row",
@@ -91,10 +96,13 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.container}>
-          <Image src={invoice} style={styles.bgImage} />
+          <View style={styles.watermark} fixed>
+            <Image src={btficon} style={styles.watermarkImage} />
+          </View>
+
           {/* HEADER */}
           <View style={styles.header}>
-            <Image src={btficon} style={styles.icon} />
+            <Image src={LogoPdf} style={styles.logo} />
             <View style={styles.headerRight}>
               <Text>ABN: 84 678 068 687</Text>
               <Text style={styles.invoiceTitle}>TAX INVOICE</Text>

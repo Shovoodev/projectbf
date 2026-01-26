@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { List, RowSelect } from "../../components/common/Reusables";
+import { List } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
+import RowSelect from "./_components/RowSelect";
 
 const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
@@ -124,27 +125,15 @@ const NoServiceCrementionPage = () => {
 
     try {
 
-      // Register
-      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!registerRes.ok) {
-        const err = await registerRes.json();
-        throw new Error(err.message || "Registration failed");
-      }
-
-      // Save selections
-      await fetch(`${CORE}/new-no-service-cremation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selections }),
-        credentials: "include",
-      });
       setTimeout(() => {
-        navigate(`/fill-agreement-form`);
-      }, 1500);
+        navigate("/fill-agreement-form", {
+          state: {
+            selections,
+            path: "new-no-service-cremation",
+          },
+        });
+      }, 1000);
+
     } catch (err) {
       setMessage(err.message, "error");
     } finally {

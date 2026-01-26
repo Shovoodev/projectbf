@@ -9,7 +9,7 @@ import { getNoCreByUserId } from "../db/noViewingCremention";
 export const sendPdfOfPrepay = async (
   req: AuthenticatedRequest,
   // req: express.Request,
-  res: express.Response,
+  res: express.Response
 ): Promise<any> => {
   try {
     const response = req.identity;
@@ -29,7 +29,7 @@ export const sendPdfOfPrepay = async (
 
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ): Promise<any> => {
   try {
     const { pdfAttachment } = req.body;
@@ -53,9 +53,9 @@ export const sendPdfOfInvoice = async (
     });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "mdathikhasan136@gmail.com",
-      subject: `Thanks  hi beleaving us for trusting us `,
-      text: "we get all you documents",
+      to: "shovoodev@gmail.com",
+      subject: `Black tulip funreals with you`,
+      text: "we have recived you application and we are happy to give you a wearn welcome in our service ",
       html: `
         <!DOCTYPE html>
         <html>
@@ -112,7 +112,7 @@ export const sendPdfOfInvoice = async (
 
 export const sendAttendenceServiceSelection = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
     const response = req.identity;

@@ -388,7 +388,7 @@ const AttendenceCrementionPage = () => {
   const BASE_PRICE = 4490;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
-    transformOption: { value: "", price: 0 },
+    transferOption: { value: "", price: 0 }, // ✅ renamed
     stationery: { value: "", price: 0 },
     bodyPreparation: { value: "", price: 0 },
     coffin: { value: "", price: 0 },
@@ -396,13 +396,13 @@ const AttendenceCrementionPage = () => {
     urn: { value: "", price: 0 },
     collectionOfUrn: { value: "", price: 0 },
   });
+
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState(0);
   //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
   //popup
-
 
   // Static Options State
   const [water, setWater] = useState("Not Required");
@@ -444,7 +444,6 @@ const AttendenceCrementionPage = () => {
     );
 
     const finalPrice = BASE_PRICE + extras;
-
     setTotalPrice(finalPrice);
     setAmount(finalPrice);
   }, [selections]);
@@ -512,27 +511,15 @@ const AttendenceCrementionPage = () => {
 
     try {
 
-      // Register
-      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!registerRes.ok) {
-        const err = await registerRes.json();
-        throw new Error(err.message || "Registration failed");
-      }
-
-      // Save selections
-      await fetch(`${CORE}/newattendingservicecremationanswers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selections }),
-        credentials: "include",
-      });
       setTimeout(() => {
-        navigate(`/fill-agreement-form`);
-      }, 1500);
+        navigate("/fill-agreement-form", {
+          state: {
+            selections,
+            path: "newattendingservicecremationanswers",
+          },
+        });
+      }, 1000);
+
     } catch (err) {
       setMessage(err.message, "error");
     } finally {
@@ -696,7 +683,6 @@ const AttendenceCrementionPage = () => {
               mainTitle="Please tell us what you whant to know about us"
               description="We'll get back to you shortly"
               title="Make an Enquiry"
-              subtitle="We'll get back to you shortly"
               onSuccess={(userData) => {
                 console.log("Enquiry submitted:", userData);
                 closePopup();

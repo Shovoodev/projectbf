@@ -1,5 +1,6 @@
 // @ts-nocheck
 import {
+  guestLogin,
   login,
   logOut,
   registerUser,
@@ -14,6 +15,7 @@ import { pdfController } from "../controllers/pdfController";
 export default (router: express.Router) => {
   router.get("/user", getUsers);
   router.post("/blacktulipauth/login", login);
+  router.post("/blacktulipauth/guest", guestLogin);
   router.post("/blacktulipauth/newuser", registerUser);
   // router.post(
   //   "/sendallrelateddocuments",

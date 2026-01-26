@@ -21,6 +21,7 @@ export const getNoServiceFunral = async (
     console.log(error);
   }
 };
+
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -126,6 +127,8 @@ export const getAttendenceAnswers = async (
   }
 };
 
+
+
 export const getVandCnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -213,8 +216,6 @@ export const getNoServiceCrementionnswers = async (
     if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
-    // Log the entire request body for debugging
 
     const { selections, totalPrice = 0 } = req.body;
 
