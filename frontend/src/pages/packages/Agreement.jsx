@@ -101,16 +101,25 @@ const AgreementForm = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [invoiceDetails, setInvoiceDetails] = useState(null);
+
   const saveSignature = async () => {
-    if (!sigCanvasRef.current || sigCanvasRef.current.isEmpty()) {
+    if (!sigCanvasRef.current) return null;
+
+    try {
+      const dataUrl = await sigCanvasRef.current.exportImage("png"); // base64
+      if (!dataUrl) return null;
+      const file = base64ToFile(dataUrl, "signature.png");
+
+      setFormKinValues((prev) => ({
+        ...prev,
+        sign: file,
+      }));
+
+      return file;
+    } catch (error) {
+      console.error("Error saving signature:", error);
       return null;
     }
-
-    const dataUrl = sigCanvasRef.current.toDataURL("image/png");
-    const file = base64ToFile(dataUrl, "signature.png");
-
-    setFormKinValues((prev) => ({ ...prev, sign: file }));
-    return file;
   };
   const removeDeceasedPhoto = (index) => {
     setDeceasedFormValues((prev) => ({
@@ -310,36 +319,31 @@ const AgreementForm = () => {
         throw new Error(text || "Failed to save deceased details");
       }
 
-      // 5. Handle signature
-      // let signFile = formKinValues.sign;
-
-      // if (signatureType === "Digital Signature" && !signFile) {
-      //   signFile = await saveSignature();
-      //   if (!signFile) {
-      //     throw new Error("Please provide a signature");
-      //   }
-      // }
-
-      // if (!signFile) {
-      //   throw new Error("Signature is required");
-      // }
 
       // 6. Save next of kin details
+      const signFile = await saveSignature();
+      if (!signFile) {
+        alert("Please provide a signature");
+        return;
+      }
+      console.log({ signFile });
+      await new Promise((r) => setTimeout(r, 0));
+
       const fd = new FormData();
 
-      Object.entries(formKinValues).forEach(([key, value]) => {
-        if (key !== "photo" && key !== "sign") {
-          fd.append(key, value);
-        }
-      });
+      fd.append("salutation", formKinValues.salutation);
+      fd.append("givenName", formKinValues.givenName);
+      fd.append("surname", formKinValues.surname);
+      fd.append("currentAddress", formKinValues.currentAddress);
+      fd.append("mobile", formKinValues.mobile);
+      fd.append("email", formKinValues.email);
+      fd.append("relation", formKinValues.relation);
 
-      formKinValues.photo.forEach((file) => {
-        fd.append("photo", file);
-      });
+      if (formKinValues.photo instanceof File) {
+        fd.append("photo", formKinValues.photo);
+      }
 
-      // if (formKinValues.sign) {
-      //   fd.append("sign", formKinValues.sign);
-      // }
+      fd.append("sign", signFile);
 
       const resforkin = await fetch(`${CORE}/next-to-keen-details`, {
         method: "POST",
@@ -347,10 +351,9 @@ const AgreementForm = () => {
         body: fd,
       });
 
-
       if (!resforkin.ok) {
-        const text = await resforkin.text();
-        throw new Error(text || "Failed to save next of kin");
+        console.error(await resforkin.text());
+        return;
       }
 
       // 7. Get final selections and generate invoice
@@ -417,9 +420,9 @@ const AgreementForm = () => {
       localStorage.removeItem('packagePath');
 
       // Navigate after delay
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // setTimeout(() => {
+      //   navigate("/");
+      // }, 2000);
 
     } catch (err) {
       console.error("Submit error:", err);
@@ -722,11 +725,9 @@ const AgreementForm = () => {
 
                       <input
                         type="file"
-                        multiple
                         required
                         onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
 
-                        className="hidden"
                       />
                     </label>
 
@@ -890,10 +891,7 @@ const AgreementForm = () => {
 
                       <input
                         type="file"
-                        multiple
-                        required
                         onChange={(e) => handlePhotoUpload(e.target.files)}
-                        className="hidden"
                       />
                     </label>
                   </div>
@@ -984,11 +982,9 @@ const AgreementForm = () => {
 
                       <input
                         type="file"
-                        multiple
                         required
                         accept="image/*"
 
-                        className="hidden"
                       />
                     </label>
 

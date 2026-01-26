@@ -208,6 +208,7 @@ export const getVandCnswers = async (
   }
 };
 
+
 export const getNoServiceCrementionnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -225,7 +226,6 @@ export const getNoServiceCrementionnswers = async (
 
     // Extract values and prices from selections
     const urnValue = selections?.urn?.value || "";
-    const transferOptionValue = selections?.transferOption?.value || "";
     const urnPrice = parseFloat(selections?.urn?.price) || 0;
 
     const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
@@ -239,10 +239,8 @@ export const getNoServiceCrementionnswers = async (
     // Calculate total price impact
     const totalPriceImpact =
       urnPrice + collectionOfUrnPrice + transferOptionPrice;
-
-    const BASE_PRICE = 2290;
     const finalTotalPrice =
-      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+      totalPrice > 0 ? totalPrice : totalPrice + totalPriceImpact;
 
     let existingResponse = await FormNoServiceResponseModel.findOne({
       userid: req.identity._id,
@@ -256,7 +254,7 @@ export const getNoServiceCrementionnswers = async (
       existingResponse.collectionOfUrn = collectionOfUrnValue;
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
-      existingResponse.transferOption = transferOptionValue;
+      existingResponse.transferOption = transferOption;
 
       savedResponse = await existingResponse.save();
     } else {
@@ -265,17 +263,16 @@ export const getNoServiceCrementionnswers = async (
         reference: req.identity.reference,
         email: req.identity.email,
 
-        urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
+        transferOption: transferOption,       
         totalPriceImpact,
-        transferOptionValue,
         totalPrice: finalTotalPrice,
         status: "draft",
       });
     }
 
     return res.status(200).json({
-      message: "No Service Cremention response saved",
+      message: "Viewing And Cremention response saved",
       data: savedResponse,
       totalPrice: savedResponse.totalPrice,
     });

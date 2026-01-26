@@ -388,13 +388,13 @@ const AttendenceCrementionPage = () => {
   const BASE_PRICE = 4490;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
-    transferOption: { value: "", price: 0 }, // ✅ renamed
-    stationery: { value: "", price: 0 },
-    bodyPreparation: { value: "", price: 0 },
-    coffin: { value: "", price: 0 },
-    flowers: { value: "", price: 0 },
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
+    transferOption: { value: "Sydney Metro", price: 0 },
+    stationery: { value: "50 Memoriam Cards", price: 0 },
+    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
+    coffin: { value: "contract-raw", price: 0 },
+    flowers: { value: "100cm Mixed Seasonal Coffin Cover - White", price: 0 },
+    urn: { value: "Funera Preferred Adult Urn", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
 
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
@@ -493,7 +493,7 @@ const AttendenceCrementionPage = () => {
         navigate(`/prepay`);
       }, 1500);
     } catch (err) {
-      showMessage(err.message, "error");
+      message(err.message, "error");
     } finally {
       setLoading(false);
     }

@@ -54,6 +54,7 @@ export const sendPdfOfInvoice = async (
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: "shovoodev@gmail.com",
+      // to: "mdathikhasan136@gmail.com",
       subject: `Black tulip funreals with you`,
       text: "we have recived you application and we are happy to give you a wearn welcome in our service ",
       html: `
