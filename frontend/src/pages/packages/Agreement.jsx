@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import base64ToFile from "../../utility";
 import { pdf } from "@react-pdf/renderer";
 import { useLocation, useNavigate } from "react-router-dom";
+import base64ToFile from "../../utility";
+const CORE = import.meta.env.VITE_API_URL;
+import Paragraph from "./aggrementComponent/Paragraph";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
-const CORE = import.meta.env.VITE_API_URL;
-
 /* ================= Reusable Components ================= */
 
 const FormLabel = ({ children, required }) => (
@@ -65,7 +65,7 @@ const AgreementForm = () => {
   const { selections, path } = location.state || {};
   console.log({ selections, path });
 
-  const [hasNotPassedAway, setHasNotPassedAway] = useState(false);
+  const [notPassed, setNotPassed] = useState(false);
   const [error, setError] = useState("");
   const [signatureType, setSignatureType] = useState("Digital Signature");
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const AgreementForm = () => {
     deceasedNow: "",
     batterypowereddevices: "",
     regulardoctoraddress: "",
-    photo: null
+    photo: []
   });
 
   const [formKinValues, setFormKinValues] = useState({
@@ -112,13 +112,24 @@ const AgreementForm = () => {
     setFormKinValues((prev) => ({ ...prev, sign: file }));
     return file;
   };
+  const removeDeceasedPhoto = (index) => {
+    setDeceasedFormValues((prev) => ({
+      ...prev,
+      photo: prev.photo.filter((_, i) => i !== index),
+    }));
+  };
 
   const clearSignature = () => {
     if (sigCanvasRef.current) {
-      sigCanvasRef.current.clear();
+      sigCanvasRef.current.clearCanvas();
     }
-    setFormKinValues((prev) => ({ ...prev, sign: null }));
+
+    setFormKinValues((prev) => ({
+      ...prev,
+      sign: null,
+    }));
   };
+
 
   const handleDeceasedChange = (field, value) => {
     setDeceasedFormValues(prev => ({
@@ -143,22 +154,22 @@ const AgreementForm = () => {
       photo: [...prev.photo, ...fileArray].slice(0, 2),
     }));
   };
+  const handleDeceasedPhotoUpload = (files) => {
+    const fileArray = Array.from(files);
 
-  const handleSignatureUpload = (files) => {
-    if (files && files[0]) {
-      setFormKinValues(prev => ({
-        ...prev,
-        sign: files[0]
-      }));
-    }
-  };
-
-  const removePhoto = (index) => {
-    setFormKinValues(prev => ({
+    setDeceasedFormValues((prev) => ({
       ...prev,
-      photo: prev.photo.filter((_, i) => i !== index)
+      photo: [...prev.photo, ...fileArray].slice(0, 2),
     }));
   };
+
+  const removeKinPhoto = (index) => {
+    setFormKinValues((prev) => ({
+      ...prev,
+      photo: prev.photo.filter((_, i) => i !== index),
+    }));
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -274,15 +285,25 @@ const AgreementForm = () => {
       }
 
       // 4. Save deceased details
-      const deceasedRes = await fetch(
-        `${CORE}/desencepersondetailsanswer`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(deceasedFormValues),
+
+      const deceasedFD = new FormData();
+
+      Object.entries(deceasedFormValues).forEach(([key, value]) => {
+        if (key !== "photo") {
+          deceasedFD.append(key, value);
         }
-      );
+      });
+
+      deceasedFormValues.photo.forEach((file) => {
+        deceasedFD.append("photo", file);
+      });
+
+      const deceasedRes = await fetch(`${CORE}/desencepersondetailsanswer`, {
+        method: "POST",
+        credentials: "include",
+        body: deceasedFD,
+      });
+
 
       if (!deceasedRes.ok) {
         const text = await deceasedRes.text();
@@ -290,41 +311,42 @@ const AgreementForm = () => {
       }
 
       // 5. Handle signature
-      let signFile = formKinValues.sign;
+      // let signFile = formKinValues.sign;
 
-      if (signatureType === "Digital Signature" && !signFile) {
-        signFile = await saveSignature();
-        if (!signFile) {
-          throw new Error("Please provide a signature");
-        }
-      }
+      // if (signatureType === "Digital Signature" && !signFile) {
+      //   signFile = await saveSignature();
+      //   if (!signFile) {
+      //     throw new Error("Please provide a signature");
+      //   }
+      // }
 
-      if (!signFile) {
-        throw new Error("Signature is required");
-      }
+      // if (!signFile) {
+      //   throw new Error("Signature is required");
+      // }
 
       // 6. Save next of kin details
       const fd = new FormData();
 
-      fd.append("salutation", formKinValues.salutation);
-      fd.append("givenName", formKinValues.givenName);
-      fd.append("surname", formKinValues.surname);
-      fd.append("currentAddress", formKinValues.currentAddress);
-      fd.append("mobile", formKinValues.mobile);
-      fd.append("email", formKinValues.email);
-      fd.append("relation", formKinValues.relation);
+      Object.entries(formKinValues).forEach(([key, value]) => {
+        if (key !== "photo" && key !== "sign") {
+          fd.append(key, value);
+        }
+      });
 
-      if (formKinValues.photo instanceof File) {
-        fd.append("photo", formKinValues.photo);
-      }
+      formKinValues.photo.forEach((file) => {
+        fd.append("photo", file);
+      });
 
-      fd.append("sign", signFile);
+      // if (formKinValues.sign) {
+      //   fd.append("sign", formKinValues.sign);
+      // }
 
       const resforkin = await fetch(`${CORE}/next-to-keen-details`, {
         method: "POST",
         credentials: "include",
         body: fd,
       });
+
 
       if (!resforkin.ok) {
         const text = await resforkin.text();
@@ -407,25 +429,21 @@ const AgreementForm = () => {
     }
   };
 
+  const deceasedLabel = deceasedFormValues.givenName || "deceased"
+  const kinLabel = formKinValues.givenName || "Next of kin"
 
   const translations = {
-    deceasedSectionTitle: { en: "Deceased Persons Details", zh: "逝者信息" },
-
+    deceasedSectionTitle: { en: "Deceased Person Details", zh: "逝者信息" },
     salutation: { en: "Salutation", zh: "称谓" },
     selectChoice: { en: "Select Choice", zh: "选择" },
-
     firstGivenName: { en: "First given name", zh: "名" },
     otherGivenNames: { en: "Other given name(s)", zh: "其他名" },
     surname: { en: "Surname / Family Name", zh: "姓" },
-
     dateOfBirth: { en: "Date of Birth", zh: "出生年月" },
     dobPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
-
     dateOfDeath: { en: "Date of Death", zh: "过世日期" },
     dodPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
-
-    personNotPassed: { en: "☐ person has not passed away", zh: "还未过世" },
-
+    personNotPassed: { en: "person has not passed away", zh: "还未过世" },
     lastRegisteredAddress: {
       en: "Last registered address of the deceased",
       zh: "最近注册过的居住地址",
@@ -434,40 +452,31 @@ const AgreementForm = () => {
       en: "This is the address they have resided at for the last 3 months.",
       zh: "此地址为过去三个月居住的地方",
     },
-
-    deceasedPassedPlace: { en: "Where did the deceased pass away?", zh: "逝者过世地点" },
-    deceasedCurrentPlace: { en: "Where is the deceased now?", zh: "逝者现在在哪里" },
+    deceasedPassedPlace: { en: `Where did  ${deceasedLabel} pass away?`, zh: "逝者过世 地点" },
+    deceasedCurrentPlace: { en: `Where is  ${deceasedLabel} now?`, zh: "逝者现在在哪里" },
     deceasedCurrentPlacePlaceholder: { en: "Eg: Home / Hospital", zh: "比如：家中/医院" },
-
-    batteryPoweredDevices: { en: "Does the deceased have any form of battery powered devices?", zh: "逝者身上是否有由电池驱动的仪器？" },
+    batteryPoweredDevices: { en: `Does the ${deceasedLabel} have any form of battery powered devices?`, zh: "逝者身上是否有由电池驱动的仪器？" },
     batteryDevicesPlaceholder: { en: "This includes all forms of pacemakers and defibrillators", zh: "这包括所有的起搏器和除颤器" },
-
-    regularDoctor: { en: "Who is the deceased's regular doctor (GP) & surgery address?", zh: "逝者的家庭医生名字和诊所地址" },
+    regularDoctor: { en: `Who is the ${deceasedLabel}'s regular doctor (GP) & surgery address?`, zh: "逝者的家庭医生名字和诊所地址" },
     regularDoctorPlaceholder: { en: "Eg: Dr Adam Brown, Strathfield", zh: "比如：Adam Brown 医生，Strathfield" },
-
-    uploadDeceasedPhoto: (name) => ({
-      en: `Upload photo identification for ${name}`,
-      zh: `上传照片证件（${name}）`,
-    }),
-
+    uploadDeasedPhoto: {
+      en: `Upload photo identification for ${deceasedLabel}`,
+      zh: `上传照片证件 `,
+    },
     nextOfKinSectionTitle: { en: "Next of Kin Details", zh: "近亲信息" },
-
     kinSalutation: { en: "Salutation", zh: "称谓" },
     kinSelectChoice: { en: "Select Choice", zh: "选择" },
-
     kinFirstGivenName: { en: "First given name", zh: "名" },
     kinOtherGivenNames: { en: "Other given name(s)", zh: "其他名" },
     kinSurname: { en: "Surname / Family Name", zh: "姓" },
-
     kinCurrentAddress: { en: "Current Address", zh: "目前地址" },
     kinMobile: { en: "Mobile", zh: "手机" },
     kinEmail: { en: "Email", zh: "邮箱" },
-    kinRelationship: { en: "Your relationship to deceased?", zh: "你与逝者的关系" },
-
-    uploadKinPhoto: (name) => ({
-      en: `Upload photo identification for ${name}`,
-      zh: `上传照片证件（${name}）`,
-    }),
+    kinRelationship: { en: `Your relationship to ${deceasedLabel}?`, zh: "你与逝者的关系" },
+    uploadKinPhoto: {
+      en: `Upload photo identification for ${kinLabel}`,
+      zh: `上传照片证件 `,
+    },
     uploadFilesText: { en: "Drag & Drop Files, or Choose Files to Upload", zh: "拖拽文件，或选择文件上传" },
     uploadFilesLimit: { en: "You can upload up to 2 files.", zh: "你可以上传最多两份文件" },
 
@@ -480,27 +489,26 @@ const AgreementForm = () => {
 
   return (
     <>
-      <section className="py-8 w-full md:max-w-5xl mx-auto px-6">
-        <div className="rounded-xl p-8">
-          <div className="mb-8">
-            <FormLabel required>Select Your Preferred Language</FormLabel>
-            <select
-              value={isEnglish ? "english" : "chinese"}
-              onChange={(e) => setIsEnglish(e.target.value === "english")}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-            >
-              <option value="english">English</option>
-              <option value="chinese">Chinese</option>
-            </select>
-          </div>
-        </div>
-      </section>
 
+      <Paragraph />
       <section className="py-8 md:py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto md:px-6">
           <div className="bg-white p-8 md:p-12 rounded-2xl shadow border border-gray-300">
             <form className="space-y-12" onSubmit={handleSubmit}>
               {/* ================= DECEASED DETAILS ================= */}
+              <div className="rounded-xl p-8">
+                <div className="mb-8">
+                  <FormLabel required>Select Your Preferred Language</FormLabel>
+                  <select
+                    value={isEnglish ? "english" : "chinese"}
+                    onChange={(e) => setIsEnglish(e.target.value === "english")}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                  >
+                    <option value="english">English</option>
+                    <option value="chinese">Chinese</option>
+                  </select>
+                </div>
+              </div>
               <div>
                 <h3 className="text-4xl text-center font-bold mb-6">
 
@@ -568,70 +576,91 @@ const AgreementForm = () => {
                       required
                     />
                   </div>
-
-                  <div className="flex items-center pt-8">
+                  <div className="flex items-center w-full md:col-span-2">
                     <input
                       type="checkbox"
-                      id="not_passed"
-                      checked={hasNotPassedAway}
-                      onChange={(e) => setHasNotPassedAway(e.target.checked)}
+                      checked={notPassed}
+                      onChange={(e) => setNotPassed(e.target.checked)}
+                      className="w-5 h-5 mr-2"
                     />
-                    <label htmlFor="not_passed" className="ml-2 text-gray-700 font-medium">
-                      Person Has Not Passed Away
-                    </label>
+                    <span className="font-medium">
+                      {isEnglish ? translations.personNotPassed.en : translations.personNotPassed.zh}
+                    </span>
                   </div>
 
-                  {!hasNotPassedAway && (
+
+                  {!notPassed && (
                     <div>
-                      <FormLabel required>{isEnglish
-                        ? translations.dateOfDeath.en
-                        : translations.dateOfDeath.zh}</FormLabel>
+                      <FormLabel required>
+                        {isEnglish
+                          ? translations.dateOfBirth.en
+                          : translations.dateOfBirth.zh}
+                      </FormLabel>
                       <InputField
                         type="date"
                         value={deceasedFormValues.dateofdeath}
                         onChange={(e) => handleDeceasedChange("dateofdeath", e.target.value)}
                         required
                       />
+
                     </div>
                   )}
 
                   <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.deceasedCurrentPlace.en
-                      : translations.deceasedCurrentPlace.zh}</FormLabel>
+                    <FormLabel required>
+                      {isEnglish ? translations.lastRegisteredAddress.en : translations.lastRegisteredAddress.zh}
+                    </FormLabel>
+
                     <InputField
-                      placeholder="This is the address they have resided at for the last 3 months."
-                      value={deceasedFormValues.deceasedpersonaddress}
-                      onChange={(e) => handleDeceasedChange("deceasedpersonaddress", e.target.value)}
                       required
+                      value={deceasedFormValues.deceasedpersonaddress}
+                      onChange={(e) =>
+                        handleDeceasedChange("deceasedpersonaddress", e.target.value)
+                      }
+                      placeholder={
+                        isEnglish
+                          ? "This is the address they have resided at for the last 3 months."
+                          : "此地址为过去三个月居住的地方"
+                      }
                     />
                   </div>
 
-                  {!hasNotPassedAway && (
-                    <div className="md:col-span-2">
-                      <FormLabel required>{isEnglish
-                        ? translations.deceasedPassedPlace.en
-                        : translations.deceasedPassedPlace.zh}</FormLabel>
-                      <InputField
-                        value={deceasedFormValues.deceasedPassedReason}
-                        onChange={(e) => handleDeceasedChange("deceasedPassedReason", e.target.value)}
-                        required
-                      />
-                    </div>
+                  {!notPassed && (
+                    <>
+                      <div className="md:col-span-2">
+                        <FormLabel required>
+                          {isEnglish ? translations.deceasedPassedPlace.en : translations.deceasedPassedPlace.zh}
+
+                        </FormLabel>
+
+                        <InputField required onChange={(e) => handleDeceasedChange("deceasedNow", e.target.value)}
+                          placeholder={
+                            isEnglish
+                              ? "This is the address they have resided at for the last 3 months."
+                              : "此地址为过去三个月居住的地方"
+                          } />
+                      </div>
+                      <div className="md:col-span-2">
+                        <FormLabel required>
+                          {isEnglish ? translations.deceasedCurrentPlace.en : translations.deceasedCurrentPlace.zh}
+
+                        </FormLabel>
+
+                        <InputField
+                          placeholder={
+                            isEnglish ? "Eg: Home / Hospital" : "比如：家中/医院"
+                          }
+                          value={deceasedFormValues.deceasedPassedReason}
+                          onChange={(e) =>
+                            handleDeceasedChange("deceasedPassedReason", e.target.value)
+                          }
+
+                          required
+                        />
+                      </div>
+                    </>
                   )}
 
-                  {!hasNotPassedAway && (
-                    <div className="md:col-span-2">
-                      <FormLabel required>{isEnglish
-                        ? translations.deceasedPassedPlace.en
-                        : translations.deceasedPassedPlace.zh}</FormLabel>     <InputField
-                        placeholder="Eg: Home / Hospital"
-                        value={deceasedFormValues.deceasedNow}
-                        onChange={(e) => handleDeceasedChange("deceasedNow", e.target.value)}
-                        required
-                      />
-                    </div>
-                  )}
 
                   <div className="md:col-span-2">
                     <FormLabel required>{isEnglish
@@ -656,15 +685,75 @@ const AgreementForm = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.uploadDeceasedPhoto.en
-                      : translations.uploadDeceasedPhoto.zh}</FormLabel>  <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleDeceasedChange("photo", e.target.files[0])}
-                      className="w-full p-3 border border-gray-300 rounded-md"
-                    />
+                    <FormLabel required>
+                      {isEnglish ? translations.uploadDeasedPhoto.en : translations.uploadDeasedPhoto.zh}
+                    </FormLabel>
+
+                    <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
+                      <div className="flex flex-col items-center justify-center text-center p-4">
+                        <svg
+                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+
+                        <p className="text-sm text-gray-500 mb-4">
+                          {isEnglish ? (
+                            <>
+                              You can upload up to 2 images <br /> (Only .jpg, .jpeg,
+                              .png, .heic files are allowed)
+                            </>
+                          ) : (
+                            <>
+                              您最多可以上传 2 张图片 <br /> （仅允许
+                              .jpg、.jpeg、.png、.heic 文件）
+                            </>
+                          )}
+                        </p>
+                      </div>
+
+                      <input
+                        type="file"
+                        multiple
+                        required
+                        onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
+
+                        className="hidden"
+                      />
+                    </label>
+
+
                   </div>
+                  <div className="md:col-span-2">
+                    <div className="flex flex-wrap gap-2">
+                      {deceasedFormValues?.photo?.map((file, index) => (
+                        <div key={index} className="relative inline-block">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview ${index + 1}`}
+                            className="w-52 object-cover border rounded"
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() => removeDeceasedPhoto(index)}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
@@ -757,29 +846,71 @@ const AgreementForm = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.uploadKinPhoto.en
-                      : translations.uploadKinPhoto.zh}</FormLabel>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) => handlePhotoUpload(e.target.files)}
-                      className="w-full p-3 border border-gray-300 rounded-md"
-                    />
+                    <FormLabel required>
+                      {isEnglish ? translations.uploadKinPhoto.en : translations.uploadKinPhoto.zh}
 
-                    <div className="flex flex-wrap gap-3 mt-4">
-                      {formKinValues.photo.map((file, index) => (
-                        <div key={index} className="relative">
+                    </FormLabel>
+
+                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
+                      <div className="flex flex-col items-center justify-center text-center p-4">
+                        <svg
+                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+
+                        <p className="font-semibold text-gray-900">
+                          {isEnglish
+                            ? "Drag & drop files here, or click to upload"
+                            : "拖放文件到此处，或点击上传"}
+                        </p>
+
+                        <p className="text-sm text-gray-500 mb-4">
+                          {isEnglish ? (
+                            <>
+                              You can upload up to 2 images <br /> (Only .jpg, .jpeg,
+                              .png, .heic files are allowed)
+                            </>
+                          ) : (
+                            <>
+                              您最多可以上传 2 张图片 <br /> （仅允许
+                              .jpg、.jpeg、.png、.heic 文件）
+                            </>
+                          )}
+                        </p>
+                      </div>
+
+                      <input
+                        type="file"
+                        multiple
+                        required
+                        onChange={(e) => handlePhotoUpload(e.target.files)}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div className="md:col-span-2">
+                    <div className="flex flex-wrap gap-2">
+                      {formKinValues?.photo?.map((file, index) => (
+                        <div key={index} className="relative inline-block">
                           <img
                             src={URL.createObjectURL(file)}
                             alt={`Preview ${index + 1}`}
-                            className="w-32 h-32 object-cover rounded border"
+                            className="w-52 object-cover border rounded"
                           />
+
                           <button
                             type="button"
-                            onClick={() => removePhoto(index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full"
+                            onClick={() => removeKinPhoto(index)}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
                           >
                             ×
                           </button>
@@ -793,49 +924,112 @@ const AgreementForm = () => {
               {/* ================= SIGNATURE ================= */}
               <div>
                 <h3 className="text-4xl text-center font-bold mb-6">
-                  Signature
+                  {isEnglish ? "Signature" : "签名"}
                 </h3>
+
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.salutation.en
-                    : translations.salutation.zh}</FormLabel>     <select
-                      value={signatureType}
-                      onChange={(e) => setSignatureType(e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                    >
-                    <option value="Digital Signature">Screen Signature</option>
-                    <option value="Upload Photo">Upload Photo</option>
+                  <FormLabel required>
+                    {isEnglish ? "Choose Your Signature Type" : "选择签名方式"}
+                  </FormLabel>
+
+                  <select
+                    value={signatureType}
+                    onChange={(e) => setSignatureType(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                  >
+                    <option value="Digital Signature">
+                      {isEnglish ? "Screen Signature" : "屏幕签名"}
+                    </option>
+                    <option value="Upload Photo">
+                      {isEnglish ? "Upload Photo" : "上传照片"}
+                    </option>
                   </select>
                 </div>
 
+                {/* Upload Signature Image */}
                 {signatureType === "Upload Photo" && (
                   <div className="mt-4">
-                    <FormLabel required>Upload Your Signature Here</FormLabel>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleSignatureUpload(e.target.files)}
-                      className="w-full p-3 border border-gray-300 rounded-md"
-                      required
-                    />
+                    <FormLabel required>
+                      {isEnglish ? "Upload Your Signature Here" : "在此上传您的签名"}
+                    </FormLabel>
+
+                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
+                      <div className="flex flex-col items-center justify-center text-center py-4">
+                        <svg
+                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+
+                        <p className="font-semibold text-gray-900">
+                          {isEnglish
+                            ? "Drag & drop files here, or click to upload"
+                            : "将文件拖放到此处，或点击上传"}
+                        </p>
+
+                        <p className="text-sm text-gray-500 mb-4">
+                          {isEnglish
+                            ? "(Only .jpg, .jpeg, .png, .heic files are allowed)"
+                            : "（仅允许 .jpg、.jpeg、.png、.heic 文件）"}
+                        </p>
+                      </div>
+
+                      <input
+                        type="file"
+                        multiple
+                        required
+                        accept="image/*"
+
+                        className="hidden"
+                      />
+                    </label>
+
+                    <div className="md:col-span-2">
+                      <div className="flex flex-wrap gap-2">
+                        {formKinValues?.photo?.map((file, index) => (
+                          <div key={index} className="relative inline-block">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Preview ${index + 1}`}
+                              className="w-52 object-cover border rounded"
+                            />
+
+                            <button
+                              type="button"
+                              onClick={() => removeDeceasedPhoto(index)}
+                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
+
+
                 )}
 
+                {/* Digital Signature */}
                 {signatureType === "Digital Signature" && (
                   <div className="mt-4">
-                    <FormLabel required>{isEnglish
-                      ? translations.salutation.en
-                      : translations.salutation.zh}</FormLabel>  <div className="border rounded-md bg-gray-50 p-2">
+                    <FormLabel required>
+                      {isEnglish ? "Sign Your Name Here" : "请在此签名"}
+                    </FormLabel>
+
+                    <div className="border rounded-md bg-gray-50 p-2">
                       <SignatureField
                         sigPadRef={sigCanvasRef}
                         saveSignature={saveSignature}
                         clearSignature={clearSignature}
-                        penColor="black"
-                        canvasProps={{
-                          width: 400,
-                          height: 150,
-                          className: "w-full h-[150px]",
-                        }}
                       />
                     </div>
                   </div>
