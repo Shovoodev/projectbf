@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, useContext, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import base64ToFile from ".";
 
 const PrePayServiceProviderContext = createContext();
@@ -124,6 +124,7 @@ export const PrePayServiceProvider = ({ children }) => {
   const sigCanvasRef = useRef(null);
   const [signature, setSignature] = useState("");
 
+  const [currentDate, setCurrentDate] = useState('');
   const saveSignature = async () => {
     if (!sigCanvasRef.current) return;
     console.log("getting hear");
@@ -138,7 +139,16 @@ export const PrePayServiceProvider = ({ children }) => {
   const clearSignature = () => {
     if (sigCanvasRef.current) sigCanvasRef.current.clearCanvas();
   };
-
+  const getCurrentDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  useEffect(() => {
+    setCurrentDate(getCurrentDate());
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -262,7 +272,7 @@ export const PrePayServiceProvider = ({ children }) => {
       directDebitForm,
       deptRequest,
       signature,
-      setAspFrequency
+      setAspFrequency, currentDate
     ]
   );
 

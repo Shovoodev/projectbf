@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import React from 'react';
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
-const SignatureField = ({ sigPadRef, clearSignature, saveSignature }) => {
+const SignatureField = ({
+  sigPadRef,
+  clearSignature,
+  onStrokeEnd,
+}) => {
   const wrapperRef = useRef(null);
   const [size, setSize] = useState({ width: 0, height: 150 });
 
@@ -34,18 +37,16 @@ const SignatureField = ({ sigPadRef, clearSignature, saveSignature }) => {
             strokeWidth={2}
             strokeColor="black"
             className="rounded-md border border-dashed border-gray-400 touch-none"
-            onStrokeEnd={saveSignature}
+            onStrokeEnd={onStrokeEnd}
           />
         )}
       </div>
 
-      {/* ONLY Clear button */}
       <div className="flex justify-end">
         <button
           type="button"
           onClick={clearSignature}
-          disabled={!size.width}
-          className="px-4 py-2 rounded bg-black text-white disabled:bg-gray-300 "
+          className="px-4 py-2 rounded bg-black text-white"
         >
           Clear
         </button>

@@ -1026,7 +1026,6 @@ const AgreementForm = () => {
         </div>
       </div>
     </section>
-    </>
   );
 };
 

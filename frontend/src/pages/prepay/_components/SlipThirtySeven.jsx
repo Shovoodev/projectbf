@@ -1,8 +1,6 @@
-import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
-import SignatureField from "../../packages/_components/SignatureField";
+import Signature from "./common/Signature";
 
 const SlipThirtySeven = () => {
-  const { sigCanvasRef, saveSignature, clearSignature } = usePrePayServiceApi();
   const declarations = [
     "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
     "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
@@ -22,11 +20,11 @@ const SlipThirtySeven = () => {
   ];
   return (
     <div className="form-container-base">
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
         <h1 className="pdf-h2 text-3xl mb-6">5. Application</h1>
 
         {/* Info */}
-        <div className="pdf-info-box bg-blue-50/50">
+        <div className="pdf-info-box mb-8 bg-blue-50/50">
           <p className="text-[13px] leading-relaxed">
             Before signing this Application Form, Investors should read the PDS
             to which this application is attached.
@@ -34,7 +32,7 @@ const SlipThirtySeven = () => {
         </div>
 
         {/* Declaration */}
-        <div >
+        <div className="mb-10">
           <h3 className="pdf-label text-lg border-b pb-2">Declaration:</h3>
           <p className="pdf-intro-p mt-3 font-bold">
             I/We agree and acknowledge:
@@ -60,18 +58,7 @@ const SlipThirtySeven = () => {
 
         {/* Signature Section */}
         <div className="">
-          {/* <<file upload */}
-          <SignatureField
-            sigPadRef={sigCanvasRef}
-            saveSignature={saveSignature}
-            clearSignature={clearSignature}
-            penColor="black"
-            canvasProps={{
-              width: 400,
-              height: 150,
-              className: "w-full h-[150px]",
-            }}
-          />
+          <Signature />
         </div>
         {/* Footer */}
         <div className="pdf-footer">
