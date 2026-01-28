@@ -28,7 +28,7 @@ const formVandCSchema = new mongoose.Schema(
       default: "draft",
     },
     baseTotal: { type: Number, default: 3399 },
-    transferOption: { type: Number, default: 0 },
+    transferOption: { type: String, default: 0 },
 
     service: { type: String, default: "Viewing and Cremention" },
 

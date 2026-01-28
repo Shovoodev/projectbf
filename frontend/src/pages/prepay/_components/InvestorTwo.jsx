@@ -33,8 +33,10 @@ const InvestorTwo = () => {
   };
 
   return (
-    <div className="form-container-base">
-      <div className="form-header-area">
+    <div className=" w-full bg-white border border-gray-200 rounded-lg
+  overflow-hidden shadow-xl font-roboto
+  p-4 md:p-8">
+      <div className="p-6 border-b border-gray-200 bg-slate-50">
         <p className="pdf-subtitle">
           Investor 2 ((Only complete this section if this is to be a jointly
           owned Policy, if being completed by a POA or if the policy is for a
@@ -46,8 +48,9 @@ const InvestorTwo = () => {
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="col-span-full">
-            <label className="pdf-label mb-3">Title:</label>
-            <div className="pdf-radio-group">
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 mb-3">Title:</label>
+            <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100">
               {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
                 <label key={t} className="pdf-radio-item">
                   <input
@@ -66,38 +69,48 @@ const InvestorTwo = () => {
           </div>
 
           <div>
-            <label className="pdf-label">Surname:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Surname:</label>
             <input
               type="text"
               name="surname"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="pdf-label">Given Names:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Given Names:</label>
             <input
               type="text"
               name="givenNames"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="pdf-label">Date of Birth:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Date of Birth:</label>
             <input
               type="date"
               name="dob"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="pdf-label">Gender:</label>
-            <div className="pdf-radio-group mt-2">
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Gender:</label>
+            <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100 mt-2">
               {["Female", "Male", "Other"].map((g) => (
                 <label key={g} className="pdf-radio-item">
                   <input
@@ -115,7 +128,10 @@ const InvestorTwo = () => {
         </div>
 
         {/* Residential Address */}
-        <h3 className="pdf-section-title">
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">
           Residential Address{" "}
           <span className="pdf-note">
             (must not be a PO box, RMB or Locked Bag)
@@ -124,174 +140,242 @@ const InvestorTwo = () => {
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Unit Number</label>
             <input
               type="text"
               name="res_unit"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street No</label>
             <input
               type="text"
               name="res_streetNo"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street Name</label>
             <input
               type="text"
               name="res_streetName"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Suburb</label>
             <input
               type="text"
               name="res_suburb"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">State</label>
             <input
               type="text"
               defaultValue="NSW"
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Postcode</label>
             <input
               type="text"
               name="res_postcode"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Country</label>
             <input
               type="text"
               defaultValue="AUSTRALIA"
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
         </div>
         {/* Milling  Address */}
-        <h3 className="pdf-section-title">
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">
           Mailing Address (
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Unit Number</label>
             <input
               type="text"
               name="res_unit"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street No</label>
             <input
               type="text"
               name="res_streetNo"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street Name</label>
             <input
               type="text"
               name="res_streetName"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Suburb</label>
             <input
               type="text"
               name="res_suburb"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">State</label>
             <input
               type="text"
               defaultValue="NSW"
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Postcode</label>
             <input
               type="text"
               name="res_postcode"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Country</label>
             <input
               type="text"
               defaultValue="AUSTRALIA"
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
         </div>
 
         {/* Contact Details */}
-        <h3 className="pdf-section-title">Contact Details</h3>
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">Contact Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
-            <label className="pdf-label">Daytime Telephone:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Daytime Telephone:</label>
             <input
               type="text"
               name="daytimeTelephone"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="pdf-label">Mobile:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Mobile:</label>
             <input
               type="text"
               name="mobile"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="pdf-label">Daytime Adress:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Daytime Adress:</label>
             <input
               type="text"
               name="daytimeAddress"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="">
-            <label className="pdf-label">Email:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Email:</label>
             <input
               type="email"
               name="email"
               onChange={handleChange}
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -300,7 +384,10 @@ const InvestorTwo = () => {
             If the application is being completed under a Power of Attorney
             (POA), please include the attorney’s contact details under
           </p>
-          <h3 className="pdf-section-title">Queensland residents only</h3>
+          <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">Queensland residents only</h3>
           <p className="pdf-intro-p">
             Queensland State legislation requires all ‘selling agents’ of
             Funeral Bonds to provide clients with a ‘Client Care Statement. We
@@ -312,7 +399,7 @@ const InvestorTwo = () => {
           </p>
         </div> */}
         {/* Footer */}
-        <div className="pdf-footer">
+        <div className="mt-12 pt-4 border-t border-slate-200 flex flex-col md:flex-row justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest">
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>

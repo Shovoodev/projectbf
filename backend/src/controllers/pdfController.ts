@@ -7,18 +7,16 @@ import { getVandCByUserId } from "../db/viewingAndCremention";
 import { getNoCreByUserId } from "../db/noViewingCremention";
 
 export const sendPdfOfPrepay = async (
-  req: AuthenticatedRequest,
-  // req: express.Request,
+  req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const response = req.identity;
-
-    if (!response) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    console.log("comming hear");
+    
     const pdfBuffer = req.file.buffer;
-    const send = SendPrePayBond(pdfBuffer);
+    const send = await SendPrePayBond(pdfBuffer);
+    console.log({send});
+    
 
     res.status(200).json({ success: true, data: send });
   } catch (error) {
@@ -112,9 +110,12 @@ export const sendPdfOfInvoice = async (
 };
 
 export const sendAttendenceServiceSelection = async (
+  // req: express.Request,
   req: AuthenticatedRequest,
   res: express.Response
 ) => {
+  console.log("heaer");
+  
   try {
     const response = req.identity;
 
@@ -122,11 +123,13 @@ export const sendAttendenceServiceSelection = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
     const userId = response._id;
+    // const { userId} = req.body
     const doc =
       (await getAttendenceByUserId(userId)) ||
       (await getVandCByUserId(userId)) ||
       (await getNoCreByUserId(userId));
-
+    console.log({doc});
+    
     const data = {
       baseTotal: doc.baseTotal,
       service: doc.service,

@@ -31,7 +31,8 @@ const NeedMoreTimeSection = () => {
             {/* Arrange a Visit Button */}
             <a
               href="#"
-              className="btn-secondary flex items-center justify-center gap-3 bg-transparent text-black border border-black px-8 py-3 rounded-full uppercase font-bold text-sm w-full sm:w-auto hover:bg-black hover:text-white transition-all shadow-sm hover:shadow-md"
+              className="flex items-center
+ justify-center gap-3 bg-transparent text-black border border-black px-8 py-3 rounded-full uppercase font-bold text-sm w-full sm:w-auto hover:bg-black hover:text-white transition-all shadow-sm hover:shadow-md"
             >
               Arrange a Visit
             </a>

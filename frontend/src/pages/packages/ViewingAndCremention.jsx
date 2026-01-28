@@ -27,6 +27,11 @@ export const viewingAndCremention = [
     type: "select",
     options: [
       {
+        label: "Select a option",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
+      {
         label: "Sydney Metro",
         value: "Sydney Metro",
         priceAdjustment: 0,
@@ -190,28 +195,14 @@ const ViewingAndCrementionPage = () => {
     setLoading(true);
 
     try {
-
-      // Register
-      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!registerRes.ok) {
-        const err = await registerRes.json();
-        throw new Error(err.message || "Registration failed");
-      }
-
-      // Save selections
-      await fetch(`${CORE}/newattendingservicecremationanswers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selections }),
-        credentials: "include",
-      });
       setTimeout(() => {
-        navigate(`/prepay`);
-      }, 1500);
+        navigate("/prepay", {
+          state: {
+            selections,
+            amount: totalPrice,
+          },
+        });
+      }, 1000);
     } catch (err) {
       message(err.message, "error");
     } finally {

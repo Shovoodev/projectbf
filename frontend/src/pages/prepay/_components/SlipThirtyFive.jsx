@@ -1,9 +1,9 @@
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
-const SlipThirtyFive = () => {
+const SlipThirtyFive = ({ amount }) => {
   const { setAspFrequency, totalPrice } = usePrePayServiceApi();
   console.log({ totalPrice });
-
+  const addedAmount = amount + 220
   const investmentOptions = [
     {
       no: 1,
@@ -39,7 +39,7 @@ const SlipThirtyFive = () => {
                 type="text"
                 name="contribution_amount"
                 readOnly
-                value={totalPrice}
+                value={addedAmount}
                 placeholder="0.00"
                 className="pdf-input pl-8 font-semibold text-lg"
               />

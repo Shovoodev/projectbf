@@ -76,7 +76,7 @@ const formResponseSchema = new mongoose.Schema(
     baseTotal: { type: Number, default: 4499 },
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
-    transferOption: { type: Number, default: 0 },
+    transferOption: { type: String, default: 0 },
 
     status: {
       type: String,

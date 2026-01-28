@@ -1,14 +1,14 @@
 import React from "react";
 import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import SignatureField from "./SignatureField";
+import { usePrePayServiceApi } from "../../../../utility/prepay-service-provider";
 function Signature() {
   // ===== Signature Upload =====
+  const { sigCanvasRef, saveSignature, clearSignature, signaturePreview, } = usePrePayServiceApi();
   const fileInputRef = useRef(null);
   const [uploadedSig, setUploadedSig] = useState(null);
 
-  // ===== Canvas Signature =====
-  const sigPadRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -26,10 +26,6 @@ function Signature() {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-  };
-
-  const handleClearCanvas = () => {
-    sigPadRef.current?.clearCanvas();
   };
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-center">
@@ -90,27 +86,18 @@ function Signature() {
           )}
         </div>
 
-        <label className="pdf-label text-center">Signature of Investor 1</label>
+        <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 text-center">Signature of Investor 1</label>
       </div>
 
       {/* Draw Signature */}
-      <div className="space-y-4 mb-5">
-        <ReactSketchCanvas
-          ref={sigPadRef}
-          width="240px"
-          height="120px"
-          strokeWidth={2}
-          strokeColor="black"
-          className="border rounded"
-        />
+      <div className="lg:col-span-2 space-y-4">
+        <SignatureField
 
-        <button
-          type="button"
-          onClick={handleClearCanvas}
-          className="px-3 py-1 bg-gray-100 border rounded text-sm"
-        >
-          Clear
-        </button>
+          sigPadRef={sigCanvasRef}
+          saveSignature={saveSignature}
+          clearSignature={clearSignature}
+          penColor="black" />
       </div>
       {/* hidden signature */}
       <div className="space-y-4 hidden">
@@ -136,41 +123,32 @@ function Signature() {
           <p className="text-[10px] text-gray-400">PNG, JPG or PDF accepted</p>
 
           {/* Preview */}
-          {/* {uploadedSig && uploadedSig.startsWith("data:image") && (
-                <div className="relative mt-2 inline-block">
-                  <button
-                    type="button"
-                    onClick={handleRemoveUploadedSig}
-                    className="absolute -top-2 -right-2 bg-white rounded-full shadow w-6 h-6 border flex items-center justify-center text-xs"
-                  >
-                    ×
-                  </button>
-                  <img
-                    src={uploadedSig}
-                    alt="Uploaded signature"
-                    className="border rounded max-w-full h-auto"
-                  />
-                </div>
-              )} */}
+          {(uploadedSig || signaturePreview) && (
+            <div className="mt-4 relative inline-block">
+              <button
+                type="button"
+                onClick={() => {
+                  setUploadedSig(null);
+                  clearSignature();
+                }}
+                className="absolute -top-2 -right-2 bg-white rounded-full shadow w-6 h-6 border flex items-center justify-center text-xs"
+              >
+                ×
+              </button>
 
-          {/* {uploadedSig &&
-                uploadedSig.startsWith("data:application/pdf") && (
-                  <div className="relative mt-2 inline-block">
-                    <button
-                      type="button"
-                      onClick={handleRemoveUploadedSig}
-                      className="absolute -top-2 -right-2 bg-white rounded-full shadow w-6 h-6 border flex items-center justify-center text-xs"
-                    >
-                      ×
-                    </button>
-                    <div className="text-xs text-gray-600 border p-2 rounded">
-                      PDF signature uploaded
-                    </div>
-                  </div>
-                )} */}
+              <img
+                src={uploadedSig || signaturePreview}
+                alt="Signature Preview"
+                className="border rounded max-w-full h-[120px] object-contain bg-white"
+              />
+            </div>
+          )}
+
+
         </div>
 
-        <label className="pdf-label text-center">Signature of Investor 1</label>
+        <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 text-center">Signature of Investor 1</label>
       </div>
     </div>
   );

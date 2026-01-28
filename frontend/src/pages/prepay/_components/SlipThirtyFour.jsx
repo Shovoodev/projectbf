@@ -4,40 +4,43 @@ const SlipThirtyFour = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
 
   return (
-    <div className="form-container-base">
-      <div className="form-header-area">
+    <div className=" w-full bg-white border border-gray-200 rounded-lg
+  overflow-hidden shadow-xl font-roboto
+  p-4 md:p-8">
+      <div className="p-6 border-b border-gray-200 bg-slate-50">
         <p className="pdf-subtitle">
-        Investor 2 (Only complete this section if this is to be a jointly owned Policy, if being completed by a POA or if the policy is
+          Investor 2 (Only complete this section if this is to be a jointly owned Policy, if being completed by a POA or if the policy is
           for a Separate Life Insured)
         </p>
-        <div className="pdf-radio-group">
-              {["Joint application ", "Separate Life Insured", "Power of Attorney"].map((t) => (
-                <label key={t} className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name="title"
-                    value={t}
-                    onChange={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
-                    }
-                    className="pdf-radio-input"
-                  />
-                  <span className="text-gray-700 group-hover:text-blue-900">
-                    {t}
-                  </span>
-                </label>
-              ))}
-            </div>
+        <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100">
+          {["Joint application ", "Separate Life Insured", "Power of Attorney"].map((t) => (
+            <label key={t} className="pdf-radio-item">
+              <input
+                type="radio"
+                name="title"
+                value={t}
+                onChange={(e) =>
+                  updateInvestor("investorOne", ["gender"], e.target.value)
+                }
+                className="pdf-radio-input"
+              />
+              <span className="text-gray-700 group-hover:text-blue-900">
+                {t}
+              </span>
+            </label>
+          ))}
+        </div>
         <p>Before making a joint application please read page 7 of the PDS. To make 2 single applications please complete a
-        separate Application Form for each Investor.</p>
+          separate Application Form for each Investor.</p>
       </div>
 
       <form className="p-8 space-y-6" onSubmit={handleChange}>
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="col-span-full">
-            <label className="pdf-label mb-3">Title:</label>
-            <div className="pdf-radio-group">
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 mb-3">Title:</label>
+            <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100">
               {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
                 <label key={t} className="pdf-radio-item">
                   <input
@@ -58,11 +61,14 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className="pdf-label">Surname:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Surname:</label>
             <input
               type="text"
               name="surname"
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               onChange={(e) =>
                 updateInvestor("investorOne", ["surname"], e.target.value)
               }
@@ -70,11 +76,14 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className="pdf-label">Given Names:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Given Names:</label>
             <input
               type="text"
               name="givenNames"
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               onChange={(e) =>
                 updateInvestor("investorOne", ["givenNames"], e.target.value)
               }
@@ -82,11 +91,14 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className="pdf-label">Date of Birth:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Date of Birth:</label>
             <input
               type="date"
               name="dob"
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               onChange={(e) =>
                 updateInvestor("investorOne", ["givenNames"], e.target.value)
               }
@@ -94,8 +106,9 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className="pdf-label">Gender:</label>
-            <div className="pdf-radio-group mt-2">
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Gender:</label>
+            <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100 mt-2">
               {["Female", "Male", "Other"].map((g) => (
                 <label key={g} className="pdf-radio-item">
                   <input
@@ -115,7 +128,10 @@ const SlipThirtyFour = () => {
         </div>
 
         {/* Residential Address */}
-        <h3 className="pdf-section-title">
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">
           Residential Address{" "}
           <span className="pdf-note">
             (must not be a PO box, RMB or Locked Bag)
@@ -124,103 +140,135 @@ const SlipThirtyFour = () => {
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Unit Number</label>
             <input
               type="text"
               name="res_unit"
               onChange={(e) =>
                 updateInvestor("investorOne", ["unit"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street No</label>
             <input
               type="text"
               name="res_streetNo"
               onChange={(e) =>
                 updateInvestor("investorOne", ["streetNo"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street Name</label>
             <input
               type="text"
               name="res_streetName"
               onChange={(e) =>
                 updateInvestor("investorOne", ["streetName"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Suburb</label>
             <input
               type="text"
               name="res_suburb"
               onChange={(e) =>
                 updateInvestor("investorOne", ["suburb"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">State</label>
             <input
               type="text"
               defaultValue="NSW"
               onChange={(e) =>
                 updateInvestor("investorOne", ["state"], e.target.value)
               }
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Postcode</label>
             <input
               type="text"
               name="res_postcode"
               onChange={(e) =>
                 updateInvestor("investorOne", ["postcode"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Country</label>
             <input
               type="text"
               onChange={(e) =>
                 updateInvestor("investorOne", ["country"], e.target.value)
               }
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
               disabled
             />
           </div>
         </div>
         {/* Milling  Address */}
-        <h3 className="pdf-section-title">
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">
           Mailing Address (
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Unit Number</label>
             <input
               type="text"
               name="res_unit"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailunit"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street No</label>
             <input
               type="text"
               name="res_streetNo"
@@ -230,7 +278,8 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Street Name</label>
             <input
               type="text"
               name="res_streetName"
@@ -241,60 +290,82 @@ const SlipThirtyFour = () => {
                   e.target.value
                 )
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Suburb</label>
             <input
               type="text"
               name="res_suburb"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailsuburb"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">State</label>
             <input
               type="text"
               defaultValue="NSW"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailstate"], e.target.value)
               }
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Postcode</label>
             <input
               type="text"
               name="res_postcode"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailpostcode"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm">Country</label>
             <input
               type="text"
               defaultValue="AUSTRALIA"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailcountry"], e.target.value)
               }
-              className="pdf-input pdf-input-readonly"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent-readonly"
             />
           </div>
         </div>
 
         {/* Contact Details */}
-        <h3 className="pdf-section-title">Contact Details</h3>
+        <h3 className="text-lg font-bold uppercase tracking-wide
+  text-[rgb(49,41,166)]
+  border-b border-gray-200
+  pb-2 mt-8 mb-4">Contact Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
-            <label className="pdf-label">Daytime Telephone:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Daytime Telephone:</label>
             <input
               type="number"
               name="daytimeTelephone"
@@ -305,22 +376,28 @@ const SlipThirtyFour = () => {
                   e.target.value
                 )
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="pdf-label">Mobile:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Mobile:</label>
             <input
               type="text"
               name="mobile"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mobile"], e.target.value)
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="pdf-label">Daytime Adress:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Daytime Adress:</label>
             <input
               type="text"
               name="daytimeAddress"
@@ -331,11 +408,14 @@ const SlipThirtyFour = () => {
                   e.target.value
                 )
               }
-              className="pdf-input"
+              className="w-full p-2 border border-gray-300 rounded
+  outline-none transition-all duration-200
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="">
-            <label className="pdf-label">Email:</label>
+            <label className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200">Email:</label>
             <input
               type="email"
               name="email"
@@ -347,7 +427,7 @@ const SlipThirtyFour = () => {
         </div>
 
         {/* Footer */}
-        <div className="pdf-footer">
+        <div className="mt-12 pt-4 border-t border-slate-200 flex flex-col md:flex-row justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest">
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS
           </div>

@@ -117,10 +117,16 @@ export const PrePayServiceProvider = ({ children }) => {
     },
   });
 
+  const [contact, setContact] = useState({
+    daytimeTelephone: "",
+    mobile: "",
+    daytimeAdress: "",
+    email: ""
+  })
   const [contributionamount, setContributionamount] = useState(0);
   const paymentMethod = ["direct_debit", "cheque", "EFT", "BPAY"];
   const [aspFrequency, setAspFrequency] = useState(false);
-
+  const [signaturePreview, setSignaturePreview] = useState("");
   const sigCanvasRef = useRef(null);
   const [signature, setSignature] = useState("");
 
@@ -133,12 +139,12 @@ export const PrePayServiceProvider = ({ children }) => {
     console.log({ dataUrl, file });
 
     setSignature(file); // ✅ File object
+    setSignaturePreview(dataUrl)
   };
 
   const clearSignature = () => {
     if (sigCanvasRef.current) sigCanvasRef.current.clearCanvas();
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -252,7 +258,7 @@ export const PrePayServiceProvider = ({ children }) => {
       saveSignature,
       clearSignature,
       signature,
-      setAspFrequency
+      setAspFrequency, signaturePreview, contact, setContact
     }),
     [
       investors,
@@ -262,7 +268,7 @@ export const PrePayServiceProvider = ({ children }) => {
       directDebitForm,
       deptRequest,
       signature,
-      setAspFrequency
+      setAspFrequency, signaturePreview, contact, setContact
     ]
   );
 

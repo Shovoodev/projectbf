@@ -70,7 +70,10 @@ export default function Hero() {
             </motion.a>
 
             <motion.a
-              className="btn-secondary"
+              className="flex items-center py-2 px-4
+  font-bold text-[rgb(49,41,166)]
+  hover:text-[rgb(49,41,166)]
+  transition-colors"
               href="#"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

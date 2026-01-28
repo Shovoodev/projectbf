@@ -36,9 +36,11 @@ import {
   twentyTwo,
   two,
 } from "../../../images/index";
-import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
 const CORE = import.meta.env.VITE_API_URL;
+const A4_WIDTH = 2480;
+const A4_HEIGHT = 3508;
+
 // import all the slips in order
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
@@ -91,9 +93,8 @@ const images = [
   twentyNine,
   thirty,
 ];
-const PrePay = () => {
+const PrePay = ({ amount }) => {
   // const [images, setImages] = useState([]);
-  const { user } = useUserFront();
   const slipRefs = useRef([]);
   const { submitInvestment } = usePrePayServiceApi();
   // const handleImageChange = () => {
@@ -113,64 +114,47 @@ const PrePay = () => {
   const sendPdfByEmail = async () => {
     try {
       setIsGeneratingPdf(true);
-      // await submitInvestment(),
       setLoadingText("Rendering application pages…");
 
       const slipImages = [];
 
-
       for (let i = 0; i < slipRefs.current.length; i++) {
-        setLoadingText(
-          `Processing page ${i + 1} of ${slipRefs.current.length}…`
-        );
-
+        setLoadingText(`Processing page ${i + 1} of ${slipRefs.current.length}…`);
         const node = slipRefs.current[i];
         if (!node) continue;
 
         const originalOverflow = node.style.overflow;
-        node.style.overflow = 'visible';
+        node.style.overflow = "visible";
+        const a4WidthPx = 595;
+        const a4HeightPx = 842;
 
-        const img = await htmlToImage.toPng(node, {
-          pixelRatio: 1,
-          quality: 0.5,
-          backgroundColor: '#ffffff',
-          height: node.scrollHeight, // Capture full height
-          width: node.scrollWidth, // Capture full width
-          style: {
-            transform: 'none', // Prevent scaling issues
-            overflow: 'visible'
-          }
+        const img = await htmlToImage.toJpeg(node, {
+          pixelRatio: 2,
+          backgroundColor: "#ffffff",
+          width: a4WidthPx,
+          height: a4HeightPx,
         });
 
-        // Restore original overflow
         node.style.overflow = originalOverflow;
-
         slipImages.push(img);
       }
 
       setLoadingText("Generating PDF document…");
-
-      // 2️⃣ Merge images with dynamic height calculation
-      const allImagesForPdf = [...slipImages];
-
-      // 3️⃣ Generate PDF
-      const pdfBlob = await generatePdfBlob(allImagesForPdf);
+      const pdfBlob = await generatePdfBlob(slipImages);
 
       setLoadingText("Sending document to your email…");
-
-      // 4️⃣ Send PDF
       const formData = new FormData();
-      formData.append("file", pdfBlob, "policy.pdf");
-      formData.append("email", user.email);
+      formData.append("file", new File([pdfBlob], "bond.pdf", { type: "application/pdf" }));
+      // formData.append("email", user.email);
 
-      await fetch(`${CORE}/${user._id}/send-pdf-on-email`, {
+      const res = await fetch(`${CORE}/send-pdf-on-email`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`, // or credentials: "include"
-        },
         body: formData,
         credentials: "include",
       });
+
+      const data = await res.json();
+      if (!data.success) throw new Error("Email failed");
 
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
@@ -181,18 +165,19 @@ const PrePay = () => {
     }
   };
 
+
   const [step, setStep] = useState(0);
   const slips = [
     <SlipThirtyTwo />,
     <SlipThirtyThree />,
     <SlipThirtyFour />,
-    <SlipThirtyFive />,
+    <SlipThirtyFive amount={amount} />,
     <SlipThirtySix />,
     <SlipThirtySeven />,
     <SlipThirtyEight />,
     <SlipThirtyNine />,
-    <SlipFourty />, //hide
-    <SlipFourtyOne />, //hide
+    <div data-pdf-ignore><SlipFourty /></div>,
+    <div data-pdf-ignore><SlipFourtyOne /></div>,
     <SlipFourtyTwo />,
     <img src={fortyTwo} />,
     <img src={fortyThree} />,
@@ -310,7 +295,7 @@ const PrePay = () => {
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="btn-primary-pdf w-full sm:w-auto justify-center"
+                  className="flex items-center bg-blue-900 text-white px-10 py-3 rounded-md shadow-md hover:bg-blue-950 transition-all active:scale-95 w-full sm:w-auto justify-center font-bold"
                 >
                   <FaChevronLeft className="mr-2" /> Previous Section
                 </button>
@@ -322,7 +307,7 @@ const PrePay = () => {
                 <button
                   type="button"
                   onClick={() => setStep(step + 1)}
-                  className="btn-primary-pdf bg-[#3129a6] w-full sm:w-auto"
+                  className="flex items-center text-white px-10 py-3 rounded-md shadow-md hover:bg-blue-950 transition-all active:scale-95 w-full sm:w-auto justify-center font-bold bg-[#3129a6]"
                 >
                   Next Section <FaChevronRight className="ml-2" />
                 </button>
@@ -333,7 +318,7 @@ const PrePay = () => {
                   type="button"
                   onClick={sendPdfByEmail}
                   disabled={isGeneratingPdf}
-                  className={`btn-primary-pdf w-full sm:w-auto border-none shadow-lg
+                  className={`flex items-center bg-blue-900 text-white px-10 py-3 rounded-md  hover:bg-blue-950 transition-all active:scale-95 w-full sm:w-auto justify-center font-bold border-none shadow-lg
             ${isGeneratingPdf
                       ? "bg-gray-400 cursor-not-allowed"
                       : "!bg-amber-500 hover:!bg-amber-600"
@@ -353,7 +338,11 @@ const PrePay = () => {
           <div
             key={index}
             ref={(el) => (slipRefs.current[index] = el)}
-            className="w-[794px] bg-white"
+            style={{
+              width: "2480px",
+              height: "3508px",
+            }}
+            className="bg-white overflow-hidden"
           >
             {SlipComponent}
           </div>

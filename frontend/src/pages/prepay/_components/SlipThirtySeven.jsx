@@ -1,5 +1,6 @@
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 import SignatureField from "../../packages/_components/SignatureField";
+import Signature from "./common/Signature";
 
 const SlipThirtySeven = () => {
   const { sigCanvasRef, saveSignature, clearSignature } = usePrePayServiceApi();
@@ -61,17 +62,7 @@ const SlipThirtySeven = () => {
         {/* Signature Section */}
         <div className="">
           {/* <<file upload */}
-          <SignatureField
-            sigPadRef={sigCanvasRef}
-            saveSignature={saveSignature}
-            clearSignature={clearSignature}
-            penColor="black"
-            canvasProps={{
-              width: 400,
-              height: 150,
-              className: "w-full h-[150px]",
-            }}
-          />
+          <Signature />
         </div>
         {/* Footer */}
         <div className="pdf-footer">

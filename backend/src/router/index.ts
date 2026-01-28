@@ -20,8 +20,8 @@ export default (): express.Router => {
   adminRouter(router);
   enquireyRouter(router);
   paymentRouter(router);
-  pdfRouter(router);
   blogRouter(router);
   prePayRouter(router);
+  pdfRouter(router)
   return router;
 };

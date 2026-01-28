@@ -4,7 +4,10 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 
 const Main = ({ onContinue, onNext, onPrev }) => {
   return (
-    <div className="intro-overlay-container">
+    <div className="fixed inset-0 h-screen w-screen
+  bg-[#F5F5F5]
+  flex items-start justify-end
+  z-[1000] overflow-hidden">
       {/* Background Image Container */}
       <div className="absolute inset-0 flex justify-center items-center transition-transform duration-300 z-0">
         <img
@@ -15,7 +18,12 @@ const Main = ({ onContinue, onNext, onPrev }) => {
       </div>
 
       {/* Floating Info Card */}
-      <div className="intro-card">
+      <div className="bg-white/98 backdrop-blur-md
+  rounded-xl shadow-2xl
+  border-2 border-[rgb(44,90,160)]/30
+  w-full max-w-[400px] m-5 min-h-[200px]
+  flex items-center text-center
+  p-9 z-[100]">
         <div className="flex-1">
           <h1 className="text-[rgb(44,90,160)] text-3xl font-bold mb-4">
             Funeral Bond Information
@@ -24,14 +32,14 @@ const Main = ({ onContinue, onNext, onPrev }) => {
           <p className="text-gray-400 text-sm mb-6">
             Swipe left/right or use arrow keys to navigate
           </p>
-          <button onClick={onContinue} className="btn-continue">
+          <button onClick={onContinue} className="bg-[rgb(44,90,160)] text-white border-2 border-[rgb(44,90,160)] px-8 py-4 rounded-lg text-base font-semibold uppercase tracking-widest transition-all duration-300 shadow-[0_6px_16px_rgba(44,90,160,0.4)] hover:brightness-110 active:scale-95">
             Continue to Application Form
           </button>
         </div>
       </div>
 
       {/* Zoom Controls */}
-      <div className="zoom-controls">
+      <div className="absolute bottom-5 right-5 bg-white border border-gray-200 p-2 rounded-lg flex items-center gap-3 z-[300] shadow-sm">
         <button className="text-gray-600 hover:text-blue-900">
           <FaMinus />
         </button>
@@ -44,14 +52,14 @@ const Main = ({ onContinue, onNext, onPrev }) => {
       {/* Navigation Arrows */}
       <button
         onClick={onPrev}
-        className="nav-circle-btn left-5"
+        className="fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44,90,160)] text-[rgb(44,90,160)] w-[60px] h-[60px] rounded-full text-2xl font-bold flex items-center justify-center transition-all duration-300 z-[1100] shadow-lg hover:bg-white left-5"
         aria-label="Previous Page"
       >
         ←
       </button>
       <button
         onClick={onNext}
-        className="nav-circle-btn right-5"
+        className="fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44,90,160)] text-[rgb(44,90,160)] w-[60px] h-[60px] rounded-full text-2xl font-bold flex items-center justify-center transition-all duration-300 z-[1100] shadow-lg hover:bg-white right-5"
         aria-label="Next Page"
       >
         →
