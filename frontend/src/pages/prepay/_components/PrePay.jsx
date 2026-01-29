@@ -38,6 +38,7 @@ import {
 } from "../../../images/index";
 import { useUserFront } from "../../../utility/use-userFront";
 import { generatePdfBlob } from "./ImageToPdf";
+
 const CORE = import.meta.env.VITE_API_URL;
 // import all the slips in order
 import SlipFortySix from "./SlipFortySix";
@@ -180,6 +181,8 @@ const PrePay = () => {
       setIsGeneratingPdf(false);
     }
   };
+
+
 
   const [step, setStep] = useState(0);
   const slips = [

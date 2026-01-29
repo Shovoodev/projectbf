@@ -62,8 +62,7 @@ const AgreementForm = () => {
     "Other",
   ];
   const location = useLocation();
-  const { selections, path } = location.state || {};
-  console.log({ selections, path });
+  const { selections, path, totalPrice } = location.state || {};
 
   const [notPassed, setNotPassed] = useState(false);
   const [error, setError] = useState("");
@@ -217,7 +216,7 @@ const AgreementForm = () => {
           flowers: selections.flowers,
           urn: selections.urn,
           collectionOfUrn: selections.collectionOfUrn,
-          transformOption: selections.transformOption || selections.transferOption,
+          transferOption: selections.transferOption || selections.transferOption,
         };
 
         // Convert to backend expected format
@@ -279,7 +278,7 @@ const AgreementForm = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               selections: backendSelections,
-              totalPrice: 0 // You can calculate this if needed
+              totalPrice: totalPrice
             }),
           });
 
@@ -326,7 +325,6 @@ const AgreementForm = () => {
         alert("Please provide a signature");
         return;
       }
-      console.log({ signFile });
       await new Promise((r) => setTimeout(r, 0));
 
       const fd = new FormData();
@@ -596,8 +594,8 @@ const AgreementForm = () => {
                     <div>
                       <FormLabel required>
                         {isEnglish
-                          ? translations.dateOfBirth.en
-                          : translations.dateOfBirth.zh}
+                          ? translations.dateOfDeath.en
+                          : translations.dateOfDeath.zh}
                       </FormLabel>
                       <InputField
                         type="date"

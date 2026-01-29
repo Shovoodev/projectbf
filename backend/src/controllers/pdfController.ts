@@ -7,16 +7,16 @@ import { getVandCByUserId } from "../db/viewingAndCremention";
 import { getNoCreByUserId } from "../db/noViewingCremention";
 
 export const sendPdfOfPrepay = async (
-  req: AuthenticatedRequest,
-  // req: express.Request,
+  // req: AuthenticatedRequest,
+  req: express.Request,
   res: express.Response
 ): Promise<any> => {
   try {
-    const response = req.identity;
+    // const response = req.identity;
 
-    if (!response) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    // if (!response) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
     const pdfBuffer = req.file.buffer;
     const send = SendPrePayBond(pdfBuffer);
 
@@ -111,39 +111,34 @@ export const sendPdfOfInvoice = async (
   }
 };
 
+
 export const sendAttendenceServiceSelection = async (
   req: AuthenticatedRequest,
   res: express.Response
 ) => {
   try {
-    const response = req.identity;
-
-    if (!response) {
+    if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const userId = response._id;
+
+    const userId = req.identity._id;
+
     const doc =
       (await getAttendenceByUserId(userId)) ||
       (await getVandCByUserId(userId)) ||
       (await getNoCreByUserId(userId));
 
-    const data = {
-      baseTotal: doc.baseTotal,
-      service: doc.service,
-      reference: doc.reference,
-      email: doc.email,
-      urn: doc.urn,
-      collectionOfUrn: doc.collectionOfUrn,
-      totalPriceImpact: doc.totalPriceImpact,
-      totalPrice: doc.totalPrice,
-    };
+    if (!doc) {
+      return res.status(404).json({ message: "No service selection found" });
+    }
 
+    // ✅ SEND THE FULL DOCUMENT
     return res.status(200).json({
       success: true,
-      data,
+      data: doc,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("ERROR:", error);
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };

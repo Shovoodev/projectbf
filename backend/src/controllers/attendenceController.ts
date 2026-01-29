@@ -22,6 +22,7 @@ export const getNoServiceFunral = async (
   }
 };
 
+
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -30,93 +31,96 @@ export const getAttendenceAnswers = async (
     if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    // Log the entire request body for debugging
 
-    const { selections, totalPrice = 0 } = req.body;
+    const { selections } = req.body;
 
     if (!selections) {
       return res.status(400).json({ message: "No selections provided" });
     }
 
-    // Extract values and prices from selections
-    const stationeryValue = selections?.stationery?.value || "";
-    const stationeryPrice = parseFloat(selections?.stationery?.price) || 0;
+    // ✅ Extract values + prices safely
+    const getValue = (key: string) => selections?.[key]?.value || "";
+    const getPrice = (key: string) =>
+      Number(selections?.[key]?.price || 0);
 
-    const bodyPreparationValue = selections?.bodyPreparation?.value || "";
-    const bodyPreparationPrice =
-      parseFloat(selections?.bodyPreparation?.price) || 0;
+    const stationeryOption = getValue("stationery");
+    const stationeryPrice = getPrice("stationery");
 
-    const coffinValue = selections?.coffin?.value || "";
-    const coffinPrice = parseFloat(selections?.coffin?.price) || 0;
+    const bodyPreparationOption = getValue("bodyPreparation");
+    const bodyPreparationPrice = getPrice("bodyPreparation");
 
-    const flowersValue = selections?.flowers?.value || "";
-    const flowersPrice = parseFloat(selections?.flowers?.price) || 0;
+    const coffinOption = getValue("coffin");
+    const coffinPrice = getPrice("coffin");
 
-    const urnValue = selections?.urn?.value || "";
-    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+    const flowersOption = getValue("flowers");
+    const flowersPrice = getPrice("flowers");
 
-    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
-    const collectionOfUrnPrice =
-      parseFloat(selections?.collectionOfUrn?.price) || 0;
-    const transferOption = selections?.transferOption?.value || "";
-    const transferOptionPrice =
-      parseFloat(selections?.transferOption?.price) || 0;
+    const urnOption = getValue("urn");
+    const urnPrice = getPrice("urn");
 
-    // Calculate total price impact
+    const collectionOfUrnOption = getValue("collectionOfUrn");
+    const collectionOfUrnPrice = getPrice("collectionOfUrn");
+
+    const transferOption = getValue("transferOption");
+    const transferPrice = getPrice("transferOption");
+
     const totalPriceImpact =
-      stationeryPrice +
-      bodyPreparationPrice +
-      coffinPrice +
-      flowersPrice +
-      urnPrice +
-      collectionOfUrnPrice +
-      transferOptionPrice;
+    stationeryPrice +
+    bodyPreparationPrice +
+    coffinPrice +
+    flowersPrice +
+    urnPrice +
+    collectionOfUrnPrice 
+    const BASE_PRICE= 4499
+    const finalTotalPrice = BASE_PRICE + totalPriceImpact;
 
-    const BASE_PRICE = 4499; // Match frontend base price
-    const finalTotalPrice =
-      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
-
-    let existingResponse = await FormResponseModel.findOne({
+    if (finalTotalPrice <= 0) {
+      return res.status(400).json({ message: "Invalid total price" });
+    }
+    let response = await FormResponseModel.findOne({
       userid: req.identity._id,
       reference: req.identity.reference,
     });
 
-    let savedResponse;
-
-    if (existingResponse) {
-      existingResponse.stationery = stationeryValue;
-      existingResponse.bodyPreparation = bodyPreparationValue;
-      existingResponse.coffin = coffinValue;
-      existingResponse.flowers = flowersValue;
-      existingResponse.urn = urnValue;
-      existingResponse.collectionOfUrn = collectionOfUrnValue;
-      existingResponse.totalPriceImpact = totalPriceImpact;
-      existingResponse.totalPrice = finalTotalPrice;
-      existingResponse.transferOption = transferOption;
-
-      savedResponse = await existingResponse.save();
-    } else {
-      savedResponse = await FormResponseModel.create({
+    if (!response) {
+      response = new FormResponseModel({
         userid: req.identity._id,
         reference: req.identity.reference,
         email: req.identity.email,
-        stationery: stationeryValue,
-        bodyPreparation: bodyPreparationValue,
-        coffin: coffinValue,
-        flowers: flowersValue,
-        urn: urnValue,
-        collectionOfUrn: collectionOfUrnValue,
-        totalPriceImpact,
-        transferOption,
-        totalPrice: finalTotalPrice,
-        status: "draft",
       });
     }
 
+    // ✅ Save OPTION + PRICE correctly
+    response.stationeryOption = stationeryOption;
+    response.stationery = stationeryPrice;
+
+    response.bodyPreparationOption = bodyPreparationOption;
+    response.bodyPreparation = bodyPreparationPrice;
+
+    response.coffinOption = coffinOption;
+    response.coffin = coffinPrice;
+
+    response.flowersOption = flowersOption;
+    response.flowers = flowersPrice;
+
+    response.urnOption = urnOption;
+    response.urn = urnPrice;
+
+    response.collectionOfUrnOption = collectionOfUrnOption;
+    response.collectionOfUrn = collectionOfUrnPrice;
+
+    response.transferOption = transferOption;
+    response.transferPrice = transferPrice;
+
+    response.totalPriceImpact = totalPriceImpact;
+    response.totalPrice = finalTotalPrice;
+    response.status = "draft";
+
+    const saved = await response.save();
+
     return res.status(200).json({
       message: "Attendance response saved",
-      data: savedResponse,
-      totalPrice: savedResponse.totalPrice,
+      data: saved,
     });
   } catch (error) {
     console.error("ERROR:", error);

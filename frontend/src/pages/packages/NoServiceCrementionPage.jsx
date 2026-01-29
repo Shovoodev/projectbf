@@ -81,7 +81,7 @@ const NoServiceCrementionPage = () => {
 
   const BASE_PRICE = 2299
   const [selections, setSelections] = useState({
-    transformOption: { value: "", price: 0 },
+    transferOption: { value: "Sydney Metro", price: 0 },
     urn: { value: "", price: 0 },
     collectionOfUrn: { value: "", price: 0 },
   });

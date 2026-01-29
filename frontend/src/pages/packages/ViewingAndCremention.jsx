@@ -88,7 +88,7 @@ const ViewingAndCrementionPage = () => {
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();
   const [selections, setSelections] = useState({
-    transformOption: { value: "", price: 0 },
+    transferOption: { value: "Sydney Metro", price: 0 },
     urn: { value: "", price: 0 },
     collectionOfUrn: { value: "", price: 0 },
   });

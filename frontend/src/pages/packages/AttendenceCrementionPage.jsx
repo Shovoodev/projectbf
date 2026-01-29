@@ -3,6 +3,7 @@ import { List, Select } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
+import PDFDownloadButton from "../prepay/_components/generatedPdf/TestDownload";
 const CORE = import.meta.env.VITE_API_URL;
 
 // --- Reusable Card Component ---
@@ -25,6 +26,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select a Option",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
+      {
         label: "Sydney Metro",
         value: "Sydney Metro",
         priceAdjustment: 0,
@@ -36,7 +42,7 @@ const attendenceData = [
       },
       {
         label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385",
+        value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
       },
     ],
@@ -516,6 +522,7 @@ const AttendenceCrementionPage = () => {
           state: {
             selections,
             path: "newattendingservicecremationanswers",
+            totalPrice: totalPrice
           },
         });
       }, 1000);
@@ -695,6 +702,7 @@ const AttendenceCrementionPage = () => {
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
+          <PDFDownloadButton />
         </div>
 
         {/* Message Display */}

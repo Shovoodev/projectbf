@@ -45,50 +45,43 @@ const formResponseSchema = new mongoose.Schema(
   {
     userid: { type: String, required: true },
     reference: { type: String, required: true, unique: true },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-    },
-    stationery: { type: String, required: true, default: "50-memoriam-cards" },
-    bodyPreparation: {
-      type: String,
-      required: true,
-      default: "General Wash | Dress | Makeup",
-    },
-    coffin: { type: String, required: true, default: "Contract - Raw" },
-    flowers: {
-      type: String,
-      required: true,
-      default: "100cm Mixed Seasonal Coffin Cover - White",
-    },
-    urn: {
-      type: String,
-      required: true,
-      default: "Funera Preferred Adult Urn",
-    },
-    collectionOfUrn: {
-      type: String,
-      required: true,
-      default: "Collect in Person",
-    },
+    email: { type: String, required: true },
+
+    stationeryOption: { type: String },
+    stationery: { type: Number, default: 0 },
+
+    bodyPreparationOption: { type: String },
+    bodyPreparation: { type: Number, default: 0 },
+
+    coffinOption: { type: String },
+    coffin: { type: Number, default: 0 },
+
+    flowersOption: { type: String },
+    flowers: { type: Number, default: 0 },
+
+    urnOption: { type: String },
+    urn: { type: Number, default: 0 },
+
+    collectionOfUrnOption: { type: String },
+    collectionOfUrn: { type: Number, default: 0 },
+
+    transferOption: { type: String },
+    transferPrice: { type: Number, default: 0 },
+
     baseTotal: { type: Number, default: 4499 },
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
-    transferOption: { type: Number, default: 0 },
 
     status: {
       type: String,
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
+
     service: { type: String, default: "Attending Service Cremation" },
     submittedAt: { type: Date },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 export const FormResponseModel = mongoose.model(

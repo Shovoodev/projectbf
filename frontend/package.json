@@ -23,6 +23,7 @@
     "@tiptap/react": "^3.16.0",
     "@tiptap/starter-kit": "^3.16.0",
     "axios": "^1.13.2",
+    "colorjs.io": "^0.6.1",
     "devextreme": "^25.2.3",
     "devextreme-react": "^25.2.3",
     "devextreme-themebuilder": "^25.2.3",

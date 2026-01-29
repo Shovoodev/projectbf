@@ -12,9 +12,8 @@ const upload = multer({
 });
 export default (router: express.Router) => {
   router.post(
-    "/:userid/send-pdf-on-email",
+    "/send-pdf-on-email",
     upload.single("file"),
-    isAuthenticated,
     sendPdfOfPrepay
   );
   router.post("/api/send-invoice", isAuthenticated, sendPdfOfInvoice);

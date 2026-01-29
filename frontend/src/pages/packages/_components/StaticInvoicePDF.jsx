@@ -12,12 +12,15 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: "#fff",
     paddingVertical: 40,
+    paddingBottom: 80, // Reduced padding to accommodate footer
   },
   container: {
     width: 515,
     marginHorizontal: "auto",
     fontSize: 11,
     color: "#222",
+    position: "relative",
+    minHeight: "100%",
   },
   watermark: {
     position: "absolute",
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: -1, // Send to back
+    zIndex: -1,
   },
   watermarkImage: {
     width: 400,
@@ -75,11 +78,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   footer: {
-    marginTop: 30,
+    position: "absolute",
+    bottom: -60, // Adjust based on your needs
+    left: 0,
+    right: 0,
     fontSize: 9,
-    lineHeight: 1.6,
+    lineHeight: 1.5,
     color: "#555",
+    borderTop: "1px solid #eee",
+    paddingTop: 10,
+    marginTop: 20,
   },
+  footerText: {
+    marginBottom: 4,
+    textAlign: "center"
+  },
+  footerHighlight: {
+    color: "#D9534F",
+    fontWeight: "bold",
+  },
+
   // from Athik Hassan
   rowBetween: {
     flexDirection: "row",
@@ -112,57 +130,74 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 220,
   },
-
   bankingTitle: {
     fontWeight: "bold",
     marginBottom: 6,
   },
-
   rightBox: {
     width: 260,
   },
-
   rightRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 14,
   },
-
   rightCol: {
     width: 120,
     textAlign: "right",
   },
-
   label: {
     fontWeight: "bold",
     marginBottom: 2,
   },
-
   tableDivider: {
     borderBottom: "1px solid #000",
     marginVertical: 8,
   },
-
   amountRight: {
     textAlign: "right",
   },
-
-  footerText: {
-    fontSize: 9,
-    lineHeight: 1.5,
-  },
-
 });
 
 const StaticInvoicePDF = ({ invoiceDetails }) => {
   if (!invoiceDetails) return null;
-
+  const formattedDate2 = new Date(invoiceDetails.createdAt)
+    .toLocaleDateString('en-GB')
+    .replace(/\//g, '/');
   const rows = [
-    { label: invoiceDetails.service, value: invoiceDetails.baseTotal },
-    { label: invoiceDetails.urn, value: 0 },
-    { label: invoiceDetails.collectionOfUrn, value: 0 },
-    { label: "Additional Charges", value: invoiceDetails.totalPriceImpact },
-  ];
+    {
+      label: invoiceDetails.service,
+      value: invoiceDetails.baseTotal,
+    },
+    {
+      label: invoiceDetails.stationeryOption,
+      value: invoiceDetails.stationery,
+    },
+    {
+      label: invoiceDetails.bodyPreparationOption,
+      value: invoiceDetails.bodyPreparation,
+    },
+    {
+      label: invoiceDetails.coffinOption,
+      value: invoiceDetails.coffin,
+    },
+    {
+      label: invoiceDetails.flowersOption,
+      value: invoiceDetails.flowers,
+    },
+    {
+      label: invoiceDetails.urnOption,
+      value: invoiceDetails.urn,
+    },
+    {
+      label: invoiceDetails.collectionOfUrnOption,
+      value: invoiceDetails.collectionOfUrn,
+    },
+    {
+      label: invoiceDetails.transferOption,
+      value: invoiceDetails.transferPrice,
+    },
+  ].filter((row) => row.label && row.value > 0);
 
   return (
     <Document>
@@ -214,14 +249,14 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
                 </View>
                 <View style={styles.rightCol}>
                   <Text style={styles.label}>Due Date</Text>
-                  <Text>DD/MM/YYYY</Text>
+                  <Text>{formattedDate2}</Text>
                 </View>
               </View>
             </View>
           </View>
 
           {/* TABLE */}
-          <View>
+          <View style={{ marginTop: 20 }}>
             <View style={styles.tableHeader}>
               <Text>Description</Text>
               <Text>Amount AUD</Text>
@@ -246,23 +281,32 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
             </View>
           </View>
 
-
           {/* FOOTER */}
-          <View style={styles.footer}>
-            <Text>
+          <View style={styles.footer} fixed>
+            <Text style={styles.footerText}>
               Please use invoice reference{" "}
-              <Text style={{ color: "red" }}>{invoiceDetails.reference}</Text>{" "}
-              when making payment. We kindly ask that payment is made
-              immediately to secure the funeral service date and time. Delays in
-              full payment may cause rescheduling of services. Please contact us
-              if you have any questions. Once paid, it would be appreciated if
-              you could email your remittance to
-              accounts@blacktulipfunerals.com.au Many thanks for your custom and
-              understanding, Scott and the Black Tulip team. Banking Details
-              Commonwealth Bank Black Tulip Funerals BSB : 062-692 ACC: 7617
-              6113 Description Amount AUD No Service Cremation Scattering Urn
-              Australia Post Registered Mail $2200.00 $0.00 $0.00 Amount Due AUD
-              $2200.00
+              <Text style={styles.footerHighlight}>
+                {invoiceDetails.reference}
+              </Text>{" "}
+              when making payment.
+            </Text>
+            <Text style={styles.footerText}>
+              We kindly ask that payment is made immediately to secure the
+              funeral service date and time.
+            </Text>
+            <Text style={styles.footerText}>
+              Delays in full payment may cause rescheduling of services.
+            </Text>
+            <Text style={styles.footerText}>
+              Please contact us if you have any questions.
+            </Text>
+            <Text style={styles.footerText}>
+              Once paid, it would be appreciated if you could email your
+              remittance to accounts@blacktulipfunerals.com.au
+            </Text>
+            <Text style={styles.footerText}>
+              Many thanks for your custom and understanding, Scott and the Black
+              Tulip team.
             </Text>
           </View>
         </View>
