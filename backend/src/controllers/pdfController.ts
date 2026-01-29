@@ -8,15 +8,14 @@ import { getNoCreByUserId } from "../db/noViewingCremention";
 
 export const sendPdfOfPrepay = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     console.log("comming hear");
-    
+
     const pdfBuffer = req.file.buffer;
     const send = await SendPrePayBond(pdfBuffer);
-    console.log({send});
-    
+    console.log({ send });
 
     res.status(200).json({ success: true, data: send });
   } catch (error) {
@@ -27,7 +26,7 @@ export const sendPdfOfPrepay = async (
 
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const { pdfAttachment } = req.body;
@@ -51,7 +50,7 @@ export const sendPdfOfInvoice = async (
     });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "shovoodev@gmail.com",
+      to: "shovoodev@gmail.com,mdathikhasan136@gmail.com",
       // to: "mdathikhasan136@gmail.com",
       subject: `Black tulip funreals with you`,
       text: "we have recived you application and we are happy to give you a wearn welcome in our service ",
@@ -112,10 +111,10 @@ export const sendPdfOfInvoice = async (
 export const sendAttendenceServiceSelection = async (
   // req: express.Request,
   req: AuthenticatedRequest,
-  res: express.Response
+  res: express.Response,
 ) => {
   console.log("heaer");
-  
+
   try {
     const response = req.identity;
 
@@ -128,8 +127,8 @@ export const sendAttendenceServiceSelection = async (
       (await getAttendenceByUserId(userId)) ||
       (await getVandCByUserId(userId)) ||
       (await getNoCreByUserId(userId));
-    console.log({doc});
-    
+    console.log({ doc });
+
     const data = {
       baseTotal: doc.baseTotal,
       service: doc.service,
