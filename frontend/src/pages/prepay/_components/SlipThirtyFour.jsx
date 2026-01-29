@@ -4,16 +4,23 @@ const SlipThirtyFour = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
 
   return (
-    <div className=" w-full bg-white border border-gray-200 rounded-lg
+    <div
+      className="w-full bg-white border border-gray-200 rounded-lg
   overflow-hidden shadow-xl font-roboto
-  p-4 md:p-8">
-      <div className="p-6 border-b border-gray-200 bg-slate-50">
+  p-4 md:p-8"
+    >
+      <div className="p-2 border-b border-gray-200 bg-slate-50">
         <p className="pdf-subtitle">
-          Investor 2 (Only complete this section if this is to be a jointly owned Policy, if being completed by a POA or if the policy is
-          for a Separate Life Insured)
+          Investor 2 (Only complete this section if this is to be a jointly
+          owned Policy, if being completed by a POA or if the policy is for a
+          Separate Life Insured)
         </p>
-        <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100">
-          {["Joint application ", "Separate Life Insured", "Power of Attorney"].map((t) => (
+        <div className="flex flex-wrap gap-6 bg-slate-50 rounded-md border border-slate-100">
+          {[
+            "Joint application ",
+            "Separate Life Insured",
+            "Power of Attorney",
+          ].map((t) => (
             <label key={t} className="pdf-radio-item">
               <input
                 type="radio"
@@ -30,17 +37,24 @@ const SlipThirtyFour = () => {
             </label>
           ))}
         </div>
-        <p>Before making a joint application please read page 7 of the PDS. To make 2 single applications please complete a
-          separate Application Form for each Investor.</p>
+        <p>
+          Before making a joint application please read page 7 of the PDS. To
+          make 2 single applications please complete a separate Application Form
+          for each Investor.
+        </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={handleChange}>
+      <form className=" space-y-2" onSubmit={handleChange}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <div className="col-span-full">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200 mb-3">Title:</label>
-            <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100">
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 "
+            >
+              Title:
+            </label>
+            <div className="flex flex-wrap gap-2 p-1 bg-slate-50 rounded-md border border-slate-100">
               {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
                 <label key={t} className="pdf-radio-item">
                   <input
@@ -61,12 +75,16 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Surname:</label>
+            <label
+              className="text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Surname:
+            </label>
             <input
               type="text"
               name="surname"
-              className="w-full p-2 border border-gray-300 rounded
+              className="w-full p-1 border border-gray-300 rounded
   outline-none transition-all duration-200
   focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               onChange={(e) =>
@@ -76,8 +94,12 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Given Names:</label>
+            <label
+              className="text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Given Names:
+            </label>
             <input
               type="text"
               name="givenNames"
@@ -91,8 +113,12 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Date of Birth:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Date of Birth:
+            </label>
             <input
               type="date"
               name="dob"
@@ -106,8 +132,12 @@ const SlipThirtyFour = () => {
           </div>
 
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Gender:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Gender:
+            </label>
             <div className="flex flex-wrap gap-6 p-4 bg-slate-50 rounded-md border border-slate-100 mt-2">
               {["Female", "Male", "Other"].map((g) => (
                 <label key={g} className="pdf-radio-item">
@@ -128,10 +158,12 @@ const SlipThirtyFour = () => {
         </div>
 
         {/* Residential Address */}
-        <h3 className="text-lg font-bold uppercase tracking-wide
+        <h3
+          className="text-lg font-bold uppercase tracking-wide
   text-[rgb(49,41,166)]
   border-b border-gray-200
-  pb-2 mt-8 mb-4">
+  pb-2 mt-8 mb-4"
+        >
           Residential Address{" "}
           <span className="pdf-note">
             (must not be a PO box, RMB or Locked Bag)
@@ -140,8 +172,12 @@ const SlipThirtyFour = () => {
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Unit Number</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Unit Number
+            </label>
             <input
               type="text"
               name="res_unit"
@@ -154,8 +190,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-4">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Street No</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Street No
+            </label>
             <input
               type="text"
               name="res_streetNo"
@@ -168,8 +208,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-3">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Street Name</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Street Name
+            </label>
             <input
               type="text"
               name="res_streetName"
@@ -182,8 +226,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-3">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Suburb</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Suburb
+            </label>
             <input
               type="text"
               name="res_suburb"
@@ -196,8 +244,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">State</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              State
+            </label>
             <input
               type="text"
               defaultValue="NSW"
@@ -212,8 +264,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Postcode</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Postcode
+            </label>
             <input
               type="text"
               name="res_postcode"
@@ -226,8 +282,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Country</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Country
+            </label>
             <input
               type="text"
               onChange={(e) =>
@@ -243,18 +303,24 @@ const SlipThirtyFour = () => {
           </div>
         </div>
         {/* Milling  Address */}
-        <h3 className="text-lg font-bold uppercase tracking-wide
+        <h3
+          className="text-lg font-bold uppercase tracking-wide
   text-[rgb(49,41,166)]
   border-b border-gray-200
-  pb-2 mt-8 mb-4">
+  pb-2 mt-8 mb-4"
+        >
           Mailing Address (
           <span className="pdf-note">(if different to above address))</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Unit Number</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Unit Number
+            </label>
             <input
               type="text"
               name="res_unit"
@@ -267,8 +333,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-4">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Street No</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Street No
+            </label>
             <input
               type="text"
               name="res_streetNo"
@@ -278,8 +348,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-3">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Street Name</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Street Name
+            </label>
             <input
               type="text"
               name="res_streetName"
@@ -287,7 +361,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["mailstreetName"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="w-full p-2 border border-gray-300 rounded
@@ -296,8 +370,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-3">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Suburb</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Suburb
+            </label>
             <input
               type="text"
               name="res_suburb"
@@ -310,8 +388,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">State</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              State
+            </label>
             <input
               type="text"
               defaultValue="NSW"
@@ -326,8 +408,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Postcode</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Postcode
+            </label>
             <input
               type="text"
               name="res_postcode"
@@ -340,8 +426,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="col-span-2">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200-sm">Country</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200-sm"
+            >
+              Country
+            </label>
             <input
               type="text"
               defaultValue="AUSTRALIA"
@@ -358,14 +448,22 @@ const SlipThirtyFour = () => {
         </div>
 
         {/* Contact Details */}
-        <h3 className="text-lg font-bold uppercase tracking-wide
+        <h3
+          className="text-lg font-bold uppercase tracking-wide
   text-[rgb(49,41,166)]
   border-b border-gray-200
-  pb-2 mt-8 mb-4">Contact Details</h3>
+  pb-2 mt-8 mb-4"
+        >
+          Contact Details
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Daytime Telephone:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Daytime Telephone:
+            </label>
             <input
               type="number"
               name="daytimeTelephone"
@@ -373,7 +471,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeTelephone"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="w-full p-2 border border-gray-300 rounded
@@ -382,8 +480,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Mobile:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Mobile:
+            </label>
             <input
               type="text"
               name="mobile"
@@ -396,8 +498,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div>
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Daytime Adress:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Daytime Adress:
+            </label>
             <input
               type="text"
               name="daytimeAddress"
@@ -405,7 +511,7 @@ const SlipThirtyFour = () => {
                 updateInvestor(
                   "investorOne",
                   ["daytimeAddress"],
-                  e.target.value
+                  e.target.value,
                 )
               }
               className="w-full p-2 border border-gray-300 rounded
@@ -414,8 +520,12 @@ const SlipThirtyFour = () => {
             />
           </div>
           <div className="">
-            <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200">Email:</label>
+            <label
+              className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200"
+            >
+              Email:
+            </label>
             <input
               type="email"
               name="email"

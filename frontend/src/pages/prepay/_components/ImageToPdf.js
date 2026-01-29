@@ -37,7 +37,38 @@ export const generatePdfBlob = async (images) => {
 
     if (i !== 0) pdf.addPage();
 
-    pdf.addImage(img, 'JPEG', 15, 15, 180, 0, '', 'SLOW');
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 15;
+
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
+
+    const imgProps = pdf.getImageProperties(img);
+    const imgWidth = imgProps.width;
+    const imgHeight = imgProps.height;
+
+    const widthRatio = maxWidth / imgWidth;
+    const heightRatio = maxHeight / imgHeight;
+    const scale = Math.min(widthRatio, heightRatio);
+
+    const renderWidth = imgWidth * scale;
+    const renderHeight = imgHeight * scale;
+    const x = (pageWidth - renderWidth) / 2;
+    const y = (pageHeight - renderHeight) / 2;
+
+    pdf.addImage(img, "JPEG", x, y, renderWidth, renderHeight, "", "SLOW");
+
+    // pdf.addImage(
+    //   img,
+    //   "JPEG",
+    //   margin,
+    //   margin,
+    //   renderWidth,
+    //   renderHeight,
+    //   "",
+    //   "SLOW",
+    // );
   }
 
   return pdf.output("blob");

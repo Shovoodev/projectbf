@@ -1,11 +1,11 @@
 const SlipThirtyTwo = () => {
   return (
-    <div className="form-container-base ">
+    <div className="form-container-base">
       {/* Decorative Brand Top Border */}
 
-      <section >
+      <section>
         {/* Main Header */}
-        <header className="mb-2">
+        <header className="mb-0">
           <h1 className="text-3xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />
@@ -17,7 +17,7 @@ const SlipThirtyTwo = () => {
         </header>
 
         {/* Introduction Text */}
-        <div className="space-y-4">
+        <div className="space-y-1">
           <p className="pdf-intro-p">
             This Application Form (including the Direct Debit Request and the
             Adviser Electronic Transaction Authority Form) accompanies and forms
@@ -74,11 +74,11 @@ const SlipThirtyTwo = () => {
         {/* Questionnaire Section */}
         <h2 className="pdf-h2">Target market questionnaire</h2>
 
-        <div className="space-y-3">
+        <div className="space-y-1">
           {/* Q1 */}
           <div>
             <label className="pdf-label">1. Funeral Bond Type:</label>
-            <div className="pdf-radio-group mt-2">
+            <div className="pdf-radio-group mt-1">
               {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
                 <label key={opt} className="pdf-radio-item">
                   <input
@@ -98,59 +98,57 @@ const SlipThirtyTwo = () => {
           </div>
 
           {/* Q2 - Q5 */}
-         
-          {[
-  { id: "age10", q: "2. Is the applicant aged 10+?" },
-  {
-    id: "existingBonds",
-    q: "3. Does the Applicant currently have 1 or more funeral bonds?",
-  },
-  {
-    id: "overCost",
-    q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
-  },
-  {
-    id: "accessCapital",
-    q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
-  },
-].map((item) => {
-  // Add your actual data/state values here
-  // Example: const formData = { age10: "yes", existingBonds: "no", overCost: "yes", accessCapital: "no" };
-  const currentValue = "yes"; // Replace with actual value from your state/props
-  
-  return (
-    <div key={item.id}>
-      <label className="pdf-label">{item.q}</label>
-      <div className="pdf-radio-group mt-2">
-        <label className="pdf-radio-item">
-          <input
-            type="radio"
-            name={item.id}
-            value="yes"
-            className="pdf-radio-input"
-            checked={currentValue === "yes"}
-            
-            readOnly
-          />
-          <span className="text-slate-700">Yes</span>
-        </label>
 
-        <label className="pdf-radio-item">
-          <input
-            type="radio"
-            name={item.id}
-            value="no"
-            className="pdf-radio-input"
-            checked={currentValue === "no"}
-            
-            readOnly
-          />
-          <span className="text-slate-700">No</span>
-        </label>
-      </div>
-    </div>
-  );
-})}
+          {[
+            { id: "age10", q: "2. Is the applicant aged 10+?" },
+            {
+              id: "existingBonds",
+              q: "3. Does the Applicant currently have 1 or more funeral bonds?",
+            },
+            {
+              id: "overCost",
+              q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
+            },
+            {
+              id: "accessCapital",
+              q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
+            },
+          ].map((item) => {
+            // Add your actual data/state values here
+            // Example: const formData = { age10: "yes", existingBonds: "no", overCost: "yes", accessCapital: "no" };
+            const currentValue = "yes"; // Replace with actual value from your state/props
+
+            return (
+              <div key={item.id}>
+                <label className="pdf-label">{item.q}</label>
+                <div className="pdf-radio-group mt-1">
+                  <label className="pdf-radio-item">
+                    <input
+                      type="radio"
+                      name={item.id}
+                      value="yes"
+                      className="pdf-radio-input"
+                      checked={currentValue === "yes"}
+                      readOnly
+                    />
+                    <span className="text-slate-700">Yes</span>
+                  </label>
+
+                  <label className="pdf-radio-item">
+                    <input
+                      type="radio"
+                      name={item.id}
+                      value="no"
+                      className="pdf-radio-input"
+                      checked={currentValue === "no"}
+                      readOnly
+                    />
+                    <span className="text-slate-700">No</span>
+                  </label>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Final Notes */}

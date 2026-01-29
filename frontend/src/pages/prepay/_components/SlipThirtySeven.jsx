@@ -1,5 +1,4 @@
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
-import SignatureField from "../../packages/_components/SignatureField";
 import Signature from "./common/Signature";
 
 const SlipThirtySeven = () => {
@@ -24,20 +23,20 @@ const SlipThirtySeven = () => {
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
-        <h1 className="pdf-h2 text-3xl mb-6">5. Application</h1>
+        <h1 className="pdf-h2 text-3xl mb-0">5. Application</h1>
 
         {/* Info */}
         <div className="pdf-info-box bg-blue-50/50">
-          <p className="text-[13px] leading-relaxed">
+          <p className="text-[13px] ">
             Before signing this Application Form, Investors should read the PDS
             to which this application is attached.
           </p>
         </div>
 
         {/* Declaration */}
-        <div >
-          <h3 className="pdf-label text-lg border-b pb-2">Declaration:</h3>
-          <p className="pdf-intro-p mt-3 font-bold">
+        <div>
+          <h3 className="pdf-label text-lg border-b pb-0">Declaration:</h3>
+          <p className="pdf-intro-p mt-0 font-bold">
             I/We agree and acknowledge:
           </p>
 
@@ -49,7 +48,7 @@ const SlipThirtySeven = () => {
               </label>
             ))}
           </div>
-          <div className="pdf-declaration-list mt-2 ml-4 border-t border-gray-300">
+          <div className="pdf-declaration-list mt- ml-1 border-t border-gray-300">
             {optionalCheckboxes.map((text, index) => (
               <label key={index} className="pdf-declaration-item">
                 <input type="checkbox" className="pdf-declaration-checkbox" />
@@ -66,11 +65,11 @@ const SlipThirtySeven = () => {
         </div>
         {/* Footer */}
         <div className="pdf-footer">
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
-          <div className="flex gap-8">
+          <div className="flex gap-2">
             <div>Version: July 2026</div>
             <div className="font-bold">37</div>
           </div>
