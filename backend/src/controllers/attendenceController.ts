@@ -6,8 +6,8 @@ import {
   getAttendenceByUserId,
 } from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
-import { FormVandCResponseModel } from "../db/viewingAndCremention";
 import { FormNoServiceResponseModel } from "../db/noViewingCremention";
+import { FormVandCResponseModel } from "../db/viewingAndCremention";
 
 export const getNoServiceFunral = async (
   req: express.Request,
@@ -130,7 +130,6 @@ export const getAttendenceAnswers = async (
     });
   }
 };
-
 
 
 export const getVandCnswers = async (
@@ -355,8 +354,6 @@ export const getdeatilByReference = async (
     console.log(error);
   }
 };
-
-
 export const getAllServiceData = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -369,3 +366,4 @@ export const getAllServiceData = async (
 
   res.json({ data });
 };
+

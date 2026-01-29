@@ -92,7 +92,8 @@ const images = [
   twentyNine,
   thirty,
 ];
-const PrePay = () => {
+const PrePay = ({ amount }) => {
+
   // const [images, setImages] = useState([]);
   const { user } = useUserFront();
   const slipRefs = useRef([]);
@@ -189,7 +190,7 @@ const PrePay = () => {
     <SlipThirtyTwo />,
     <SlipThirtyThree />,
     <SlipThirtyFour />,
-    <SlipThirtyFive />,
+    <SlipThirtyFive amount={amount} />,
     <SlipThirtySix />,
     <SlipThirtySeven />,
     <SlipThirtyEight />,

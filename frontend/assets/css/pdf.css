@@ -1,18 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 @import "tailwindcss";
+
 @theme {
   --font-roboto: "Roboto", sans-serif;
 }
+
 @layer base {
   p {
-    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+    @apply text-sm text-[rgb(49, 41, 166)] leading-relaxed mb-4;
   }
 }
+
 @layer components {
+
   /* Root Layout and Sections */
   .form-container-base {
-    @apply w-full bg-white border border-gray-200 rounded-lg  font-roboto shadow-xl;
+    @apply w-full bg-white border border-gray-200 rounded-lg font-roboto shadow-xl;
   }
 
   .form-header-area {
@@ -21,19 +25,19 @@
 
   /* Typography */
   .pdf-h2 {
-    @apply text-2xl font-bold text-[rgb(49,41,166)];
+    @apply text-2xl font-bold text-[rgb(49, 41, 166)];
   }
 
   .pdf-section-title {
-    @apply text-lg font-bold text-[rgb(49,41,166)]  uppercase tracking-wide border-b border-gray-200 pb-2 mt-8 mb-4;
+    @apply text-lg font-bold text-[rgb(49, 41, 166)] uppercase tracking-wide border-b border-gray-200 pb-2 mt-8 mb-4;
   }
 
   .pdf-label {
-    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block;
+    @apply text-sm font-bold text-[rgb(49, 41, 166)] mb-1 block;
   }
 
   .pdf-label-sm {
-    @apply text-[14px] font-black text-[rgb(49,41,166)]  block;
+    @apply text-[14px] font-black text-[rgb(49, 41, 166)] block;
   }
 
   /* Inputs */
@@ -63,41 +67,44 @@
   }
 
   .btn-secondary {
-    @apply flex items-center text-[rgb(49,41,166)]  font-bold hover:text-[rgb(49,41,166)] transition-colors py-2 px-4;
+    @apply flex items-center text-[rgb(49, 41, 166)] font-bold hover:text-[rgb(49, 41, 166)] transition-colors py-2 px-4;
   }
 
   /*  */
   .pdf-currency-wrapper {
     @apply relative flex-1 max-w-xs;
   }
+
   .pdf-radio-item {
-    @apply flex items-center space-x-2 cursor-pointer text-[rgb(49,41,166)];
+    @apply flex items-center space-x-2 cursor-pointer text-[rgb(49, 41, 166)];
   }
+
   .pdf-currency-symbol {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(49,41,166)] font-bold;
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(49, 41, 166)] font-bold;
   }
 
   .pdf-info-box {
-    @apply mt-6 p-4  bg-blue-50 text-sm text-[rgb(49,41,166)]  leading-relaxed italic;
+    @apply mt-6 p-4 bg-blue-50 text-sm text-[rgb(49, 41, 166)] leading-relaxed italic;
   }
 
   .pdf-footnote {
-    @apply mt-8 text-[11px] text-[rgb(49,41,166)]  leading-normal;
+    @apply mt-8 text-[11px] text-[rgb(49, 41, 166)] leading-normal;
   }
 
   .pdf-footnote-sup {
-    @apply text-[rgb(49,41,166)] text-sm  font-bold mr-1;
+    @apply text-[rgb(49, 41, 166)] text-sm font-bold mr-1;
   }
+
   /* The standard bold label */
   .pdf-label {
-    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block transition-colors duration-200;
+    @apply text-sm font-bold text-[rgb(49, 41, 166)] mb-1 block transition-colors duration-200;
   }
 
   /* The tiny uppercase label used in address grids */
 
   /* Slip One */
   .pdf-intro-p {
-    @apply text-sm text-[rgb(49,41,166)] font-roboto leading-relaxed mb-4;
+    @apply text-sm text-[rgb(49, 41, 166)] font-roboto leading-relaxed mb-2;
   }
 
   .pdf-hr {
@@ -106,17 +113,18 @@
 
   /* Highlight Box (Instruction area) */
   .pdf-highlight-box {
-    @apply bg-gray-100 text-sm p-4 my-8  text-[rgb(49,41,166)];
+    @apply bg-gray-100 text-sm p-2 my-3 text-[rgb(49, 41, 166)];
   }
 
   /* Questionnaire Specifics */
   .pdf-q-title {
-    @apply text-2xl font-semibold   text-[#4BA6A6] mb-6 mt-8;
+    @apply text-2xl font-semibold text-[#4BA6A6] mb-6 mt-8;
   }
 
   .pdf-q-note {
-    @apply mt-10 text-[11px] leading-relaxed border-t border-slate-200 pt-6 text-[rgb(49,41,166)]  italic;
+    @apply mt-10 text-[11px] leading-relaxed border-t border-slate-200 pt-6 text-[rgb(49, 41, 166)] italic;
   }
+
   /* Full screen backdrop for the introduction */
   .intro-overlay-container {
     @apply fixed inset-0 h-screen w-screen bg-[#F5F5F5] flex items-start justify-end z-[1000] overflow-hidden;
@@ -124,21 +132,21 @@
 
   /* The floating white information card */
   .intro-card {
-    @apply bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[rgb(44,90,160)]/30;
+    @apply bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[rgb(44, 90, 160)]/30;
     @apply w-full max-w-[400px] m-5 min-h-[200px] flex items-center z-[100] p-9 text-center;
   }
 
   /* The main button used in the overlay */
   .btn-continue {
-    @apply bg-[rgb(44,90,160)] text-white border-2 border-[rgb(44,90,160)] px-8 py-4 rounded-lg;
+    @apply bg-[rgb(44, 90, 160)] text-white border-2 border-[rgb(44, 90, 160)] px-8 py-4 rounded-lg;
     @apply text-base font-semibold uppercase tracking-widest transition-all duration-300;
-    @apply shadow-[0_6px_16px_rgba(44,90,160,0.4)] hover:brightness-110 active:scale-95;
+    @apply shadow-[0_6px_16px_rgba(44, 90, 160, 0.4)] hover:brightness-110 active:scale-95;
   }
 
   /* Navigation circle buttons */
   .nav-circle-btn {
-    @apply fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44,90,160)];
-    @apply text-[rgb(44,90,160)] w-[60px] h-[60px] rounded-full text-2xl font-bold;
+    @apply fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44, 90, 160)];
+    @apply text-[rgb(44, 90, 160)] w-[60px] h-[60px] rounded-full text-2xl font-bold;
     @apply flex items-center justify-center transition-all duration-300 z-[1100] shadow-lg hover:bg-white;
   }
 
@@ -146,6 +154,7 @@
   .zoom-controls {
     @apply absolute bottom-5 right-5 bg-white border border-gray-200 p-2 rounded-lg flex items-center gap-3 z-[300] shadow-sm;
   }
+
   /* Slip Three */
   /* Investment Table Styles */
   .pdf-table {
@@ -165,7 +174,7 @@
   }
 
   .pdf-table-td {
-    @apply py-2 px-1 border-b border-[#4BA6A6] text-[rgb(49,41,166)] align-top;
+    @apply py-2 px-1 border-b border-[#4BA6A6] text-[rgb(49, 41, 166)] align-top;
   }
 
   .pdf-table-td-teal {
@@ -195,12 +204,13 @@
   .form-container-base {
     @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-roboto shadow-xl;
     /* Reduce padding on mobile */
-    @apply p-4 md:p-8;
+    @apply p-1 md:p-2;
   }
 
   /* Table responsiveness */
   .pdf-table-wrapper {
-    @apply w-full overflow-x-auto; /* Essential for mobile table viewing */
+    @apply w-full overflow-x-auto;
+    /* Essential for mobile table viewing */
   }
 
   .pdf-table {
@@ -233,7 +243,7 @@
   }
 
   .pdf-adviser-label {
-    @apply text-sm font-medium text-[rgb(49,41,166)] min-w-[180px];
+    @apply text-sm font-medium text-[rgb(49, 41, 166)] min-w-[180px];
   }
 
   /*  Slip Six */
@@ -247,24 +257,25 @@
   }
 
   .pdf-declaration-checkbox {
-    @apply w-5 h-5 mt-1 accent-[rgb(49,41,166)] flex-shrink-0 cursor-pointer;
+    @apply w-5 h-5 mt-1 accent-[rgb(49, 41, 166)] flex-shrink-0 cursor-pointer;
   }
 
   .pdf-declaration-text {
-    @apply text-[13px] leading-relaxed text-[rgb(49,41,166)];
+    @apply text-[13px] leading-relaxed text-[rgb(49, 41, 166)];
   }
 
   /* Signature Upload Box */
   .pdf-signature-zone {
     @apply w-full border-2 border-dashed border-gray-300 rounded-lg p-6 bg-slate-50;
     @apply flex flex-col items-center justify-center text-center transition-all;
-    @apply hover:border-[rgb(49,41,166)] hover:bg-blue-50/30;
+    @apply hover:border-[rgb(49, 41, 166)] hover:bg-blue-50/30;
   }
 
   .pdf-upload-btn {
     @apply bg-white border border-gray-300 px-4 py-2 rounded shadow-sm text-sm font-bold;
-    @apply text-[rgb(49,41,166)] hover:bg-slate-50 active:scale-95 transition-all;
+    @apply text-[rgb(49, 41, 166)] hover:bg-slate-50 active:scale-95 transition-all;
   }
+
   /* Slip Seven */
   .pdf-signature-date-row {
     @apply flex flex-col md:flex-row gap-6 mt-4 items-stretch;
@@ -277,8 +288,9 @@
 
   /* Bold instruction text for specific sections */
   .pdf-instruction-bold {
-    @apply text-sm font-black text-[rgb(49,41,166)] mb-2 leading-relaxed;
+    @apply text-sm font-black text-[rgb(49, 41, 166)] mb-2 leading-relaxed;
   }
+
   /* SlipThirteen */
   .pdf-legal-list {
     @apply pl-8 space-y-3 mt-3;
@@ -289,22 +301,25 @@
   }
 
   .pdf-legal-letter {
-    @apply font-bold text-[rgb(49,41,166)] min-w-[15px] italic;
+    @apply font-bold text-[rgb(49, 41, 166)] min-w-[15px] italic;
   }
 
   /* Section header for the service agreement */
   .pdf-agreement-h3 {
-    @apply font-bold text-[rgb(49,41,166)] mb-3 text-lg;
+    @apply font-bold text-[rgb(49, 41, 166)] mb-3 text-lg;
   }
 }
+
 @import "tailwindcss";
 
 @layer base {
   p {
-    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+    @apply text-sm text-[rgb(49, 41, 166)] leading-relaxed mb-4;
   }
 }
+
 @layer components {
+
   /* Root Layout and Sections */
   .form-container-base {
     @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
@@ -316,19 +331,19 @@
 
   /* Typography */
   .pdf-h2 {
-    @apply text-2xl font-bold text-[rgb(49,41,166)];
+    @apply text-2xl font-bold text-[rgb(49, 41, 166)];
   }
 
   .pdf-section-title {
-    @apply text-lg font-bold text-[rgb(49,41,166)]  uppercase tracking-wide border-b border-gray-200 pb-2 mt-8 mb-4;
+    @apply text-lg font-bold text-[rgb(49, 41, 166)] uppercase tracking-wide border-b border-gray-200 pb-2 mt-8 mb-4;
   }
 
   .pdf-label {
-    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block;
+    @apply text-sm font-bold text-[rgb(49, 41, 166)] mb-1 block;
   }
 
   .pdf-label-sm {
-    @apply text-[14px] font-black text-[rgb(49,41,166)]  block;
+    @apply text-[14px] font-black text-[rgb(49, 41, 166)] block;
   }
 
   /* Inputs */
@@ -358,41 +373,44 @@
   }
 
   .btn-secondary {
-    @apply flex items-center text-[rgb(49,41,166)]  font-bold hover:text-[rgb(49,41,166)] transition-colors py-2 px-4;
+    @apply flex items-center text-[rgb(49, 41, 166)] font-bold hover:text-[rgb(49, 41, 166)] transition-colors py-2 px-4;
   }
 
   /*  */
   .pdf-currency-wrapper {
     @apply relative flex-1 max-w-xs;
   }
+
   .pdf-radio-item {
-    @apply flex items-center space-x-2 cursor-pointer text-[rgb(49,41,166)];
+    @apply flex items-center space-x-2 cursor-pointer text-[rgb(49, 41, 166)];
   }
+
   .pdf-currency-symbol {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(49,41,166)] font-bold;
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[rgb(49, 41, 166)] font-bold;
   }
 
   .pdf-info-box {
-    @apply mt-6 p-4 border-l-4 border-blue-900 bg-blue-50 text-sm text-[rgb(49,41,166)]  leading-relaxed italic;
+    @apply mt-6 p-4 border-l-4 border-blue-900 bg-blue-50 text-sm text-[rgb(49, 41, 166)] leading-relaxed italic;
   }
 
   .pdf-footnote {
-    @apply mt-8 text-[11px] text-[rgb(49,41,166)]  leading-normal;
+    @apply mt-8 text-[11px] text-[rgb(49, 41, 166)] leading-normal;
   }
 
   .pdf-footnote-sup {
-    @apply text-[rgb(49,41,166)]  font-bold mr-1;
+    @apply text-[rgb(49, 41, 166)] font-bold mr-1;
   }
+
   /* The standard bold label */
   .pdf-label {
-    @apply text-sm font-bold text-[rgb(49,41,166)]  mb-1 block transition-colors duration-200;
+    @apply text-sm font-bold text-[rgb(49, 41, 166)] mb-1 block transition-colors duration-200;
   }
 
   /* The tiny uppercase label used in address grids */
 
   /* Slip One */
   .pdf-intro-p {
-    @apply text-sm text-[rgb(49,41,166)]  leading-relaxed mb-4;
+    @apply text-sm text-[rgb(49, 41, 166)] leading-relaxed mb-2;
   }
 
   .pdf-hr {
@@ -401,17 +419,18 @@
 
   /* Highlight Box (Instruction area) */
   .pdf-highlight-box {
-    @apply bg-[#F1F6F7] text-sm p-4 my-8 border-l-4 border-[#4BA6A6] text-[rgb(49,41,166)];
+    @apply bg-[#F1F6F7] text-sm p-2 my-3 border-l-4 border-[#4BA6A6] text-[rgb(49, 41, 166)];
   }
 
   /* Questionnaire Specifics */
   .pdf-q-title {
-    @apply text-2xl font-semibold   text-[#4BA6A6] mb-6 mt-8;
+    @apply text-2xl font-semibold text-[#4BA6A6] mb-6 mt-8;
   }
 
   .pdf-q-note {
-    @apply mt-10 text-[11px] leading-relaxed border-t border-slate-200 pt-6 text-[rgb(49,41,166)]  italic;
+    @apply mt-10 text-[11px] leading-relaxed border-t border-slate-200 pt-6 text-[rgb(49, 41, 166)] italic;
   }
+
   /* Full screen backdrop for the introduction */
   .intro-overlay-container {
     @apply fixed inset-0 h-screen w-screen bg-[#F5F5F5] flex items-start justify-end z-[1000] overflow-hidden;
@@ -419,21 +438,21 @@
 
   /* The floating white information card */
   .intro-card {
-    @apply bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[rgb(44,90,160)]/30;
+    @apply bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[rgb(44, 90, 160)]/30;
     @apply w-full max-w-[400px] m-5 min-h-[200px] flex items-center z-[100] p-9 text-center;
   }
 
   /* The main button used in the overlay */
   .btn-continue {
-    @apply bg-[rgb(44,90,160)] text-white border-2 border-[rgb(44,90,160)] px-8 py-4 rounded-lg;
+    @apply bg-[rgb(44, 90, 160)] text-white border-2 border-[rgb(44, 90, 160)] px-8 py-4 rounded-lg;
     @apply text-base font-semibold uppercase tracking-widest transition-all duration-300;
-    @apply shadow-[0_6px_16px_rgba(44,90,160,0.4)] hover:brightness-110 active:scale-95;
+    @apply shadow-[0_6px_16px_rgba(44, 90, 160, 0.4)] hover:brightness-110 active:scale-95;
   }
 
   /* Navigation circle buttons */
   .nav-circle-btn {
-    @apply fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44,90,160)];
-    @apply text-[rgb(44,90,160)] w-[60px] h-[60px] rounded-full text-2xl font-bold;
+    @apply fixed top-1/2 -translate-y-1/2 bg-white/90 border-2 border-[rgb(44, 90, 160)];
+    @apply text-[rgb(44, 90, 160)] w-[60px] h-[60px] rounded-full text-2xl font-bold;
     @apply flex items-center justify-center transition-all duration-300 z-[1100] shadow-lg hover:bg-white;
   }
 
@@ -441,6 +460,7 @@
   .zoom-controls {
     @apply absolute bottom-5 right-5 bg-white border border-gray-200 p-2 rounded-lg flex items-center gap-3 z-[300] shadow-sm;
   }
+
   /* Slip Three */
   /* Investment Table Styles */
   .pdf-table {
@@ -460,7 +480,7 @@
   }
 
   .pdf-table-td {
-    @apply py-2 px-1 border-b border-[#4BA6A6] text-[rgb(49,41,166)] align-top;
+    @apply py-2 px-1 border-b border-[#4BA6A6] text-[rgb(49, 41, 166)] align-top;
   }
 
   .pdf-table-td-teal {
@@ -490,12 +510,13 @@
   .form-container-base {
     @apply w-full bg-white border border-gray-200 rounded-lg overflow-hidden font-sans shadow-xl;
     /* Reduce padding on mobile */
-    @apply p-4 md:p-8;
+    @apply p-1 md:p-2;
   }
 
   /* Table responsiveness */
   .pdf-table-wrapper {
-    @apply w-full overflow-x-auto; /* Essential for mobile table viewing */
+    @apply w-full overflow-x-auto;
+    /* Essential for mobile table viewing */
   }
 
   .pdf-table {
@@ -504,7 +525,7 @@
 
   /* Header responsiveness */
   .pdf-h2 {
-    @apply text-xl md:text-2xl font-bold text-[rgb(49,41,166)];
+    @apply text-xl md:text-2xl font-bold text-[rgb(49, 41, 166)];
   }
 
   /* Radio & Frequency Grid responsiveness */
@@ -528,7 +549,7 @@
   }
 
   .pdf-adviser-label {
-    @apply text-sm font-medium text-[rgb(49,41,166)] min-w-[180px];
+    @apply text-sm font-medium text-[rgb(49, 41, 166)] min-w-[180px];
   }
 
   /*  Slip Six */
@@ -542,24 +563,25 @@
   }
 
   .pdf-declaration-checkbox {
-    @apply w-5 h-5 mt-1 accent-[rgb(49,41,166)] flex-shrink-0 cursor-pointer;
+    @apply w-5 h-5 mt-1 accent-[rgb(49, 41, 166)] flex-shrink-0 cursor-pointer;
   }
 
   .pdf-declaration-text {
-    @apply text-[13px] leading-relaxed text-[rgb(49,41,166)];
+    @apply text-[13px] leading-relaxed text-[rgb(49, 41, 166)];
   }
 
   /* Signature Upload Box */
   .pdf-signature-zone {
     @apply w-full border-2 border-dashed border-gray-300 rounded-lg p-6 bg-slate-50;
     @apply flex flex-col items-center justify-center text-center transition-all;
-    @apply hover:border-[rgb(49,41,166)] hover:bg-blue-50/30;
+    @apply hover:border-[rgb(49, 41, 166)] hover:bg-blue-50/30;
   }
 
   .pdf-upload-btn {
     @apply bg-white border border-gray-300 px-4 py-2 rounded shadow-sm text-sm font-bold;
-    @apply text-[rgb(49,41,166)] hover:bg-slate-50 active:scale-95 transition-all;
+    @apply text-[rgb(49, 41, 166)] hover:bg-slate-50 active:scale-95 transition-all;
   }
+
   /* Slip Seven */
   .pdf-signature-date-row {
     @apply flex flex-col md:flex-row gap-6 mt-4 items-stretch;
@@ -572,8 +594,9 @@
 
   /* Bold instruction text for specific sections */
   .pdf-instruction-bold {
-    @apply text-sm font-black text-[rgb(49,41,166)] mb-2 leading-relaxed;
+    @apply text-sm font-black text-[rgb(49, 41, 166)] mb-2 leading-relaxed;
   }
+
   /* SlipThirteen */
   .pdf-legal-list {
     @apply pl-8 space-y-3 mt-3;
@@ -584,11 +607,11 @@
   }
 
   .pdf-legal-letter {
-    @apply font-bold text-[rgb(49,41,166)] min-w-[15px] italic;
+    @apply font-bold text-[rgb(49, 41, 166)] min-w-[15px] italic;
   }
 
   /* Section header for the service agreement */
   .pdf-agreement-h3 {
-    @apply font-bold text-[rgb(49,41,166)] mb-3 text-lg;
+    @apply font-bold text-[rgb(49, 41, 166)] mb-3 text-lg;
   }
 }

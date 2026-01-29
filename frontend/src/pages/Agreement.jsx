@@ -496,533 +496,536 @@ const AgreementForm = () => {
 
 
   return (
-    <>
+    <section className="py-8 w-full md:max-w-5xl mx-auto px-6">
+      <div className="rounded-xl p-8">
+        <div className="w-full space-y-4 text-black text-center  font-medium  font-body leading-relaxed ">
+          <p className="text-lg text-black ">
+            I authorise{" "}
+            <strong className="text-gray-900">BLACK TULIP FUNERALS</strong> to
+            conduct the given funeral. I understand that I have been given a
+            general quote on the entire service and note that there might be
+            variations given the condition of the deceased once transferred
+            into our care.
+          </p>
 
-      <section className="py-8 md:py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto md:px-6">
-          <div className="bg-white p-8 md:p-12 rounded-2xl shadow border border-gray-300">
-            <form className="space-y-12" onSubmit={handleSubmit}>
-              {/* ================= DECEASED DETAILS ================= */}
-              <div className="rounded-xl p-8">
-                <div className="mb-8">
-                  <FormLabel required>Select Your Preferred Language</FormLabel>
-                  <select
-                    value={isEnglish ? "english" : "chinese"}
-                    onChange={(e) => setIsEnglish(e.target.value === "english")}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option value="english">English</option>
-                    <option value="chinese">Chinese</option>
-                  </select>
+          <p className="text-lg text-black ">
+            All data that I provide in the “Firehawk Link” will be entered
+            correctly and is true to the best of my knowledge. I will check
+            all fields upon completion and note that I will be liable for any
+            costs that incur if an error is presented and/or needs amendment.
+          </p>
+
+          <p className="text-lg text-black ">
+            I consent to the transfer of the deceased by{" "}
+            <strong className="text-gray-900">BLACK TULIP FUNERALS</strong> or
+            their nominated transfer companies.
+          </p>
+
+          <p className="text-lg text-black ">
+            I consent for the services to proceed without any delays and note
+            that if I choose to delay the service, cost variations may occur.
+          </p>
+        </div>
+        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100">
+          <form className="space-y-12">
+            {/* ==========================================
+                SECTION 1: DECEASED PERSONS DETAILS
+               ========================================== */}
+            <div>
+              <h3 className="text-3xl text-center font-display font-bold text-gray-900 mb-6  pb-2">
+                Deceased Persons Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {/* Salutation */}
+                <div className="md:col-span-2 lg:col-span-1">
+                  <FormLabel required>Salutation</FormLabel>
+                  <SelectField options={salutations} required />
                 </div>
-              </div>
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
 
-                  {isEnglish
-                    ? translations.deceasedSectionTitle.en
-                    : translations.deceasedSectionTitle.zh}
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.firstGivenName.en
+                    : translations.firstGivenName.zh}</FormLabel>
+                  <InputField
+                    type="text"
+                    value={deceasedFormValues.givenName}
+                    onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
+                    required
+                  />
+                </div>
 
-                </h3>
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.otherGivenNames.en
+                    : translations.otherGivenNames.zh}</FormLabel>
+                  <InputField
+                    type="text"
+                    onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
+                  />
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.surname.en
+                    : translations.surname.zh}</FormLabel>
+                  <InputField
+                    type="text"
+                    value={deceasedFormValues.surname}
+                    onChange={(e) => handleDeceasedChange("surname", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.dateOfBirth.en
+                    : translations.dateOfBirth.zh}</FormLabel>
+                  <InputField
+                    type="date"
+                    value={deceasedFormValues.dateofbirth}
+
+                    required
+                  />
+                </div>
+                <div className="flex items-center w-full md:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={notPassed}
+                    onChange={(e) => setNotPassed(e.target.checked)}
+                    className="w-5 h-5 mr-2"
+                  />
+                  <span className="font-medium">
+                    {isEnglish ? translations.personNotPassed.en : translations.personNotPassed.zh}
+                  </span>
+                </div>
+
+
+                {!notPassed && (
                   <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.salutation.en
-                      : translations.salutation.zh}</FormLabel>
-                    <SelectField
-                      options={salutations}
-                      required
-                      value={deceasedFormValues.salutation}
-                      onChange={(e) => handleDeceasedChange("salutation", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.firstGivenName.en
-                      : translations.firstGivenName.zh}</FormLabel>
-                    <InputField
-                      type="text"
-                      value={deceasedFormValues.givenName}
-                      onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.otherGivenNames.en
-                      : translations.otherGivenNames.zh}</FormLabel>
-                    <InputField
-                      type="text"
-                      onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.surname.en
-                      : translations.surname.zh}</FormLabel>
-                    <InputField
-                      type="text"
-                      value={deceasedFormValues.surname}
-                      onChange={(e) => handleDeceasedChange("surname", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.dateOfBirth.en
-                      : translations.dateOfBirth.zh}</FormLabel>
+                    <FormLabel required>
+                      {" "}
+                      {isEnglish ? "Date of Death" : "过世日期"}
+                    </FormLabel>
                     <InputField
                       type="date"
-                      value={deceasedFormValues.dateofbirth}
-
+                      value={deceasedFormValues.dateofdeath}
+                      onChange={(e) => handleDeceasedChange("dateofdeath", e.target.value)}
                       required
                     />
                   </div>
-                  <div className="flex items-center w-full md:col-span-2">
-                    <input
-                      type="checkbox"
-                      checked={notPassed}
-                      onChange={(e) => setNotPassed(e.target.checked)}
-                      className="w-5 h-5 mr-2"
-                    />
-                    <span className="font-medium">
-                      {isEnglish ? translations.personNotPassed.en : translations.personNotPassed.zh}
-                    </span>
-                  </div>
+                )}
 
+                <div className="md:col-span-2">
+                  <FormLabel required>
+                    {isEnglish ? translations.lastRegisteredAddress.en : translations.lastRegisteredAddress.zh}
+                  </FormLabel>
 
-                  {!notPassed && (
-                    <div>
+                  <InputField
+                    required
+                    placeholder={
+                      isEnglish
+                        ? "This is the address they have resided at for the last 3 months."
+                        : "此地址为过去三个月居住的地方"
+                    }
+                  />
+                </div>
+
+                {!notPassed && (
+                  <>
+                    <div className="md:col-span-2">
                       <FormLabel required>
-                        {" "}
-                        {isEnglish ? "Date of Death" : "过世日期"}
+                        {isEnglish ? translations.deceasedPassedPlace.en : translations.deceasedPassedPlace.zh}
+
                       </FormLabel>
+
+                      <InputField required />
+                    </div>
+                    <div className="md:col-span-2">
+                      <FormLabel required>
+                        {isEnglish ? translations.deceasedCurrentPlace.en : translations.deceasedCurrentPlace.zh}
+
+                      </FormLabel>
+
                       <InputField
-                        type="date"
-                        value={deceasedFormValues.dateofdeath}
-                        onChange={(e) => handleDeceasedChange("dateofdeath", e.target.value)}
+                        placeholder={
+                          isEnglish ? "Eg: Home / Hospital" : "比如：家中/医院"
+                        }
                         required
                       />
                     </div>
-                  )}
+                  </>
+                )}
 
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish ? translations.lastRegisteredAddress.en : translations.lastRegisteredAddress.zh}
-                    </FormLabel>
 
-                    <InputField
-                      required
-                      placeholder={
-                        isEnglish
-                          ? "This is the address they have resided at for the last 3 months."
-                          : "此地址为过去三个月居住的地方"
-                      }
-                    />
-                  </div>
+                <div className="md:col-span-2">
+                  <FormLabel required>{isEnglish
+                    ? translations.batteryPoweredDevices.en
+                    : translations.batteryPoweredDevices.zh}</FormLabel>  <InputField
+                    placeholder="This includes all forms of pacemakers and defibrillators"
+                    value={deceasedFormValues.batterypowereddevices}
+                    onChange={(e) => handleDeceasedChange("batterypowereddevices", e.target.value)}
+                    required
+                  />
+                </div>
 
-                  {!notPassed && (
-                    <>
-                      <div className="md:col-span-2">
-                        <FormLabel required>
-                          {isEnglish ? translations.deceasedPassedPlace.en : translations.deceasedPassedPlace.zh}
+                <div className="md:col-span-2">
+                  <FormLabel required>{isEnglish
+                    ? translations.regularDoctor.en
+                    : translations.regularDoctor.zh}</FormLabel> <InputField
+                    placeholder="Eg: Dr Adam Brown, Strathfield"
+                    value={deceasedFormValues.regulardoctoraddress}
+                    onChange={(e) => handleDeceasedChange("regulardoctoraddress", e.target.value)}
+                    required
+                  />
+                </div>
 
-                        </FormLabel>
+                <div className="md:col-span-2">
+                  <FormLabel required>
+                    {isEnglish ? translations.uploadDeasedPhoto.en : translations.uploadDeasedPhoto.zh}
+                  </FormLabel>
 
-                        <InputField required />
-                      </div>
-                      <div className="md:col-span-2">
-                        <FormLabel required>
-                          {isEnglish ? translations.deceasedCurrentPlace.en : translations.deceasedCurrentPlace.zh}
-
-                        </FormLabel>
-
-                        <InputField
-                          placeholder={
-                            isEnglish ? "Eg: Home / Hospital" : "比如：家中/医院"
-                          }
-                          required
+                  <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
+                    <div className="flex flex-col items-center justify-center text-center p-4">
+                      <svg
+                        className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                         />
-                      </div>
-                    </>
-                  )}
+                      </svg>
 
+                      <p className="text-sm text-gray-500 mb-4">
+                        {isEnglish ? (
+                          <>
+                            You can upload up to 2 images <br /> (Only .jpg, .jpeg,
+                            .png, .heic files are allowed)
+                          </>
+                        ) : (
+                          <>
+                            您最多可以上传 2 张图片 <br /> （仅允许
+                            .jpg、.jpeg、.png、.heic 文件）
+                          </>
+                        )}
+                      </p>
+                    </div>
 
-                  <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.batteryPoweredDevices.en
-                      : translations.batteryPoweredDevices.zh}</FormLabel>  <InputField
-                      placeholder="This includes all forms of pacemakers and defibrillators"
-                      value={deceasedFormValues.batterypowereddevices}
-                      onChange={(e) => handleDeceasedChange("batterypowereddevices", e.target.value)}
+                    <input
+                      type="file"
+                      multiple
                       required
+                      onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
+
+                      className="hidden"
                     />
-                  </div>
+                  </label>
 
-                  <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.regularDoctor.en
-                      : translations.regularDoctor.zh}</FormLabel> <InputField
-                      placeholder="Eg: Dr Adam Brown, Strathfield"
-                      value={deceasedFormValues.regulardoctoraddress}
-                      onChange={(e) => handleDeceasedChange("regulardoctoraddress", e.target.value)}
-                      required
-                    />
-                  </div>
 
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish ? translations.uploadDeasedPhoto.en : translations.uploadDeasedPhoto.zh}
-                    </FormLabel>
+                </div>
+                <div className="md:col-span-2">
+                  <div className="flex flex-wrap gap-2">
+                    {deceasedFormValues?.photo?.map((file, index) => (
+                      <div key={index} className="relative inline-block">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-52 object-cover border rounded"
+                        />
 
-                    <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
-                      <div className="flex flex-col items-center justify-center text-center p-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                        <button
+                          type="button"
+                          onClick={() => removeDeceasedPhoto(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish ? (
-                            <>
-                              You can upload up to 2 images <br /> (Only .jpg, .jpeg,
-                              .png, .heic files are allowed)
-                            </>
-                          ) : (
-                            <>
-                              您最多可以上传 2 张图片 <br /> （仅允许
-                              .jpg、.jpeg、.png、.heic 文件）
-                            </>
-                          )}
-                        </p>
+                          ×
+                        </button>
                       </div>
-
-                      <input
-                        type="file"
-                        multiple
-                        required
-                        onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
-
-                        className="hidden"
-                      />
-                    </label>
-
-
+                    ))}
                   </div>
-                  <div className="md:col-span-2">
+                </div>
+
+              </div>
+            </div>
+
+            {/* ================= NEXT OF KIN ================= */}
+            <div>
+              <h3 className="text-4xl text-center font-bold mb-6">
+                Next of Kin Details
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinSalutation.en
+                    : translations.kinSalutation.zh}</FormLabel>  <SelectField
+                    options={salutations}
+                    value={formKinValues.salutation}
+                    onChange={(e) => handleKinChange("salutation", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinFirstGivenName.en
+                    : translations.kinFirstGivenName.zh}</FormLabel>  <InputField
+                    value={formKinValues.givenName}
+                    onChange={(e) => handleKinChange("givenName", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinOtherGivenNames.en
+                    : translations.kinOtherGivenNames.zh}</FormLabel> <InputField
+                    onChange={(e) => handleKinChange("otherNames", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinSurname.en
+                    : translations.kinSurname.zh}</FormLabel> <InputField
+                    value={formKinValues.surname}
+                    onChange={(e) => handleKinChange("surname", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormLabel required>{isEnglish
+                    ? translations.kinCurrentAddress.en
+                    : translations.kinCurrentAddress.zh}</FormLabel>  <InputField
+                    value={formKinValues.currentAddress}
+                    onChange={(e) => handleKinChange("currentAddress", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinMobile.en
+                    : translations.kinMobile.zh}</FormLabel>  <InputField
+                    type="tel"
+                    value={formKinValues.mobile}
+                    onChange={(e) => handleKinChange("mobile", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <FormLabel required>{isEnglish
+                    ? translations.kinEmail.en
+                    : translations.kinEmail.zh}</FormLabel>   <InputField
+                    type="email"
+                    value={formKinValues.email}
+                    onChange={(e) => handleKinChange("email", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormLabel required>{isEnglish
+                    ? translations.kinRelationship.en
+                    : translations.kinRelationship.zh}</FormLabel>  <InputField
+                    value={formKinValues.relation}
+                    onChange={(e) => handleKinChange("relation", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormLabel required>
+                    {isEnglish ? translations.uploadKinPhoto.en : translations.uploadKinPhoto.zh}
+
+                  </FormLabel>
+
+                  <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
+                    <div className="flex flex-col items-center justify-center text-center p-4">
+                      <svg
+                        className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+
+                      <p className="font-semibold text-gray-900">
+                        {isEnglish
+                          ? "Drag & drop files here, or click to upload"
+                          : "拖放文件到此处，或点击上传"}
+                      </p>
+
+                      <p className="text-sm text-gray-500 mb-4">
+                        {isEnglish ? (
+                          <>
+                            You can upload up to 2 images <br /> (Only .jpg, .jpeg,
+                            .png, .heic files are allowed)
+                          </>
+                        ) : (
+                          <>
+                            您最多可以上传 2 张图片 <br /> （仅允许
+                            .jpg、.jpeg、.png、.heic 文件）
+                          </>
+                        )}
+                      </p>
+                    </div>
+
+                    <input
+                      type="file"
+                      multiple
+                      required
+                      onChange={(e) => handlePhotoUpload("photo", e.target.files[0])}
+
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* ================= SIGNATURE ================= */}
+            <div>
+              <h3 className="text-4xl text-center font-bold mb-6">
+                {isEnglish ? "Signature" : "签名"}
+              </h3>
+
+              <div>
+                <FormLabel required>
+                  {isEnglish ? "Choose Your Signature Type" : "选择签名方式"}
+                </FormLabel>
+
+                <select
+                  value={signatureType}
+                  onChange={(e) => setSignatureType(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                >
+                  <option value="Digital Signature">
+                    {isEnglish ? "Screen Signature" : "屏幕签名"}
+                  </option>
+                  <option value="Upload Photo">
+                    {isEnglish ? "Upload Photo" : "上传照片"}
+                  </option>
+                </select>
+              </div>
+
+              {/* Upload Signature Image */}
+              {signatureType === "Upload Photo" && (
+                <div className="mt-4">
+                  <FormLabel required>
+                    {isEnglish ? "Upload Your Signature Here" : "在此上传您的签名"}
+                  </FormLabel>
+
+                  <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
+                    <div className="flex flex-col items-center justify-center text-center py-4">
+                      <svg
+                        className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+
+                      <p className="font-semibold text-gray-900">
+                        {isEnglish
+                          ? "Drag & drop files here, or click to upload"
+                          : "将文件拖放到此处，或点击上传"}
+                      </p>
+
+                      <p className="text-sm text-gray-500 mb-4">
+                        {isEnglish
+                          ? "(Only .jpg, .jpeg, .png, .heic files are allowed)"
+                          : "（仅允许 .jpg、.jpeg、.png、.heic 文件）"}
+                      </p>
+                    </div>
+
+                    <input
+                      type="file"
+                      multiple
+                      required
+                      accept="image/*"
+
+                      className="hidden"
+                    />
+                  </label>
+
+                  <div className="md:col-span-2 mt-4">
                     <div className="flex flex-wrap gap-2">
-                      {deceasedFormValues?.photo?.map((file, index) => (
+                      {formKinValues?.sign?.map((file, index) => (
                         <div key={index} className="relative inline-block">
                           <img
                             src={URL.createObjectURL(file)}
                             alt={`Preview ${index + 1}`}
                             className="w-52 object-cover border rounded"
                           />
-
-                          <button
-                            type="button"
-                            onClick={() => removeDeceasedPhoto(index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                          >
-                            ×
-                          </button>
                         </div>
                       ))}
                     </div>
                   </div>
-
                 </div>
-              </div>
+              )}
 
-              {/* ================= NEXT OF KIN ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  Next of Kin Details
-                </h3>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinSalutation.en
-                      : translations.kinSalutation.zh}</FormLabel>  <SelectField
-                      options={salutations}
-                      value={formKinValues.salutation}
-                      onChange={(e) => handleKinChange("salutation", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinFirstGivenName.en
-                      : translations.kinFirstGivenName.zh}</FormLabel>  <InputField
-                      value={formKinValues.givenName}
-                      onChange={(e) => handleKinChange("givenName", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinOtherGivenNames.en
-                      : translations.kinOtherGivenNames.zh}</FormLabel> <InputField
-                      onChange={(e) => handleKinChange("otherNames", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinSurname.en
-                      : translations.kinSurname.zh}</FormLabel> <InputField
-                      value={formKinValues.surname}
-                      onChange={(e) => handleKinChange("surname", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.kinCurrentAddress.en
-                      : translations.kinCurrentAddress.zh}</FormLabel>  <InputField
-                      value={formKinValues.currentAddress}
-                      onChange={(e) => handleKinChange("currentAddress", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinMobile.en
-                      : translations.kinMobile.zh}</FormLabel>  <InputField
-                      type="tel"
-                      value={formKinValues.mobile}
-                      onChange={(e) => handleKinChange("mobile", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>{isEnglish
-                      ? translations.kinEmail.en
-                      : translations.kinEmail.zh}</FormLabel>   <InputField
-                      type="email"
-                      value={formKinValues.email}
-                      onChange={(e) => handleKinChange("email", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>{isEnglish
-                      ? translations.kinRelationship.en
-                      : translations.kinRelationship.zh}</FormLabel>  <InputField
-                      value={formKinValues.relation}
-                      onChange={(e) => handleKinChange("relation", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish ? translations.uploadKinPhoto.en : translations.uploadKinPhoto.zh}
-
-                    </FormLabel>
-
-                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-                      <div className="flex flex-col items-center justify-center text-center p-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          {isEnglish
-                            ? "Drag & drop files here, or click to upload"
-                            : "拖放文件到此处，或点击上传"}
-                        </p>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish ? (
-                            <>
-                              You can upload up to 2 images <br /> (Only .jpg, .jpeg,
-                              .png, .heic files are allowed)
-                            </>
-                          ) : (
-                            <>
-                              您最多可以上传 2 张图片 <br /> （仅允许
-                              .jpg、.jpeg、.png、.heic 文件）
-                            </>
-                          )}
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        multiple
-                        required
-                        onChange={(e) => handlePhotoUpload("photo", e.target.files[0])}
-
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* ================= SIGNATURE ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  {isEnglish ? "Signature" : "签名"}
-                </h3>
-
-                <div>
+              {/* Digital Signature */}
+              {signatureType === "Digital Signature" && (
+                <div className="mt-4">
                   <FormLabel required>
-                    {isEnglish ? "Choose Your Signature Type" : "选择签名方式"}
+                    {isEnglish ? "Sign Your Name Here" : "请在此签名"}
                   </FormLabel>
 
-                  <select
-                    value={signatureType}
-                    onChange={(e) => setSignatureType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option value="Digital Signature">
-                      {isEnglish ? "Screen Signature" : "屏幕签名"}
-                    </option>
-                    <option value="Upload Photo">
-                      {isEnglish ? "Upload Photo" : "上传照片"}
-                    </option>
-                  </select>
+                  <div className="border rounded-md bg-gray-50 p-2">
+                    <SignatureField
+                      sigPadRef={sigCanvasRef}
+                      saveSignature={saveSignature}
+                      clearSignature={clearSignature}
+                    />
+                  </div>
                 </div>
+              )}
+            </div>
 
-                {/* Upload Signature Image */}
-                {signatureType === "Upload Photo" && (
-                  <div className="mt-4">
-                    <FormLabel required>
-                      {isEnglish ? "Upload Your Signature Here" : "在此上传您的签名"}
-                    </FormLabel>
-
-                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
-                      <div className="flex flex-col items-center justify-center text-center py-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          {isEnglish
-                            ? "Drag & drop files here, or click to upload"
-                            : "将文件拖放到此处，或点击上传"}
-                        </p>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish
-                            ? "(Only .jpg, .jpeg, .png, .heic files are allowed)"
-                            : "（仅允许 .jpg、.jpeg、.png、.heic 文件）"}
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        multiple
-                        required
-                        accept="image/*"
-
-                        className="hidden"
-                      />
-                    </label>
-
-                    <div className="md:col-span-2 mt-4">
-                      <div className="flex flex-wrap gap-2">
-                        {formKinValues?.sign?.map((file, index) => (
-                          <div key={index} className="relative inline-block">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
-                              className="w-52 object-cover border rounded"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Digital Signature */}
-                {signatureType === "Digital Signature" && (
-                  <div className="mt-4">
-                    <FormLabel required>
-                      {isEnglish ? "Sign Your Name Here" : "请在此签名"}
-                    </FormLabel>
-
-                    <div className="border rounded-md bg-gray-50 p-2">
-                      <SignatureField
-                        sigPadRef={sigCanvasRef}
-                        saveSignature={saveSignature}
-                        clearSignature={clearSignature}
-                      />
-                    </div>
-                  </div>
-                )}
+            {/* Error and Success Messages */}
+            {error && (
+              <div className="p-4 bg-red-50 text-red-700 rounded-lg">
+                {error}
               </div>
+            )}
 
-              {/* Error and Success Messages */}
-              {error && (
-                <div className="p-4 bg-red-50 text-red-700 rounded-lg">
-                  {error}
-                </div>
-              )}
+            {message && (
+              <div className="p-4 bg-green-50 text-green-700 rounded-lg">
+                {message}
+              </div>
+            )}
 
-              {message && (
-                <div className="p-4 bg-green-50 text-green-700 rounded-lg">
-                  {message}
-                </div>
-              )}
-
-              {/* ================= SUBMIT ================= */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
-            </form>
-          </div>
+            {/* ================= SUBMIT ================= */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+          </form>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 

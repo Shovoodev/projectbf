@@ -1,6 +1,7 @@
-import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
-
+import { FaUpload } from "react-icons/fa";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipNine = () => {
+  const { currentDate } = usePrePayServiceApi()
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -77,7 +78,8 @@ const SlipNine = () => {
               <input
                 type="date"
                 name="investor1_date"
-                defaultValue="2026-01-08"
+                value={currentDate}
+                defaultValue={currentDate}
                 className="pdf-input"
               />
             </div>

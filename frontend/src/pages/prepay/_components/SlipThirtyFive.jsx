@@ -1,8 +1,8 @@
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
-const SlipThirtyFive = () => {
-  const { setAspFrequency, totalPrice } = usePrePayServiceApi();
-  console.log({ totalPrice });
+const SlipThirtyFive = ({ amount }) => {
+  const { setAspFrequency } = usePrePayServiceApi();
+  const adjustedPrice = amount + 220
 
   const investmentOptions = [
     {
@@ -15,6 +15,7 @@ const SlipThirtyFive = () => {
     { no: 3, fund: "Balanced Index Fund", ufm: "Vanguard", benefitNo: 52 },
     { no: 4, fund: "Growth Index Fund", ufm: "Vanguard", benefitNo: 53 },
   ];
+
 
   return (
     <>
@@ -39,7 +40,7 @@ const SlipThirtyFive = () => {
                 type="text"
                 name="contribution_amount"
                 readOnly
-                value={totalPrice}
+                value={adjustedPrice}
                 placeholder="0.00"
                 className="pdf-input pl-8 font-semibold text-lg"
               />

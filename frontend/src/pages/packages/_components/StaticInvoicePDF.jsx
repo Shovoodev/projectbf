@@ -1,6 +1,7 @@
 import {
   Document,
   Image,
+  Link,
   Page,
   StyleSheet,
   Text,
@@ -85,17 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     lineHeight: 1.5,
     color: "#555",
-    borderTop: "1px solid #eee",
-    paddingTop: 10,
-    marginTop: 20,
-  },
-  footerText: {
-    marginBottom: 4,
-    textAlign: "center"
-  },
-  footerHighlight: {
-    color: "#D9534F",
-    fontWeight: "bold",
+    textAlign: "center",
   },
 
   // from Athik Hassan
@@ -125,41 +116,45 @@ const styles = StyleSheet.create({
     color: "#D9534F",
     fontWeight: "bold",
   },
+  //
+  rowTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 30,
+  },
+
   bankingBox: {
-    border: "1px solid #D18B47",
+    width: 170,
+    border: "1px solid #E0B07A",
     padding: 10,
-    width: 220,
+    fontSize: 10,
+    lineHeight: 1.4,
   },
   bankingTitle: {
     fontWeight: "bold",
     marginBottom: 6,
   },
+
+  middleBox: {
+    width: 160,
+    textAlign: "center",
+    fontSize: 10,
+    lineHeight: 1.4,
+  },
+
   rightBox: {
-    width: 260,
-  },
-  rightRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 14,
-  },
-  rightCol: {
-    width: 120,
+    width: 160,
     textAlign: "right",
+    fontSize: 10,
+    lineHeight: 1.4,
   },
   label: {
     fontWeight: "bold",
-    marginBottom: 2,
-  },
-  tableDivider: {
-    borderBottom: "1px solid #000",
-    marginVertical: 8,
-  },
-  amountRight: {
-    textAlign: "right",
+    marginBottom: 4,
   },
 });
 
-const StaticInvoicePDF = ({ invoiceDetails }) => {
+const StaticInvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
   if (!invoiceDetails) return null;
   const formattedDate2 = new Date(invoiceDetails.createdAt)
     .toLocaleDateString('en-GB')
@@ -219,39 +214,33 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
             </View>
           </View>
 
-          <View style={styles.rowBetween}>
+          <View style={styles.rowTop}>
             {/* BANKING DETAILS */}
             <View style={styles.bankingBox}>
               <Text style={styles.bankingTitle}>Banking Details</Text>
               <Text>Commonwealth Bank</Text>
               <Text style={{ fontWeight: "bold" }}>Black Tulip Funerals</Text>
-              <Text>BSB: 062-692</Text>
-              <Text>ACC: 7617 6113</Text>
+              <Text>BSB : 062-692</Text>
+              <Text>ACC : 7617 6113</Text>
             </View>
 
-            {/* CUSTOMER / INVOICE */}
-            <View style={styles.rightBox}>
-              <View style={styles.rightRow}>
-                <View>
-                  <Text style={styles.label}>Customer Details</Text>
-                  <Text>Next of Kin</Text>
-                </View>
-                <View style={styles.rightCol}>
-                  <Text style={styles.label}>Invoice Number</Text>
-                  <Text style={styles.red}>BTF9BB3252</Text>
-                </View>
-              </View>
+            {/* CUSTOMER DETAILS */}
+            <View style={styles.middleBox}>
+              <Text style={styles.label}>Customer Details</Text>
 
-              <View style={styles.rightRow}>
-                <View>
-                  <Text style={styles.label}>Reference</Text>
-                  <Text>Deceased Name</Text>
-                </View>
-                <View style={styles.rightCol}>
-                  <Text style={styles.label}>Due Date</Text>
-                  <Text>{formattedDate2}</Text>
-                </View>
-              </View>
+              <Text>{kinName}</Text>
+              {/* <Text>{invoiceDetails?.nextOfKin}</Text> */}
+              <Text style={[styles.label, { marginTop: 12 }]}>Reference</Text>
+              <Text>{deceasedName}</Text>
+            </View>
+
+            {/* INVOICE DETAILS */}
+            <View style={styles.rightBox}>
+              <Text style={styles.label}>Invoice Number</Text>
+              <Text style={styles.red}>{invoiceDetails?.reference}</Text>
+
+              <Text style={[styles.label, { marginTop: 12 }]}>Due Date</Text>
+              <Text>Date: {new Date().toLocaleDateString("en-GB")}</Text>
             </View>
           </View>
 
@@ -259,54 +248,55 @@ const StaticInvoicePDF = ({ invoiceDetails }) => {
           <View style={{ marginTop: 20 }}>
             <View style={styles.tableHeader}>
               <Text>Description</Text>
-              <Text>Amount AUD</Text>
+              <Text>Amount (AUD)</Text>
             </View>
 
             {rows.map((row, idx) => (
               <View style={styles.tableRow} key={idx}>
                 <Text>{row.label}</Text>
-                <Text style={styles.amountRight}>
-                  ${row.value.toFixed(2)}
+                <Text>
+                  {typeof row.value === "number"
+                    ? `$${row.value.toFixed(2)}`
+                    : row.value}
                 </Text>
               </View>
             ))}
 
-            <View style={styles.tableDivider} />
-
+            {/* TOTAL */}
             <View style={styles.totalRow}>
-              <Text>Amount Due AUD</Text>
+              <Text style={styles.totalLabel}>Total Amount Due</Text>
               <Text style={styles.totalAmount}>
-                ${invoiceDetails.totalPrice.toFixed(2)}
+                ${Number(invoiceDetails.totalPrice).toFixed(2)}
               </Text>
             </View>
           </View>
 
           {/* FOOTER */}
-          <View style={styles.footer} fixed>
-            <Text style={styles.footerText}>
-              Please use invoice reference{" "}
-              <Text style={styles.footerHighlight}>
-                {invoiceDetails.reference}
+          <View style={styles.footer}>
+            <Text>
+              Please use our invoice number{" "}
+              <Text
+                style={{
+                  color: "red",
+                  paddingLeft: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                {invoiceDetails?.reference}
               </Text>{" "}
-              when making payment.
-            </Text>
-            <Text style={styles.footerText}>
-              We kindly ask that payment is made immediately to secure the
-              funeral service date and time.
-            </Text>
-            <Text style={styles.footerText}>
-              Delays in full payment may cause rescheduling of services.
-            </Text>
-            <Text style={styles.footerText}>
-              Please contact us if you have any questions.
-            </Text>
-            <Text style={styles.footerText}>
-              Once paid, it would be appreciated if you could email your
-              remittance to accounts@blacktulipfunerals.com.au
-            </Text>
-            <Text style={styles.footerText}>
+              as your payment reference. We kindly ask that payment is made
+              immediately to secure the funeral service date and time. Delays in
+              full payment may cause rescheduling of services. Please contact us
+              if you have any questions. Once paid, it would be appreciated if
+              you could email your remittance to{" "}
+              <Link
+                src="mailto:accounts@blacktulipfunerals.com.au"
+                style={{ color: "blue", textDecoration: "underline" }}
+              >
+                accounts@blacktulipfunerals.com.au
+              </Link>{" "}
               Many thanks for your custom and understanding, Scott and the Black
-              Tulip team.
+              Tulip team
             </Text>
           </View>
         </View>
