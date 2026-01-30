@@ -3,7 +3,7 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourtyOne = () => {
   const { directDebitForm, updateDirectDebitForm } = usePrePayServiceApi();
   return (
-    <div className="w-full  bg-white text-[#2b2e83] px-5 py-6">
+    <div className="form-container-base">
       {/* Header */}
       <h1 className="text-4xl font-bold leading-tight">
         KeyInvest Direct
@@ -11,7 +11,7 @@ const SlipFourtyOne = () => {
         Debit Request
       </h1>
 
-      <hr className="my-6 border-[#2b2e83]/40" />
+      <hr className="my-1 border-[#2b2e83]/40" />
 
       {/* Description */}
       <p className="text-sm text-[#2b2e83]/90 max-w-4xl">
@@ -21,7 +21,7 @@ const SlipFourtyOne = () => {
         KeyInvest or phone KeyInvest on 1300 658 904 with any enquiries.
       </p>
 
-      <hr className="my-6 border-[#2b2e83]/40" />
+      <hr className="my-2 border-[#2b2e83]/40" />
 
       {/* Section 1 */}
       <h2 className="text-xl font-bold text-teal-600">
@@ -29,7 +29,7 @@ const SlipFourtyOne = () => {
       </h2>
 
       {/* Account Holder 1 */}
-      <section className="mt-3 space-y-1">
+      <section className="mt-1 space-y-1">
         <h3 className="font-semibold">Account Holder 1</h3>
 
         {/* Title */}
@@ -86,11 +86,11 @@ const SlipFourtyOne = () => {
       </section>
 
       {/* Account Holder 2 */}
-      <section className="mt-5 space-y-1">
+      <section className="mt-2 space-y-1">
         <h3 className="font-semibold">Account Holder 2</h3>
 
         {/* Title */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2">
           <span className="w-16">Title:</span>
           {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
             <label key={t} className="flex items-center gap-2">
@@ -143,7 +143,7 @@ const SlipFourtyOne = () => {
       </section>
 
       {/* Address */}
-      <section className="mt-10 space-y-4">
+      <section className="mt-3 space-y-2">
         <p className="text-sm font-semibold">If company ABN or Trust</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -206,14 +206,14 @@ const SlipFourtyOne = () => {
         </div>
       </section>
 
-      <hr className="my-10 border-[#2b2e83]/40" />
+      <hr className="my-3 border-[#2b2e83]/40" />
 
       {/* Section 2 */}
       <h2 className="text-xl font-bold text-teal-600">
         2. Nominated financial institution account
       </h2>
 
-      <section >
+      <section>
         <div>
           <label className="block text-sm mb-1">
             Name of financial institution:

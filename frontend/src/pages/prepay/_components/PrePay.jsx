@@ -7,6 +7,9 @@ import {
   eleven,
   fifteen,
   five,
+  fortySeven,
+  fortyThree,
+  fortyTwo,
   four,
   fourteen,
   nine,
@@ -36,18 +39,20 @@ import {
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 import { generatePdfBlob } from "./ImageToPdf";
 // import all the slips in order
-// import SlipFortySix from "./SlipFortySix";
-// import SlipFourty from "./SlipFourty";
-// import SlipFourtyFive from "./SlipFourtyFive";
-// import SlipFourtyOne from "./SlipFourtyOne";
-// import SlipFourtySeven from "./SlipFourtySeven";
-// import SlipFourtyTwo from "./SlipFourtyTwo";
-// import SlipThirtyEight from "./SlipThirtyEight";
+import SlipFortySix from "./SlipFortySix";
+import SlipFourty from "./SlipFourty";
+import SlipFourtyFive from "./SlipFourtyFive";
+import SlipFourtyOne from "./SlipFourtyOne";
+import SlipFourtySeven from "./SlipFourtySeven";
+import SlipFourtyTwo from "./SlipFourtyTwo";
+import SlipThirtyEight from "./SlipThirtyEight";
 import SlipThirtyFive from "./SlipThirtyFive";
-// import SlipThirtyFour from "./SlipThirtyFour";
-// import SlipThirtyNine from "./SlipThirtyNine";
+import SlipThirtyFour from "./SlipThirtyFour";
+import SlipThirtyNine from "./SlipThirtyNine";
 import SlipThirtySeven from "./SlipThirtySeven";
 import SlipThirtySix from "./SlipThirtySix";
+import SlipThirtyThree from "./SlipThirtyThree";
+import SlipThirtyTwo from "./SlipThirtyTwo";
 const CORE = import.meta.env.VITE_API_URL;
 
 // These are the "Natural" dimensions for CSS layouts to look correct
@@ -98,29 +103,32 @@ const PrePay = ({ amount }) => {
   const [step, setStep] = useState(0);
 
   const slips = [
-    // <SlipThirtyTwo />,
-    // <SlipThirtyThree />,
-    // <SlipThirtyFour />,
+    // <SlipFourtyTwo />,
+    // <SlipFourtyFive />,
+    // <SlipFourtySeven />,
+
+    <SlipThirtyTwo />,
+    <SlipThirtyThree />,
+    <SlipThirtyFour />,
     <SlipThirtyFive amount={amount} />,
     <SlipThirtySix />,
     <SlipThirtySeven />,
-    // <SlipThirtyEight />,
-    // <SlipThirtyNine />,
-    // <div data-pdf-ignore>
-    //   <SlipFourty />
-    // </div>,
-    // <div data-pdf-ignore>
-    //   <SlipFourtyOne />
-    // </div>,
-    // <SlipFourtyTwo />,
-    // <img src={fortyTwo} />,
-    // <img src={fortyThree} />,
-    // <SlipFourtyFive />,
-    // <SlipFortySix />,
-    // <SlipFourtySeven />,
-    // <img src={fortySeven} />,
+    <SlipThirtyEight />,
+    <SlipThirtyNine />,
+    <div data-pdf-ignore>
+      <SlipFourty />
+    </div>,
+    <div data-pdf-ignore>
+      <SlipFourtyOne />
+    </div>,
+    <SlipFourtyTwo />,
+    <img src={fortyTwo} />,
+    <img src={fortyThree} />,
+    <SlipFourtyFive />,
+    <SlipFortySix />,
+    <SlipFourtySeven />,
+    <img src={fortySeven} />,
   ];
-
   useEffect(() => {
     document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
   }, [isGeneratingPdf]);

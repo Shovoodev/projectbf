@@ -5,10 +5,10 @@ import SignatureField from "./SignatureField";
 import { usePrePayServiceApi } from "../../../../utility/prepay-service-provider";
 function Signature() {
   // ===== Signature Upload =====
-  const { sigCanvasRef, saveSignature, clearSignature, signaturePreview, } = usePrePayServiceApi();
+  const { sigCanvasRef, saveSignature, clearSignature, signaturePreview } =
+    usePrePayServiceApi();
   const fileInputRef = useRef(null);
   const [uploadedSig, setUploadedSig] = useState(null);
-
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -30,7 +30,7 @@ function Signature() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-center">
       {/* Upload Signature */}
-      <div className="space-y-4">
+      <div className="space-y-1">
         <div className="pdf-signature-zone">
           <FaUpload className="text-gray-300 text-3xl mb-3" />
 
@@ -86,21 +86,25 @@ function Signature() {
           )}
         </div>
 
-        <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200 text-center">Signature of Investor 1</label>
+        <label
+          className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 text-center"
+        >
+          Signature of Investor 1
+        </label>
       </div>
 
       {/* Draw Signature */}
-      <div className="lg:col-span-2 space-y-4">
+      <div className="lg:col-span-2 space-y-1">
         <SignatureField
-
           sigPadRef={sigCanvasRef}
           saveSignature={saveSignature}
           clearSignature={clearSignature}
-          penColor="black" />
+          penColor="black"
+        />
       </div>
       {/* hidden signature */}
-      <div className="space-y-4 hidden">
+      <div className="space-y-1 hidden">
         <div className="pdf-signature-zone">
           <FaUpload className="text-gray-300 text-3xl mb-3" />
 
@@ -124,7 +128,7 @@ function Signature() {
 
           {/* Preview */}
           {(uploadedSig || signaturePreview) && (
-            <div className="mt-4 relative inline-block">
+            <div className="mt-1 relative inline-block">
               <button
                 type="button"
                 onClick={() => {
@@ -143,12 +147,14 @@ function Signature() {
               />
             </div>
           )}
-
-
         </div>
 
-        <label className=" text-sm font-bold text-[rgb(49,41,166)]
-  mb-1 block transition-colors duration-200 text-center">Signature of Investor 1</label>
+        <label
+          className=" text-sm font-bold text-[rgb(49,41,166)]
+  mb-1 block transition-colors duration-200 text-center"
+        >
+          Signature of Investor 1
+        </label>
       </div>
     </div>
   );

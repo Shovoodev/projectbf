@@ -3,23 +3,23 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyThree = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
-  useEffect(()=> {
-    window.scroll(0.0)
-  }, [])
+  useEffect(() => {
+    window.scroll(0.0);
+  }, []);
   return (
     <div className="form-container-base">
-      <div >
+      <div>
         <h2 className="pdf-h2">1. Investor details</h2>
         <p className="pdf-subtitle">
           Investor 1 (all correspondence will be sent to this person)
         </p>
       </div>
 
-      <form  onSubmit={handleChange}>
+      <form onSubmit={handleChange}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <div className="col-span-full">
-            <label className="pdf-label mb-3">Title:</label>
+            <label className="pdf-label mb-1">Title:</label>
             <div className="pdf-radio-group">
               {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
                 <label key={t} className="pdf-radio-item">
@@ -328,12 +328,12 @@ const SlipThirtyThree = () => {
             />
           </div>
         </div>
-       
-          <p className="pdf-intro-p">
-            If the application is being completed under a Power of Attorney
-            (POA), please include the attorney’s contact details under
-          </p>
-          
+
+        <p className="pdf-intro-p">
+          If the application is being completed under a Power of Attorney (POA),
+          please include the attorney’s contact details under
+        </p>
+
         {/* Footer */}
         <div className="pdf-footer">
           <div>
