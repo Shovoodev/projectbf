@@ -1,6 +1,5 @@
-import Hero from "../../../components/common/Hero";
-import BlogSection from "./_component/BlogSection";
-
+import Hero from "../../components/common/Hero";
+import BlogSection from './_component/BlogSection'
 const BlogPage = () => {
   return (
     <div>

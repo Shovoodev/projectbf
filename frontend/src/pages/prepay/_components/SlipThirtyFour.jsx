@@ -3,40 +3,50 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipThirtyFour = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
 
+  const handleUpdate = (field, value) => {
+    updateInvestor("investorTwo", [field], value); // Changed to investorTwo for Slip 34
+  };
+
   return (
-    <div className="form-container-base">
-      <div className="form-header-area">
+    <div className="form-container-base p-3">
+      <div className="p-1">
         <p className="pdf-subtitle">
-        Investor 2 (Only complete this section if this is to be a jointly owned Policy, if being completed by a POA or if the policy is
-          for a Separate Life Insured)
+          Investor 2 (Only complete this section if this is to be a jointly
+          owned Policy, if being completed by a POA or if the policy is for a
+          Separate Life Insured)
         </p>
-        <div className="pdf-radio-group">
-              {["Joint application ", "Separate Life Insured", "Power of Attorney"].map((t) => (
-                <label key={t} className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name="title"
-                    value={t}
-                    onChange={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
-                    }
-                    className="pdf-radio-input"
-                  />
-                  <span className="text-gray-700 group-hover:text-blue-900">
-                    {t}
-                  </span>
-                </label>
-              ))}
-            </div>
-        <p>Before making a joint application please read page 7 of the PDS. To make 2 single applications please complete a
-        separate Application Form for each Investor.</p>
+        <div className="pdf-radio-group mb-4">
+          {[
+            "Joint application",
+            "Separate Life Insured",
+            "Power of Attorney",
+          ].map((t) => (
+            <label key={t} className="pdf-radio-item">
+              <input
+                type="radio"
+                name="applicationType"
+                value={t}
+                onChange={(e) =>
+                  handleUpdate("applicationType", e.target.value)
+                }
+                className="pdf-radio-input"
+              />
+              <span className="text-gray-700">{t}</span>
+            </label>
+          ))}
+        </div>
+        <p className="text-xs text-gray-500 mb-4">
+          Before making a joint application please read page 7 of the PDS. To
+          make 2 single applications please complete a separate Application Form
+          for each Investor.
+        </p>
       </div>
 
-      <form className="p-8 space-y-6" onSubmit={handleChange}>
+      <form className="space-y-4" onSubmit={handleChange}>
         {/* Personal Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="col-span-full">
-            <label className="pdf-label mb-3">Title:</label>
+            <label className="pdf-label">Title:</label>
             <div className="pdf-radio-group">
               {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
                 <label key={t} className="pdf-radio-item">
@@ -44,14 +54,10 @@ const SlipThirtyFour = () => {
                     type="radio"
                     name="title"
                     value={t}
-                    onChange={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
-                    }
+                    onChange={(e) => handleUpdate("title", e.target.value)}
                     className="pdf-radio-input"
                   />
-                  <span className="text-gray-700 group-hover:text-blue-900">
-                    {t}
-                  </span>
+                  <span className="text-gray-700">{t}</span>
                 </label>
               ))}
             </div>
@@ -61,11 +67,8 @@ const SlipThirtyFour = () => {
             <label className="pdf-label">Surname:</label>
             <input
               type="text"
-              name="surname"
               className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["surname"], e.target.value)
-              }
+              onChange={(e) => handleUpdate("surname", e.target.value)}
             />
           </div>
 
@@ -73,11 +76,8 @@ const SlipThirtyFour = () => {
             <label className="pdf-label">Given Names:</label>
             <input
               type="text"
-              name="givenNames"
               className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["givenNames"], e.target.value)
-              }
+              onChange={(e) => handleUpdate("givenNames", e.target.value)}
             />
           </div>
 
@@ -85,17 +85,14 @@ const SlipThirtyFour = () => {
             <label className="pdf-label">Date of Birth:</label>
             <input
               type="date"
-              name="dob"
               className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["givenNames"], e.target.value)
-              }
+              onChange={(e) => handleUpdate("dob", e.target.value)}
             />
           </div>
 
           <div>
             <label className="pdf-label">Gender:</label>
-            <div className="pdf-radio-group mt-2">
+            <div className="pdf-radio-group">
               {["Female", "Male", "Other"].map((g) => (
                 <label key={g} className="pdf-radio-item">
                   <input
@@ -103,9 +100,7 @@ const SlipThirtyFour = () => {
                     name="gender"
                     value={g}
                     className="pdf-radio-input"
-                    onSelect={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
-                    }
+                    onChange={(e) => handleUpdate("gender", e.target.value)}
                   />
                   <span className="text-gray-700">{g}</span>
                 </label>
@@ -115,233 +110,99 @@ const SlipThirtyFour = () => {
         </div>
 
         {/* Residential Address */}
-        <h3 className="pdf-section-title">
+        <h3 className="pdf-section-header">
           Residential Address{" "}
           <span className="pdf-note">
             (must not be a PO box, RMB or Locked Bag)
           </span>
         </h3>
 
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-6 gap-3">
           <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
+            <label className="pdf-label text-xs">Unit Number</label>
             <input
               type="text"
-              name="res_unit"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["unit"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("unit", e.target.value)}
             />
           </div>
           <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
+            <label className="pdf-label text-xs">Street No</label>
             <input
               type="text"
-              name="res_streetNo"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["streetNo"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("streetNo", e.target.value)}
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
+            <label className="pdf-label text-xs">Street Name</label>
             <input
               type="text"
-              name="res_streetName"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["streetName"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("streetName", e.target.value)}
             />
           </div>
           <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
+            <label className="pdf-label text-xs">Suburb</label>
             <input
               type="text"
-              name="res_suburb"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["suburb"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("suburb", e.target.value)}
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
+            <label className="pdf-label text-xs">State</label>
             <input
               type="text"
               defaultValue="NSW"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["state"], e.target.value)
-              }
-              className="pdf-input pdf-input-readonly"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
-            <input
-              type="text"
-              name="res_postcode"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["postcode"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("state", e.target.value)}
             />
           </div>
           <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
+            <label className="pdf-label text-xs">Postcode</label>
             <input
               type="text"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["country"], e.target.value)
-              }
+              className="pdf-input"
+              onChange={(e) => handleUpdate("postcode", e.target.value)}
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="pdf-label text-xs">Country</label>
+            <input
+              type="text"
+              defaultValue="AUSTRALIA"
               className="pdf-input pdf-input-readonly"
               disabled
             />
           </div>
         </div>
-        {/* Milling  Address */}
-        <h3 className="pdf-section-title">
-          Mailing Address (
-          <span className="pdf-note">(if different to above address))</span>
-        </h3>
-
-        <div className="grid grid-cols-6 gap-2">
-          <div className="col-span-2">
-            <label className="pdf-label-sm">Unit Number</label>
-            <input
-              type="text"
-              name="res_unit"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailunit"], e.target.value)
-              }
-              className="pdf-input"
-            />
-          </div>
-          <div className="col-span-4">
-            <label className="pdf-label-sm">Street No</label>
-            <input
-              type="text"
-              name="res_streetNo"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailstreetNo"], e.target.value)
-              }
-            />
-          </div>
-          <div className="col-span-3">
-            <label className="pdf-label-sm">Street Name</label>
-            <input
-              type="text"
-              name="res_streetName"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["mailstreetName"],
-                  e.target.value
-                )
-              }
-              className="pdf-input"
-            />
-          </div>
-          <div className="col-span-3">
-            <label className="pdf-label-sm">Suburb</label>
-            <input
-              type="text"
-              name="res_suburb"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailsuburb"], e.target.value)
-              }
-              className="pdf-input"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="pdf-label-sm">State</label>
-            <input
-              type="text"
-              defaultValue="NSW"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailstate"], e.target.value)
-              }
-              className="pdf-input pdf-input-readonly"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="pdf-label-sm">Postcode</label>
-            <input
-              type="text"
-              name="res_postcode"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailpostcode"], e.target.value)
-              }
-              className="pdf-input"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="pdf-label-sm">Country</label>
-            <input
-              type="text"
-              defaultValue="AUSTRALIA"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailcountry"], e.target.value)
-              }
-              className="pdf-input pdf-input-readonly"
-            />
-          </div>
-        </div>
 
         {/* Contact Details */}
-        <h3 className="pdf-section-title">Contact Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <h3 className="pdf-section-header">Contact Details</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
               type="number"
-              name="daytimeTelephone"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["daytimeTelephone"],
-                  e.target.value
-                )
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("daytimeTelephone", e.target.value)}
             />
           </div>
           <div>
             <label className="pdf-label">Mobile:</label>
             <input
               type="text"
-              name="mobile"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mobile"], e.target.value)
-              }
               className="pdf-input"
+              onChange={(e) => handleUpdate("mobile", e.target.value)}
             />
           </div>
-          <div>
-            <label className="pdf-label">Daytime Adress:</label>
-            <input
-              type="text"
-              name="daytimeAddress"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["daytimeAddress"],
-                  e.target.value
-                )
-              }
-              className="pdf-input"
-            />
-          </div>
-          <div className="">
+          <div className="col-span-full">
             <label className="pdf-label">Email:</label>
             <input
               type="email"
-              name="email"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["email"], e.target.value)
-              }
+              className="pdf-input"
+              onChange={(e) => handleUpdate("email", e.target.value)}
             />
           </div>
         </div>

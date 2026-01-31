@@ -20,6 +20,134 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
+    section: {
+        marginBottom: 15,
+    },
+    formSection: {
+        marginBottom: 20,
+    },
+    h2: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    subtitle: {
+        fontSize: 10,
+        color: '#666',
+        marginBottom: 15,
+    },
+    sectionTitle: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        marginTop: 5,
+    },
+    note: {
+        fontSize: 10,
+        color: '#666',
+        fontWeight: 'normal',
+    },
+    label: {
+        fontSize: 10,
+        marginBottom: 5,
+        fontWeight: 'bold',
+    },
+    labelSm: {
+        fontSize: 9,
+        marginBottom: 3,
+        fontWeight: 'bold',
+    },
+    input: {
+        fontSize: 10,
+        padding: 5,
+        border: '1 solid #ccc',
+        borderRadius: 3,
+        marginBottom: 8,
+        minHeight: 25,
+    },
+    readonlyInput: {
+        backgroundColor: '#f5f5f5',
+        color: '#666',
+    },
+    row: {
+        flexDirection: 'row',
+        marginBottom: 10,
+        gap: 15,
+    },
+    column: {
+        flex: 1,
+    },
+    radioGroup: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 10,
+        gap: 15,
+    },
+    radioItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 10,
+        marginBottom: 5,
+    },
+    radioCircle: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        border: '1 solid #000',
+        marginRight: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    radioDot: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: '#000',
+    },
+    radioText: {
+        fontSize: 10,
+    },
+    gridRow: {
+        flexDirection: 'row',
+        marginBottom: 8,
+        gap: 10,
+    },
+    gridCol2: {
+        flex: 2,
+    },
+    gridCol3: {
+        flex: 3,
+    },
+    gridCol4: {
+        flex: 4,
+    },
+    noteSection: {
+        marginTop: 15,
+        marginBottom: 20,
+    },
+    introText: {
+        fontSize: 9,
+        color: '#666',
+        lineHeight: 1.4,
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 30,
+        left: 30,
+        right: 30,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderTop: '1 solid #ddd',
+        paddingTop: 10,
+    },
+    footerText: {
+        fontSize: 9,
+        color: '#666',
+    },
+    brand: {
+        color: '#1e3a8a', // blue-900 equivalent
+        fontWeight: 'bold',
+    },
     formContainerBase: {
         width: '100%',
         backgroundColor: '#ffffff',

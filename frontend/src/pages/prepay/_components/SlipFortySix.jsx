@@ -26,7 +26,7 @@ const SlipFortySix = () => {
           </div>
 
           {/* Main Content */}
-          <div className="p-6 md:p-8">
+          <div className="p-2 md:p-3">
             {/* Terms and Conditions */}
             <div className="mb-10">
               <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-3 border-b border-gray-200">

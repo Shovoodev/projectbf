@@ -30,7 +30,9 @@ import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage"
 import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
-
+import BlogPage from './pages/blog/BlogPage'
+import CreateBlog from './pages/blog/_component/CreateBlog'
+import BlogDetails from './pages/blog/_component/BlogDetails'
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -41,11 +43,7 @@ import AgreementFormPage from "./pages/packages/Agreement";
 import Packages from "./pages/Packages";
 
 import Registration from "./pages/Registration";
-import UserPage from "./pages/dashboard/UserPage";
 import InvoicePage from "./pages/pay/InvoicePage";
-import BlogPage from "./pages/packages/blog/BlogPage";
-import BlogDetails from "./pages/packages/blog/_component/BlogDetails";
-import CreateBlog from "./pages/packages/blog/_component/CreateBlog";
 import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 export const routes = createBrowserRouter([
   {
@@ -214,11 +212,6 @@ export const routes = createBrowserRouter([
       {
         path: "/invoicePdf",
         element: <StaticInvoicePDF />,
-        isPrivate: true,
-      },
-      {
-        path: "/user",
-        element: <UserPage />,
         isPrivate: true,
       },
     ],

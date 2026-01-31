@@ -1,9 +1,20 @@
+import { useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyEight = () => {
+  const [formData, setFormData] = useState({
+    funeral_director_name: "",
+    funeral_director_phone: "",
+    investor1_date: "2026-01-08",
+  });
+  const { signature } = usePrePayServiceApi();
 
-  const { signature, currentDate } = usePrePayServiceApi();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -43,6 +54,7 @@ const SlipThirtyEight = () => {
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -54,6 +66,7 @@ const SlipThirtyEight = () => {
                 value="1300110031"
                 placeholder="Enter phone number"
                 className="pdf-input"
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -93,7 +106,7 @@ const SlipThirtyEight = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    value={currentDate}
+                    defaultValue="2026-01-08"
                     className="pdf-input"
                   />
                 </div>
@@ -120,8 +133,9 @@ const SlipThirtyEight = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    value={currentDate}
+                    defaultValue="2026-01-08"
                     className="pdf-input"
+                    onChange={handleChange}
                   />
                 </div>
               </div>

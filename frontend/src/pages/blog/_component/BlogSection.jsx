@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import BlogCard from "./BlogCard";
 import { useNavigate } from "react-router-dom";
+import BlogCard from "./BlogCard";
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
