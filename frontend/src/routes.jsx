@@ -46,6 +46,7 @@ import AgreementFormPage from "./pages/packages/Agreement";
 
 import Packages from "./pages/Packages";
 
+import Error from "./pages/Error";
 import InvoicePDF from "./pages/Invoicepdf";
 import Registration from "./pages/Registration";
 
@@ -195,6 +196,7 @@ export const routes = createBrowserRouter([
       },
     ],
   },
+  { path: "*", element: <Error /> },
   {
     element: <BlankLayout />,
     children: [

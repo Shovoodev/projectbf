@@ -91,7 +91,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-body">
-          <p>Copyright © 2025 blacktulipfunerals. All rights reserved.</p>
+          <p>Copyright © blacktulipfunerals. All rights reserved.</p>
           <div className="flex space-x-4">
             {[<FaFacebookF />, <FaTwitter />, <FaYoutube />].map((icon, i) => (
               <a
