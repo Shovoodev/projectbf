@@ -25,7 +25,7 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select a Option",
+        label: "Sydney Metro",
         value: "Sydney Metro",
         priceAdjustment: 0,
       },
@@ -352,14 +352,15 @@ const attendenceData = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "Funera Preferred Adult Urn",
-        value: "Funera Preferred Adult Urn",
-        priceAdjustment: 0,
-      },
+
       {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Funera Preferred Adult Urn",
+        value: "Funera Preferred Adult Urn",
         priceAdjustment: 0,
       },
     ],
@@ -687,7 +688,7 @@ const AttendenceCrementionPage = () => {
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
-          <PDFDownloadButton />
+          {/* <PDFDownloadButton /> */}
         </div>
 
         {/* Message Display */}

@@ -26,6 +26,7 @@ const SlipFourtyFive = () => {
   });
 
   const [isSecondInvestor, setIsSecondInvestor] = useState(false);
+  const [popupSms, setPopupSms] = useState(false)
 
   return (
     <div className="form-container-base">

@@ -49,14 +49,15 @@ export const viewingAndCremention = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "BTF Preferred Adult Urn",
-        value: "BTF Preferred Adult Urn",
-        priceAdjustment: 0,
-      },
+
       {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
+        priceAdjustment: 0,
+      },
+      {
+        label: "BTF Preferred Adult Urn",
+        value: "BTF Preferred Adult Urn",
         priceAdjustment: 0,
       },
     ],

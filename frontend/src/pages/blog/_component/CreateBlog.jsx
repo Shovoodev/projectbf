@@ -113,8 +113,8 @@ const CreateBlog = () => {
       formData.append(
         "excerpt",
         blogData.excerpt?.trim() ||
-          blogData.content.trim().substring(0, 150) +
-            (blogData.content.length > 150 ? "..." : "")
+        blogData.content.trim().substring(0, 150) +
+        (blogData.content.length > 150 ? "..." : "")
       );
 
       // Append external image URL if provided
@@ -273,7 +273,7 @@ const CreateBlog = () => {
                     Select a category
                   </option>
                   <option value="btf news">BTF News</option>
-                  <option value="uncetaglory">UncetaGlory</option>
+                  <option value="uncetaglory">Uncategory</option>
                   <option value="blogs">Blogs</option>
                 </select>
               </div>
@@ -390,7 +390,7 @@ const CreateBlog = () => {
             </div>
 
             {/* Content Editor */}
-            <div className="h-[400px] overflow-y-auto">
+            <div>
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Blog Content *
               </label>
@@ -429,15 +429,14 @@ const CreateBlog = () => {
           {/* Status Message */}
           {message.text && (
             <div
-              className={`mt-4 p-4 rounded-lg text-center font-medium transition-all duration-300 ${
-                message.type === "error"
-                  ? "bg-red-50 text-red-600 border border-red-200"
-                  : message.type === "warning"
+              className={`mt-4 p-4 rounded-lg text-center font-medium transition-all duration-300 ${message.type === "error"
+                ? "bg-red-50 text-red-600 border border-red-200"
+                : message.type === "warning"
                   ? "bg-yellow-50 text-yellow-600 border border-yellow-200"
                   : message.type === "info"
-                  ? "bg-blue-50 text-blue-600 border border-blue-200"
-                  : "bg-green-50 text-green-600 border border-green-200"
-              }`}
+                    ? "bg-blue-50 text-blue-600 border border-blue-200"
+                    : "bg-green-50 text-green-600 border border-green-200"
+                }`}
             >
               {message.text}
             </div>

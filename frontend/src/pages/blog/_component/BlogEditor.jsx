@@ -5,7 +5,45 @@ import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Extension } from "@tiptap/core";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Node } from "@tiptap/core";
+
+export const Iframe = Node.create({
+  name: "iframe",
+
+  group: "block",
+  atom: true,
+
+  addAttributes() {
+    return {
+      src: { default: null },
+      width: { default: "100%" },
+      height: { default: "400" },
+      allowfullscreen: { default: true },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "iframe" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "div",
+      { class: "relative aspect-video w-full my-4" },
+      [
+        "iframe",
+        {
+          ...HTMLAttributes,
+          class: "w-full h-full rounded-lg",
+          frameborder: "0",
+          allow:
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+        },
+      ],
+    ];
+  },
+});
 
 const FontSize = Extension.create({
   name: "fontSize",
@@ -101,10 +139,41 @@ const ToolbarSelect = ({
 
 const BlogEditor = ({ value, onChange }) => {
   const imageInputRef = useRef(null);
+  const [previewImages, setPreviewImages] = useState([]);
+  const [showEmbedInput, setShowEmbedInput] = useState(true);
+  const [embedUrl, setEmbedUrl] = useState("");
+
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    const newPreviews = [];
+
+    files.forEach((file) => {
+      if (!file.type.startsWith("image/")) return;
+
+      const imageUrl = URL.createObjectURL(file);
+
+      // 1️⃣ Store preview
+      newPreviews.push({
+        file,
+        url: imageUrl,
+      });
+
+      // 2️⃣ Insert into editor (optional)
+      editor.chain().focus().setImage({ src: imageUrl }).run();
+    });
+
+    setPreviewImages((prev) => [...prev, ...newPreviews]);
+
+    e.target.value = ""; // reset input
+  };
+
 
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Iframe,
       TextStyle, // ✅ REQUIRED
       FontSize,
       Image.configure({
@@ -141,19 +210,19 @@ const BlogEditor = ({ value, onChange }) => {
     );
   }
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
+  // const handleImageUpload = (e) => {
+  //   const files = Array.from(e.target.files);
 
-    files.forEach((file) => {
-      if (!file.type.startsWith("image/")) return;
+  //   files.forEach((file) => {
+  //     if (!file.type.startsWith("image/")) return;
 
-      const imageUrl = URL.createObjectURL(file);
+  //     const imageUrl = URL.createObjectURL(file);
 
-      editor.chain().focus().setImage({ src: imageUrl }).run();
-    });
+  //     editor.chain().focus().setImage({ src: imageUrl }).run();
+  //   });
 
-    e.target.value = ""; // reset input
-  };
+  //   e.target.value = ""; // reset input
+  // };
 
   // Get current font size
   const getCurrentFontSize = () => {
@@ -180,9 +249,26 @@ const BlogEditor = ({ value, onChange }) => {
   };
 
   return (
-    <div className="border-2 border-gray-200 rounded-xl overflow-hidden bg-white">
+    <div className="border-2 border-gray-200 rounded-xl bg-white">
+      <div className=" flex gap-2">
+        <ToolbarButton
+          onClick={() => imageInputRef.current.click()}
+          title="Insert Image"
+        >
+          Add Images
+        </ToolbarButton>
+        <ToolbarButton
+          title="Embed Video"
+          onClick={() => setShowEmbedInput((prev) => !prev)}
+        >
+          Add Videos
+        </ToolbarButton>
+      </div>
+
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-2 p-3 border-b bg-gray-50 items-center">
+      <div className="flex flex-wrap gap-2 p-3 border-b bg-gray-50 items-center
+                sticky top-0 z-10">
+
         {/* Font Size Control */}
         <div className="flex items-center gap-1">
           <span className="text-xs text-gray-600 mr-1">Size:</span>
@@ -321,12 +407,7 @@ const BlogEditor = ({ value, onChange }) => {
 
         {/* Media */}
         <div className="flex gap-1">
-          <ToolbarButton
-            onClick={() => imageInputRef.current.click()}
-            title="Insert Image"
-          >
-            🖼
-          </ToolbarButton>
+
 
           <ToolbarButton
             onClick={() => {
@@ -369,7 +450,51 @@ const BlogEditor = ({ value, onChange }) => {
       </div>
 
       {/* Editor */}
-      <EditorContent editor={editor} />
+      <div className="max-h-[500px] overflow-y-auto">
+        <EditorContent editor={editor} />
+        {previewImages.length > 0 && (
+          <div className="flex flex-wrap gap-3 p-3 border-b bg-gray-50">
+            {previewImages.map((img, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={img.url}
+                  alt={`Preview ${index}`}
+                  className="w-20 h-20 object-cover rounded-lg border"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPreviewImages((prev) =>
+                      prev.filter((_, i) => i !== index)
+                    )
+                  }
+                  className="absolute -top-2 -right-2 bg-red-500 text-white
+                     rounded-full w-5 h-5 flex items-center justify-center
+                     text-xs hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {showEmbedInput && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Paste YouTube / Vimeo embed URL"
+                  value={embedUrl}
+                  onChange={(e) => setEmbedUrl(e.target.value)}
+                  className="px-3 py-1 text-sm border rounded-lg w-64
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+
+              </div>
+            )}
+
+          </div>
+        )}
+
+      </div>
     </div>
   );
 };
