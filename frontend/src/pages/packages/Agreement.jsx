@@ -372,7 +372,7 @@ const AgreementForm = () => {
         // Generate PDF with the data we just received
         if (invoiceData) {
           const blob = await pdf(
-            <StaticInvoicePDF invoiceDetails={invoiceData} />
+            <StaticInvoicePDF invoiceDetails={invoiceData} deceasedName={deceasedFormValues.givenName} kinName={formKinValues.givenName} />
           ).toBlob();
 
           const base64data = await new Promise((resolve, reject) => {

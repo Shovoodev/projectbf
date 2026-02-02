@@ -68,7 +68,7 @@ const SlipThirtyFive = ({ amount }) => {
                       : method === "bpay"
                         ? "BPAY"
                         : method === "oheque"
-                          ? "OHEQUE"
+                          ? "CHEQUE"
                           : "Direct Debit"}
                   </span>
                 </label>
