@@ -12,7 +12,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
     >
-      <h3 className="font-display font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-display font-lato font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}
@@ -26,6 +26,11 @@ export const viewingAndCremention = [
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
+      {
+        label: "Select an option",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
       {
         label: "Sydney Metro",
         value: "Sydney Metro",
@@ -49,7 +54,6 @@ export const viewingAndCremention = [
     question: "Urn",
     type: "select",
     options: [
-
       {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
@@ -90,8 +94,8 @@ const ViewingAndCrementionPage = () => {
   const navigate = useNavigate();
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
+    urn: { value: "BTF Preferred Scattering Tube", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

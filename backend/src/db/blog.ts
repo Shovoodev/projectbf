@@ -17,6 +17,7 @@ const blogSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: ["btf news", "uncetaglory", "blogs"],
+      default : "uncetaglory"
     },
     excerpt: {
       type: String,

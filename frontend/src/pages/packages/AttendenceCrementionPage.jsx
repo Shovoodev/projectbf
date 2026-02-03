@@ -11,7 +11,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 h-full ${className}`}
     >
-      <h3 className="font-body font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-body font-lato font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}
@@ -25,8 +25,8 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Sydney Metro",
-        value: "Sydney Metro",
+        label: "Select an Option",
+        value: "Select an Option",
         priceAdjustment: 0,
       },
       {
@@ -352,7 +352,6 @@ const attendenceData = [
     question: "Urn",
     type: "select",
     options: [
-
       {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
@@ -394,12 +393,12 @@ const AttendenceCrementionPage = () => {
   const BASE_PRICE = 4499;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
-    transferOption: { value: "Sydney Metro", price: 0 },
+    transferOption: { value: "Select an Option", price: 0 },
     stationery: { value: "50 Memoriam Cards", price: 0 },
     bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
     coffin: { value: "contract-raw", price: 0 },
     flowers: { value: "100cm Mixed Seasonal Coffin Cover - White", price: 0 },
-    urn: { value: "Funera Preferred Adult Urn", price: 0 },
+    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
     collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
 

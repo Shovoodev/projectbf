@@ -2,7 +2,7 @@ export function List({ items }) {
   return (
     <ul className="space-y-2 text-lg text-gray-700">
       {items?.map((item, i) => (
-        <li key={i} className="whitespace-nowrap">• {item}</li>
+        <li key={i} className="whitespace-nowrap font-lato">• {item}</li>
       ))}
     </ul>
   );
@@ -16,7 +16,7 @@ export function Select({ label, value, options, onChange }) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="p-2  rounded bg-gray-100 text-left w-2/3"
+        className="p-2 text-xl rounded bg-gray-100 text-left w-2/3"
       >
         {options?.map((opt) => (
           <option className="text-sm" key={opt} value={opt}>

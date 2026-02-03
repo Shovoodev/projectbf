@@ -141,7 +141,7 @@ const ToolbarSelect = ({
 const BlogEditor = ({ value, onChange }) => {
   const imageInputRef = useRef(null);
   const [previewImages, setPreviewImages] = useState([]);
-  const [showEmbedInput, setShowEmbedInput] = useState(true);
+  const [showEmbedInput, setShowEmbedInput] = useState(false);
   const [embedUrl, setEmbedUrl] = useState("")
 
   const handleImageUpload = (e) => {
@@ -506,7 +506,35 @@ const BlogEditor = ({ value, onChange }) => {
         {/* Editor */}
         <div className="max-h-[500px] overflow-y-auto">
           <EditorContent editor={editor} />
-
+          {showEmbedInput && (
+            <div className="p-3 border-b bg-blue-50 flex gap-2 items-center">
+              <input
+                type="text"
+                value={embedUrl}
+                onChange={(e) => setEmbedUrl(e.target.value)}
+                placeholder="Enter YouTube or video embed URL..."
+                className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleEmbedVideo();
+                }}
+              />
+              <button
+                onClick={handleEmbedVideo}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              >
+                Embed
+              </button>
+              <button
+                onClick={() => {
+                  setShowEmbedInput(false);
+                  setEmbedUrl("");
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
 
         </div>
       </div>
@@ -543,39 +571,13 @@ const BlogEditor = ({ value, onChange }) => {
             ))}
           </div>
         )}
-        {showEmbedInput && (
-          <div className="p-3 border-b bg-blue-50 flex gap-2 items-center">
-            <input
-              type="text"
-              value={embedUrl}
-              onChange={(e) => setEmbedUrl(e.target.value)}
-              placeholder="Enter YouTube or video embed URL..."
-              className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleEmbedVideo();
-              }}
-            />
-            <button
-              onClick={handleEmbedVideo}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-            >
-              Embed
-            </button>
-            <button
-              onClick={() => {
-                setShowEmbedInput(false);
-                setEmbedUrl("");
-              }}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
+
       </div>
 
     </div>
+
   );
+
 };
 
 export default BlogEditor;
