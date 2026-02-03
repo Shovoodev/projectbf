@@ -30,12 +30,12 @@ const Facilities = () => {
     {
       title: "The Library",
       desc: "A private and modern oasis. This chapel can accommodate 84 guests",
-      img: img2,
+      img: img3,
     },
     {
       title: "Viewing Room",
       desc: "Preserve the legacy of your loved one with thoughtfully designed funeral stationery from Sydney's leading funeral parlours.",
-      img: img3,
+      img: img2,
     },
   ];
 

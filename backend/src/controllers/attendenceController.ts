@@ -1,21 +1,13 @@
 import express from "express";
-import { attendenceData } from "../data/attandenceData";
 import { AuthenticatedRequest } from "../lib/types";
-import { FormResponseModel } from "../db/attendence";
+import {
+  FormResponseModel,
+  getAttendenceByReference,
+  getAttendenceByUserId,
+} from "../db/attendence";
 import { noServiceFunralData } from "../data/noServicefunralData";
-
-export const getAttendenceData = async (
-  req: express.Request,
-  res: express.Response
-): Promise<any> => {
-  try {
-    const filtered = attendenceData;
-
-    res.json(filtered);
-  } catch (error) {
-    console.log(error);
-  }
-};
+import { FormNoServiceResponseModel } from "../db/noViewingCremention";
+import { FormVandCResponseModel } from "../db/viewingAndCremention";
 
 export const getNoServiceFunral = async (
   req: express.Request,
@@ -29,6 +21,8 @@ export const getNoServiceFunral = async (
     console.log(error);
   }
 };
+
+
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
   res: express.Response
@@ -38,68 +32,95 @@ export const getAttendenceAnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { selections, totalPriceImpact = 0 } = req.body;
+    const { selections } = req.body;
 
-    const stationery = selections?.Stationery?.value;
-    const bodyPreparation = selections?.["Body Preparation"]?.value;
-    const coffin = selections?.Coffin?.value;
-    const flowers = selections?.["Flowers:"]?.value;
-    const urn = selections?.Urn?.value;
-    const collectionOfUrn = selections?.["Collection of Urn"]?.value;
+    if (!selections) {
+      return res.status(400).json({ message: "No selections provided" });
+    }
 
-    console.log("REQ BODY:", req.body);
+    // ✅ Extract values + prices safely
+    const getValue = (key: string) => selections?.[key]?.value || "";
+    const getPrice = (key: string) =>
+      Number(selections?.[key]?.price || 0);
 
-    let existingResponse = await FormResponseModel.findOne({
+    const stationeryOption = getValue("stationery");
+    const stationeryPrice = getPrice("stationery");
+
+    const bodyPreparationOption = getValue("bodyPreparation");
+    const bodyPreparationPrice = getPrice("bodyPreparation");
+
+    const coffinOption = getValue("coffin");
+    const coffinPrice = getPrice("coffin");
+
+    const flowersOption = getValue("flowers");
+    const flowersPrice = getPrice("flowers");
+
+    const urnOption = getValue("urn");
+    const urnPrice = getPrice("urn");
+
+    const collectionOfUrnOption = getValue("collectionOfUrn");
+    const collectionOfUrnPrice = getPrice("collectionOfUrn");
+
+    const transferOption = getValue("transferOption");
+    const transferPrice = getPrice("transferOption");
+
+    const totalPriceImpact =
+    stationeryPrice +
+    bodyPreparationPrice +
+    coffinPrice +
+    flowersPrice +
+    urnPrice +
+    collectionOfUrnPrice 
+    const BASE_PRICE= 4499
+    const finalTotalPrice = BASE_PRICE + totalPriceImpact;
+
+    if (finalTotalPrice <= 0) {
+      return res.status(400).json({ message: "Invalid total price" });
+    }
+    let response = await FormResponseModel.findOne({
       userid: req.identity._id,
       reference: req.identity.reference,
     });
 
-    let savedResponse;
-
-    if (existingResponse) {
-      existingResponse.stationery = stationery;
-      existingResponse.bodyPreparation = bodyPreparation;
-      existingResponse.coffin = coffin;
-      existingResponse.flowers = flowers;
-      existingResponse.urn = urn;
-      existingResponse.collectionOfUrn = collectionOfUrn;
-      existingResponse.totalPriceImpact = totalPriceImpact;
-
-      savedResponse = await existingResponse.save();
-    } else {
-      savedResponse = await FormResponseModel.create({
+    if (!response) {
+      response = new FormResponseModel({
         userid: req.identity._id,
         reference: req.identity.reference,
         email: req.identity.email,
-        stationery,
-        bodyPreparation,
-        coffin,
-        flowers,
-        urn,
-        collectionOfUrn,
-        totalPriceImpact,
-        status: "draft",
       });
     }
-    console.log("Selections received:", selections);
-    const allResponses = await FormResponseModel.find({
-      userid: req.identity._id,
-    });
 
-    const totalPrice = allResponses.reduce(
-      (sum, r) => sum + (r.totalPriceImpact || 0),
-      0
-    );
+    // ✅ Save OPTION + PRICE correctly
+    response.stationeryOption = stationeryOption;
+    response.stationery = stationeryPrice;
 
-    await FormResponseModel.updateMany(
-      { userid: req.identity._id },
-      { totalPrice }
-    );
+    response.bodyPreparationOption = bodyPreparationOption;
+    response.bodyPreparation = bodyPreparationPrice;
+
+    response.coffinOption = coffinOption;
+    response.coffin = coffinPrice;
+
+    response.flowersOption = flowersOption;
+    response.flowers = flowersPrice;
+
+    response.urnOption = urnOption;
+    response.urn = urnPrice;
+
+    response.collectionOfUrnOption = collectionOfUrnOption;
+    response.collectionOfUrn = collectionOfUrnPrice;
+
+    response.transferOption = transferOption;
+    response.transferPrice = transferPrice;
+
+    response.totalPriceImpact = totalPriceImpact;
+    response.totalPrice = finalTotalPrice;
+    response.status = "draft";
+
+    const saved = await response.save();
 
     return res.status(200).json({
       message: "Attendance response saved",
-      data: savedResponse,
-      totalPrice,
+      data: saved,
     });
   } catch (error) {
     console.error("ERROR:", error);
@@ -109,3 +130,240 @@ export const getAttendenceAnswers = async (
     });
   }
 };
+
+
+export const getVandCnswers = async (
+  req: AuthenticatedRequest,
+  res: express.Response
+) => {
+  try {
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Log the entire request body for debugging
+
+    const { selections, totalPrice = 0 } = req.body;
+
+    if (!selections) {
+      return res.status(400).json({ message: "No selections provided" });
+    }
+
+    // Extract values and prices from selections
+    const urnValue = selections?.urn?.value || "";
+    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+
+    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
+    const collectionOfUrnPrice =
+      parseFloat(selections?.collectionOfUrn?.price) || 0;
+    const transferOption = selections?.transferOption?.value || "";
+    const transferOptionPrice =
+      parseFloat(selections?.transferOption?.price) || 0;
+
+    // Calculate total price impact
+    const totalPriceImpact =
+      urnPrice + collectionOfUrnPrice + transferOptionPrice;
+
+    const BASE_PRICE = 3399; // Match frontend base price
+    const finalTotalPrice =
+      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+
+    let existingResponse = await FormVandCResponseModel.findOne({
+      userid: req.identity._id,
+      reference: req.identity.reference,
+    });
+
+    let savedResponse;
+
+    if (existingResponse) {
+      existingResponse.urn = urnValue;
+      existingResponse.collectionOfUrn = collectionOfUrnValue;
+      existingResponse.totalPriceImpact = totalPriceImpact;
+      existingResponse.totalPrice = finalTotalPrice;
+      existingResponse.transferOption = transferOption;
+
+      savedResponse = await existingResponse.save();
+    } else {
+      savedResponse = await FormVandCResponseModel.create({
+        userid: req.identity._id,
+        reference: req.identity.reference,
+        email: req.identity.email,
+
+        urn: urnValue,
+        collectionOfUrn: collectionOfUrnValue,
+        totalPriceImpact,
+        totalPrice: finalTotalPrice,
+        status: "draft",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Viewing And Cremention response saved",
+      data: savedResponse,
+      totalPrice: savedResponse.totalPrice,
+    });
+  } catch (error) {
+    console.error("ERROR:", error);
+    return res.status(500).json({
+      message: "Server error",
+      error: error instanceof Error ? error.message : error,
+    });
+  }
+};
+
+
+export const getNoServiceCrementionnswers = async (
+  req: AuthenticatedRequest,
+  res: express.Response
+) => {
+  try {
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { selections, totalPrice = 0 } = req.body;
+    const normalizeSelection = (field: any, fallback: string) => {
+      if (!field) return fallback;
+      if (typeof field === "string" && field.trim() !== "") return field;
+      if (typeof field === "object" && typeof field.value === "string" && field.value.trim() !== "") {
+        return field.value;
+      }
+      return fallback;
+    };
+    
+    if (!selections) {
+      return res.status(400).json({ message: "No selections provided" });
+    }
+    const BASE_PRICE = 2299;
+    // Extract values and prices from selections
+    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+
+    const collectionOfUrnPrice =
+      parseFloat(selections?.collectionOfUrn?.price) || 0;
+
+    const transferOptionPrice =
+      parseFloat(selections?.transferOption?.price) || 0;
+      const urnValue = normalizeSelection(
+        selections?.urn,
+        "Funera Preferred Adult Urn"
+      );
+      
+      const collectionOfUrnValue = normalizeSelection(
+        selections?.collectionOfUrn,
+        "Collect in Person"
+      );
+      
+      const transferOptionValue = normalizeSelection(
+        selections?.transferOption,
+        "Sydney Metro"
+      );
+      
+    // Calculate total price impact
+    const totalPriceImpact =
+      urnPrice + collectionOfUrnPrice + transferOptionPrice;
+      const finalTotalPrice =
+      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+      
+    let existingResponse = await FormNoServiceResponseModel.findOne({
+      userid: req.identity._id,
+      reference: req.identity.reference,
+    });
+
+    let savedResponse;
+
+    if (existingResponse) {
+      existingResponse.urn = urnValue;
+      existingResponse.collectionOfUrn = collectionOfUrnValue;
+      existingResponse.transferOption = transferOptionValue;
+      existingResponse.totalPriceImpact = totalPriceImpact;
+      existingResponse.totalPrice = finalTotalPrice;      
+
+      savedResponse = await existingResponse.save();
+    } else {
+      savedResponse = await FormNoServiceResponseModel.create({
+        userid: req.identity._id,
+        reference: req.identity.reference,
+        email: req.identity.email,
+      
+        urn: urnValue,
+        collectionOfUrn: collectionOfUrnValue,
+        transferOption: transferOptionValue,
+        totalPriceImpact,
+        totalPrice: finalTotalPrice,
+        status: "draft",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Viewing And Cremention response saved",
+      data: savedResponse,
+      totalPrice: savedResponse.totalPrice,
+    });
+  } catch (error) {
+    console.error("ERROR:", error);
+    return res.status(500).json({
+      message: "Server error",
+      error: error instanceof Error ? error.message : error,
+    });
+  }
+};
+
+export const getdeatilByReference = async (
+  req: express.Request,
+  res: express.Response
+): Promise<any> => {
+  try {
+    console.log("Request body:", JSON.stringify(req.body, null, 2));
+    if (!req.body) {
+      res.status(400).json({
+        success: false,
+        error: "Request body is required",
+        message: "Please provide reference data in the request body",
+      });
+      return;
+    }
+    const { reference } = req.body;
+
+    if (!reference) {
+      res.status(400).json({
+        success: false,
+        error: "Missing required field",
+        message: "reference is required in the request body",
+        field: "reference",
+      });
+      return;
+    }
+
+    const referenceIdRegex = /^[A-Za-z0-9-]+$/;
+    if (!referenceIdRegex.test(reference)) {
+      res.status(400).json({
+        success: false,
+        error: "Invalid format",
+        message: "referenceId contains invalid characters",
+        validFormat: "Alphanumeric characters and hyphens only",
+      });
+      return;
+    }
+    const filtered = await getAttendenceByReference(reference);
+
+    res.json({
+      success: true,
+      data: filtered,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getAllServiceData = async (
+  req: AuthenticatedRequest,
+  res: express.Response
+) => {
+  if (!req.identity) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = req.identity._id;
+  const data = await getAttendenceByUserId(userId);
+
+  res.json({ data });
+};
+

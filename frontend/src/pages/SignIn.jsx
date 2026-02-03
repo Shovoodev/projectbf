@@ -27,7 +27,7 @@ const SignIn = () => {
 
       localStorage.setItem("user", JSON.stringify(loginData));
 
-      navigate(`/${loginData._id}/user`);
+      navigate(`/user`);
     } catch (err) {
       console.error("Error:", err.message);
     } finally {

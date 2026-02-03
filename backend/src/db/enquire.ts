@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const enquireSchema = new mongoose.Schema({
-  enquireEmail: { type: String, required: true },
   name: { type: String, required: true },
-  Source: { type: String, default: "social media" },
+  email: { type: String, required: true },
+  source: { type: String, default: "social media" },
   question: { type: String, default: true },
   message: { type: String, default: true },
   phone: { type: Number, default: true },

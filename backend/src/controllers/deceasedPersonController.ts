@@ -5,6 +5,7 @@ import {
   deceasedPersonModel,
 } from "../db/deceasedPerson";
 import { AuthenticatedRequest } from "../lib/types";
+import { claudinaryConfig } from "../config/cloudinary";
 
 export const getDeceasedPersonFormData = async (
   req: express.Request,
@@ -47,6 +48,16 @@ export const getDeceasedPersonFormAnswers = async (
       regulardoctoraddress,
     } = req.body;
 
+
+    let photoUrls = []
+    const files = req.files as Express.Multer.File[];
+    for (const file of files) {
+      const uploaded = await claudinaryConfig().uploader.upload(file.path, { folder: "kin/photo" });
+      photoUrls.push(uploaded.secure_url);
+    }
+    
+
+
     if (existingResponse) {
       existingResponse.salutation = salutation;
       existingResponse.givenName = givenName;
@@ -73,10 +84,11 @@ export const getDeceasedPersonFormAnswers = async (
         deceasedNow,
         batterypowereddevices,
         regulardoctoraddress,
+        photo: photoUrls,
       });
     }
-    return res.status(200).json({
-      message: "Attendance response saved",
+    return res.status(201).json({
+      message: "Deseased details created successfully",
       data: savedResponse,
     });
   } catch (error) {

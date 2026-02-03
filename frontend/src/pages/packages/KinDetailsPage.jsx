@@ -37,7 +37,7 @@ const KinDetailsPage = () => {
       if (formValues.photo) fd.append("photo", formValues.photo);
       if (formValues.sign) fd.append("sign", formValues.sign);
 
-      fd.append("userid", userid);
+      // fd.append("userid", userid);
 
       const res = await fetch(`${CORE}/${userid}/next-to-keen-details`, {
         method: "POST",

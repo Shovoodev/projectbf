@@ -1,180 +1,381 @@
-import React, { useEffect, useState } from "react";
-import { Actions } from "./_components/Actions";
-import { List, Select } from "../../components/common/Reusables";
+import { useEffect, useState } from "react";
+import { List } from "../../components/common/Reusables";
+import { useNavigate } from "react-router-dom";
+import PopupEnquirey from "./_components/PopupEnquirey";
+import RowSelect from "./_components/RowSelect";
+
 const CORE = import.meta.env.VITE_API_URL;
-import { useNavigate } from "react-router";
-
-import RenderQuestion from "./_components/RenderQuestion";
-
-export function Card({ title, children }) {
+// Card Component matching the design (Light Gray Background)
+export function Card({ title, children, className = "" }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <h3 className="font-semibold uppercase text-sm mb-4">{title}</h3>
+    <div
+      className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
+    >
+      <h3 className="font-display font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
+        {title}
+      </h3>
       {children}
     </div>
   );
 }
+const noServiceFunralData = [
+  {
+    id: 1,
+    question: "Transfers from Place of Passing",
+    type: "select",
+    options: [
+      {
+        label: "Sydney Metro",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Zone 2 (+ $220)",
+        value: "Zone 2 (+ $220)",
+        priceAdjustment: 220,
+      },
+      {
+        label: "Zone 3 (+ $385)",
+        value: "Zone 3 (+ $385",
+        priceAdjustment: 385,
+      },
+    ],
+  },
+  {
+    id: 2,
+    question: "Urn",
+    type: "select",
+    options: [
 
+      {
+        label: "BTF Preferred Scattering Tube",
+        value: "BTF Preferred Scattering Tube",
+        priceAdjustment: 0,
+      },
+      {
+        label: "BTF Preferred Adult Urn",
+        value: "BTF Preferred Adult Urn",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+  {
+    id: 3,
+    question: "Collection of Urn",
+    type: "select",
+    options: [
+      {
+        label: "Collect in Person",
+        value: "Collect in Person",
+        priceAdjustment: 0,
+      },
+      {
+        label: "Australia Post Registered Mail",
+        value: "Australia Post Registered Mail",
+        priceAdjustment: 0,
+      },
+    ],
+  },
+
+];
 const NoServiceCrementionPage = () => {
-  const BASE_PRICE = 2299;
 
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const BASE_PRICE = 2299
   const [selections, setSelections] = useState({
+    transferOption: { value: "Sydney Metro", price: 0 },
     urn: { value: "", price: 0 },
     collectionOfUrn: { value: "", price: 0 },
   });
-
-  const [hearse, setHearse] = useState();
+  const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
+  const [error, setError] = useState(null);
+  const [amount, setAmount] = useState(0);
+  //   const { user } = useUserFront();
+  const [message, setMessage] = useState("");
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
+  // Transfer Dropdown State
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchStepData = async () => {
-      try {
-        const response = await fetch(`${CORE}/noservicefunraldata`, {
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch data");
-
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStepData();
-  }, []);
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
       0
     );
+    // Add any static option costs here if needed
+    const finalTotal = BASE_PRICE + totalPriceImpact;
 
-    setTotalPrice(BASE_PRICE + totalPriceImpact);
-  }, [selections]);
+    setTotalPrice(finalTotal);
+    setAmount(finalTotal);
+  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
 
-  console.log(data);
+  // --- Calculate Total Price ---
   useEffect(() => {
-    if (data.length > 0) {
-      setSelections({
-        urn: data[0]?.options[0]?.value || "No option selected",
-        collectionOfUrn: data[1]?.options[0]?.value || "No option selected",
-      });
-    }
-  }, [data]);
+    const variableTotal = Object.values(selections).reduce(
+      (sum, opt) => sum + (Number(opt.price) || 0),
+      0
+    );
 
-  const geNext = async (e) => {
+    setTotalPrice(BASE_PRICE + variableTotal);
+    setAmount(BASE_PRICE + variableTotal);
+  }, [selections, BASE_PRICE]);
+
+
+
+  const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      navigate(
-        `/register?=${selections.urn}&collectionOfUrn=${selections.collectionOfUrn}`
-      );
+
+      setTimeout(() => {
+        navigate("/fill-agreement-form", {
+          state: {
+            selections,
+            path: "new-no-service-cremation",
+          },
+        });
+      }, 1000);
+
     } catch (err) {
-      console.error("Fetch error:", err);
+      setMessage(err.message, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) return <p className="text-white">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  const handlePrepaySubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+
+      // Register
+      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
+      }
+
+      // Save selections
+      await fetch(`${CORE}/newattendingservicecremationanswers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selections }),
+        credentials: "include",
+      });
+      setTimeout(() => {
+        navigate(`/prepay`);
+      }, 1000);
+    } catch (err) {
+      setMessage(err.message, "error");
+      setError(err.message)
+    } finally {
+      setLoading(false);
+    }
+  };
+  const [activePopup, setActivePopup] = useState(null);
+  const openPopup = (popupType) => {
+    setActivePopup(popupType);
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
+
+  const handleOptionChange = (category, value, priceAdjustment) => {
+    const categoryKeyMap = {
+      "Transfers from Place of Passing": "transferOption",
+      Urn: "urn",
+      "Collection of Urn": "collectionOfUrn",
+    };
+
+    const key = categoryKeyMap[category];
+
+    setSelections((prev) => {
+      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
+
+      // Calculate total price impact
+      const totalPriceImpact = Object.values(updated).reduce(
+        (sum, opt) => sum + (opt.price || 0),
+        0
+      );
+
+      setTotalPrice(BASE_PRICE + totalPriceImpact);
+      setAmount(BASE_PRICE + totalPriceImpact);
+
+      return updated;
+    });
+  };
+
+  const handleSelectChange = (itemId, selectedValue) => {
+    const item = noServiceFunralData.find((data) => data.id === itemId);
+    if (!item) return;
+
+    const selectedOption = item.options.find(
+      (opt) => opt.value === selectedValue
+    );
+    if (!selectedOption) return;
+
+    // Make sure priceAdjustment is being used
+    const price = selectedOption.priceAdjustment || 0;
+
+    handleOptionChange(item.question, selectedValue, price);
+  };
+
+
+  useEffect(() => {
+    const totalPriceImpact = Object.values(selections).reduce(
+      (sum, opt) => sum + (opt.price || 0),
+      0
+    );
+    // Add any static option costs here if needed
+    const finalTotal = BASE_PRICE + totalPriceImpact;
+
+    setTotalPrice(finalTotal);
+    setAmount(finalTotal);
+  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
+
+
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error)
+    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className=" mx-20">
-      <div className="grid md:grid-cols-[1fr_auto] gap-8 items-start mb-10">
-        <div>
-          <h1 className="font-serif text-4xl mb-4">No Service Cremation</h1>
-          <p className="text-gray-600 max-w-2xl">
-            Black Tulip Funerals simple and unattendent cremention options ,
-            with no formal services or viewing .it offer a dignify ,
-            straightforward funeral while allowing families to arrange a
-            memorial and remembarence for later on
-          </p>
+    <div className="bg-white min-h-screen pb-20">
+      <div className="section-container max-w-7xl mx-auto px-6 py-16">
+        {/* --- HEADER --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
+          <div className="max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+              No Service Cremation
+            </h1>
+            <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
+              Black Tulip Funerals is a simple and unattended cremation option,
+              with no formal service or viewing. It offers a dignified,
+              straightforward farewell while allowing families to arrange a
+              memorial or remembrance at a later time.
+            </p>
+          </div>
+
+          {/* Price Box */}
+          <div className="bg-gray-50 border border-gray-100 rounded-xl p-6 text-center min-w-[200px]">
+            <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
+              Price
+            </span>
+            <span className="text-5xl font-body font-bold text-gray-900">
+              ${totalPrice}
+            </span>
+          </div>
         </div>
 
-        <div className="bg-gray-100 rounded-lg px-8 py-6 text-center sticky top-6">
-          <div className="text-sm text-gray-500">Price</div>
-          <div className="text-4xl font-bold">${totalPrice}</div>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 gap-6 mb-10">
-        <Card title="Required Services">
-          <List
-            items={[
-              "Phone or Zoom Consultation",
-              "Administration Fees",
-              "Registration of Death",
-              "Celebrant or Host",
-              "Cremation Fee",
-              "Transfers from Place of Passing (Sydney Metro 24/7)",
-            ]}
-          />
-        </Card>
-
-        <Card title="Disbursements">
-          <List
-            items={[
-              "Medical Referee Certificate",
-              "Cremation Risk Advice",
-              "NSW Government Services Levy",
-              "Official Death Certificate Issued by BDM",
-            ]}
-          />
-        </Card>
-
-        <Card title="Included Services">
-          <List
-            items={[
-              "Live Video Streaming",
-              "SMS Photo Invitation",
-              "Photo Slideshow",
-              "Photo for Screens in Chapel",
-            ]}
-          />
-        </Card>
-
-        <Card title="Included Variables">
-          {data.map((item) => (
-            <RenderQuestion
-              key={item.id}
-              item={item}
-              selections={selections}
-              setSelections={setSelections}
-              setTotalPrice={setTotalPrice}
-              BASE_PRICE={BASE_PRICE}
+        {/* --- GRID CONTENT --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {/* 1. Required Services */}
+          <Card
+            title="Required Services"
+            className="flex flex-col justify-between"
+          >
+            <List
+              items={[
+                "Phone or Zoom Consultation",
+                "Administration Fees",
+                "Registration of Death",
+                "Cremation Fee",
+              ]}
             />
-          ))}
-        </Card>
 
-        <Card title="Options">
-          <Select
-            label="Hearse"
-            value={hearse}
-            onChange={setHearse}
-            options={[
-              "No Hearse - Coffin in place",
-              "Standard Hearse",
-              "Premium Hearse",
-            ]}
+
+          </Card>
+
+          {/* 2. Disbursements */}
+          <Card title="Disbursements">
+            <List
+              items={[
+                "Medical Referee Certificate",
+                "Cremation Risk Advice",
+                "NSW Government Services Levy",
+                "Official Death Certificate Issued by BDM",
+              ]}
+            />
+          </Card>
+
+          {/* 3. Included Variables (Full Width) */}
+          <div className="md:col-span-2">
+            <Card title="Included Variables">
+              <div className="flex flex-col gap-2">
+                {noServiceFunralData.map((item) => {
+                  // Determine current value based on your mapping logic
+                  const categoryKeyMap = {
+                    "Transfers from Place of Passing": "transferOption",
+                    Urn: "urn",
+                    "Collection of Urn": "collectionOfUrn",
+                  };
+                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+                  const currentValue = selections[key]?.value || "";
+
+                  return (
+                    <RowSelect
+                      key={item.id}
+                      label={item.question}
+                      value={currentValue}
+                      onChange={(e) =>
+                        handleSelectChange(item.id, e.target.value)
+                      }
+                      options={item.options}
+                      placeholder="Select an option"
+                    />
+                  );
+                })}
+              </div>
+            </Card>
+          </div>
+        </div>
+
+        {/* --- ACTIONS FOOTER --- */}
+        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
+          {/* Make Agreement button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={handleRegistrationSubmit}
+            >
+              Make Agreement Now
+            </button>
+          </div>
+
+          {/* Enquiry button */}
+          <div>
+            <button
+              className="btn-primary normal"
+              onClick={() => openPopup("enquirey")}
+            >
+              Enquire Now
+            </button>
+          </div>
+
+          {/* PrePay button */}
+          <button className="btn-primary normal" onClick={handlePrepaySubmit}>
+            Prepay
+          </button>
+          <PopupEnquirey
+            isOpen={activePopup === "enquirey"}
+            onClose={closePopup}
+            mode="enquirey"
+            mainTitle="Please tell us what you whant to know about us"
+            description="We'll get back to you shortly"
+            title="Make an Enquiry"
+            subtitle="We'll get back to you shortly"
+            onSuccess={(userData) => {
+              console.log("Enquiry submitted:", userData);
+              closePopup();
+              // Handle enquiry submission
+            }}
           />
-          <Select
-            label="Bottled Water 600ml"
-            value="Not Required"
-            options={["Not Required"]}
-          />
-          <Select
-            label="Personalised Tissue Packs"
-            value="Not Required"
-            options={["Not Required"]}
-          />
-        </Card>
+        </div>
       </div>
-      <Actions goNext={geNext} />
     </div>
   );
 };

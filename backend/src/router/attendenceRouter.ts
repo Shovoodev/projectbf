@@ -1,17 +1,31 @@
 import express from "express";
 import {
+  getAllServiceData,
   getAttendenceAnswers,
-  getAttendenceData,
+  getdeatilByReference,
+  getNoServiceCrementionnswers,
   getNoServiceFunral,
+  getVandCnswers,
 } from "../controllers/attendenceController";
 import { isAuthenticated } from "../middlewear";
 
 export default (router: express.Router) => {
-  router.get("/newattendingservicecremation", getAttendenceData);
   router.get("/noservicefunraldata", getNoServiceFunral);
+  router.get("/all-service-data", isAuthenticated, getAllServiceData);
+  router.post("/service-details", getdeatilByReference);
   router.post(
     "/newattendingservicecremationanswers",
     isAuthenticated,
-    getAttendenceAnswers
+    getAttendenceAnswers,
+  );
+  router.post(
+    "/new-view-and-service-cremation",
+    isAuthenticated,
+    getVandCnswers,
+  );
+  router.post(
+    "/new-no-service-cremation",
+    isAuthenticated,
+    getNoServiceCrementionnswers,
   );
 };

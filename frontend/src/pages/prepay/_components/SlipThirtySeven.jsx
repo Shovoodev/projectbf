@@ -1,5 +1,5 @@
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
-import SignatureField from "../../packages/_components/SignatureField";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+import Signature from "./common/Signature";
 
 const SlipThirtySeven = () => {
   const { sigCanvasRef, saveSignature, clearSignature } = usePrePayServiceApi();
@@ -22,21 +22,21 @@ const SlipThirtySeven = () => {
   ];
   return (
     <div className="form-container-base">
-      <form className="p-4 md:p-10" onSubmit={(e) => e.preventDefault()}>
-        <h1 className="pdf-h2 text-3xl mb-6">5. Application</h1>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <h1 className="pdf-h2 text-3xl mb-0">5. Application</h1>
 
         {/* Info */}
-        <div className="pdf-info-box mb-8 bg-blue-50/50">
-          <p className="text-[13px] leading-relaxed">
+        <div className="pdf-info-box bg-blue-50/50">
+          <p className="text-[13px] ">
             Before signing this Application Form, Investors should read the PDS
             to which this application is attached.
           </p>
         </div>
 
         {/* Declaration */}
-        <div className="mb-10">
-          <h3 className="pdf-label text-lg border-b pb-2">Declaration:</h3>
-          <p className="pdf-intro-p mt-3 font-bold">
+        <div>
+          <h3 className="pdf-label text-lg border-b pb-0">Declaration:</h3>
+          <p className="pdf-intro-p mt-0 font-bold">
             I/We agree and acknowledge:
           </p>
 
@@ -48,7 +48,11 @@ const SlipThirtySeven = () => {
               </label>
             ))}
           </div>
+<<<<<<< HEAD
           <div className="pdf-declaration-list mt-2 ml-4 border-t border-gray-300">
+=======
+          <div className="pdf-declaration-list mt- ml-1 border-t border-gray-300">
+>>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
             {optionalCheckboxes.map((text, index) => (
               <label key={index} className="pdf-declaration-item">
                 <input type="checkbox" className="pdf-declaration-checkbox" />
@@ -60,25 +64,20 @@ const SlipThirtySeven = () => {
 
         {/* Signature Section */}
         <div className="">
-          <SignatureField
-            sigPadRef={sigCanvasRef}
-            saveSignature={saveSignature}
-            clearSignature={clearSignature}
-            penColor="black"
-            canvasProps={{
-              width: 400,
-              height: 150,
-              className: "w-full h-[150px]",
-            }}
-          />
+          {/* <<file upload */}
+          <Signature />
         </div>
         {/* Footer */}
         <div className="pdf-footer">
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
+<<<<<<< HEAD
           <div className="flex gap-8">
+=======
+          <div className="flex gap-2">
+>>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
             <div>Version: July 2026</div>
             <div className="font-bold">37</div>
           </div>

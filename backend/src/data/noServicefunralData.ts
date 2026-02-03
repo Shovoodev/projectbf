@@ -5,13 +5,13 @@ export const noServiceFunralData = [
     type: "select",
     options: [
       {
-        label: "Funera Preferred Adult Urn",
-        value: "Funera Preferred Adult Urn",
+        label: "BTF Preferred Adult Urn",
+        value: "BTF Preferred Adult Urn",
         priceAdjustment: 0,
       },
       {
-        label: "Funera Preferred Scattering Tube",
-        value: "Funera Preferred Scattering Tube",
+        label: "BTF Preferred Scattering Tube",
+        value: "BTF Preferred Scattering Tube",
         priceAdjustment: 0,
       },
     ],

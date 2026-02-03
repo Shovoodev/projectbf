@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipFourtySeven = () => {
   const { signature } = usePrePayServiceApi();
@@ -44,55 +44,50 @@ const SlipFourtySeven = () => {
   const currentDate = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
+    <div className="form-container-base">
+      <div className="">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Section Header */}
-          <div className="px-6 py-8 border-b border-gray-200">
-            <h3 className="text-3xl font-bold text-gray-800 mb-2">
+          <div className="px-2 py-2 border-b border-gray-200">
+            <h3 className="text-3xl font-bold text-gray-800 mb-1">
               4. Investor(s) declaration
             </h3>
           </div>
 
           {/* Declarations List */}
-          <div className="p-6 md:p-8">
-            <div className="space-y-1 mb-10">
-              <p className="text-gray-700 font-medium mb-4">
+          <div className="p-2 md:p-2">
+            <div >
+              <p className="text-gray-700 font-medium mb-1">
                 You authorise the nominated financial adviser, or authorised
                 delegate:
               </p>
 
-              <div className="space-y-3">
-                {declarations.map((declaration, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-700 font-bold text-sm">
-                          —
-                        </span>
-                      </div>
-                    </div>
-                    <p className="ml-3 text-gray-700 leading-relaxed">
-                      {declaration}
-                    </p>
-                  </div>
+              <div className="pdf-declaration-list">
+                {declarations.map((text, index) => (
+                  <label key={index} className="pdf-declaration-item p-0">
+                    <input
+                      type="checkbox"
+                      className="pdf-declaration-checkbox"
+                    />
+                    <span className="pdf-declaration-text">{text}</span>
+                  </label>
                 ))}
               </div>
             </div>
 
             {/* Signature Sections */}
-            <div className="space-y-12">
+            <div className="space-y-1">
               {/* Investor 1 */}
-              <div className="border-2 border-gray-200 rounded-xl p-6 bg-gray-50">
-                <div className="flex items-center mb-6">
+              <div className="border-2 border-gray-200 rounded-xl p-2 bg-gray-50">
+                <div className="flex items-center mb-1">
                   <h3 className="text-2xl font-semibold text-gray-800">
                     Signature
                   </h3>
                 </div>
                 <div className=" flex">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     {/* Left Column */}
-                    <div className="space-y-6">
+                    <div className="space-y-2">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Signatureof Inverste 1 *
@@ -101,7 +96,7 @@ const SlipFourtySeven = () => {
                           <img
                             src={URL.createObjectURL(signature)}
                             alt="Signature"
-                            className="mt-4"
+                            className="mt-1"
                           />
                         )}
                         <p className="text-xs text-gray-500 mt-2">
@@ -111,19 +106,19 @@ const SlipFourtySeven = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     {/* Left Column */}
                     {showSecondInvester && (
                       <>
-                        <div className="space-y-6">
+                        <div className="space-y-2">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
                               Signature of Inverste 2
                             </label>
                             <textarea
                               value={formData.investor1.signature}
                               placeholder="Type your full legal signature"
-                              className="w-full h-32 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none font-signature text-xl"
+                              className="w-full h-32 px-1 py-1 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none font-signature text-xl"
                               required
                             />
                             <p className="text-xs text-gray-500 mt-2">

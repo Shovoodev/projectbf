@@ -1,5 +1,6 @@
 // @ts-nocheck
 import {
+  guestLogin,
   login,
   logOut,
   registerUser,
@@ -9,11 +10,12 @@ import { getUsers } from "../db/user";
 
 import express from "express";
 import { isAuthenticated } from "../middlewear";
-import { pdfController } from "../controllers/pdf.routeController";
+import { pdfController } from "../controllers/pdfController";
 
 export default (router: express.Router) => {
   router.get("/user", getUsers);
   router.post("/blacktulipauth/login", login);
+  router.post("/blacktulipauth/guest", guestLogin);
   router.post("/blacktulipauth/newuser", registerUser);
   // router.post(
   //   "/sendallrelateddocuments",

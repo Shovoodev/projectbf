@@ -22,14 +22,13 @@ function App() {
 
     // ✅ Logged in → block login page
     if (user?._id && pathname === "/login") {
-      navigate(`/${user._id}/user`, { replace: true });
+      navigate(`/user`, { replace: true });
     }
   }, [user, pathname, navigate]);
 
   return (
     <section>
       <Header />
-
       <main className="mx-auto">
         <Outlet />
       </main>

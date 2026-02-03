@@ -1,12 +1,16 @@
+<<<<<<< HEAD
 import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
+=======
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+>>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
 const SlipFourtyTwo = () => {
   const { updateDeptRequest } = usePrePayServiceApi();
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+    <div className="form-container-base">
+      <div className=" mx-auto bg-white rounded-lg shadow-md p-2 md:p-3">
         {/* Header */}
-        <div className="mb-8 border-b pb-4">
+        <div className="mb-2 border-b pb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             Direct Debit Request
           </h1>
@@ -17,14 +21,14 @@ const SlipFourtyTwo = () => {
         </div>
 
         {/* Section 3: Amount and frequency of debits */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b">
+        <div className="mb-3">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2 pb-2 border-b">
             3. Amount and frequency of debits
           </h2>
 
           {/* Lump Sum Contribution */}
-          <div className="mb-8">
-            <div className="flex items-start mb-4">
+          <div className="mb-2">
+            <div className="flex items-start mb-2">
               <div className="min-w-6 h-6 mt-0.5">
                 <input
                   type="checkbox"
@@ -44,22 +48,22 @@ const SlipFourtyTwo = () => {
                 </span>
               </label>
             </div>
-            <div className="ml-9">
+            <div className="ml-2">
               <input
                 type="text"
                 placeholder="Amount"
                 defaultValue={5000}
                 className="pdf-input"
                 onChange={() => {
-                  updateDeptRequest(["lumpSum", "amount"], "5000");
+                  updateDeptRequest(["lumpSum", "amount"], "5000"); // coming form last page
                 }}
               />
             </div>
           </div>
 
           {/* Regular Savings Plan */}
-          <div className="mb-8">
-            <div className="flex items-start mb-4">
+          <div className="mb-1">
+            <div className="flex items-start mb-2">
               <div className="min-w-6 h-6 mt-0.5">
                 <input
                   type="checkbox"
@@ -70,14 +74,14 @@ const SlipFourtyTwo = () => {
                   }}
                 />
               </div>
-              <label htmlFor="rsp" className="ml-3 block">
+              <label htmlFor="rsp" className="ml-1 block">
                 <span className="font-medium text-gray-700">
                   The Regular Savings Plan contribution of $
                 </span>
               </label>
             </div>
-            <div className="ml-9 space-y-4">
-              <div className="flex items-center space-x-4">
+            <div className="ml-2 space-y-2">
+              <div className="flex items-center space-x-2">
                 <input
                   type="text"
                   placeholder="Amount"
@@ -91,7 +95,7 @@ const SlipFourtyTwo = () => {
                   will be deducted commencing on the
                 </span>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <span className="text-gray-600">
                   15th of the month nominated in Section 2.1 of the Application
                   Form.
@@ -101,7 +105,7 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* No Selection Note */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 mb-2">
             <p className="text-gray-700">
               If no selection is made the RSP will commence at the discretion of
               KeyInvest and be confirmed in writing to you in your Policy
@@ -110,8 +114,8 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* RSP End Condition */}
-          <div className="mb-4">
-            <p className="text-gray-700 mb-3">
+          <div className="mb-2">
+            <p className="text-gray-700 mb-2">
               Please end my RSP when total contributions reach $
             </p>
             <input
@@ -126,14 +130,14 @@ const SlipFourtyTwo = () => {
         </div>
 
         {/* Section 4: Declarations */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b">
+        <div className="mb-2">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2 pb-2 border-b">
             4. Declarations
           </h2>
 
           {/* Declaration Text */}
-          <div className="mb-8">
-            <p className="text-gray-700 mb-4 leading-relaxed">
+          <div className="mb-4">
+            <p className="text-gray-700 mb-2 leading-relaxed">
               I/We request and authorise KeyInvest Ltd - Identification Number
               113657 to arrange for any amount KeyInvest Ltd may debit or charge
               to be debited through the Bulk Electronic Clearing System from an
@@ -150,7 +154,7 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* Company Signing Note */}
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8">
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-2">
             <p className="text-gray-700 italic">
               (If signing for a company, sign and print full name and capacity
               for signing e.g. Director.)
@@ -158,13 +162,13 @@ const SlipFourtyTwo = () => {
           </div>
 
           {/* Signature Sections */}
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Account Holder 1 */}
             <div className="border-t pt-6">
               <h3 className="font-medium text-gray-800 mb-4">
                 Signature of Account Holder 1
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Signature
@@ -184,11 +188,11 @@ const SlipFourtyTwo = () => {
             </div>
 
             {/* Account Holder 2 */}
-            <div className="border-t pt-6">
+            <div className="border-t pt-3">
               <h3 className="font-medium text-gray-800 mb-4">
                 Signature of Account Holder 2
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Signature

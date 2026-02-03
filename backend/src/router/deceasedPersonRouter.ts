@@ -4,11 +4,12 @@ import {
   getDeceasedPersonFormData,
 } from "../controllers/deceasedPersonController";
 import { isAuthenticated } from "../middlewear";
+import { upload } from "../middlewear/upload";
 
 export default (router: express.Router) => {
   router.get("/desencepersondetails", getDeceasedPersonFormData);
   router.post(
-    "/desencepersondetailsanswer",
+    "/desencepersondetailsanswer", upload.array("photo", 2),
     isAuthenticated,
     getDeceasedPersonFormAnswers
   );
