@@ -15,7 +15,6 @@ import LandingPage from "./pages/Landing-Page";
 import LiveMusic from "./pages/LiveMusic";
 import MusicSection from "./pages/Music";
 import News from "./pages/News";
-import NewsDetails from "./pages/News[id]/NewsDetails";
 import Refund_Policy from "./pages/Refund_Policy";
 import Resources from "./pages/Resources";
 import ServiceArea from "./pages/Service-Area";
@@ -45,6 +44,7 @@ import Packages from "./pages/Packages";
 import Registration from "./pages/Registration";
 import InvoicePage from "./pages/pay/InvoicePage";
 import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
+import NewsDetails from "./components/pages/News/_components/NewsDetails";
 export const routes = createBrowserRouter([
   {
     path: "/",
