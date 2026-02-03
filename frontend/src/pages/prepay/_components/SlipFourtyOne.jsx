@@ -3,11 +3,7 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourtyOne = () => {
   const { directDebitForm, updateDirectDebitForm } = usePrePayServiceApi();
   return (
-<<<<<<< HEAD
-    <div className="w-full  bg-white text-[#2b2e83] px-10 py-12">
-=======
     <div className="form-container-base">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
       {/* Header */}
       <h1 className="text-4xl font-bold leading-tight">
         KeyInvest Direct

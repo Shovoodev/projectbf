@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
 const StaticInvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
   if (!invoiceDetails) return null;
   const formattedDate2 = new Date(invoiceDetails.createdAt)
-    .toLocaleDateString('en-GB')
-    .replace(/\//g, '/');
+    .toLocaleDateString("en-GB")
+    .replace(/\//g, "/");
   const rows = [
     {
       label: invoiceDetails.service,

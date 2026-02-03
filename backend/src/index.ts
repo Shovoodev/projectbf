@@ -4,13 +4,9 @@ import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
-<<<<<<< HEAD
 
-import router from "./router";
 import Stripe from "stripe";
 
-=======
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 import { claudinaryConfig } from "./config/cloudinary";
 import router from "./router";
 dotenv.config();
@@ -21,7 +17,6 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
 
 const server = http.createServer(app);
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
@@ -35,7 +30,7 @@ app.use(
       "Authorization",
       "Access-Control-Allow-Origin",
     ],
-  })
+  }),
 );
 
 mongoose.Promise = Promise;

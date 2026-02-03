@@ -5,19 +5,11 @@ const SlipThirtyTwo = () => {
 
       <section className=" p-2">
         {/* Main Header */}
-<<<<<<< HEAD
-        <header className="mb-2">
-          <h1 className="text-5xl font-black text-blue-900 leading-tight">
-            KeyInvest Funeral Bond
-            <br />
-            <span className="text-5xl font-black text-blue-900 leading-tight">
-=======
         <header className="mb-0">
           <h1 className="text-3xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />
             <span className="text-3xl font-black text-blue-900 leading-tight">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
               application form
             </span>
           </h1>
@@ -121,31 +113,6 @@ const SlipThirtyTwo = () => {
               id: "accessCapital",
               q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
             },
-<<<<<<< HEAD
-          ].map((item) => (
-            <div key={item.id}>
-              <label className="pdf-label">{item.q}</label>
-              <div className="pdf-radio-group mt-2">
-                <label className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name={item.id}
-                    className="pdf-radio-input"
-                    defaultChecked
-                  />
-                  <span className="text-slate-700">Yes</span>
-                </label>
-
-                <label className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name={item.id}
-                    className="pdf-radio-input"
-                    disabled
-                  />
-                  <span className="text-slate-700">No</span>
-                </label>
-=======
           ].map((item) => {
             // Add your actual data/state values here
             // Example: const formData = { age10: "yes", existingBonds: "no", overCost: "yes", accessCapital: "no" };
@@ -179,18 +146,13 @@ const SlipThirtyTwo = () => {
                     <span className="text-slate-700">No</span>
                   </label>
                 </div>
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
               </div>
             );
           })}
         </div>
 
         {/* Final Notes */}
-<<<<<<< HEAD
-        <footer className="pdf-q-note text-sm">
-=======
         <footer className=" p-3 text-sm">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
           <strong>Note:</strong> Investors must be at least 10 years old and
           those under 16 require written consent from a parent or guardian.
           Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or

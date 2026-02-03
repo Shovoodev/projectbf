@@ -1,9 +1,5 @@
 import * as htmlToImage from "html-to-image";
 import { useEffect, useRef, useState } from "react";
-<<<<<<< HEAD
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-=======
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 import {
   cover,
   eight,
@@ -39,11 +35,6 @@ import {
 } from "../../../images/index";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 import { generatePdfBlob } from "./ImageToPdf";
-<<<<<<< HEAD
-const CORE = import.meta.env.VITE_API_URL;
-// import SlipFour from "./SlipFour";
-=======
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 // import all the slips in order
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
@@ -218,23 +209,6 @@ const PrePay = ({ amount }) => {
 
   return (
     <div className="relative font-roboto">
-<<<<<<< HEAD
-      <div className="fixed right-6 top-10 -translate-y-1/2 z-50">
-        <button
-          onClick={handleToggleForm}
-          className="bg-green-700 text-xl p-3 text-white shadow-2xl rounded-2xl"
-        >
-          {buttonStatus
-            ? "Continue to fill in the form"
-            : "Move back to the Documentation"}
-        </button>
-      </div>
-      <div className="fixed  bg-white bg-center blur-2xl " />
-      {/* <Main /> */}
-      <div className="fixed" />
-      {/* 🔹 Flowing Images */}
-      <div className="flex flex-col  items-center gap-10 py-3">
-=======
       {/* Sidebar/Control UI */}
       <div className="fixed right-6 top-10 z-[1100]">
         <div className="bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[#2c5aa0]/30 w-full max-w-[400px] min-h-[200px] flex items-center p-[35px] text-center">
@@ -259,7 +233,6 @@ const PrePay = ({ amount }) => {
 
       {/* Main Image Gallery */}
       <div className="flex flex-col items-center gap-10 py-3">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
         {images.map((img, index) => (
           <img
             key={index}
@@ -272,54 +245,12 @@ const PrePay = ({ amount }) => {
 
       {/* Form Interaction Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${
+          formActive
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
       >
-<<<<<<< HEAD
-        <div
-          className="max-w-[800px] max-h-[850px]   mx-auto font-roboto
-                overflow-y-scroll px-6 py-10 space-y-3
-                bg-white rounded-none md:rounded-2xl shadow-2xl "
-        >
-          {slips[step]}
-
-          {/* Actions Section */}
-          <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-4 mt-6 border-t border-gray-100">
-            {/* Previous Section Button: Only shows if not on the first step */}
-            {step > 0 ? (
-              <button
-                type="button"
-                onClick={() => setStep(step - 1)}
-                className="btn-primary-pdf w-full  sm:w-auto justify-center"
-              >
-                <FaChevronLeft className="mr-2" /> Previous Section
-              </button>
-            ) : (
-              <div className="hidden sm:block" /> /* Keeps "Next" on the right when "Previous" is gone */
-            )}
-
-            {/* Next Section Button: Shows if there are more slips remaining */}
-            {step < slips.length - 1 && (
-              <button
-                type="button"
-                onClick={() => setStep(step + 1)}
-                className="btn-primary-pdf bg-[#3129a6] w-full sm:w-auto"
-              >
-                Next Section <FaChevronRight className="ml-2" />
-              </button>
-            )}
-
-            {/* Final Submit Button: Only shows on the very last slip */}
-            {step === slips.length - 1 && (
-              <button
-                type="button"
-                onClick={sendPdfByEmail}
-                className="btn-primary-pdf w-full sm:w-auto !bg-amber-500 hover:!bg-amber-600 border-none shadow-lg"
-              >
-                Finish your submission <FaChevronRight className="ml-2" />
-=======
         <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
           <div className="w-full flex-1 overflow-y-scroll ">{slips[step]}</div>
           <div className="sticky bottom-0 bg-white border-t p-4 flex justify-between gap-3">
@@ -345,7 +276,6 @@ const PrePay = ({ amount }) => {
                 className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"}`}
               >
                 {isGeneratingPdf ? "Processing..." : "Finish Submission"}
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
               </button>
             )}
           </div>

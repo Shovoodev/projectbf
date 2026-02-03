@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-import SlipThreeHeader from "../../../components/prepay/SlipThreeHeader/SlipThreeHeader";
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
-
-const SlipThirtyFive = () => {
-  const { setAspFrequency } = usePrePayServiceApi();
-=======
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
 const SlipThirtyFive = ({ amount }) => {
   const { setAspFrequency, totalPrice } = usePrePayServiceApi();
@@ -54,10 +46,6 @@ const SlipThirtyFive = ({ amount }) => {
               />
             </div>
           </div>
-<<<<<<< HEAD
-          <div>Version: July 2026</div>
-          <div>Page 35</div>
-=======
 
           {/* Payment Method */}
           <div className="space-y-1">
@@ -237,7 +225,6 @@ const SlipThirtyFive = ({ amount }) => {
             <div>Version: July 2026</div>
             <div>Page 35</div>
           </div>
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
         </div>
       </div>
     </>

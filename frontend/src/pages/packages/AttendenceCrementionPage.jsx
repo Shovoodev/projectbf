@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import { List } from "../../components/common/Reusables";
-import { useServiceApi } from "../../utility/SelectedServiceProvider";
-import { Actions } from "./_components/Actions";
-=======
 import { List, Select } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import PDFDownloadButton from "../prepay/_components/generatedPdf/TestDownload";
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -358,7 +352,6 @@ const attendenceData = [
     question: "Urn",
     type: "select",
     options: [
-
       {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
@@ -388,63 +381,11 @@ const attendenceData = [
       },
     ],
   },
-
 ];
 
 // --- Reusable Row Select Component ---
 
-
-
-// --- Reusable Row Select Component ---
-const RowSelect = ({ label, value, onChange, options, placeholder }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center border-b border-gray-200/60 last:border-0 pb-4 last:pb-0">
-    <label className="font-body font-medium text-gray-700 text-sm">
-      {label}:
-    </label>
-    <select
-      value={value}
-      onChange={onChange}
-      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5"
-    >
-      {placeholder && (
-        <option value="" disabled>
-          {placeholder}
-        </option>
-      )}
-      {options.map((opt, idx) => (
-        <option key={idx} value={opt.value || opt}>
-          {opt.label || opt}
-        </option>
-      ))}
-    </select>
-  </div>
-);
-
 const AttendenceCrementionPage = () => {
-<<<<<<< HEAD
-  const {
-    selections,
-    loading,
-    error,
-    amount,
-    setAmount,
-    message,
-    geNext,
-    setTotalPrice,
-    totalPrice,
-    handleSelectChange,
-    BASE_PRICE,
-    attendenceData,
-  } = useServiceApi();
-
-  // Static Options State
-  const [hearse, setHearse] = useState("No Hearse - Coffin in place");
-  const [water, setWater] = useState("Not Required");
-  const [tissues, setTissues] = useState("Not Required");
-
-  // Recalculate price when selections change
-=======
-
   const BASE_PRICE = 4499;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
@@ -497,36 +438,23 @@ const AttendenceCrementionPage = () => {
     }));
   };
 
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
   useEffect(() => {
     const extras = Object.values(selections || {}).reduce(
       (sum, opt) => sum + Number(opt?.price || 0),
-      0
+      0,
     );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
 
-<<<<<<< HEAD
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
-
-  if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
-=======
     const finalPrice = BASE_PRICE + extras;
     setTotalPrice(finalPrice);
     setAmount(finalPrice);
   }, [selections]);
-
 
   const handleSelectChange = (itemId, selectedValue) => {
     const item = attendenceData.find((data) => data.id === itemId);
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue
+      (opt) => opt.value === selectedValue,
     );
     if (!selectedOption) return;
 
@@ -535,7 +463,6 @@ const AttendenceCrementionPage = () => {
 
     handleOptionChange(item.question, selectedValue, price);
   };
-
 
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
@@ -546,7 +473,7 @@ const AttendenceCrementionPage = () => {
         navigate("/prepay", {
           state: {
             selections,
-            amount: totalPrice
+            amount: totalPrice,
           },
         });
       }, 100);
@@ -557,35 +484,30 @@ const AttendenceCrementionPage = () => {
     }
   };
 
-
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
     return <div className="p-20 text-center text-red-500">Error: {error}</div>;
-
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-
       setTimeout(() => {
         navigate("/fill-agreement-form", {
           state: {
             selections,
             path: "newattendingservicecremationanswers",
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
           },
         });
       }, 1000);
-
     } catch (err) {
       setMessage(err.message, "error");
     } finally {
       setLoading(false);
     }
   };
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -626,19 +548,10 @@ const AttendenceCrementionPage = () => {
                 "Registration of Death",
                 "Celebrant or Host",
                 "Cremation Fee",
-<<<<<<< HEAD
-                "Transfers from Place of Passing (Sydney Metro 24/7)",
               ]}
             />
           </Card>
 
-=======
-              ]}
-            />
-
-          </Card>
-
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
           {/* 2. Disbursements */}
           <Card title="Disbursements">
             <List
@@ -665,77 +578,11 @@ const AttendenceCrementionPage = () => {
         </div>
 
         {/* --- BOTTOM ROW: 2 COLUMNS --- */}
-<<<<<<< HEAD
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Left: Included Variables (Dynamic) */}
-          <Card title="Included Variables">
-            <div className="flex flex-col gap-4">
-              {attendenceData.map((item) => {
-                // Determine current value based on your mapping logic
-                const categoryKeyMap = {
-                  "Funeral Stationery": "stationery", // Fixed typo in key map if needed
-                  Stationery: "stationery",
-                  "Body Preparation": "bodyPreparation",
-                  Coffin: "coffin",
-                  Flowers: "flowers", // Removed colon for safer matching
-                  "Flowers:": "flowers",
-                  Urn: "urn",
-                  "Collection of Urn": "collectionOfUrn",
-                };
-                const key = categoryKeyMap[item.question] || item.question; // Fallback
-                const currentValue = selections[key]?.value || "";
-
-                return (
-                  <RowSelect
-                    key={item.id}
-                    label={item.question}
-                    value={currentValue}
-                    onChange={(e) =>
-                      handleSelectChange(item.id, e.target.value)
-                    }
-                    options={item.options}
-                    placeholder="Select an option"
-                  />
-                );
-              })}
-            </div>
-          </Card>
-
-          {/* Right: Options (Static) */}
-          <Card title="Options">
-            <div className="flex flex-col gap-4">
-              <RowSelect
-                label="Hearse"
-                value={hearse}
-                onChange={(e) => setHearse(e.target.value)}
-                options={[
-                  "No Hearse - Coffin in place",
-                  "Standard Hearse",
-                  "Premium Hearse",
-                ]}
-              />
-              <RowSelect
-                label="Bottled Water 600ml"
-                value={water}
-                onChange={(e) => setWater(e.target.value)}
-                options={["Not Required", "10 Bottles", "20 Bottles"]}
-              />
-              <RowSelect
-                label="Personalised Tissue Packs"
-                value={tissues}
-                onChange={(e) => setTissues(e.target.value)}
-                options={["Not Required", "50 Packs", "100 Packs"]}
-              />
-            </div>
-          </Card>
-        </div>
-
-        {/* --- ACTIONS --- */}
-        <Actions goNext={geNext} totalPrice={amount} />
-=======
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           {/* Left: Included Variables (Dynamic) - 70% */}
-          <div className="lg:col-span-8"> {/* 8/12 = 66.67% ≈ 70% */}
+          <div className="lg:col-span-8">
+            {" "}
+            {/* 8/12 = 66.67% ≈ 70% */}
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
                 {attendenceData.map((item) => {
@@ -772,7 +619,9 @@ const AttendenceCrementionPage = () => {
           </div>
 
           {/* Right: Options (Static) - 30% */}
-          <div className="lg:col-span-4"> {/* 4/12 = 33.33% ≈ 30% */}
+          <div className="lg:col-span-4">
+            {" "}
+            {/* 4/12 = 33.33% ≈ 30% */}
             <Card title="Options">
               <div className="flex flex-col gap-4">
                 <RowSelect
@@ -833,23 +682,15 @@ const AttendenceCrementionPage = () => {
           </button>
           {/* <PDFDownloadButton /> */}
         </div>
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
         {/* Message Display */}
         {message && (
           <div
-<<<<<<< HEAD
             className={`mt-6 p-4 rounded text-center font-medium ${
               message.includes("Error")
                 ? "bg-red-50 text-red-600 border border-red-100"
                 : "bg-green-50 text-green-600 border border-green-100"
             }`}
-=======
-            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
-              ? "bg-red-50 text-red-600 border border-red-100"
-              : "bg-green-50 text-green-600 border border-green-100"
-              }`}
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
           >
             {message}
           </div>

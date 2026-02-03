@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { pdf } from "@react-pdf/renderer";
 import { useLocation, useNavigate } from "react-router-dom";
 import base64ToFile from "../utility";
+import SignatureField from "./packages/_components/SignatureField";
 const CORE = import.meta.env.VITE_API_URL;
 
 /* ================= Reusable Components ================= */
@@ -30,7 +31,9 @@ const InputField = ({
   />
 );
 
-const SelectField = ({ options, required, value, onChange }) => ( // Added value and onChange
+const SelectField = (
+  { options, required, value, onChange }, // Added value and onChange
+) => (
   <select
     required={required}
     value={value}
@@ -80,7 +83,7 @@ const AgreementForm = () => {
     deceasedNow: "",
     batterypowereddevices: "",
     regulardoctoraddress: "",
-    photo: []
+    photo: [],
   });
 
   const [formKinValues, setFormKinValues] = useState({
@@ -128,18 +131,17 @@ const AgreementForm = () => {
     }));
   };
 
-
   const handleDeceasedChange = (field, value) => {
-    setDeceasedFormValues(prev => ({
+    setDeceasedFormValues((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleKinChange = (field, value) => {
-    setFormKinValues(prev => ({
+    setFormKinValues((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -161,7 +163,6 @@ const AgreementForm = () => {
     }));
   };
 
-
   const handleSignatureUpload = (files) => {
     if (!files?.length) return;
 
@@ -178,7 +179,6 @@ const AgreementForm = () => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -191,8 +191,14 @@ const AgreementForm = () => {
         { field: formKinValues.email, message: "Email is required" },
         { field: formKinValues.givenName, message: "First name is required" },
         { field: formKinValues.mobile, message: "Mobile number is required" },
-        { field: deceasedFormValues.givenName, message: "Deceased first name is required" },
-        { field: deceasedFormValues.surname, message: "Deceased surname is required" },
+        {
+          field: deceasedFormValues.givenName,
+          message: "Deceased first name is required",
+        },
+        {
+          field: deceasedFormValues.surname,
+          message: "Deceased surname is required",
+        },
       ];
 
       for (const { field, message } of requiredFields) {
@@ -216,7 +222,8 @@ const AgreementForm = () => {
           flowers: selections.flowers,
           urn: selections.urn,
           collectionOfUrn: selections.collectionOfUrn,
-          transformOption: selections.transformOption || selections.transferOption,
+          transformOption:
+            selections.transformOption || selections.transferOption,
         };
 
         // Convert to backend expected format
@@ -224,7 +231,7 @@ const AgreementForm = () => {
           if (value) {
             transformed[key] = {
               value: value.value || value,
-              price: value.price || "0"
+              price: value.price || "0",
             };
           }
         });
@@ -237,7 +244,9 @@ const AgreementForm = () => {
 
       // Warn if no selections but allow to continue
       if (!backendSelections) {
-        console.warn("No selections provided - continuing without package selections");
+        console.warn(
+          "No selections provided - continuing without package selections",
+        );
       }
 
       // 1. Register user
@@ -278,7 +287,7 @@ const AgreementForm = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               selections: backendSelections,
-              totalPrice: 0 // You can calculate this if needed
+              totalPrice: 0, // You can calculate this if needed
             }),
           });
 
@@ -311,7 +320,6 @@ const AgreementForm = () => {
         credentials: "include",
         body: deceasedFD,
       });
-
 
       if (!deceasedRes.ok) {
         const text = await deceasedRes.text();
@@ -355,7 +363,6 @@ const AgreementForm = () => {
         body: fd,
       });
 
-
       if (!resforkin.ok) {
         const text = await resforkin.text();
         throw new Error(text || "Failed to save next of kin");
@@ -379,7 +386,7 @@ const AgreementForm = () => {
         // Generate PDF with the data we just received
         if (invoiceData) {
           const blob = await pdf(
-            <StaticInvoicePDF invoiceDetails={invoiceData} />
+            <StaticInvoicePDF invoiceDetails={invoiceData} />,
           ).toBlob();
 
           const base64data = await new Promise((resolve, reject) => {
@@ -421,14 +428,13 @@ const AgreementForm = () => {
       setMessage("Form submitted successfully!");
 
       // Clear localStorage
-      localStorage.removeItem('packageSelections');
-      localStorage.removeItem('packagePath');
+      localStorage.removeItem("packageSelections");
+      localStorage.removeItem("packagePath");
 
       // Navigate after delay
       setTimeout(() => {
         navigate("/");
       }, 2000);
-
     } catch (err) {
       console.error("Submit error:", err);
       setError(err.message || "Something went wrong");
@@ -437,8 +443,8 @@ const AgreementForm = () => {
     }
   };
 
-  const deceasedLabel = deceasedFormValues.givenName || "deceased"
-  const kinLabel = formKinValues.givenName || "Next of kin"
+  const deceasedLabel = deceasedFormValues.givenName || "deceased";
+  const kinLabel = formKinValues.givenName || "Next of kin";
 
   const translations = {
     deceasedSectionTitle: { en: "Deceased Person Details", zh: "逝者信息" },
@@ -460,13 +466,34 @@ const AgreementForm = () => {
       en: "This is the address they have resided at for the last 3 months.",
       zh: "此地址为过去三个月居住的地方",
     },
-    deceasedPassedPlace: { en: `Where did  ${deceasedLabel} pass away?`, zh: "逝者过世 地点" },
-    deceasedCurrentPlace: { en: `Where is  ${deceasedLabel} now?`, zh: "逝者现在在哪里" },
-    deceasedCurrentPlacePlaceholder: { en: "Eg: Home / Hospital", zh: "比如：家中/医院" },
-    batteryPoweredDevices: { en: `Does the ${deceasedLabel} have any form of battery powered devices?`, zh: "逝者身上是否有由电池驱动的仪器？" },
-    batteryDevicesPlaceholder: { en: "This includes all forms of pacemakers and defibrillators", zh: "这包括所有的起搏器和除颤器" },
-    regularDoctor: { en: `Who is the ${deceasedLabel}'s regular doctor (GP) & surgery address?`, zh: "逝者的家庭医生名字和诊所地址" },
-    regularDoctorPlaceholder: { en: "Eg: Dr Adam Brown, Strathfield", zh: "比如：Adam Brown 医生，Strathfield" },
+    deceasedPassedPlace: {
+      en: `Where did  ${deceasedLabel} pass away?`,
+      zh: "逝者过世 地点",
+    },
+    deceasedCurrentPlace: {
+      en: `Where is  ${deceasedLabel} now?`,
+      zh: "逝者现在在哪里",
+    },
+    deceasedCurrentPlacePlaceholder: {
+      en: "Eg: Home / Hospital",
+      zh: "比如：家中/医院",
+    },
+    batteryPoweredDevices: {
+      en: `Does the ${deceasedLabel} have any form of battery powered devices?`,
+      zh: "逝者身上是否有由电池驱动的仪器？",
+    },
+    batteryDevicesPlaceholder: {
+      en: "This includes all forms of pacemakers and defibrillators",
+      zh: "这包括所有的起搏器和除颤器",
+    },
+    regularDoctor: {
+      en: `Who is the ${deceasedLabel}'s regular doctor (GP) & surgery address?`,
+      zh: "逝者的家庭医生名字和诊所地址",
+    },
+    regularDoctorPlaceholder: {
+      en: "Eg: Dr Adam Brown, Strathfield",
+      zh: "比如：Adam Brown 医生，Strathfield",
+    },
     uploadDeasedPhoto: {
       en: `Upload photo identification for ${deceasedLabel}`,
       zh: `上传照片证件 `,
@@ -480,20 +507,28 @@ const AgreementForm = () => {
     kinCurrentAddress: { en: "Current Address", zh: "目前地址" },
     kinMobile: { en: "Mobile", zh: "手机" },
     kinEmail: { en: "Email", zh: "邮箱" },
-    kinRelationship: { en: `Your relationship to ${deceasedLabel}?`, zh: "你与逝者的关系" },
+    kinRelationship: {
+      en: `Your relationship to ${deceasedLabel}?`,
+      zh: "你与逝者的关系",
+    },
     uploadKinPhoto: {
       en: `Upload photo identification for ${kinLabel}`,
       zh: `上传照片证件 `,
     },
-    uploadFilesText: { en: "Drag & Drop Files, or Choose Files to Upload", zh: "拖拽文件，或选择文件上传" },
-    uploadFilesLimit: { en: "You can upload up to 2 files.", zh: "你可以上传最多两份文件" },
+    uploadFilesText: {
+      en: "Drag & Drop Files, or Choose Files to Upload",
+      zh: "拖拽文件，或选择文件上传",
+    },
+    uploadFilesLimit: {
+      en: "You can upload up to 2 files.",
+      zh: "你可以上传最多两份文件",
+    },
 
     signHere: { en: "Sign Your Name Here", zh: "签名" },
     clearSignature: { en: "[Clear Signature]", zh: "清除签名" },
 
     submit: { en: "Submit", zh: "递交" },
   };
-
 
   return (
     <section className="py-8 w-full md:max-w-5xl mx-auto px-6">
@@ -504,15 +539,15 @@ const AgreementForm = () => {
             <strong className="text-gray-900">BLACK TULIP FUNERALS</strong> to
             conduct the given funeral. I understand that I have been given a
             general quote on the entire service and note that there might be
-            variations given the condition of the deceased once transferred
-            into our care.
+            variations given the condition of the deceased once transferred into
+            our care.
           </p>
 
           <p className="text-lg text-black ">
             All data that I provide in the “Firehawk Link” will be entered
-            correctly and is true to the best of my knowledge. I will check
-            all fields upon completion and note that I will be liable for any
-            costs that incur if an error is presented and/or needs amendment.
+            correctly and is true to the best of my knowledge. I will check all
+            fields upon completion and note that I will be liable for any costs
+            that incur if an error is presented and/or needs amendment.
           </p>
 
           <p className="text-lg text-black ">
@@ -543,47 +578,60 @@ const AgreementForm = () => {
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.firstGivenName.en
-                    : translations.firstGivenName.zh}</FormLabel>
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.firstGivenName.en
+                      : translations.firstGivenName.zh}
+                  </FormLabel>
                   <InputField
                     type="text"
                     value={deceasedFormValues.givenName}
-                    onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
+                    onChange={(e) =>
+                      handleDeceasedChange("givenName", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.otherGivenNames.en
-                    : translations.otherGivenNames.zh}</FormLabel>
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.otherGivenNames.en
+                      : translations.otherGivenNames.zh}
+                  </FormLabel>
                   <InputField
                     type="text"
-                    onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
+                    onChange={(e) =>
+                      handleDeceasedChange("otherNames", e.target.value)
+                    }
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.surname.en
-                    : translations.surname.zh}</FormLabel>
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.surname.en
+                      : translations.surname.zh}
+                  </FormLabel>
                   <InputField
                     type="text"
                     value={deceasedFormValues.surname}
-                    onChange={(e) => handleDeceasedChange("surname", e.target.value)}
+                    onChange={(e) =>
+                      handleDeceasedChange("surname", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.dateOfBirth.en
-                    : translations.dateOfBirth.zh}</FormLabel>
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.dateOfBirth.en
+                      : translations.dateOfBirth.zh}
+                  </FormLabel>
                   <InputField
                     type="date"
                     value={deceasedFormValues.dateofbirth}
-
                     required
                   />
                 </div>
@@ -595,10 +643,11 @@ const AgreementForm = () => {
                     className="w-5 h-5 mr-2"
                   />
                   <span className="font-medium">
-                    {isEnglish ? translations.personNotPassed.en : translations.personNotPassed.zh}
+                    {isEnglish
+                      ? translations.personNotPassed.en
+                      : translations.personNotPassed.zh}
                   </span>
                 </div>
-
 
                 {!notPassed && (
                   <div>
@@ -609,7 +658,9 @@ const AgreementForm = () => {
                     <InputField
                       type="date"
                       value={deceasedFormValues.dateofdeath}
-                      onChange={(e) => handleDeceasedChange("dateofdeath", e.target.value)}
+                      onChange={(e) =>
+                        handleDeceasedChange("dateofdeath", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -617,7 +668,9 @@ const AgreementForm = () => {
 
                 <div className="md:col-span-2">
                   <FormLabel required>
-                    {isEnglish ? translations.lastRegisteredAddress.en : translations.lastRegisteredAddress.zh}
+                    {isEnglish
+                      ? translations.lastRegisteredAddress.en
+                      : translations.lastRegisteredAddress.zh}
                   </FormLabel>
 
                   <InputField
@@ -634,16 +687,18 @@ const AgreementForm = () => {
                   <>
                     <div className="md:col-span-2">
                       <FormLabel required>
-                        {isEnglish ? translations.deceasedPassedPlace.en : translations.deceasedPassedPlace.zh}
-
+                        {isEnglish
+                          ? translations.deceasedPassedPlace.en
+                          : translations.deceasedPassedPlace.zh}
                       </FormLabel>
 
                       <InputField required />
                     </div>
                     <div className="md:col-span-2">
                       <FormLabel required>
-                        {isEnglish ? translations.deceasedCurrentPlace.en : translations.deceasedCurrentPlace.zh}
-
+                        {isEnglish
+                          ? translations.deceasedCurrentPlace.en
+                          : translations.deceasedCurrentPlace.zh}
                       </FormLabel>
 
                       <InputField
@@ -656,32 +711,49 @@ const AgreementForm = () => {
                   </>
                 )}
 
-
                 <div className="md:col-span-2">
-                  <FormLabel required>{isEnglish
-                    ? translations.batteryPoweredDevices.en
-                    : translations.batteryPoweredDevices.zh}</FormLabel>  <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.batteryPoweredDevices.en
+                      : translations.batteryPoweredDevices.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     placeholder="This includes all forms of pacemakers and defibrillators"
                     value={deceasedFormValues.batterypowereddevices}
-                    onChange={(e) => handleDeceasedChange("batterypowereddevices", e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <FormLabel required>{isEnglish
-                    ? translations.regularDoctor.en
-                    : translations.regularDoctor.zh}</FormLabel> <InputField
-                    placeholder="Eg: Dr Adam Brown, Strathfield"
-                    value={deceasedFormValues.regulardoctoraddress}
-                    onChange={(e) => handleDeceasedChange("regulardoctoraddress", e.target.value)}
+                    onChange={(e) =>
+                      handleDeceasedChange(
+                        "batterypowereddevices",
+                        e.target.value,
+                      )
+                    }
                     required
                   />
                 </div>
 
                 <div className="md:col-span-2">
                   <FormLabel required>
-                    {isEnglish ? translations.uploadDeasedPhoto.en : translations.uploadDeasedPhoto.zh}
+                    {isEnglish
+                      ? translations.regularDoctor.en
+                      : translations.regularDoctor.zh}
+                  </FormLabel>{" "}
+                  <InputField
+                    placeholder="Eg: Dr Adam Brown, Strathfield"
+                    value={deceasedFormValues.regulardoctoraddress}
+                    onChange={(e) =>
+                      handleDeceasedChange(
+                        "regulardoctoraddress",
+                        e.target.value,
+                      )
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.uploadDeasedPhoto.en
+                      : translations.uploadDeasedPhoto.zh}
                   </FormLabel>
 
                   <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
@@ -703,8 +775,8 @@ const AgreementForm = () => {
                       <p className="text-sm text-gray-500 mb-4">
                         {isEnglish ? (
                           <>
-                            You can upload up to 2 images <br /> (Only .jpg, .jpeg,
-                            .png, .heic files are allowed)
+                            You can upload up to 2 images <br /> (Only .jpg,
+                            .jpeg, .png, .heic files are allowed)
                           </>
                         ) : (
                           <>
@@ -719,13 +791,12 @@ const AgreementForm = () => {
                       type="file"
                       multiple
                       required
-                      onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
-
+                      onChange={(e) =>
+                        handleDeceasedPhotoUpload(e.target.files)
+                      }
                       className="hidden"
                     />
                   </label>
-
-
                 </div>
                 <div className="md:col-span-2">
                   <div className="flex flex-wrap gap-2">
@@ -748,7 +819,6 @@ const AgreementForm = () => {
                     ))}
                   </div>
                 </div>
-
               </div>
             </div>
 
@@ -760,38 +830,56 @@ const AgreementForm = () => {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinSalutation.en
-                    : translations.kinSalutation.zh}</FormLabel>  <SelectField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinSalutation.en
+                      : translations.kinSalutation.zh}
+                  </FormLabel>{" "}
+                  <SelectField
                     options={salutations}
                     value={formKinValues.salutation}
-                    onChange={(e) => handleKinChange("salutation", e.target.value)}
+                    onChange={(e) =>
+                      handleKinChange("salutation", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinFirstGivenName.en
-                    : translations.kinFirstGivenName.zh}</FormLabel>  <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinFirstGivenName.en
+                      : translations.kinFirstGivenName.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     value={formKinValues.givenName}
-                    onChange={(e) => handleKinChange("givenName", e.target.value)}
+                    onChange={(e) =>
+                      handleKinChange("givenName", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinOtherGivenNames.en
-                    : translations.kinOtherGivenNames.zh}</FormLabel> <InputField
-                    onChange={(e) => handleKinChange("otherNames", e.target.value)}
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinOtherGivenNames.en
+                      : translations.kinOtherGivenNames.zh}
+                  </FormLabel>{" "}
+                  <InputField
+                    onChange={(e) =>
+                      handleKinChange("otherNames", e.target.value)
+                    }
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinSurname.en
-                    : translations.kinSurname.zh}</FormLabel> <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinSurname.en
+                      : translations.kinSurname.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     value={formKinValues.surname}
                     onChange={(e) => handleKinChange("surname", e.target.value)}
                     required
@@ -799,19 +887,27 @@ const AgreementForm = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <FormLabel required>{isEnglish
-                    ? translations.kinCurrentAddress.en
-                    : translations.kinCurrentAddress.zh}</FormLabel>  <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinCurrentAddress.en
+                      : translations.kinCurrentAddress.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     value={formKinValues.currentAddress}
-                    onChange={(e) => handleKinChange("currentAddress", e.target.value)}
+                    onChange={(e) =>
+                      handleKinChange("currentAddress", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinMobile.en
-                    : translations.kinMobile.zh}</FormLabel>  <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinMobile.en
+                      : translations.kinMobile.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     type="tel"
                     value={formKinValues.mobile}
                     onChange={(e) => handleKinChange("mobile", e.target.value)}
@@ -820,9 +916,12 @@ const AgreementForm = () => {
                 </div>
 
                 <div>
-                  <FormLabel required>{isEnglish
-                    ? translations.kinEmail.en
-                    : translations.kinEmail.zh}</FormLabel>   <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinEmail.en
+                      : translations.kinEmail.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     type="email"
                     value={formKinValues.email}
                     onChange={(e) => handleKinChange("email", e.target.value)}
@@ -831,19 +930,25 @@ const AgreementForm = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <FormLabel required>{isEnglish
-                    ? translations.kinRelationship.en
-                    : translations.kinRelationship.zh}</FormLabel>  <InputField
+                  <FormLabel required>
+                    {isEnglish
+                      ? translations.kinRelationship.en
+                      : translations.kinRelationship.zh}
+                  </FormLabel>{" "}
+                  <InputField
                     value={formKinValues.relation}
-                    onChange={(e) => handleKinChange("relation", e.target.value)}
+                    onChange={(e) =>
+                      handleKinChange("relation", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 <div className="md:col-span-2">
                   <FormLabel required>
-                    {isEnglish ? translations.uploadKinPhoto.en : translations.uploadKinPhoto.zh}
-
+                    {isEnglish
+                      ? translations.uploadKinPhoto.en
+                      : translations.uploadKinPhoto.zh}
                   </FormLabel>
 
                   <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
@@ -871,8 +976,8 @@ const AgreementForm = () => {
                       <p className="text-sm text-gray-500 mb-4">
                         {isEnglish ? (
                           <>
-                            You can upload up to 2 images <br /> (Only .jpg, .jpeg,
-                            .png, .heic files are allowed)
+                            You can upload up to 2 images <br /> (Only .jpg,
+                            .jpeg, .png, .heic files are allowed)
                           </>
                         ) : (
                           <>
@@ -887,8 +992,9 @@ const AgreementForm = () => {
                       type="file"
                       multiple
                       required
-                      onChange={(e) => handlePhotoUpload("photo", e.target.files[0])}
-
+                      onChange={(e) =>
+                        handlePhotoUpload("photo", e.target.files[0])
+                      }
                       className="hidden"
                     />
                   </label>
@@ -925,7 +1031,9 @@ const AgreementForm = () => {
               {signatureType === "Upload Photo" && (
                 <div className="mt-4">
                   <FormLabel required>
-                    {isEnglish ? "Upload Your Signature Here" : "在此上传您的签名"}
+                    {isEnglish
+                      ? "Upload Your Signature Here"
+                      : "在此上传您的签名"}
                   </FormLabel>
 
                   <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
@@ -962,7 +1070,6 @@ const AgreementForm = () => {
                       multiple
                       required
                       accept="image/*"
-
                       className="hidden"
                     />
                   </label>

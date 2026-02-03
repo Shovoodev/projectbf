@@ -1,8 +1,8 @@
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+
 import Signature from "./common/Signature";
 
 const SlipThirtySeven = () => {
-  const { sigCanvasRef, saveSignature, clearSignature } = usePrePayServiceApi();
   const declarations = [
     "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
     "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
@@ -48,11 +48,7 @@ const SlipThirtySeven = () => {
               </label>
             ))}
           </div>
-<<<<<<< HEAD
-          <div className="pdf-declaration-list mt-2 ml-4 border-t border-gray-300">
-=======
           <div className="pdf-declaration-list mt- ml-1 border-t border-gray-300">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
             {optionalCheckboxes.map((text, index) => (
               <label key={index} className="pdf-declaration-item">
                 <input type="checkbox" className="pdf-declaration-checkbox" />
@@ -73,11 +69,7 @@ const SlipThirtySeven = () => {
             <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
             <span>Funeral Bond Product Disclosure Statement (PDS)</span>
           </div>
-<<<<<<< HEAD
-          <div className="flex gap-8">
-=======
           <div className="flex gap-2">
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
             <div>Version: July 2026</div>
             <div className="font-bold">37</div>
           </div>

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { usePrePayServiceApi } from "../../../utility/prePayServiceProvider";
-=======
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
->>>>>>> fdd390eadc7d47a7d8167ee9bb1f9361c9abaee4
 
 const SlipFourtyTwo = () => {
   const { updateDeptRequest } = usePrePayServiceApi();

@@ -40,7 +40,7 @@ const SlipEight = () => {
         </div>
 
         {/* Director Details */}
-        <div >
+        <div>
           <h3 className="pdf-section-title border-none mb-0 text-[#00A99D]">
             Assigned to:
           </h3>
