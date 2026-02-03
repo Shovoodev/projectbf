@@ -86,7 +86,7 @@
   }
 
   .pdf-adviser-label {
-    @apply text-sm font-roboto font-medium text-[rgb(49, 41, 166)] min-w-[180px];
+    @apply text-sm font-roboto font-medium text-pdf-primary min-w-[180px];
   }
 
   .pdf-input-readonly {

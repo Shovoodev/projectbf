@@ -178,8 +178,8 @@ const BlogDetails = () => {
             >
               {/* Render HTML content if it exists */}
               {article.content &&
-              typeof article.content === "string" &&
-              article.content.includes("<") ? (
+                typeof article.content === "string" &&
+                article.content.includes("<") ? (
                 <div dangerouslySetInnerHTML={{ __html: article.content }} />
               ) : (
                 /* Fallback for plain text */
@@ -283,16 +283,47 @@ const BlogDetails = () => {
 
             {/* resent blogs */}
 
+            {/* Recent Posts */}
             <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
-              <h1 className="font-bold text-xl">Recent Posts</h1>
-              <ul className="space-y-3">
-                {blogData.map((item) => {
-                  return (
-                    <li className="flex justify-between text-lg text-blue-500 py-2 border-b border-gray-100">
-                      <span className="font-medium">{item.title}</span>
+              <h1 className="font-bold text-xl mb-4">Recent Posts</h1>
+              <ul className="space-y-4">
+                {blogData
+                  .filter((item) => item._id !== id) // Exclude current blog from recent posts
+                  .slice(0, 5) // Limit to 5 recent posts
+                  .map((item) => (
+                    <li
+                      key={item._id}
+                      className="pb-3 border-b border-gray-100 last:border-b-0"
+                    >
+                      <Link
+                        to={`/blog/${item._id}`}
+                        className="group flex items-start gap-3"
+                      >
+                        {item.images && item.images.length > 0 && (
+                          <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+                            <img
+                              src={item.images[0]}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              onError={(e) => {
+                                e.target.src = "https://via.placeholder.com/100x100?text=Blog";
+                              }}
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2">
+                            {item.title}
+                          </span>
+                          {item.createdAt && (
+                            <p className="text-sm text-gray-500 mt-1">
+                              {formatDate(item.createdAt)}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
                     </li>
-                  );
-                })}
+                  ))}
               </ul>
             </div>
           </aside>

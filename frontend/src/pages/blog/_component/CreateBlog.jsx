@@ -394,17 +394,20 @@ const CreateBlog = () => {
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Blog Content *
               </label>
-              <div className="">
+
+              <div className="w-full flex-1">
                 <BlogEditor
                   value={blogData.content}
                   onChange={(content) => setBlogData({ ...blogData, content })}
                 />
               </div>
+
               <p className="text-xs text-gray-500 mt-2">
                 Tip: Images added in the editor will be automatically converted
                 for permanent storage.
               </p>
             </div>
+
           </div>
 
           {/* Submit Button */}
