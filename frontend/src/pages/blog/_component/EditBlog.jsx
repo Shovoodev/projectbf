@@ -12,12 +12,15 @@ import {
 } from "react-icons/fi";
 import { FaUpload } from "react-icons/fa";
 import BlogEditor from "./BlogEditor";
+import { showToast } from "../../../utility/toast";
+import ConfirmModal from "../../../components/ConfirmModal";
 
 const EditBlog = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const [message, setMessage] = useState({ text: "", type: "" });
     const [loading, setLoading] = useState(true);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const [images, setImages] = useState([]);
     const { id } = useParams();
@@ -122,7 +125,7 @@ const EditBlog = () => {
         setLoading(true);
         setMessage({ text: "", type: "" });
         setError(null);
-
+        showToast.error({ error })
         try {
             // Validate required fields
             if (!blogData.title?.trim() || !blogData.content?.trim()) {
@@ -218,45 +221,23 @@ const EditBlog = () => {
         }
     };
     const handleDeleteBlog = async () => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this blog? This action cannot be undone."
-        );
-
-        if (!confirmed) return;
-
         try {
             setLoading(true);
-            setMessage({ text: "", type: "" });
 
             const res = await fetch(`${CORE}/delete-blog/${id}`, {
                 method: "DELETE",
                 credentials: "include",
             });
 
-            const data = await res.json();
+            if (!res.ok) throw new Error("Failed to delete blog");
 
-            if (!res.ok) {
-                throw new Error(data.message || "Failed to delete blog");
-            }
-
-            setMessage({
-                text: "Blog deleted successfully",
-                type: "success",
-            });
-
-            // Redirect after delete
-            setTimeout(() => {
-                navigate("/blog");
-            }, 1500);
-        } catch (error) {
-            console.error("Delete error:", error);
-
-            setMessage({
-                text: error.message || "Something went wrong while deleting",
-                type: "error",
-            });
+            showToast.success("Blog deleted successfully");
+            navigate("/blog");
+        } catch (err) {
+            showToast.error(err.message || "Delete failed");
         } finally {
             setLoading(false);
+            setShowConfirm(false);
         }
     };
 
@@ -271,7 +252,7 @@ const EditBlog = () => {
                 <button
                     type="button"
                     disabled={loading}
-                    onClick={handleDeleteBlog}
+                    onClick={() => setShowConfirm(true)}
                     className="bg-red-500 text-white px-6 py-2.5 rounded-lg text-sm font-medium
                flex items-center gap-2 hover:bg-red-800 transition-all
                active:scale-95 whitespace-nowrap disabled:opacity-50"
@@ -544,6 +525,16 @@ const EditBlog = () => {
                     </div>
                 </form>
             </div>
+            <ConfirmModal
+                isOpen={showConfirm}
+                title="Delete Blog"
+                message="Are you sure you want to delete this blog? This action cannot be undone."
+                onConfirm={handleDeleteBlog}
+                onCancel={() => setShowConfirm(false)}
+                confirmText="Delete"
+                loading={loading}
+                variant="danger"
+            />
         </div>
     );
 };

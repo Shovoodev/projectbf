@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft, FaEdit, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
+import ConfirmModal from "../../../components/ConfirmModal";
 
 const CommentSection = () => {
   // ... (keep your existing CommentSection code)
@@ -20,7 +21,7 @@ const BlogDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useUserFront()
-
+  const [showConfirm, setShowConfirm] = useState(false);
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -120,13 +121,20 @@ const BlogDetails = () => {
       </div>
     );
   }
-
+  const handleEditBlog = () => {
+    try {
+      navigate(`/edit-blog/${id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="bg-white min-h-screen">
       <div className="flex justify-end px-6 pt-6">
 
         {user && <button
-          onClick={() => navigate(`/edit-blog/${id}`)}
+          onClick={() => setShowConfirm(true)}
+          // onClick={() => navigate(`/edit-blog/${id}`)}
           className="bg-black text-white px-6 py-2.5 font-lato rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
         >
           <FaEdit size={18} />  Edit blog
@@ -342,6 +350,16 @@ const BlogDetails = () => {
           </aside>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={showConfirm}
+        title="Edit Blog"
+        message="Are you sure you want to Edit this blog"
+        variant="primary"
+        onConfirm={handleEditBlog}
+        onCancel={() => setShowConfirm(false)}
+        confirmText="Edit"
+        loading={loading}
+      />
     </div>
   );
 };

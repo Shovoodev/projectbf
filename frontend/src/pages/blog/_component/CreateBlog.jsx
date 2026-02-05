@@ -11,11 +11,11 @@ import {
 } from "react-icons/fi";
 import { FaUpload } from "react-icons/fa";
 import BlogEditor from "./BlogEditor";
+import { showToast } from "../../../utility/toast";
 
 const CreateBlog = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   const [message, setMessage] = useState({ text: "", type: "" });
   const [images, setImages] = useState([]);
   const [blogData, setBlogData] = useState({
@@ -88,7 +88,7 @@ const CreateBlog = () => {
     setLoading(true);
     setMessage({ text: "", type: "" });
     setError(null);
-
+    showToast.error({ error })
     try {
       // Validate required fields
       if (!blogData.title?.trim() || !blogData.content?.trim()) {
@@ -96,6 +96,7 @@ const CreateBlog = () => {
           text: "Please fill in all required fields (Title and Content are required)",
           type: "error",
         });
+        showToast.error("Please fill in all required fields (Title and Content are required)")
         setLoading(false);
         return;
       }
@@ -154,7 +155,7 @@ const CreateBlog = () => {
         text: "Blog created successfully!",
         type: "success",
       });
-
+      showToast.success("Blog created successfully!")
       // Reset form
       setBlogData({
         title: "",

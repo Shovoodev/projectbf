@@ -7,6 +7,7 @@ const CORE = import.meta.env.VITE_API_URL;
 import Paragraph from "./aggrementComponent/Paragraph";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
+import { showToast } from "../../utility/toast";
 /* ================= Reusable Components ================= */
 
 const FormLabel = ({ children, required }) => (
@@ -421,7 +422,7 @@ const AgreementForm = () => {
       // setTimeout(() => {
       //   navigate("/");
       // }, 2000);
-
+      showToast.success("completed Your Regsitration")
     } catch (err) {
       console.error("Submit error:", err);
       setError(err.message || "Something went wrong");
