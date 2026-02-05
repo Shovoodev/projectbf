@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaCalendarAlt, FaSearch, FaUser } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CommentSection = () => {
   // ... (keep your existing CommentSection code)
@@ -17,6 +17,8 @@ const formatDate = (dateString) => {
 
 const BlogDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,6 +121,28 @@ const BlogDetails = () => {
 
   return (
     <div className="bg-white min-h-screen">
+      <div className="flex justify-end px-6 pt-6">
+
+        <button
+          onClick={() => navigate(`/edit-blog/${id}`)}
+          className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
+        >
+          Edit blog
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+        </button>
+      </div>
       {/* 2. Main Content Layout */}
 
       <div className="section-container max-w-7xl mx-auto px-6 py-16">

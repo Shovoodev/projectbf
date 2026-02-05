@@ -102,6 +102,7 @@ const CreateBlog = () => {
       // Process content to convert blob URLs to base64
       const processedContent = await processContentImages(blogData.content);
 
+
       // Create FormData
       const formData = new FormData();
 
