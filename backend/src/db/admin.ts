@@ -8,11 +8,19 @@ const AdminsSchema = new mongoose.Schema({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
+  role: {
+    type: String,
+    enum: ["admin", "office", "user"],
+    default: "admin",
+    required: true,
+  },
 });
 
 export const adminsModel = mongoose.model("Admins", AdminsSchema);
 export const getAdmin = () => adminsModel.find();
-export const geAdminByEmail = (email: string) => adminsModel.findOne({ email });
+export const geAdminByEmail = (email: string) =>
+  adminsModel.findOne({ adminEmail: email });
+
 export const getsinglAdminById = (userId: string) =>
   adminsModel.findById(userId);
 export const getAttendenceBAdminId = (userId: string) =>

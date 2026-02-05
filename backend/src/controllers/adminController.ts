@@ -21,21 +21,22 @@ export const registerAdmin = async (
   res: express.Response
 ): Promise<any> => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
+    const { adminEmail, password } = req.body;
+    console.log({adminEmail , password});
+    
+    if (!adminEmail || !password) {
       return res.status(400);
     }
-    const existingUser = await geAdminByEmail(email);
+    const existingUser = await geAdminByEmail(adminEmail);
     console.log(existingUser);
     if (existingUser) {
       return res
         .status(400)
-        .json({ message: "User already registrated to the database" });
+        .json({ message: "Admin already registrated to the database" });
     }
     const salt = random();
     const user = await creatAdmin({
-      email,
+      adminEmail,
       authentication: {
         salt,
         password: authentication(salt, password),
@@ -70,4 +71,52 @@ export const MarkInvoicePaid = async (
     success: false,
     message: "Payment not completed",
   });
+};
+
+
+export const adminlogin = async (req: express.Request, res: express.Response) => {
+  try {
+    const { adminEmail, password } = req.body;
+
+    if (!adminEmail || !password) {
+      return res.status(403).json({ error: "Email or password is wrong" });
+    }
+
+    const user = await geAdminByEmail(adminEmail).select(
+      "+authentication.salt +authentication.password"
+    );
+
+    if (!user) {
+      return res.status(403).json({ error: "User is not registered" });
+    }
+
+    const expectedHash = authentication(user.authentication.salt, password);
+
+    if (user.authentication.password !== expectedHash) {
+      return res.status(403).json({ error: "Email or password is wrong" });
+    }
+
+    const salt = random();
+    user.authentication.sessionToken = authentication(
+      salt,
+      user._id.toString()
+    );
+    await user.save();
+
+    // send session token as HTTP-only cookie
+    res.cookie("sessionToken", user.authentication.sessionToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
+
+    return res.status(200).json({
+      _id: user._id,
+      email: user.adminEmail,
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ error: "Something went wrong" });
+  }
 };

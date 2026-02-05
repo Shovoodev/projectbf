@@ -46,6 +46,8 @@ import InvoicePage from "./pages/pay/InvoicePage";
 import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 import NewsDetails from "./components/pages/News/_components/NewsDetails";
 import EditBlog from "./pages/blog/_component/EditBlog";
+import SignIn from "./pages/admin/SignIn";
+import Register from "./pages/admin/Register";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -218,6 +220,16 @@ export const routes = createBrowserRouter([
       {
         path: "/invoicePdf",
         element: <StaticInvoicePDF />,
+        isPrivate: true,
+      },
+      {
+        path: "/administration-btf",
+        element: <SignIn />,
+        isPrivate: true,
+      },
+      {
+        path: "/add-new-btf-admin",
+        element: <Register />,
         isPrivate: true,
       },
     ],

@@ -15,6 +15,7 @@ import BlogEditor from "./BlogEditor";
 const CreateBlog = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   const [message, setMessage] = useState({ text: "", type: "" });
   const [images, setImages] = useState([]);
   const [blogData, setBlogData] = useState({

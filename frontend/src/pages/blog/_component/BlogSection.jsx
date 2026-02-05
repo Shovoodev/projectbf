@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogCard from "./BlogCard";
+import { useUserFront } from "../../../utility/use-userFront";
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [blogData, setBlogData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { user } = useUserFront()
   useEffect(() => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
@@ -30,24 +31,24 @@ const BlogSection = () => {
 
     getBlogs();
   }, []);
-  console.log([blogData]);
 
   return (
     <section className="bg-white py-16 md:py-24">
       <div className="section-container">
         {/* Section Header with Button in Corner */}
-        <div className="flex justify-between items-start md:items-center mb-16 flex-col md:flex-row gap-4">
+        <div className="flex justify-center items-start md:items-center mb-16 flex-col md:flex-row gap-4">
           <div className="text-left">
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
               Latest Blog Posts
             </h2>
-            <p className="text-gray-500 max-w-2xl">
+            <p className="text-gray-500 max-w-2xl ml-[-40px]">
               Stay updated with our latest articles, guides, and company
               announcements.
             </p>
           </div>
 
-          <button
+
+          {user && <button
             onClick={() => navigate("/create-new-blog")}
             className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
           >
@@ -65,7 +66,7 @@ const BlogSection = () => {
                 d="M12 4v16m8-8H4"
               />
             </svg>
-          </button>
+          </button>}
         </div>
 
         {/* Loading and Error States */}
