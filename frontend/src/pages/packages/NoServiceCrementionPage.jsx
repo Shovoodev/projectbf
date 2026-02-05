@@ -11,7 +11,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
     >
-      <h3 className="font-display font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-display font-lato font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}
@@ -24,6 +24,11 @@ const noServiceFunralData = [
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
+      {
+        label: "Select an option",
+        value: "Sydney Metro",
+        priceAdjustment: 0,
+      },
       {
         label: "Sydney Metro",
         value: "Sydney Metro",
@@ -80,8 +85,8 @@ const NoServiceCrementionPage = () => {
   const BASE_PRICE = 2299;
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
-    urn: { value: "", price: 0 },
-    collectionOfUrn: { value: "", price: 0 },
+    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
   const [error, setError] = useState(null);

@@ -14,7 +14,13 @@ const BlogSection = () => {
       try {
         const res = await fetch("http://localhost:4000/publish-all-blog-data");
         const data = await res.json();
-        setBlogData(data);
+        const filteredData = Array.isArray(data)
+          ? data.filter(
+            (item) => item?.category?.toLowerCase() !== "btf news"
+          )
+          : [];
+
+        setBlogData(filteredData);
       } catch (error) {
         console.error(error);
       } finally {

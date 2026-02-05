@@ -18,6 +18,7 @@ export default {
         serif: ["Playfair Display", "serif"],
         sans: ["Inter", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
+        lato: ["'Lato'", "sans-serif"],
       },
     },
   },
