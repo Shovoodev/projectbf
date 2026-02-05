@@ -7,4 +7,5 @@ export interface AuthenticatedRequest extends express.Request {
     reference?: string;
     role: "admin" | "office" | "user";
   };
+  user?: any;
 }

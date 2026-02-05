@@ -101,6 +101,19 @@ export const adminlogin = async (req: express.Request, res: express.Response) =>
       salt,
       user._id.toString()
     );
+    const ONE_HOUR = 60 * 60 * 1000;
+    
+    user.authentication.expiresAt = new Date(Date.now() + ONE_HOUR);
+    
+    await user.save();
+    
+    res.cookie("sessionToken", user.authentication.sessionToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: ONE_HOUR, // ⏱ browser auto logout
+    });
+    
     await user.save();
 
     // send session token as HTTP-only cookie
@@ -108,6 +121,7 @@ export const adminlogin = async (req: express.Request, res: express.Response) =>
       httpOnly: true,
       sameSite: "lax",
       path: "/",
+      maxAge: 60 * 60 * 1000,
     });
 
     return res.status(200).json({
