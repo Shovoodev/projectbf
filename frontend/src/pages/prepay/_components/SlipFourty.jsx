@@ -1,17 +1,8 @@
-import { useState } from "react";
 import img from "./images/Scott Harris Sign.png";
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourty = () => {
-  const [formData, setFormData] = useState({
-    funeral_director_name: "",
-    funeral_director_phone: "",
-    investor1_date: "2026-01-08",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
+  const { date } = usePrePayServiceApi()
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -74,7 +65,6 @@ const SlipFourty = () => {
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
             <div>
@@ -82,9 +72,8 @@ const SlipFourty = () => {
               <input
                 type="date"
                 name="investor1_date"
-                defaultValue="2026-01-08"
+                defaultValue={date}
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
           </div>

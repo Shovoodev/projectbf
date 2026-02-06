@@ -7,6 +7,9 @@ import {
   eleven,
   fifteen,
   five,
+  fortySeven,
+  fortyThree,
+  fortyTwo,
   four,
   fourteen,
   nine,
@@ -99,28 +102,31 @@ const PrePay = ({ amount }) => {
   const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [step, setStep] = useState(0);
 
+  const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
+
+
   const slips = [
     // <SlipFourtyTwo />,
     // <SlipFourtyFive />,
     // <SlipFourtySeven />,
 
     <SlipThirtyTwo />,
-    <SlipThirtyThree />,
+    // <SlipThirtyThree />,
     <SlipThirtyFour />,
     <SlipThirtyFive amount={amount} />,
-    <SlipThirtySix />,
+    // <SlipThirtySix />,
     <SlipThirtySeven />,
     <SlipThirtyEight />,
     <SlipThirtyNine />,
     <SlipFourty />,
-    <SlipFourtyOne />,
-    <SlipFourtyTwo />,
+    // <SlipFourtyOne />,
+    // <SlipFourtyTwo />,
     // <img src={fortyTwo} />,
     // <img src={fortyThree} />,
-    <SlipFourtyFive />,
-    <SlipFortySix />,
+    // <SlipFourtyFive />,
+    // <SlipFortySix />,
     <SlipFourtySeven />,
-    // <img src={fortySeven} />,
+    <img src={fortySeven} />,
   ];
   useEffect(() => {
     document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
@@ -210,10 +216,89 @@ const PrePay = ({ amount }) => {
   return (
     <div className="relative font-roboto">
       {/* Sidebar/Control UI */}
-      <div className="fixed right-6 top-10 z-[1100]">
-        <div className="bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[#2c5aa0]/30 w-full max-w-[400px] min-h-[200px] flex items-center p-[35px] text-center">
+      <div className="fixed bottom-4 flex items-center justify-center inset-x-4 z-[1100] md:hidden">
+        {!mobileInfoOpen && (
+          <button
+            onClick={() => setMobileInfoOpen(true)}
+            className="w-[200px] py-3 bg-blue-600 text-white rounded-xl shadow-xl"
+          >
+            {buttonStatus ? "Open Funeral Bond Info" : "Open Application"}
+          </button>
+        )}
+      </div>
+
+      {/* MOBILE CARD */}
+      {mobileInfoOpen && (
+        <div className="
+    fixed 
+    bottom-0 left-0 right-0
+    z-[1100] 
+    md:hidden
+    animate-slide-up">
+
+          <div
+            className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+            onClick={() => setMobileInfoOpen(false)}
+          />
+
+          <div className="
+      relative
+      mx-4 mb-4
+      bg-white 
+      rounded-2xl 
+      shadow-2xl 
+      p-5
+      border border-gray-200">
+
+            <div className="flex items-start justify-between mb-4">
+              <h1 className="
+          text-[#2c5aa0] 
+          text-lg font-bold
+          flex items-center gap-2">
+
+                {buttonStatus ? " Funeral Bond Info" : " Application Form"}
+              </h1>
+
+              <button
+                onClick={() => setMobileInfoOpen(false)}
+                className="
+            text-gray-400 hover:text-gray-600
+            p-1"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="space-y-4">
+              <button
+                onClick={() => {
+                  handleToggleForm();
+                  setMobileInfoOpen(false);
+                }}
+                className="
+            w-full
+            bg-[#2c5aa0] hover:bg-blue-700
+            text-white
+            font-semibold
+            text-base
+            py-3.5
+            rounded-xl
+            transition-colors
+            active:scale-[0.98]"
+              >
+                {buttonStatus
+                  ? "Continue to Application Form"
+                  : "Back to Documentation"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      <div className="hidden md:block fixed right-6 top-10 z-[1100]">
+        <div className="bg-white rounded-xl shadow-2xl p-8 w-[380px]">
           <div className="w-full flex-1">
-            <h1 className="text-[#2c5aa0] text-[28px] font-semibold mb-[15px]">
+            <h1 className="text-[#2c5aa0] text-2xl font-semibold mb-4">
               {buttonStatus ? "Funeral Bond Information" : "Application Form"}
             </h1>
             <p className="text-[#666666] text-base leading-[1.5] mb-5">

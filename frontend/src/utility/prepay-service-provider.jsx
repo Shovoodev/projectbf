@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import base64ToFile from ".";
+import { showToast } from "./toast";
 
 const PrePayServiceProviderContext = createContext();
 
@@ -132,8 +133,13 @@ export const PrePayServiceProvider = ({ children }) => {
     const dataUrl = await sigCanvasRef.current.exportImage("png");
     const file = base64ToFile(dataUrl, "signature.png");
     console.log({ dataUrl, file });
-
-    setSignature(file); // ✅ File object
+    showToast.success("Signature is Being Saved", {
+      duration: 800,
+      options: {
+        position: "bottom-right"
+      }
+    })
+    setSignature(file);
   };
 
   const clearSignature = () => {
@@ -146,6 +152,9 @@ export const PrePayServiceProvider = ({ children }) => {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
+
+  const [date, setDate] = useState(getCurrentDate());
+
   useEffect(() => {
     setCurrentDate(getCurrentDate());
   }, []);
@@ -262,7 +271,7 @@ export const PrePayServiceProvider = ({ children }) => {
       saveSignature,
       clearSignature,
       signature,
-      setAspFrequency
+      setAspFrequency, setSignature, date
     }),
     [
       investors,
@@ -272,7 +281,7 @@ export const PrePayServiceProvider = ({ children }) => {
       directDebitForm,
       deptRequest,
       signature,
-      setAspFrequency, currentDate
+      setAspFrequency, currentDate, setSignature, date
     ]
   );
 

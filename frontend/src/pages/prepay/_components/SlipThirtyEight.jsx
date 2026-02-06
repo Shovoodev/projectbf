@@ -1,19 +1,10 @@
-import { useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyEight = () => {
-  const [formData, setFormData] = useState({
-    funeral_director_name: "",
-    funeral_director_phone: "",
-    investor1_date: "2026-01-08",
-  });
-  const { signature } = usePrePayServiceApi();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { signature, date } = usePrePayServiceApi();
+
 
   return (
     <div className="form-container-base">
@@ -54,7 +45,6 @@ const SlipThirtyEight = () => {
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
             <div>
@@ -66,7 +56,6 @@ const SlipThirtyEight = () => {
                 value="1300110031"
                 placeholder="Enter phone number"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
           </div>
@@ -76,7 +65,7 @@ const SlipThirtyEight = () => {
         <div className="space-y-6">
           <div className="pdf-highlight-box !my-0 !border-[#4BA6A6] bg-[#F1F6F7]">
             <p className="font-bold text-[rgb(49,41,166)]">
-              Acknowledgement of nomination – Investor 1 and Investor 2 (where
+              Acknowledgement of nomination – Investor (where
               applicable) signatures are required.
             </p>
           </div>
@@ -87,7 +76,7 @@ const SlipThirtyEight = () => {
                 {/* Signature Upload Area */}
                 <div className="flex-[2] space-y-2">
                   <label className="pdf-label-sm">
-                    Signature of investor 1
+                    Signature of investor
                   </label>
                   <div className="pdf-signature-zone !py-4">
                     {signature && (
@@ -106,7 +95,7 @@ const SlipThirtyEight = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    defaultValue="2026-01-08"
+                    defaultValue={date}
                     className="pdf-input"
                   />
                 </div>
@@ -133,9 +122,8 @@ const SlipThirtyEight = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    defaultValue="2026-01-08"
+                    defaultValue={date}
                     className="pdf-input"
-                    onChange={handleChange}
                   />
                 </div>
               </div>

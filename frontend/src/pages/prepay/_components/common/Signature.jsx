@@ -42,7 +42,7 @@ function Signature() {
             htmlFor="sig-investor-1"
             className="pdf-upload-btn cursor-pointer"
           >
-            Upload Investor 1 Signature
+            Upload Investor's Signature
           </label>
 
           <p className="text-[10px] text-gray-400">PNG, JPG or PDF accepted</p>
@@ -77,7 +77,7 @@ function Signature() {
           )}
         </div>
 
-        <label className="pdf-label text-center">Signature of Investor 1</label>
+        <label className="pdf-label text-center">Signature of Investor</label>
       </div>
 
       {/* Draw Signature */}

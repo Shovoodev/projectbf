@@ -1,4 +1,9 @@
+import PdfRadio from "./common/PdfRadio";
+
+
 const SlipThirtyTwo = () => {
+
+
   return (
     <div className="form-container-base">
       {/* Decorative Brand Top Border */}
@@ -76,80 +81,66 @@ const SlipThirtyTwo = () => {
 
         <div className="space-y-1">
           {/* Q1 */}
-          <div>
-            <label className="pdf-label">1. Funeral Bond Type:</label>
-            <div className="pdf-radio-group mt-1">
-              {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
-                <label key={opt} className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name="bondType"
-                    disabled={
-                      opt === "Unassigned" || opt === "Prepaid/Assigned"
-                    }
-                    className="pdf-radio-input"
-                    defaultChecked={opt === "Prepaid/Assigned"}
-                    checked={opt === "Nominated"}
-                  />
-                  <span className="text-slate-700">{opt}</span>
-                </label>
-              ))}
+          <div className="space-y-4">
+
+            {/* Q1 */}
+            <div>
+              <label className="pdf-label">1. Funeral Bond Type:</label>
+              <div className="flex gap-10 mt-1">
+                <PdfRadio label="Nominated" checked />
+                <PdfRadio label="Unassigned" />
+                <PdfRadio label="Prepaid/Assigned" />
+              </div>
             </div>
+
+            {/* Q2 */}
+            <div>
+              <label className="pdf-label">2. Is the applicant aged 10+?</label>
+              <div className="flex gap-16 mt-1">
+                <PdfRadio label="Yes" checked />
+                <PdfRadio label="No" />
+              </div>
+            </div>
+
+            {/* Q3 */}
+            <div>
+              <label className="pdf-label">
+                3. Does the Applicant currently have 1 or more funeral bonds?
+              </label>
+              <div className="flex gap-16 mt-1">
+                <PdfRadio label="Yes" />
+                <PdfRadio label="No" checked />
+              </div>
+            </div>
+
+            {/* Q4 */}
+            <div>
+              <label className="pdf-label">
+                4. Does the Applicant intend to contribute more than the actual or
+                reasonable cost of a funeral?
+              </label>
+              <div className="flex gap-16 mt-1">
+                <PdfRadio label="Yes" />
+                <PdfRadio label="No" checked />
+              </div>
+            </div>
+
+            {/* Q5 */}
+            <div>
+              <label className="pdf-label">
+                5. Does the Applicant require access to the capital after the 30 day
+                cooling off period?
+              </label>
+              <div className="flex gap-16 mt-1">
+                <PdfRadio label="Yes" />
+                <PdfRadio label="No" checked />
+              </div>
+            </div>
+
           </div>
 
-          {/* Q2 - Q5 */}
-
-          {[
-            { id: "age10", q: "2. Is the applicant aged 10+?" },
-            {
-              id: "existingBonds",
-              q: "3. Does the Applicant currently have 1 or more funeral bonds?",
-            },
-            {
-              id: "overCost",
-              q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
-            },
-            {
-              id: "accessCapital",
-              q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
-            },
-          ].map((item) => {
-            // Add your actual data/state values here
-            // Example: const formData = { age10: "yes", existingBonds: "no", overCost: "yes", accessCapital: "no" };
-            const currentValue = "yes"; // Replace with actual value from your state/props
-
-            return (
-              <div key={item.id}>
-                <label className="pdf-label">{item.q}</label>
-                <div className="pdf-radio-group mt-1">
-                  <label className="pdf-radio-item">
-                    <input
-                      type="radio"
-                      name={item.id}
-                      value="yes"
-                      className="pdf-radio-input"
-                      checked={currentValue === "yes"}
-                      readOnly
-                    />
-                    <span className="text-slate-700">Yes</span>
-                  </label>
-
-                  <label className="pdf-radio-item">
-                    <input
-                      type="radio"
-                      name={item.id}
-                      value="no"
-                      className="pdf-radio-input"
-                      checked={currentValue === "no"}
-                      readOnly
-                    />
-                    <span className="text-slate-700">No</span>
-                  </label>
-                </div>
-              </div>
-            );
-          })}
         </div>
+
 
         {/* Final Notes */}
         <footer className=" p-3 text-sm">

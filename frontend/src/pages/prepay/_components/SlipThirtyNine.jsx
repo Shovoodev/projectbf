@@ -1,19 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaChevronLeft, FaChevronRight, FaUpload } from "react-icons/fa";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyNine = () => {
-  const { signature } = usePrePayServiceApi();
-  const [formData, setFormData] = useState({
-    funeral_director_name: "",
-    funeral_director_phone: "",
-    investor1_date: "2026-01-08",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { signature, date } = usePrePayServiceApi();
 
   return (
     <div className="form-container-base">
@@ -57,7 +47,6 @@ const SlipThirtyNine = () => {
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
             <div>
@@ -69,7 +58,6 @@ const SlipThirtyNine = () => {
                 value="1300110031"
                 placeholder="Enter phone number"
                 className="pdf-input"
-                onChange={handleChange}
               />
             </div>
           </div>
@@ -104,7 +92,7 @@ const SlipThirtyNine = () => {
                 {/* Signature Upload Area */}
                 <div className="flex-[2] space-y-2">
                   <label className="pdf-label-sm">
-                    Signature of investor 1
+                    Signature of investor
                   </label>
                   {signature && (
                     <img
@@ -121,7 +109,7 @@ const SlipThirtyNine = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    defaultValue="2026-01-08"
+                    defaultValue={date}
                     className="pdf-input"
                   />
                 </div>
@@ -150,7 +138,7 @@ const SlipThirtyNine = () => {
                   <input
                     type="date"
                     name="investor1_date"
-                    defaultValue="2026-01-08"
+                    defaultValue={date}
                     className="pdf-input"
                   />
                 </div>
