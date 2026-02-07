@@ -3,6 +3,7 @@ import { List } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
+import { showToast } from "../../utility/toast";
 
 const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
@@ -145,27 +146,15 @@ const NoServiceCrementionPage = () => {
     setLoading(true);
 
     try {
-      // Register
-      const registerRes = await fetch(`${CORE}/blacktulipauth/guest`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!registerRes.ok) {
-        const err = await registerRes.json();
-        throw new Error(err.message || "Registration failed");
-      }
-
-      // Save selections
-      await fetch(`${CORE}/newattendingservicecremationanswers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selections }),
-        credentials: "include",
-      });
       setTimeout(() => {
+        showToast.info("Getting PrePay document Ready for your Selections", {
+          duration: 3000,
+          options: {
+            position: "bottom-right",
+          },
+        });
         navigate(`/prepay`);
-      }, 1000);
+      }, 100);
     } catch (err) {
       setMessage(err.message, "error");
       setError(err.message);

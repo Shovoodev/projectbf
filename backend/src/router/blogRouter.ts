@@ -8,17 +8,18 @@ import {
   getSingleBlog,
   updateBlog,
 } from "../controllers/blogcontroller";
-import { isAuthenticated } from "../middlewear";
+import { isAuthenticated, isAuthenticatedAdmin } from "../middlewear";
 
 export default (router: express.Router) => {
   router.post(
     "/create-btf-new-blog",
+    isAuthenticatedAdmin,
     uploadBlogImages.array("images", 10),
     createBlog
   );
   router.get("/publish-all-blog-data", getallBlogs);
   router.get("/single-blog-data/:id", getSingleBlog);
   router.get("/publish-blog/:id", getallBlogs);
-  router.put("/:id", upload.single("image"), updateBlog);
-  router.delete("/:id", deleteBlog);
+  router.put("/update-blog/:id", upload.single("image") , isAuthenticatedAdmin , updateBlog);
+  router.delete("/delete-blog/:id", isAuthenticatedAdmin , deleteBlog);
 };

@@ -2,6 +2,7 @@ import express from "express";
 import { merge } from "lodash";
 import { getUserBySessionToken } from "./../db/user";
 import { AuthenticatedRequest } from "../lib/types";
+import { geAdminBySessionToken } from "../db/admin";
 
 // export const isAuthenticated = async (
 //   req: AuthenticatedRequest,
@@ -56,6 +57,28 @@ export const isAuthenticated = async (
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const isAuthenticatedAdmin = async ( 
+  req: AuthenticatedRequest,
+  res: express.Response,
+  next: express.NextFunction) => {
+  const token = req.cookies.sessionToken;
+
+  if (!token) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  const user = await geAdminBySessionToken(token);
+
+  if (!user) {
+    return res.status(401).json({ error: "Session expired or invalid" });
+  }
+
+  req.user = user;
+  
+  next();
+};
+
 
 export const AccessAuthentication = async (
   req: AuthenticatedRequest,

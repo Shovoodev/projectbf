@@ -15,7 +15,7 @@ const SignatureField = ({ sigPadRef, clearSignature, saveSignature }) => {
     return (
         <div className="w-full">
             <label className="block mb-2 font-medium text-gray-700">
-                Signature Of Investor 1
+                Signature Of Investor
             </label>
             <div ref={wrapperRef} className="border rounded bg-white w-full">
                 {size.width > 0 && (

@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import { FaUpload } from "react-icons/fa";
 import BlogEditor from "./BlogEditor";
+import { showToast } from "../../../utility/toast";
 
 const CreateBlog = () => {
   const [error, setError] = useState(null);
@@ -87,7 +88,7 @@ const CreateBlog = () => {
     setLoading(true);
     setMessage({ text: "", type: "" });
     setError(null);
-
+    showToast.error({ error })
     try {
       // Validate required fields
       if (!blogData.title?.trim() || !blogData.content?.trim()) {
@@ -95,12 +96,14 @@ const CreateBlog = () => {
           text: "Please fill in all required fields (Title and Content are required)",
           type: "error",
         });
+        showToast.error("Please fill in all required fields (Title and Content are required)")
         setLoading(false);
         return;
       }
 
       // Process content to convert blob URLs to base64
       const processedContent = await processContentImages(blogData.content);
+
 
       // Create FormData
       const formData = new FormData();
@@ -152,7 +155,7 @@ const CreateBlog = () => {
         text: "Blog created successfully!",
         type: "success",
       });
-
+      showToast.success("Blog created successfully!")
       // Reset form
       setBlogData({
         title: "",

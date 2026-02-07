@@ -1,8 +1,6 @@
-import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+import PdfRadio from "./common/PdfRadio";
 
 const SlipThirtyFive = ({ amount }) => {
-  const { setAspFrequency, totalPrice } = usePrePayServiceApi();
-  console.log({ totalPrice });
   const addedAmount = amount + 220;
   const investmentOptions = [
     {
@@ -10,10 +8,7 @@ const SlipThirtyFive = ({ amount }) => {
       fund: "Capital Guaranteed Fund",
       ufm: "Janus Henderson & KeyInvest Managed Investments",
       benefitNo: 50,
-    },
-    { no: 2, fund: "Conservative Index Fund", ufm: "Vanguard", benefitNo: 51 },
-    { no: 3, fund: "Balanced Index Fund", ufm: "Vanguard", benefitNo: 52 },
-    { no: 4, fund: "Growth Index Fund", ufm: "Vanguard", benefitNo: 53 },
+    }
   ];
 
   return (
@@ -53,26 +48,31 @@ const SlipThirtyFive = ({ amount }) => {
               Please select how the initial contribution will be paid.
             </p>
             <div className="pdf-radio-group p-1 bg-slate-50 rounded-md border border-slate-100">
-              {["bpay", "direct_debit", "oheque", "eft"].map((method) => (
-                <label key={method} className="pdf-radio-item">
-                  <input
-                    type="radio"
-                    name="payment_method"
-                    disabled={method === "direct_debit" || method === "oheque"}
-                    value={method}
-                    className="pdf-radio-input"
-                  />
-                  <span className="pdf-label mb-0 uppercase group-hover:text-blue-900">
-                    {method === "eft"
+              <div className="flex gap-10 mt-1">
+                {["bpay", "direct_debit", "cheque", "eft"].map((method) => {
+                  const isDisabled =
+                    method === "direct_debit" || method === "cheque";
+
+                  const isChecked = method === "eft"; // ← change dynamically later
+
+                  const label =
+                    method === "eft"
                       ? "EFT"
                       : method === "bpay"
                         ? "BPAY"
-                        : method === "oheque"
-                          ? "CHEQUE"
-                          : "Direct Debit"}
-                  </span>
-                </label>
-              ))}
+                        : "Direct Debit";
+
+                  return (
+                    <PdfRadio
+                      key={method}
+                      label={label}
+                      checked={isChecked}
+                      disabled={isDisabled}
+                    />
+                  );
+                })}
+              </div>
+
             </div>
           </div>
 
@@ -168,53 +168,6 @@ const SlipThirtyFive = ({ amount }) => {
                   </tbody>
                 </table>
               </div>
-
-              {/* Footnote Responsiveness */}
-              <p className="pdf-footnote text-blue-800 font-bold mt-6 text-[10px] md:text-xs">
-                Minimum $100 per Investment Option for initial contribution and
-                $50 per option for Regular Savings Plan contributions.
-              </p>
-
-              {/* ASP Frequency Section - Grid handles 1 vs 2 columns */}
-              <div className="mt-1 border-t border-gray-100 pt-2">
-                <p className="pdf-label uppercase tracking-widest text-xs">
-                  Regular Savings Plan (ASP) frequency:
-                </p>
-                <div className="pdf-asp-grid">
-                  {[
-                    { label: "Monthly", detail: "commencing in month" },
-                    { label: "Quarterly", detail: "commencing in month" },
-                    { label: "Six Monthly", detail: "commencing in month" },
-                    { label: "Annually", detail: "commencing in month" },
-                  ].map((freq) => (
-                    <div
-                      key={freq.label}
-                      className="flex items-center gap-1 group"
-                    >
-                      <input
-                        type="radio"
-                        name="asp_frequency"
-                        className="pdf-radio-input"
-                        onChange={(e) => setAspFrequency(e.target.value)}
-                        defaultChecked={freq.label === "Monthly"}
-                      />
-                      <div className="flex flex-wrap gap-1 text-sm items-center">
-                        <span className="font-black text-[rgb(49,41,166)]">
-                          {freq.label}
-                        </span>
-                        <span className="text-gray-400 italic text-xs">
-                          {freq.detail}
-                        </span>
-                        <input
-                          type="text"
-                          className="border-b border-gray-300  bg-transparent outline-none focus:border-blue-500"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Responsive Buttons */}
             </form>
           </div>

@@ -10,15 +10,6 @@ import {
 } from '@react-pdf/renderer';
 import styles from './Styles';
 
-// Register fonts
-// Font.register({
-//     family: 'Helvetica',
-//     fonts: [
-//         { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxP.ttf' },
-//         { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fBBc9.ttf', fontWeight: 'bold' },
-//     ]
-// });
-
 // Helper component for radio options
 const RadioOption = ({ label, value, name, checked = false, style = {} }) => (
     <View style={[styles.radioItem, style]}>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import PDFDownloadButton from "../prepay/_components/generatedPdf/TestDownload";
+import { showToast } from "../../utility/toast";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -470,6 +471,12 @@ const AttendenceCrementionPage = () => {
 
     try {
       setTimeout(() => {
+        showToast.info("Getting PrePay document Ready for your Selections", {
+          duration: 3000,
+          options: {
+            position: "bottom-right",
+          },
+        });
         navigate("/prepay", {
           state: {
             selections,
@@ -493,6 +500,12 @@ const AttendenceCrementionPage = () => {
     setLoading(true);
 
     try {
+      showToast.success("Getting Aggrement form ", {
+        duration: 3000,
+        options: {
+          position: "bottom-right",
+        },
+      });
       setTimeout(() => {
         navigate("/fill-agreement-form", {
           state: {

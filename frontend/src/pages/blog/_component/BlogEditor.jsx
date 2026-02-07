@@ -6,7 +6,12 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Extension } from "@tiptap/core";
 import { useRef, useState } from "react";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
 import { Node } from "@tiptap/core";
+import { useEffect } from "react";
+
 import { FaAlignLeft, FaAlignRight, FaAlignCenter, FaUndo, FaRedo, FaLink } from "react-icons/fa";
 
 export const Iframe = Node.create({
@@ -222,11 +227,29 @@ const BlogEditor = ({ value, onChange }) => {
   };
 
 
+
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: false, // We'll add our own
+        orderedList: false, // We'll add our own
+        listItem: false, // We'll add our own
+      }),
+      // List extensions
+      BulletList.configure({
+        HTMLAttributes: {
+          class: "list-disc pl-6",
+        },
+      }),
+      OrderedList.configure({
+        HTMLAttributes: {
+          class: "list-decimal pl-6",
+        },
+      }),
+      ListItem,
+      // Your other extensions
       Iframe,
-      TextStyle, // ✅ REQUIRED
+      TextStyle,
       FontSize,
       Image.configure({
         HTMLAttributes: {
@@ -236,7 +259,7 @@ const BlogEditor = ({ value, onChange }) => {
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-blue-600 font-samibold hover:text-blue-800",
+          class: "text-blue-600 font-semibold hover:text-blue-800",
         },
       }),
       TextAlign.configure({
@@ -261,7 +284,11 @@ const BlogEditor = ({ value, onChange }) => {
       </div>
     );
   }
-
+  useEffect(() => {
+    if (editor && value) {
+      editor.commands.setContent(value, false);
+    }
+  }, [editor, value]);
   // const handleImageUpload = (e) => {
   //   const files = Array.from(e.target.files);
 

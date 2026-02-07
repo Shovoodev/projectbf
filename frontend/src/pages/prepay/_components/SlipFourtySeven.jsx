@@ -1,29 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipFourtySeven = () => {
-  const { signature } = usePrePayServiceApi();
-  const [formData, setFormData] = useState({
-    investor1: {
-      signature: "",
-      date: "",
-      email: "",
-      phone: "",
-    },
-    investor2: {
-      signature: "",
-      printedName: "",
-      date: "",
-      email: "",
-      phone: "",
-    },
-    hasSecondInvestor: false,
-    acceptAllDeclarations: false,
-    receiveElectronicUpdates: true,
-    preferredContactMethod: "email",
-    acknowledgeRisks: false,
-  });
-  const [showSecondInvester, setShowSeceondInverster] = useState(false);
+  const { signature, date } = usePrePayServiceApi();
   const declarations = [
     "To apply for the Funeral Bond electronically online.",
     "To submit signed applications for the Funeral Bond via email.",
@@ -41,7 +20,6 @@ const SlipFourtySeven = () => {
     "KeyInvest can cancel or vary these conditions by giving you not less than seven (7) days written notice.",
   ];
 
-  const currentDate = new Date().toISOString().split("T")[0];
 
   return (
     <div className="form-container-base">
@@ -90,7 +68,7 @@ const SlipFourtySeven = () => {
                     <div className="space-y-2">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Signatureof Inverste 1 *
+                          Signature of Inverstor
                         </label>
                         {signature && (
                           <img
@@ -99,37 +77,19 @@ const SlipFourtySeven = () => {
                             className="mt-1"
                           />
                         )}
-                        <p className="text-xs text-gray-500 mt-2">
-                          This should match the signature on your official
-                          identification documents
-                        </p>
+                        <div className="pdf-date-container">
+                          <label className="pdf-label-sm">Date:</label>
+                          <input
+                            type="date"
+                            name="investor1_date"
+                            defaultValue={date}
+                            className="pdf-input"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                    {/* Left Column */}
-                    {showSecondInvester && (
-                      <>
-                        <div className="space-y-2">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Signature of Inverste 2
-                            </label>
-                            <textarea
-                              value={formData.investor1.signature}
-                              placeholder="Type your full legal signature"
-                              className="w-full h-32 px-1 py-1 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none font-signature text-xl"
-                              required
-                            />
-                            <p className="text-xs text-gray-500 mt-2">
-                              This should match the signature on your official
-                              identification documents
-                            </p>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
+
                 </div>
               </div>
             </div>

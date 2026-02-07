@@ -1,8 +1,27 @@
+import { useCallback } from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 import Signature from "./common/Signature";
+import { showToast } from "../../../utility/toast";
 
 const SlipThirtySeven = () => {
+  const { signature, setSignature, sigCanvasRef } = usePrePayServiceApi();
+
+  const clearSavedSignature = useCallback(() => {
+    setSignature(null);
+
+    if (sigCanvasRef.current) {
+      console.log("Clearing canvas...");
+      sigCanvasRef.current.clear();
+    }
+    showToast.error("signature has been removed", {
+      duration: 800,
+      options: {
+        position: "bottom-right",
+      },
+    });
+  }, [setSignature, sigCanvasRef]);
+
   const declarations = [
     "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
     "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
@@ -16,10 +35,12 @@ const SlipThirtySeven = () => {
     "My/Our financial adviser (where applicable), may process an application under the KeyInvest Funeral Bond using KeyInvest's online application portal;",
     "That my/our personal information will be collected, used and disclosed by KeyInvest in accordance with its Privacy Policy.",
   ];
+
   const optionalCheckboxes = [
     "If you do not wish to receive newsletters or information in relation to our other products and services, please mark this box",
     "If you do not wish to receive newsletters or information about goods or services from other suppliers which Keylnvest reasonably consider may be of interest to you, please mark this box.",
   ];
+
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -27,7 +48,7 @@ const SlipThirtySeven = () => {
 
         {/* Info */}
         <div className="pdf-info-box bg-blue-50/50">
-          <p className="text-[13px] ">
+          <p className="text-[13px]">
             Before signing this Application Form, Investors should read the PDS
             to which this application is attached.
           </p>
@@ -48,7 +69,8 @@ const SlipThirtySeven = () => {
               </label>
             ))}
           </div>
-          <div className="pdf-declaration-list mt- ml-1 border-t border-gray-300">
+
+          <div className="pdf-declaration-list mt-4 ml-1 border-t border-gray-300">
             {optionalCheckboxes.map((text, index) => (
               <label key={index} className="pdf-declaration-item">
                 <input type="checkbox" className="pdf-declaration-checkbox" />
@@ -59,10 +81,26 @@ const SlipThirtySeven = () => {
         </div>
 
         {/* Signature Section */}
-        <div className="">
-          {/* <<file upload */}
-          <Signature />
+        <div className="mt-6">
+          {signature ? (
+            <div className="space-y-2">
+              <img
+                src={URL.createObjectURL(signature)}
+                alt="Signature"
+                className="mt-4 max-w-xs border p-2 rounded bg-white"
+              />
+              <button
+                onClick={clearSavedSignature}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+              >
+                Remove Signature
+              </button>
+            </div>
+          ) : (
+            <Signature />
+          )}
         </div>
+
         {/* Footer */}
         <div className="pdf-footer">
           <div className="flex gap-1">
