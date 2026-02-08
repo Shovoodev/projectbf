@@ -1,30 +1,34 @@
 import React from 'react';
-import { pdf } from '@react-pdf/renderer';
-import RemdererPDF from './rendererPdf';
+import { pdfTemplate } from './pdfTemplate';
 
 const PDFDownloadButton = () => {
     const handleDownload = async () => {
-        try {
-            // Generate PDF blob
-            const blob = await pdf(<RemdererPDF />).toBlob();
+        const formData = {
+            surname: 'Doe',
+            givenNames: 'John',
+            email: 'john@example.com',
+            mobile: '123456789',
+        };
 
-            // Create download link
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'KeyInvest-Application-Form.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        const response = await fetch('http://localhost:5000/generate-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                html: pdfTemplate(formData),
+            }),
+        });
 
-            // Clean up
-            URL.revokeObjectURL(url);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
 
-            console.log('PDF downloaded successfully');
-        } catch (error) {
-            console.error('Error downloading PDF:', error);
-            alert('Failed to generate PDF. Please try again.');
-        }
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'application-form.pdf';
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        window.URL.revokeObjectURL(url);
     };
 
     return (
@@ -32,14 +36,10 @@ const PDFDownloadButton = () => {
             onClick={handleDownload}
             style={{
                 padding: '12px 24px',
-                backgroundColor: '#1e40af',
-                color: 'white',
+                background: '#1e40af',
+                color: '#fff',
                 border: 'none',
-                borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                margin: '20px'
             }}
         >
             Download PDF

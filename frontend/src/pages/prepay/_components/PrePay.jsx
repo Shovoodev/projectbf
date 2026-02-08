@@ -53,6 +53,7 @@ import SlipThirtySeven from "./SlipThirtySeven";
 import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
+import PDFDownloadButton from "./generatedPdf/TestDownload";
 const CORE = import.meta.env.VITE_API_URL;
 
 // These are the "Natural" dimensions for CSS layouts to look correct
@@ -312,6 +313,8 @@ const PrePay = ({ amount }) => {
                 ? "Continue to Application Form"
                 : "Move back to Documentation"}
             </button>
+
+            <PDFDownloadButton />
           </div>
         </div>
       </div>

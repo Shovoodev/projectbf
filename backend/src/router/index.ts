@@ -9,6 +9,7 @@ import paymentRouter from "./paymentRouter";
 import pdfRouter from "./pdfRouter";
 import blogRouter from "./blogRouter";
 import prePayRouter from "./prePayRouter";
+import signatureRouter from "./signatureRouter";
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ export default (): express.Router => {
   pdfRouter(router);
   blogRouter(router);
   prePayRouter(router);
+  signatureRouter(router)
   return router;
 };

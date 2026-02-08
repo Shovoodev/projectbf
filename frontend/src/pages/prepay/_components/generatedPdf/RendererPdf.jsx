@@ -11,15 +11,15 @@ import {
 import styles from './Styles';
 
 // Helper component for radio options
-const RadioOption = ({ label, value, name, checked = false, style = {} }) => (
-    <View style={[styles.radioItem, style]}>
-        <View style={styles.radioInput} />
-        <Text style={styles.radioText}>{label}</Text>
+const RadioOption = ({ label, checked }) => (
+    <View style={{ flexDirection: 'row', marginRight: 10 }}>
+        <Text>{checked ? '[X]' : '[ ]'}</Text>
+        <Text style={{ marginLeft: 4 }}>{label}</Text>
     </View>
 );
 
 // Main PDF Component
-const RemdererPDF = ({ investorData = {} }) => {
+const RendererPDF = ({ investorData = {} }) => {
     // Default data structure
     const data = {
         investorOne: {
@@ -57,140 +57,7 @@ const RemdererPDF = ({ investorData = {} }) => {
 
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.formContainerBase}>
-                    {/* Main Header */}
-                    <View style={styles.mainHeader}>
-                        <Text style={styles.title}>KeyInvest Funeral Bond</Text>
-                        <Text style={styles.subtitle}>application form</Text>
-                        <View style={styles.pdfHr} />
-                    </View>
 
-                    {/* Introduction Text */}
-                    <View style={{ marginBottom: 20 }}>
-                        <Text style={styles.pdfIntroP}>
-                            This Application Form (including the Direct Debit Request and the
-                            Adviser Electronic Transaction Authority Form) accompanies and forms
-                            part of the Product Disclosure Statement (PDS) issued by KeyInvest
-                            Ltd ABN 74 087 649 474 AFSL 240667 (KeyInvest) ('we', 'us', 'our' in
-                            this Application Form) for the Funeral Bond dated 28 July 2025.
-                        </Text>
-
-                        <Text style={styles.pdfIntroP}>
-                            The PDS (and any Supplementary PDS issued) contain important
-                            information about the Funeral Bond which you should consider before
-                            making an application. The PDS is available via our website at{' '}
-                            <Link src="https://keyinvest.com.au/" style={styles.link}>
-                                keyinvest.com.au
-                            </Link>{' '}
-                            or you may request a copy from your financial adviser or funeral
-                            director.
-                        </Text>
-
-                        <Text style={styles.pdfIntroP}>
-                            An application to invest in the KeyInvest Funeral Bond can only be
-                            made using this form. Completed Application Forms can be posted to
-                            KeyInvest, Reply Paid 3340, RUNDLE MALL SA 5000 (no stamp required)
-                            or emailed to:{' '}
-                            <Link src="mailto:info@keyinvest.com.au" style={styles.link}>
-                                info@keyinvest.com.au
-                            </Link>
-                        </Text>
-
-                        <Text style={[styles.pdfLabel, { color: '#1e40af', marginTop: 16 }]}>
-                            PLEASE USE CAPITAL LETTERS TO COMPLETE THE APPLICATION FORM
-                        </Text>
-                    </View>
-
-                    {/* Highlight Box */}
-                    <View style={styles.pdfHighlightBox}>
-                        <Text style={styles.paragraph}>
-                            For an individual applicant you only need to complete{' '}
-                            <Text style={styles.highlightText}>Investor 1</Text>. Joint
-                            applicants will complete{' '}
-                            <Text style={styles.highlightText}>Investor 1 & 2</Text>. If
-                            investing for a separate life insured the Investor is{' '}
-                            <Text style={styles.highlightText}>Investor 1</Text> and the life insured{' '}
-                            <Text style={styles.highlightText}>Investor 2</Text>.
-                        </Text>
-                    </View>
-
-                    {/* Questionnaire Section */}
-                    <View style={{ marginTop: 32 }}>
-                        <Text style={styles.pdfH2}>Target market questionnaire</Text>
-
-                        <View style={{ marginTop: 16 }}>
-                            {/* Q1 */}
-                            <View style={{ marginBottom: 20 }}>
-                                <Text style={styles.pdfLabel}>1. Funeral Bond Type:</Text>
-                                <View style={[styles.pdfRadioGroup, { marginTop: 8 }]}>
-                                    {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
-                                        <View key={opt} style={styles.pdfRadioItem}>
-                                            <View style={styles.pdfRadioInput} />
-                                            <Text style={styles.pdfRadioText}>{opt}</Text>
-                                        </View>
-                                    ))}
-                                </View>
-                            </View>
-
-                            {/* Q2 - Q5 */}
-                            {[
-                                { id: "age10", q: "2. Is the applicant aged 10+?" },
-                                {
-                                    id: "existingBonds",
-                                    q: "3. Does the Applicant currently have 1 or more funeral bonds?",
-                                },
-                                {
-                                    id: "overCost",
-                                    q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
-                                },
-                                {
-                                    id: "accessCapital",
-                                    q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
-                                },
-                            ].map((item, index) => (
-                                <View key={item.id} style={{ marginBottom: 20 }}>
-                                    <Text style={styles.pdfLabel}>{item.q}</Text>
-                                    <View style={[styles.pdfRadioGroup, { marginTop: 8 }]}>
-                                        <View style={styles.pdfRadioItem}>
-                                            <View style={styles.pdfRadioInput} />
-                                            <Text style={styles.pdfRadioText}>Yes</Text>
-                                        </View>
-                                        <View style={styles.pdfRadioItem}>
-                                            <View style={styles.pdfRadioInput} />
-                                            <Text style={styles.pdfRadioText}>No</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            ))}
-                        </View>
-                    </View>
-
-                    {/* Final Notes */}
-                    <View style={styles.noteBox}>
-                        <Text style={{ marginBottom: 8 }}>
-                            <Text style={{ fontWeight: 'bold' }}>Note:</Text> Investors must be at least 10 years old and
-                            those under 16 require written consent from a parent or guardian.
-                            Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or
-                            DVA asset and income tests if certain conditions apply. Funeral Bonds
-                            (nominated or unassigned) are exempt if specific criteria are met.
-                            Holding multiple Funeral Bonds may result in assets being assessable.
-                            Funeral bonds can only be used to contribute to the cost of a funeral.
-                            After the 30 day cooling off period there is no access to funeral bond
-                            capital prior to payment of funeral expenses.
-                        </Text>
-                    </View>
-
-                    {/* Footer */}
-                    <View style={styles.pdfFooter}>
-                        <Text style={styles.footerText}>
-                            <Text style={{ color: '#1e40af', fontWeight: 'bold' }}>KeyInvest</Text> Funeral Bond PDS
-                        </Text>
-                        <Text style={styles.footerText}>Version: July 2026</Text>
-                        <Text style={styles.pageNumber}>Page 32</Text>
-                    </View>
-                </View>
-            </Page>
             <Page size="A4" style={styles.page}>
                 <View style={styles.container}>
                     {/* Header */}
@@ -222,14 +89,14 @@ const RemdererPDF = ({ investorData = {} }) => {
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Surname:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.surname || '________________'}</Text>
+                                    <Text>{data.investorOne.surname || '---------------------'}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Given Names:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.givenNames || '________________'}</Text>
+                                    <Text>{data.investorOne.givenNames || '---------------------'}</Text>
                                 </View>
                             </View>
 
@@ -294,7 +161,7 @@ const RemdererPDF = ({ investorData = {} }) => {
                             <View style={[styles.addressField, { width: '48%' }]}>
                                 <Text style={styles.labelSm}>Suburb</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.suburb || '________________'}</Text>
+                                    <Text>{data.investorOne.suburb || '---------------------'}</Text>
                                 </View>
                             </View>
 
@@ -358,7 +225,7 @@ const RemdererPDF = ({ investorData = {} }) => {
                             <View style={[styles.addressField, { width: '48%' }]}>
                                 <Text style={styles.labelSm}>Suburb</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.mailsuburb || '________________'}</Text>
+                                    <Text>{data.investorOne.mailsuburb || '---------------------'}</Text>
                                 </View>
                             </View>
 
@@ -397,28 +264,28 @@ const RemdererPDF = ({ investorData = {} }) => {
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Daytime Telephone:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.daytimeTelephone || '________________'}</Text>
+                                    <Text>{data.investorOne.daytimeTelephone || '---------------------'}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Mobile:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.mobile || '________________'}</Text>
+                                    <Text>{data.investorOne.mobile || '---------------------'}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Daytime Address:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.daytimeAddress || '________________'}</Text>
+                                    <Text>{data.investorOne.daytimeAddress || '---------------------'}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.colHalf}>
                                 <Text style={styles.label}>Email:</Text>
                                 <View style={styles.input}>
-                                    <Text>{data.investorOne.email || '________________@____.com'}</Text>
+                                    <Text>{data.investorOne.email || '---------------------@____.com'}</Text>
                                 </View>
                             </View>
                         </View>
@@ -444,8 +311,9 @@ const RemdererPDF = ({ investorData = {} }) => {
                     <Text style={styles.pageNumber}>Page 33</Text>
                 </View>
             </Page>
+
         </Document>
     );
 };
 
-export default RemdererPDF;
+export default RendererPDF;

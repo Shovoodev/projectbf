@@ -94,6 +94,7 @@ const AgreementForm = () => {
     email: "",
     relation: "",
     photo: [],
+    // photoOfSign: null,
     sign: null,
   });
 
@@ -173,6 +174,12 @@ const AgreementForm = () => {
   };
 
   const removeKinPhoto = (index) => {
+    setFormKinValues((prev) => ({
+      ...prev,
+      photo: prev.photo.filter((_, i) => i !== index),
+    }));
+  };
+  const removeKinSignPhoto = (index) => {
     setFormKinValues((prev) => ({
       ...prev,
       photo: prev.photo.filter((_, i) => i !== index),
@@ -796,7 +803,8 @@ const AgreementForm = () => {
                   <div>
                     <FormLabel required>{isEnglish
                       ? translations.kinSurname.en
-                      : translations.kinSurname.zh}</FormLabel> <InputField
+                      : translations.kinSurname.zh}</FormLabel>
+                    <InputField
                       value={formKinValues.surname}
                       onChange={(e) => handleKinChange("surname", e.target.value)}
                       required

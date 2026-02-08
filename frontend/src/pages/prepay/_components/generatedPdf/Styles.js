@@ -1,291 +1,426 @@
 import { StyleSheet, Font } from '@react-pdf/renderer';
 
-// Font.register({
-//     family: 'Roboto',
-//     fonts: [
-//         { src: '/fonts/Roboto-Regular.ttf' },
-//         { src: '/fonts/Roboto-Bold.ttf', fontWeight: 'bold' },
-//     ],
-// });
-
 const styles = StyleSheet.create({
-    page: {
-        // fontFamily: 'Roboto',
-        fontSize: 11,
-        color: '#3129A6',
-        backgroundColor: '#ffffff',
-    },
+    // ===============================
+    // BASE STYLES
+    // ===============================
 
-    container: {
-        flex: 1,
-    },
-
-    section: {
-        marginBottom: 15,
-    },
-    formSection: {
-        marginBottom: 20,
-    },
-    h2: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    subtitle: {
-        fontSize: 10,
-        color: '#666',
-        marginBottom: 15,
-    },
-    sectionTitle: {
+    p: {
         fontSize: 12,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        marginTop: 5,
+        lineHeight: 1.6,
+        marginBottom: 16,
+        color: '#3129A6',
     },
-    note: {
-        fontSize: 10,
-        color: '#666',
-        fontWeight: 'normal',
+
+    // ===============================
+    // UTILITIES
+    // ===============================
+    textPdfPrimary: {
+        color: '#3129A6',
     },
-    label: {
-        fontSize: 10,
-        marginBottom: 5,
-        fontWeight: 'bold',
+
+    textPdfAccent: {
+        color: '#00A99D',
     },
-    labelSm: {
-        fontSize: 9,
-        marginBottom: 3,
-        fontWeight: 'bold',
-    },
-    input: {
-        fontSize: 10,
-        padding: 5,
-        border: '1 solid #ccc',
-        borderRadius: 3,
-        marginBottom: 8,
-        minHeight: 25,
-    },
-    readonlyInput: {
-        backgroundColor: '#f5f5f5',
-        color: '#666',
-    },
-    row: {
-        flexDirection: 'row',
-        marginBottom: 10,
-        gap: 15,
-    },
-    column: {
-        flex: 1,
-    },
-    radioGroup: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginBottom: 10,
-        gap: 15,
-    },
-    radioItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 10,
-        marginBottom: 5,
-    },
-    radioCircle: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        border: '1 solid #000',
-        marginRight: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    radioDot: {
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: '#000',
-    },
-    radioText: {
-        fontSize: 10,
-    },
-    gridRow: {
-        flexDirection: 'row',
-        marginBottom: 8,
-        gap: 10,
-    },
-    gridCol2: {
-        flex: 2,
-    },
-    gridCol3: {
-        flex: 3,
-    },
-    gridCol4: {
-        flex: 4,
-    },
-    noteSection: {
-        marginTop: 15,
-        marginBottom: 20,
-    },
-    introText: {
-        fontSize: 9,
-        color: '#666',
-        lineHeight: 1.4,
-    },
-    footer: {
-        position: 'absolute',
-        bottom: 30,
-        left: 30,
-        right: 30,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderTop: '1 solid #ddd',
-        paddingTop: 10,
-    },
-    footerText: {
-        fontSize: 9,
-        color: '#666',
-    },
-    brand: {
-        color: '#1e3a8a', // blue-900 equivalent
-        fontWeight: 'bold',
-    },
+
+    // ===============================
+    // COMPONENTS
+    // ===============================
+
+    /* Root Layout */
     formContainerBase: {
         width: '100%',
-        backgroundColor: '#ffffff',
-        borderWidth: 1,
-        borderColor: '#e5e7eb',
+        minHeight: 1123,
+        backgroundColor: '#FFFFFF',
+        border: '1pt solid #E5E7EB',
         borderRadius: 8,
+        padding: 32,
     },
 
-    paragraph: {
-        fontSize: 11,
-        lineHeight: 1.625,
-        marginBottom: 16,
+    formHeaderArea: {
+        backgroundColor: '#F8FAFC',
+        padding: 8,
+        borderBottom: '1pt solid #E5E7EB',
     },
 
+    /* Typography */
     pdfH2: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 8,
+        color: '#00A99D',
+    },
+
+    pdfSectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        borderBottom: '1pt solid #E5E7EB',
+        paddingBottom: 4,
+        marginTop: 4,
+        marginBottom: 4,
+        color: '#3129A6',
     },
 
     pdfLabel: {
-        fontSize: 11,
+        fontSize: 14,
         fontWeight: 'bold',
+        marginBottom: 4,
+        color: '#3129A6',
+    },
+
+    pdfLabelSm: {
+        fontSize: 14,
+        fontWeight: 'black',
+        color: '#3129A6',
+    },
+
+    pdfIntroP: {
+        fontSize: 14,
+        lineHeight: 1.6,
+        marginBottom: 16,
+        color: '#3129A6',
+    },
+
+    /* Inputs (simulated with View/Text) */
+    pdfInput: {
+        width: '100%',
+        border: '1pt solid #D1D5DB',
+        borderRadius: 4,
+    },
+
+    pdfAdviserRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 4,
     },
 
-    pdfInput: {
-        width: '100%',
-        padding: 8,
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-        borderRadius: 4,
-        fontSize: 11,
-        backgroundColor: '#ffffff',
+    pdfAdviserLabel: {
+        fontSize: 14,
+        fontWeight: 'medium',
+        color: '#3129A6',
+        minWidth: 180,
     },
 
+    pdfInputReadonly: {
+        backgroundColor: '#F8FAFC',
+        fontWeight: 'semibold',
+    },
+
+    /* Radio / Checkbox Groups */
     pdfRadioGroup: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        padding: 16,
-        backgroundColor: '#f8fafc',
+        gap: 8,
+        padding: 8,
+        backgroundColor: '#F8FAFC',
         borderRadius: 6,
-        borderWidth: 1,
-        borderColor: '#f1f5f9',
+        border: '1pt solid #F1F5F9',
     },
 
     pdfRadioItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 24,
-        marginBottom: 8,
+        color: '#3129A6',
     },
 
-    pdfRadioInput: {
-        width: 14,
-        height: 14,
-        borderWidth: 1,
-        borderColor: '#93c5fd',
-        backgroundColor: '#dbeafe',
-        marginRight: 8,
+    /* Footer */
+    pdfFooter: {
+        marginTop: 48,
+        paddingTop: 4,
+        borderTop: '1pt solid #E2E8F0',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        fontSize: 10,
+        color: '#9CA3AF',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        letterSpacing: 1,
     },
 
-    pdfCheckboxBox: {
-        width: 24,
-        height: 24,
-        borderWidth: 1,
-        borderColor: '#93c5fd',
-        backgroundColor: '#dbeafe',
+    /* Buttons (for reference - PDF doesn't have interactive buttons) */
+    btnPrimaryPdf: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#1E3A8A',
+        color: '#FFFFFF',
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 4,
+        paddingBottom: 4,
+        borderRadius: 6,
+    },
+
+    btnSecondary: {
+        fontWeight: 'bold',
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 4,
+        paddingRight: 4,
+        color: '#3129A6',
+    },
+
+    /* Tables */
+    pdfTableWrapper: {
+        width: '100%',
     },
 
     pdfTable: {
         width: '100%',
         marginTop: 16,
+        fontSize: 12,
     },
 
     pdfTableTh: {
-        paddingVertical: 8,
-        paddingHorizontal: 4,
+        paddingTop: 8,
+        paddingBottom: 8,
+        paddingLeft: 4,
+        paddingRight: 4,
+        textAlign: 'left',
         fontWeight: 'bold',
-        lineHeight: 1.25,
+        color: '#00A99D',
     },
 
     pdfTableTd: {
-        paddingVertical: 8,
-        paddingHorizontal: 4,
-        borderBottomWidth: 1,
-        borderBottomColor: '#4BA6A6',
+        paddingTop: 8,
+        paddingBottom: 8,
+        paddingLeft: 4,
+        paddingRight: 4,
+        borderBottom: '1pt solid #00A99D',
+        color: '#3129A6',
     },
 
-    pdfInfoBox: {
+    pdfTableTrHighlight: {
+        backgroundColor: '#00A99D',
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+    },
+
+    /* ASP Grid */
+    pdfAspGrid: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 4,
+    },
+
+    gridColumn: {
+        width: '48%',
+        marginRight: '2%',
+    },
+
+    /* Declaration */
+    pdfDeclarationList: {
+        marginTop: 4,
+        marginBottom: 4,
+    },
+
+    pdfDeclarationItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    pdfDeclarationText: {
+        fontSize: 10,
+        lineHeight: 1.6,
+        color: '#3129A6',
+    },
+
+    /* Signature */
+    pdfSignatureZone: {
+        width: '100%',
+        border: '2pt dashed #D1D5DB',
+        borderRadius: 8,
+        padding: 24,
+        backgroundColor: '#F8FAFC',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    pdfUploadBtn: {
+        backgroundColor: '#FFFFFF',
+        border: '1pt solid #D1D5DB',
+        paddingLeft: 4,
+        paddingRight: 4,
+        paddingTop: 4,
+        paddingBottom: 4,
+        borderRadius: 4,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#3129A6',
+    },
+
+    /* Misc */
+    pdfHr: {
+        borderTop: '1pt solid rgba(30, 58, 138, 0.2)',
         marginTop: 24,
+        marginBottom: 24,
+    },
+
+    pdfInstructionBold: {
+        fontSize: 14,
+        fontWeight: 'black',
+        lineHeight: 1.6,
+        marginBottom: 8,
+        color: '#3129A6',
+    },
+
+    pdfLegalList: {
+        paddingLeft: 16,
+        marginTop: 4,
+    },
+
+    pdfLegalListItem: {
+        flexDirection: 'row',
+        gap: 4,
+        fontSize: 14,
+        lineHeight: 1.6,
+        color: '#374151',
+    },
+
+    pdfLegalLetter: {
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        minWidth: 15,
+        color: '#3129A6',
+    },
+
+    pdfAgreementH3: {
+        fontWeight: 'bold',
+        marginBottom: 4,
+        fontSize: 18,
+        color: '#3129A6',
+    },
+
+    // ===============================
+    // LAYOUT HELPERS
+    // ===============================
+    flexRow: {
+        flexDirection: 'row',
+    },
+
+    flexCol: {
+        flexDirection: 'column',
+    },
+
+    flexWrap: {
+        flexWrap: 'wrap',
+    },
+
+    itemsCenter: {
+        alignItems: 'center',
+    },
+
+    justifyBetween: {
+        justifyContent: 'space-between',
+    },
+
+    wFull: {
+        width: '100%',
+    },
+
+    mb4: {
+        marginBottom: 16,
+    },
+
+    mb2: {
+        marginBottom: 8,
+    },
+
+    mb1: {
+        marginBottom: 4,
+    },
+
+    mt4: {
+        marginTop: 16,
+    },
+
+    mt2: {
+        marginTop: 8,
+    },
+
+    mt1: {
+        marginTop: 4,
+    },
+
+    px4: {
+        paddingLeft: 16,
+        paddingRight: 16,
+    },
+
+    py2: {
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+
+    //slipe 32 
+    page: {
+        padding: 30,
+    },
+
+    mainHeader: {
+        marginBottom: 20,
+    },
+
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#3129A6',
+        textAlign: 'center',
+    },
+
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'normal',
+        color: '#3129A6',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+        marginTop: 4,
+    },
+
+    pdfHighlightBox: {
+        backgroundColor: '#F0F9FF',
+        border: '1pt solid #3B82F6',
         padding: 16,
-        borderLeftWidth: 4,
-        borderLeftColor: '#1e40af',
-        backgroundColor: '#dbeafe',
-        fontSize: 11,
-        lineHeight: 1.625,
+        borderRadius: 6,
+        marginBottom: 16,
     },
 
     noteBox: {
-        fontSize: 11,
-        lineHeight: 1.5,
-        marginTop: 24,
+        backgroundColor: '#FEF3C7',
+        border: '1pt solid #F59E0B',
         padding: 16,
-        backgroundColor: '#f8fafc',
-        borderLeftWidth: 4,
-        borderLeftColor: '#d1d5db',
+        borderRadius: 6,
+        marginTop: 32,
     },
 
-    pdfFooter: {
-        marginTop: 48,
-        paddingTop: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#e5e7eb',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        fontSize: 9,
+    // Radio button specific styles
+    pdfRadioInput: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        border: '1pt solid #3129A6',
+        marginRight: 4,
     },
 
-    spacer: { height: 16 },
-    spacerSm: { height: 8 },
-    spacerLg: { height: 32 },
+    pdfRadioText: {
+        fontSize: 12,
+        color: '#3129A6',
+    },
 
-    textCenter: { textAlign: 'center' },
-    textRight: { textAlign: 'right' },
-    textLeft: { textAlign: 'left' },
+    // Additional utility styles
+    highlightText: {
+        color: '#00A99D',
+        fontWeight: 'bold',
+    },
 
-    flexRow: { flexDirection: 'row' },
-    flexCol: { flexDirection: 'column' },
-    itemsCenter: { alignItems: 'center' },
-    justifyBetween: { justifyContent: 'space-between' },
-
-    rounded: { borderRadius: 4 },
-    roundedMd: { borderRadius: 6 },
-    roundedLg: { borderRadius: 8 },
-    roundedFull: { borderRadius: 9999 },
+    paragraph: {
+        fontSize: 12,
+        lineHeight: 1.6,
+        color: '#3129A6',
+    },
 });
 
 export default styles;

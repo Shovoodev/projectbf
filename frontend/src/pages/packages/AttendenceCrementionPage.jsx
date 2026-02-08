@@ -3,7 +3,6 @@ import { List, Select } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
-import PDFDownloadButton from "../prepay/_components/generatedPdf/TestDownload";
 import { showToast } from "../../utility/toast";
 
 // --- Reusable Card Component ---
@@ -700,7 +699,6 @@ const AttendenceCrementionPage = () => {
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
-          {/* <PDFDownloadButton /> */}
         </div>
 
         {/* Message Display */}
