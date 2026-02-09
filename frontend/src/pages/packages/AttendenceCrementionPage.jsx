@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
+import TestDownload from "../prepay/_components/generatedPdf/TestDownload";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -699,6 +700,7 @@ const AttendenceCrementionPage = () => {
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
+          <TestDownload />
         </div>
 
         {/* Message Display */}

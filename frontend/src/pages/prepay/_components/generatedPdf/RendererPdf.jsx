@@ -1,317 +1,358 @@
-import React from 'react';
-import {
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-    Font,
-    Link
-} from '@react-pdf/renderer';
-import styles from './Styles';
+import React from "react";
+import { Document, Page, View, Text } from "@react-pdf/renderer";
+import styles from "./Styles";
+import SlipThirtyFourPage from "./pages/SlipThirtyFourPage";
+import SlipThirtyFivePage from "./pages/SlipThirtyFivePage";
+import SlipThirtySevenPage from "./pages/SlipThirtySevenPage";
+import SlipThirtySixPage from "./pages/SlipThirtySixPage";
+import SlipThirtyEightPage from "./pages/SlipThirtyEightPage";
+import SlipThirtyNinePage from "./pages/SlipThirtyNinePage";
+import SlipFourtyPage from "./pages/SlipFourtyPage";
+import SlipFourtyOnePage from "./pages/SlipFourtyOnePage";
+import SlipFourtyTwoPage from "./pages/SlipFourtyTwoPage";
+import SlipFourtyFivePage from "./pages/SlipFourtyFivePage";
+import SlipFortySixPage from "./pages/SlipFortySixPage";
+import SlipFourtySevenPage from "./pages/SlipFourtySevenPage";
 
-// Helper component for radio options
+// ✅ Helper component for radio options
 const RadioOption = ({ label, checked }) => (
-    <View style={{ flexDirection: 'row', marginRight: 10 }}>
-        <Text>{checked ? '[X]' : '[ ]'}</Text>
-        <Text style={{ marginLeft: 4 }}>{label}</Text>
+    <View style={styles.pdfRadioItem}>
+        <Text style={styles.pdfRadioBox}>{checked ? "☑" : "☐"}</Text>
+
+        <Text style={styles.pdfRadioText}>{label}</Text>
     </View>
 );
 
-// Main PDF Component
+// ✅ Helper component for address section
+const AddressSection = ({ title, data }) => (
+    <View style={styles.mb4}>
+        <Text style={styles.pdfSectionTitle}>{title}</Text>
+
+        <View style={[styles.flexRow, styles.mb2]}>
+            <View style={{ width: "20%", marginRight: 8 }}>
+                <Text style={styles.pdfLabel}>Unit</Text>
+                <Text style={styles.pdfIntroP}>{data.unit || "-"}</Text>
+            </View>
+
+            <View style={{ width: "25%", marginRight: 8 }}>
+                <Text style={styles.pdfLabel}>Street No</Text>
+                <Text style={styles.pdfIntroP}>{data.streetNo || "-"}</Text>
+            </View>
+
+            <View style={{ width: "30%", marginRight: 8 }}>
+                <Text style={styles.pdfLabel}>Street Name</Text>
+                <Text style={styles.pdfIntroP}>{data.streetName || "-"}</Text>
+            </View>
+
+            <View style={{ width: "25%" }}>
+                <Text style={styles.pdfLabel}>Suburb</Text>
+                <Text style={styles.pdfIntroP}>{data.suburb || "-"}</Text>
+            </View>
+        </View>
+
+        <View style={[styles.flexRow, styles.mb2]}>
+            <View style={{ width: "30%", marginRight: 8 }}>
+                <Text style={styles.pdfLabel}>State</Text>
+                <Text style={styles.pdfIntroP}>{data.state || "-"}</Text>
+            </View>
+
+            <View style={{ width: "30%", marginRight: 8 }}>
+                <Text style={styles.pdfLabel}>Postcode</Text>
+                <Text style={styles.pdfIntroP}>{data.postcode || "-"}</Text>
+            </View>
+
+            <View style={{ width: "40%" }}>
+                <Text style={styles.pdfLabel}>Country</Text>
+                <Text style={styles.pdfIntroP}>{data.country || "-"}</Text>
+            </View>
+        </View>
+    </View>
+);
+
+// ✅ Main PDF Component
 const RendererPDF = ({ investorData = {} }) => {
-    // Default data structure
     const data = {
+
+        contributionAmount: investorData?.amount || 0,
+        paymentMethod: investorData?.paymentMethod || "eft",
+        rspIncrease: "yes",
+        annualIncreasePercent: "10",
+        serviceFeeFixed: "220",
+        serviceFeePercent: "",
+        adviser: {
+            providerName: "Black Tulip Funerals",
+            groupName: "",
+            address: "PO Box 1033 Hurstville BC NSW 1481",
+            phone: "1300110031",
+            officeEmail: "keyinvest@blacktulipfunerals.com.au",
+            newAdviserEmail: "",
+            afsLicence: "",
+            adviserCode: "",
+        },
         investorOne: {
-            title: investorData?.investorOne?.title || '',
-            surname: investorData?.investorOne?.surname || '',
-            givenNames: investorData?.investorOne?.givenNames || '',
-            dob: investorData?.investorOne?.dob || '',
-            gender: investorData?.investorOne?.gender || '',
-
-            // Residential Address
-            unit: investorData?.investorOne?.unit || '',
-            streetNo: investorData?.investorOne?.streetNo || '',
-            streetName: investorData?.investorOne?.streetName || '',
-            suburb: investorData?.investorOne?.suburb || '',
-            state: investorData?.investorOne?.state || 'NSW',
-            postcode: investorData?.investorOne?.postcode || '',
-            country: investorData?.investorOne?.country || 'AUSTRALIA',
-
-            // Mailing Address
-            mailunit: investorData?.investorOne?.mailunit || '',
-            mailstreetNo: investorData?.investorOne?.mailstreetNo || '',
-            mailstreetName: investorData?.investorOne?.mailstreetName || '',
-            mailsuburb: investorData?.investorOne?.mailsuburb || '',
-            mailstate: investorData?.investorOne?.mailstate || 'NSW',
-            mailpostcode: investorData?.investorOne?.mailpostcode || '',
-            mailcountry: investorData?.investorOne?.mailcountry || 'AUSTRALIA',
-
-            // Contact Details
-            daytimeTelephone: investorData?.investorOne?.daytimeTelephone || '',
-            mobile: investorData?.investorOne?.mobile || '',
-            daytimeAddress: investorData?.investorOne?.daytimeAddress || '',
-            email: investorData?.investorOne?.email || '',
-        }
+            title: investorData?.investorOne?.title || "",
+            surname: investorData?.investorOne?.surname || "",
+            givenNames: investorData?.investorOne?.givenNames || "",
+            dob: investorData?.investorOne?.dob || "",
+            gender: investorData?.investorOne?.gender || "",
+            unit: investorData?.investorOne?.unit || "",
+            streetNo: investorData?.investorOne?.streetNo || "",
+            streetName: investorData?.investorOne?.streetName || "",
+            suburb: investorData?.investorOne?.suburb || "",
+            state: investorData?.investorOne?.state || "NSW",
+            postcode: investorData?.investorOne?.postcode || "",
+            country: investorData?.investorOne?.country || "AUSTRALIA",
+            mailunit: investorData?.investorOne?.mailunit || "",
+            mailstreetNo: investorData?.investorOne?.mailstreetNo || "",
+            mailstreetName: investorData?.investorOne?.mailstreetName || "",
+            mailsuburb: investorData?.investorOne?.mailsuburb || "",
+            mailstate: investorData?.investorOne?.mailstate || "NSW",
+            mailpostcode: investorData?.investorOne?.mailpostcode || "",
+            mailcountry: investorData?.investorOne?.mailcountry || "AUSTRALIA",
+            daytimeTelephone: investorData?.investorOne?.daytimeTelephone || "",
+            mobile: investorData?.investorOne?.mobile || "",
+            daytimeAddress: investorData?.investorOne?.daytimeAddress || "",
+            email: investorData?.investorOne?.email || "",
+        },
+        questionnaire: {
+            bondType: investorData?.questionnaire?.bondType || "Nominated",
+            ageOver10: investorData?.questionnaire?.ageOver10 !== false,
+            hasExistingBonds: !!investorData?.questionnaire?.hasExistingBonds,
+            excessContribution: !!investorData?.questionnaire?.excessContribution,
+            requiresCapitalAccess: !!investorData?.questionnaire?.requiresCapitalAccess,
+        },
     };
 
     return (
         <Document>
+            {/* ✅ PAGE 1 */}
+            <Page size="A4" style={styles.page} wrap={false}>
+                <View style={styles.formContainerBase}>
+                    <View style={styles.mainHeader}>
+                        <Text style={styles.title}>KeyInvest Funeral Bond</Text>
+                        <Text style={styles.subtitle}>application form</Text>
+                    </View>
 
-            <Page size="A4" style={styles.page}>
-                <View style={styles.container}>
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <Text style={styles.h2}>1. Investor details</Text>
-                        <Text style={styles.subtitle}>
-                            Investor 1 (all correspondence will be sent to this person)
+                    <View style={styles.mb4}>
+                        <Text style={styles.pdfIntroP}>
+                            This Application Form (including the Direct Debit Request and the Adviser Electronic Transaction
+                            Authority Form) accompanies and forms part of the Product Disclosure Statement (PDS) issued by KeyInvest
+                            Ltd ABN 74 087 649 474 AFSL 240667 (KeyInvest).
+                        </Text>
+
+                        <Text style={[styles.pdfIntroP, styles.mt2]}>
+                            The PDS contain important information about the Funeral Bond which you should consider before making an
+                            application. The PDS is available via our website at keyinvest.com.au or you may request a copy from your
+                            financial adviser or funeral director.
+                        </Text>
+
+                        <Text style={[styles.pdfIntroP, styles.mt2]}>
+                            An application to invest in the KeyInvest Funeral Bond can only be made using this form. Completed
+                            Application Forms can be posted to KeyInvest, Reply Paid 3340, RUNDLE MALL SA 5000 or emailed to:
+                            info@keyinvest.com.au
+                        </Text>
+
+                        <Text style={[styles.pdfLabel, styles.mt2]}>
+                            PLEASE USE CAPITAL LETTERS TO COMPLETE THE APPLICATION FORM
                         </Text>
                     </View>
 
-                    {/* Personal Info Section */}
-                    <View style={styles.section}>
-                        {/* Title Radio Buttons */}
-                        <View style={styles.colFull}>
-                            <Text style={styles.label}>Title:</Text>
-                            <View style={styles.radioGroup}>
-                                {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((title) => (
-                                    <RadioOption
-                                        key={title}
-                                        label={title}
-                                        checked={data.investorOne.title === title}
-                                        style={{ marginRight: 15 }}
-                                    />
-                                ))}
-                            </View>
-                        </View>
-
-                        <View style={styles.formGrid}>
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Surname:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.surname || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Given Names:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.givenNames || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Date of Birth:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.dob || 'DD/MM/YYYY'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Gender:</Text>
-                                <View style={[styles.radioGroup, { marginTop: 8 }]}>
-                                    {["Female", "Male", "Other"].map((gender) => (
-                                        <RadioOption
-                                            key={gender}
-                                            label={gender}
-                                            checked={data.investorOne.gender === gender}
-                                            style={{ marginRight: 15 }}
-                                        />
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.spacer} />
-
-                    {/* Residential Address */}
-                    <View style={styles.section}>
-                        <View style={styles.sectionTitle}>
-                            <Text>
-                                Residential Address{' '}
-                                <Text style={styles.note}>
-                                    (must not be a PO box, RMB or Locked Bag)
-                                </Text>
-                            </Text>
-                        </View>
-
-                        <View style={styles.addressGrid}>
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Unit Number</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.unit || '________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '65%' }]}>
-                                <Text style={styles.labelSm}>Street No</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.streetNo || '________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '48%' }]}>
-                                <Text style={styles.labelSm}>Street Name</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.streetName || '_____________________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '48%' }]}>
-                                <Text style={styles.labelSm}>Suburb</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.suburb || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>State</Text>
-                                <View style={[styles.input, styles.inputReadonly]}>
-                                    <Text>{data.investorOne.state}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Postcode</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.postcode || '____'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Country</Text>
-                                <View style={[styles.input, styles.inputReadonly]}>
-                                    <Text>{data.investorOne.country}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.spacer} />
-
-                    {/* Mailing Address */}
-                    <View style={styles.section}>
-                        <View style={styles.sectionTitle}>
-                            <Text>
-                                Mailing Address (
-                                <Text style={styles.note}>(if different to above address)</Text>
-                                )
-                            </Text>
-                        </View>
-
-                        <View style={styles.addressGrid}>
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Unit Number</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mailunit || '________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '65%' }]}>
-                                <Text style={styles.labelSm}>Street No</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mailstreetNo || '________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '48%' }]}>
-                                <Text style={styles.labelSm}>Street Name</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mailstreetName || '_____________________'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '48%' }]}>
-                                <Text style={styles.labelSm}>Suburb</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mailsuburb || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>State</Text>
-                                <View style={[styles.input, styles.inputReadonly]}>
-                                    <Text>{data.investorOne.mailstate}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Postcode</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mailpostcode || '____'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={[styles.addressField, { width: '32%' }]}>
-                                <Text style={styles.labelSm}>Country</Text>
-                                <View style={[styles.input, styles.inputReadonly]}>
-                                    <Text>{data.investorOne.mailcountry}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.spacer} />
-
-                    {/* Contact Details */}
-                    <View style={styles.section}>
-                        <View style={styles.sectionTitle}>
-                            <Text>Contact Details</Text>
-                        </View>
-
-                        <View style={styles.formGrid}>
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Daytime Telephone:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.daytimeTelephone || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Mobile:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.mobile || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Daytime Address:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.daytimeAddress || '---------------------'}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.colHalf}>
-                                <Text style={styles.label}>Email:</Text>
-                                <View style={styles.input}>
-                                    <Text>{data.investorOne.email || '---------------------@____.com'}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.spacer} />
-
-                    {/* Additional Information */}
-                    <View style={styles.introText}>
-                        <Text>
-                            If the application is being completed under a Power of Attorney
-                            (POA), please include the attorney's contact details under
+                    <View style={[styles.pdfHighlightBox, styles.mb4]}>
+                        <Text style={styles.pdfIntroP}>
+                            For an individual applicant you only need to complete Investor 1. Joint applicants will complete Investor
+                            1 &amp; 2. If investing for a separate life insured the Investor is Investor 1 and the life insured
+                            Investor 2.
                         </Text>
                     </View>
-                </View>
 
-                {/* Footer */}
-                <View style={styles.footer}>
-                    <Text style={styles.footerText}>
-                        <Text style={styles.footerBrand}>KeyInvest</Text> Funeral Bond PDS
-                    </Text>
-                    <Text style={styles.footerText}>Version: July 2026</Text>
-                    <Text style={styles.pageNumber}>Page 33</Text>
+                    <Text style={styles.pdfH2}>Target market questionnaire</Text>
+
+                    <View style={styles.mb3}>
+                        <Text style={styles.pdfLabel}>1. Funeral Bond Type:</Text>
+                        <View style={styles.flexRow}>
+                            <RadioOption label="Nominated" checked={data.questionnaire.bondType === "Nominated"} />
+                            <RadioOption label="Unassigned" checked={data.questionnaire.bondType === "Unassigned"} />
+                            <RadioOption label="Prepaid/Assigned" checked={data.questionnaire.bondType === "Prepaid/Assigned"} />
+                        </View>
+                    </View>
+
+                    <View style={styles.mb3}>
+                        <Text style={styles.pdfLabel}>2. Is the applicant aged 10+?</Text>
+                        <View style={styles.flexRow}>
+                            <RadioOption label="Yes" checked={data.questionnaire.ageOver10} />
+                            <RadioOption label="No" checked={!data.questionnaire.ageOver10} />
+                        </View>
+                    </View>
+
+                    <View style={styles.mb3}>
+                        <Text style={styles.pdfLabel}>
+                            3. Does the Applicant currently have 1 or more funeral bonds?
+                        </Text>
+                        <View style={styles.flexRow}>
+                            <RadioOption label="Yes" checked={data.questionnaire.hasExistingBonds} />
+                            <RadioOption label="No" checked={!data.questionnaire.hasExistingBonds} />
+                        </View>
+                    </View>
+
+                    <View style={styles.mb3}>
+                        <Text style={styles.pdfLabel}>
+                            4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?
+                        </Text>
+                        <View style={styles.flexRow}>
+                            <RadioOption label="Yes" checked={data.questionnaire.excessContribution} />
+                            <RadioOption label="No" checked={!data.questionnaire.excessContribution} />
+                        </View>
+                    </View>
+
+                    <View style={styles.mb3}>
+                        <Text style={styles.pdfLabel}>
+                            5. Does the Applicant require access to the capital after the 30 day cooling off period?
+                        </Text>
+                        <View style={styles.flexRow}>
+                            <RadioOption label="Yes" checked={data.questionnaire.requiresCapitalAccess} />
+                            <RadioOption label="No" checked={!data.questionnaire.requiresCapitalAccess} />
+                        </View>
+                    </View>
+
+                    <View style={[styles.pdfFooter, styles.mt4]}>
+                        <Text style={styles.pdfIntroP}>
+                            Note: Investors must be at least 10 years old and those under 16 require written consent from a parent or
+                            guardian. Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or DVA asset tests. Funeral
+                            Bonds can only be used to contribute to the cost of a funeral.
+                        </Text>
+                    </View>
+
+                    <View style={[styles.pdfFooter, styles.mt4]}>
+                        <Text>KeyInvest Funeral Bond PDS</Text>
+                        <Text>Version: July 2026</Text>
+                        <Text>Page 32</Text>
+                    </View>
                 </View>
             </Page>
 
+            {/* ✅ PAGE 2 */}
+            <Page size="A4" style={styles.page} wrap={false}>
+                <View style={styles.formContainerBase}>
+                    <View style={styles.mainHeader}>
+                        <Text style={styles.title}>Investor Details Form</Text>
+                        <Text style={styles.subtitle}>Personal Information</Text>
+                    </View>
+
+                    <View style={styles.mb4}>
+                        <Text style={styles.pdfSectionTitle}>1. Investor Details</Text>
+
+                        <View style={[styles.flexRow, styles.mb2]}>
+                            <View style={{ width: "25%", marginRight: 8 }}>
+                                <Text style={styles.pdfLabel}>Title</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.title || "-"}</Text>
+                            </View>
+
+                            <View style={{ width: "35%", marginRight: 8 }}>
+                                <Text style={styles.pdfLabel}>Surname</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.surname || "-"}</Text>
+                            </View>
+
+                            <View style={{ width: "40%" }}>
+                                <Text style={styles.pdfLabel}>Given Names</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.givenNames || "-"}</Text>
+                            </View>
+                        </View>
+
+                        <View style={[styles.flexRow, styles.mb2]}>
+                            <View style={{ width: "48%", marginRight: 8 }}>
+                                <Text style={styles.pdfLabel}>Date of Birth</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.dob || "-"}</Text>
+                            </View>
+
+                            <View style={{ width: "48%" }}>
+                                <Text style={styles.pdfLabel}>Gender</Text>
+                                <View style={styles.pdfRadioGroup}>
+                                    <RadioOption label="Male" checked={data.investorOne.gender === "Male"} />
+                                    <RadioOption label="Female" checked={data.investorOne.gender === "Female"} />
+                                    <RadioOption label="Other" checked={data.investorOne.gender === "Other"} />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+
+                    <AddressSection
+                        title="2. Residential Address"
+                        data={{
+                            unit: data.investorOne.unit,
+                            streetNo: data.investorOne.streetNo,
+                            streetName: data.investorOne.streetName,
+                            suburb: data.investorOne.suburb,
+                            state: data.investorOne.state,
+                            postcode: data.investorOne.postcode,
+                            country: data.investorOne.country,
+                        }}
+                    />
+
+                    <AddressSection
+                        title="3. Mailing Address (if different)"
+                        data={{
+                            unit: data.investorOne.mailunit,
+                            streetNo: data.investorOne.mailstreetNo,
+                            streetName: data.investorOne.mailstreetName,
+                            suburb: data.investorOne.mailsuburb,
+                            state: data.investorOne.mailstate,
+                            postcode: data.investorOne.mailpostcode,
+                            country: data.investorOne.mailcountry,
+                        }}
+                    />
+                </View>
+                <View style={styles.formContainerBase}>
+                    <View style={styles.mainHeader}>
+                        <Text style={styles.title}>Contact Information</Text>
+                    </View>
+
+                    <View style={styles.mb4}>
+                        <Text style={styles.pdfSectionTitle}>4. Contact Details</Text>
+
+                        <View style={[styles.flexRow, styles.mb2]}>
+                            <View style={{ width: "48%", marginRight: 8 }}>
+                                <Text style={styles.pdfLabel}>Daytime Telephone</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.daytimeTelephone || "-"}</Text>
+                            </View>
+
+                            <View style={{ width: "48%" }}>
+                                <Text style={styles.pdfLabel}>Mobile</Text>
+                                <Text style={styles.pdfIntroP}>{data.investorOne.mobile || "-"}</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.mb2}>
+                            <Text style={styles.pdfLabel}>Daytime Address</Text>
+                            <Text style={styles.pdfIntroP}>{data.investorOne.daytimeAddress || "-"}</Text>
+                        </View>
+
+                        <View style={styles.mb2}>
+                            <Text style={styles.pdfLabel}>Email</Text>
+                            <Text style={styles.pdfIntroP}>{data.investorOne.email || "-"}</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.pdfFooter}>
+                        <Text>© 2026 KeyInvest Funeral Bond</Text>
+                        <Text>Page 33</Text>
+                    </View>
+                </View>
+            </Page>
+
+            {/* ✅ PAGE 3 */}
+            <SlipThirtyFourPage data={data} />
+            <SlipThirtyFivePage data={data} />
+            <SlipThirtySixPage data={data} />
+            <SlipThirtySevenPage data={data} />
+            <SlipThirtyEightPage data={data} />
+
+            <SlipThirtyNinePage data={data} />
+            <SlipFourtyPage data={data} />
+            <SlipFourtyOnePage data={data} />
+            <SlipFourtyTwoPage data={data} />
+            <SlipFourtyFivePage data={data} />
+            <SlipFortySixPage data={data} />
+            <SlipFourtySevenPage data={data} />
         </Document>
     );
 };

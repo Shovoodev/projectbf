@@ -4,7 +4,7 @@ import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipThirtyThree = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
   useEffect(() => {
-    window.scroll(0.0);
+    window.scrollTo(0, 0);
   }, []);
   return (
     <div className="form-container-base p-2">
@@ -15,7 +15,7 @@ const SlipThirtyThree = () => {
         </p>
       </div>
 
-      <form className=" p-1" onSubmit={handleChange}>
+      <form className="p-1" onSubmit={(e) => { e.preventDefault(); handleChange(); }}>
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <div className="col-span-full">
@@ -28,11 +28,11 @@ const SlipThirtyThree = () => {
                     name="title"
                     value={t}
                     onChange={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
+                      updateInvestor("investorOne", ["title"], e.target.value)
                     }
                     className="pdf-radio-input"
                   />
-                  <span className="text-gray-700 group-hover:text-blue-900">
+                  <span className="text-gray-700 hover:text-blue-900">
                     {t}
                   </span>
                 </label>
@@ -71,7 +71,7 @@ const SlipThirtyThree = () => {
               name="dob"
               className="pdf-input"
               onChange={(e) =>
-                updateInvestor("investorOne", ["givenNames"], e.target.value)
+                updateInvestor("investorOne", ["dob"], e.target.value)
               }
             />
           </div>
@@ -85,10 +85,10 @@ const SlipThirtyThree = () => {
                     type="radio"
                     name="gender"
                     value={g}
-                    className="pdf-radio-input"
-                    onSelect={(e) =>
+                    onChange={(e) =>
                       updateInvestor("investorOne", ["gender"], e.target.value)
                     }
+                    className="pdf-radio-input"
                   />
                   <span className="text-gray-700">{g}</span>
                 </label>
@@ -176,18 +176,19 @@ const SlipThirtyThree = () => {
             <label className="pdf-label-sm">Country</label>
             <input
               type="text"
+              defaultValue="AUSTRALIA"
               onChange={(e) =>
                 updateInvestor("investorOne", ["country"], e.target.value)
               }
               className="pdf-input pdf-input-readonly"
-              disabled
             />
           </div>
         </div>
-        {/* Milling  Address */}
+
+        {/* Mailing Address */}
         <h3 className="pdf-section-title">
-          Mailing Address (
-          <span className="pdf-note">(if different to above address))</span>
+          Mailing Address{" "}
+          <span className="pdf-note">(if different to above address)</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
@@ -195,7 +196,7 @@ const SlipThirtyThree = () => {
             <label className="pdf-label-sm">Unit Number</label>
             <input
               type="text"
-              name="res_unit"
+              name="mail_unit"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailunit"], e.target.value)
               }
@@ -206,17 +207,18 @@ const SlipThirtyThree = () => {
             <label className="pdf-label-sm">Street No</label>
             <input
               type="text"
-              name="res_streetNo"
+              name="mail_streetNo"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailstreetNo"], e.target.value)
               }
+              className="pdf-input"
             />
           </div>
           <div className="col-span-3">
             <label className="pdf-label-sm">Street Name</label>
             <input
               type="text"
-              name="res_streetName"
+              name="mail_streetName"
               onChange={(e) =>
                 updateInvestor(
                   "investorOne",
@@ -231,7 +233,7 @@ const SlipThirtyThree = () => {
             <label className="pdf-label-sm">Suburb</label>
             <input
               type="text"
-              name="res_suburb"
+              name="mail_suburb"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailsuburb"], e.target.value)
               }
@@ -253,7 +255,7 @@ const SlipThirtyThree = () => {
             <label className="pdf-label-sm">Postcode</label>
             <input
               type="text"
-              name="res_postcode"
+              name="mail_postcode"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mailpostcode"], e.target.value)
               }
@@ -279,7 +281,7 @@ const SlipThirtyThree = () => {
           <div>
             <label className="pdf-label">Daytime Telephone:</label>
             <input
-              type="number"
+              type="tel"
               name="daytimeTelephone"
               onChange={(e) =>
                 updateInvestor(
@@ -294,7 +296,7 @@ const SlipThirtyThree = () => {
           <div>
             <label className="pdf-label">Mobile:</label>
             <input
-              type="text"
+              type="tel"
               name="mobile"
               onChange={(e) =>
                 updateInvestor("investorOne", ["mobile"], e.target.value)
@@ -303,7 +305,7 @@ const SlipThirtyThree = () => {
             />
           </div>
           <div>
-            <label className="pdf-label">Daytime Adress:</label>
+            <label className="pdf-label">Daytime Address:</label>
             <input
               type="text"
               name="daytimeAddress"
@@ -317,7 +319,7 @@ const SlipThirtyThree = () => {
               className="pdf-input"
             />
           </div>
-          <div className="">
+          <div>
             <label className="pdf-label">Email:</label>
             <input
               type="email"
@@ -325,13 +327,14 @@ const SlipThirtyThree = () => {
               onChange={(e) =>
                 updateInvestor("investorOne", ["email"], e.target.value)
               }
+              className="pdf-input"
             />
           </div>
         </div>
 
         <p className="pdf-intro-p">
           If the application is being completed under a Power of Attorney (POA),
-          please include the attorney’s contact details under
+          please include the attorney's contact details under
         </p>
 
         {/* Footer */}

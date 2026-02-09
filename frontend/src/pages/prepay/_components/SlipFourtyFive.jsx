@@ -1,32 +1,6 @@
-import { useState } from "react";
+
 
 const SlipFourtyFive = () => {
-  const [formData, setFormData] = useState({
-    investor1: {
-      fullName: "",
-      emailAddress: "",
-      address: "",
-      companyABN: "",
-      postcode: "",
-    },
-    investor2: {
-      fullName: "",
-      emailAddress: "",
-      address: "",
-      companyABN: "",
-      postcode: "",
-    },
-    adviser: {
-      fullName: "",
-      dealerGroup: "",
-      licenseeAFSLNo: "",
-      keyinvestAdviserCode: "",
-    },
-    acceptedTerms: false,
-  });
-
-  const [isSecondInvestor, setIsSecondInvestor] = useState(false);
-  const [popupSms, setPopupSms] = useState(false)
 
   return (
     <div className="form-container-base">
@@ -103,7 +77,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor1.fullName}
                         placeholder="Enter full legal name"
                         className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         required
@@ -116,7 +89,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="email"
-                        value={formData.investor1.emailAddress}
                         placeholder="investor@example.com"
                         className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         required
@@ -130,7 +102,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.investor1.address}
                       placeholder="Street address, suburb, state"
                       className="w-full px-1 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
@@ -143,7 +114,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor1.companyABN}
                         placeholder="XX XXX XXX XXX"
                         className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       />
@@ -155,7 +125,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor1.postcode}
                         placeholder="XXXX"
                         maxLength={4}
                         className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
@@ -184,10 +153,8 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor2.fullName}
                         placeholder="Enter full legal name"
                         className="w-full px-1 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        required={isSecondInvestor}
                       />
                     </div>
 
@@ -197,10 +164,8 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="email"
-                        value={formData.investor2.emailAddress}
                         placeholder="investor@example.com"
                         className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        required={isSecondInvestor}
                       />
                     </div>
                   </div>
@@ -211,7 +176,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.investor2.address}
                       placeholder="Street address, suburb, state"
                       className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
@@ -224,7 +188,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor2.companyABN}
                         placeholder="XX XXX XXX XXX"
                         className="w-full px-1 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       />
@@ -236,7 +199,6 @@ const SlipFourtyFive = () => {
                       </label>
                       <input
                         type="text"
-                        value={formData.investor2.postcode}
                         placeholder="XXXX"
                         maxLength={4}
                         className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
@@ -265,7 +227,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.adviser.fullName}
                       placeholder="Adviser full name"
                       className="w-full px-1 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
@@ -278,7 +239,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.adviser.dealerGroup}
                       placeholder="Dealer group name"
                       className="w-full px-1 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
@@ -294,7 +254,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.adviser.licenseeAFSLNo}
                       placeholder="AFSL number"
                       className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
@@ -306,7 +265,6 @@ const SlipFourtyFive = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.adviser.keyinvestAdviserCode}
                       placeholder="Adviser code"
                       className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
