@@ -165,3 +165,16 @@ export const deleteBlog = async (
     res.status(500).json({ message: error.message });
   }
 };
+// search blogs by title or content
+export const searchBlogs = async (
+  req: express.Request,
+  res: express.Response,
+) => {
+  const search = req.query.search || "";
+
+  const blogs = await getBlogs().find({
+    title: { $regex: search, $options: "i" },
+  });
+
+  res.json(blogs);
+};

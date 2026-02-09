@@ -1,10 +1,13 @@
 import express from "express";
 import {
-  getprePaypayment,
-  paymentReciverMarkPaid,
+  capturePayment,
+  chargesPayment,
+  getChargeAmount,
 } from "../controllers/paymentController";
 
 export default (router: express.Router) => {
-  router.post("/prepay-option", getprePaypayment);
-  router.post("/create-payment-intent", paymentReciverMarkPaid);
+  //powerbank account payment
+  router.post("/create-payment", chargesPayment);
+  router.post("/capture-payment/:id", capturePayment);
+  router.get("/charge/:id", getChargeAmount);
 };

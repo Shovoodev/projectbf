@@ -369,7 +369,7 @@ const CreateBlog = () => {
               )}
             </div>
 
-            {/* Excerpt */}
+            {/* Excerpt
             <div>
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Excerpt/Short Description (Optional)
@@ -390,7 +390,7 @@ const CreateBlog = () => {
               <p className="text-xs text-gray-500 mt-1 text-right">
                 {blogData.excerpt?.length || 0}/200 characters
               </p>
-            </div>
+            </div> */}
 
             {/* Content Editor */}
             <div>
