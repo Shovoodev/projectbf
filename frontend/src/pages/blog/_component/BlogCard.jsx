@@ -24,9 +24,8 @@ const BlogCard = ({ blog }) => {
     return `${day} ${month} ${year}`;
   };
 
-  const cutExcerpt = (text) => {
-    if (text.length <= 3) return text;
-    return text.slice(3);
+  const stripTags = (html) => {
+    return html.replace(/<[^>]*>/g, "");
   };
 
   return (
@@ -69,7 +68,7 @@ const BlogCard = ({ blog }) => {
         {/* Excerpt */}
         <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1 text-justify">
           {
-            cutExcerpt(blog.excerpt)}
+            stripTags(blog.excerpt)}
         </p>
 
         {/* Button */}

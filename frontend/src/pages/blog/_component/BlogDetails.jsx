@@ -29,7 +29,6 @@ const BlogDetails = () => {
   const [error, setError] = useState(null);
 
   const [blogData, setBlogData] = useState([]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
@@ -176,15 +175,6 @@ const BlogDetails = () => {
                       "https://via.placeholder.com/800x400?text=Image+Not+Found";
                   }}
                 />
-              </div>
-            )}
-
-            {/* Excerpt */}
-            {article.excerpt && (
-              <div className="mb-8 p-6">
-                <p className="text-lg text-gray-700 italic">
-                  {article.excerpt}
-                </p>
               </div>
             )}
 
