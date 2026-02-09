@@ -1,6 +1,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import { AuthenticatedRequest } from "../lib/types";
+import { SendPrePayBond } from "../lib/resend";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -120,10 +121,32 @@ export const sendPdfOfPrepay = async (
   res: express.Response,
 ): Promise<any> => {
   try {
-    res.json({ success: true, message: "PDF sent" });
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No file received. Make sure FormData field name is 'file'.",
+      });
+    }
+
+    if (req.file.mimetype !== "application/pdf") {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid file type: ${req.file.mimetype}. Expected application/pdf`,
+      });
+    }
+
+    const pdfBuffer = req.file.buffer;
+
+    const result = await SendPrePayBond(pdfBuffer);
+
+    return res.status(200).json({ success: true, data: result });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Failed to send PDF" });
+    console.error("sendPdfOfPrepay error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Email failed",
+      details: error?.message || "Unknown error",
+    });
   }
 };
 

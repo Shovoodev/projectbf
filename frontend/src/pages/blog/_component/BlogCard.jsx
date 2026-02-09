@@ -45,7 +45,7 @@ const BlogCard = ({ blog }) => {
         <img
           src={blog.images?.[0]}
           alt={blog.title}
-          className="w-full h-full object-cover  transform group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover  font-bold transform group-hover:scale-110 transition-transform duration-700"
         />
         {/* Overlay for hover effect (optional, adds polish) */}
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -66,7 +66,7 @@ const BlogCard = ({ blog }) => {
           </div>
           <div className="flex items-center gap-1.5">
             <FaCalendarDays className="text-gray-400" />
-            <span>{blog.date}</span>
+            <span>{formatDate(blog.date)}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <FaFolderOpen className="text-gray-400" />
@@ -76,7 +76,7 @@ const BlogCard = ({ blog }) => {
 
         {/* Excerpt */}
         <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1 text-justify">
-          {blog.excerpt}
+          {cutExcerpt(blog.excerpt)}
         </p>
 
         {/* Button */}

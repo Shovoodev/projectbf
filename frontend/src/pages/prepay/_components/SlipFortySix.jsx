@@ -1,5 +1,4 @@
-import { Sign } from "../../../images";
-
+import Sign from "./images/adminsign.png";
 const SlipFortySix = () => {
 
   return (

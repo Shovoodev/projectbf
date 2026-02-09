@@ -17,18 +17,18 @@ const blogSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: ["btf news", "uncetaglory", "blogs"],
-      default : "uncetaglory"
+      default: "uncetaglory",
     },
-    excerpt: {
-      type: String,
-    },
+    // excerpt: {
+    //   type: String,
+    // },
     images: [
       {
         type: String,
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const blogModel = mongoose.model("blogs", blogSchema);

@@ -3,10 +3,7 @@ import { FaArrowLeft, FaEdit, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import ConfirmModal from "../../../components/ConfirmModal";
-
-const CommentSection = () => {
-  // ... (keep your existing CommentSection code)
-};
+import CommentSection from "./CommentSection";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -15,6 +12,11 @@ const formatDate = (dateString) => {
     month: "long",
     day: "numeric",
   });
+};
+const stripHtml = (html) => {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  return temp.textContent || temp.innerText || "";
 };
 
 const BlogDetails = () => {
@@ -44,6 +46,7 @@ const BlogDetails = () => {
 
     getBlogs();
   }, []);
+  console.log({ blogData });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,6 +67,7 @@ const BlogDetails = () => {
         const data = await res.json();
 
         // Transform API data to match component expectations
+        const plainText = stripHtml(data.content || "");
         const transformedData = {
           ...data,
           // Use the first image from images array as main image, or placeholder
@@ -78,7 +82,12 @@ const BlogDetails = () => {
           // Ensure category has a default value
           category: data.category || "Uncategorized",
           // Ensure excerpt exists
-          excerpt: data.excerpt || data.content?.substring(0, 150) + "...",
+
+
+          excerpt:
+            data.excerpt ||
+            plainText.substring(0, 150).split(" ").slice(0, -1).join(" ") + "...",
+
         };
 
         setArticle(transformedData);
@@ -129,41 +138,32 @@ const BlogDetails = () => {
     }
   }
   return (
-    <div className="bg-white min-h-screen">
-      <div className="flex justify-end px-6 pt-6">
+    <div className="bg-white min-h-screen flex flex-col">
 
-        {user && <button
-          onClick={() => setShowConfirm(true)}
-          // onClick={() => navigate(`/edit-blog/${id}`)}
-          className="bg-black text-white px-6 py-2.5 font-lato rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
-        >
-          <FaEdit size={18} />  Edit blog
-        </button>}
-      </div>
-      {/* 2. Main Content Layout */}
 
-      <div className="section-container max-w-7xl mx-auto px-6 py-16">
-        <div>
-          {article.title && (
-            <div>
-              <p className="text-lg text-gray-700 italic">{article.title}</p>
-            </div>
-          )}
-          {/* Blog Stats */}
-          <div className="bg-white  border-gray-200 rounded-xl mb-8">
-            <ul className="space-y-3 flex">
-              <li className="flex justify-between py-2 border-gray-100">
-                <span className="font-medium">By {article.author} /</span>
-              </li>
-              <li className="flex justify-between py-2  border-gray-100">
-                <span className="font-medium">{article.date}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div className="section-container max-w-7xl mx-auto px-6 mb-4 flex-1">
+
+        <div className="grid pt-5 grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* --- LEFT COLUMN: Article Content (8 cols) --- */}
-          <main className="lg:col-span-8">
+          <main className="lg:col-span-8 overflow-y-auto pr-4 max-h-[calc(100vh-var(--navbar-h)-40px)]">
+            <div>
+              {article.title && (
+                <div>
+                  <p className="text-[32px] font-display text-gray-700 font-bold ">{article.title}</p>
+                </div>
+              )}
+              {/* Blog Stats */}
+              <div className="bg-white  border-gray-200 rounded-xl mb-8">
+                <ul className="space-y-3 flex">
+                  <li className="flex justify-between py-2 border-gray-100 mr-2">
+                    <span className="font-medium">By {article.author} </span>
+                  </li>
+                  <li className="flex justify-between py-2  border-gray-100">
+                    <span className="font-medium">{article.date}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
             {/* Featured Image */}
             {article.image && (
               <div className="rounded-2xl overflow-hidden shadow-sm mb-10">
@@ -262,12 +262,65 @@ const BlogDetails = () => {
               </div>
             </div>
 
-            {/* Comments */}
+            {/* Related Posts */}
+            {blogData.length > 0 && (
+              <div className="mt-20">
+                <h2 className="text-3xl font-bold mb-10">Related Posts</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  {blogData
+                    .filter((item) => item._id !== id) // exclude current blog
+                    .slice(0, 2) // show 2 posts
+                    .map((item) => (
+                      <Link
+                        key={item._id}
+                        to={`/blog/${item._id}`}
+                        className="group"
+                      >
+                        {/* Image */}
+                        <div className="overflow-hidden rounded-md mb-4">
+                          <img
+                            src={
+                              item.images && item.images.length > 0
+                                ? item.images[0]
+                                : "https://via.placeholder.com/600x400?text=Blog"
+                            }
+                            alt={item.title}
+                            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-2xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                          {item.title}
+                        </h3>
+
+                        {/* Meta */}
+                        <p className="text-blue-600 mt-2 text-sm">
+                          Leave a Comment / {item.category || "Blogs"} / By{" "}
+                          {item.author || "Anonymous"}
+                        </p>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            )}
+
             <CommentSection />
           </main>
 
           {/* --- RIGHT COLUMN: Sidebar (4 cols) --- */}
-          <aside className="lg:col-span-4 lg:pl-8">
+          <aside className="lg:col-span-4 lg:pl-8 overflow-y-auto max-h-[calc(100vh-var(--navbar-h)-140px)]">
+            <div className="flex justify-end px-6 pt-6">
+
+              {user && <button
+                onClick={() => setShowConfirm(true)}
+                // onClick={() => navigate(`/edit-blog/${id}`)}
+                className="bg-black text-white px-6 py-2.5 font-lato rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-800 transition-all active:scale-95 whitespace-nowrap"
+              >
+                <FaEdit size={18} />  Edit blog
+              </button>}
+            </div>
             <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-3">
               <h3 className="font-bold text-lg mb-4">Search Blogs</h3>
               <form className="relative">
@@ -305,7 +358,7 @@ const BlogDetails = () => {
             {/* resent blogs */}
 
             {/* Recent Posts */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
+            <div className="bg-white border border-gray-200 rounded-xl p-3 mb-4">
               <h1 className="font-bold text-xl mb-4">Recent Posts</h1>
               <ul className="space-y-4">
                 {blogData
@@ -320,27 +373,12 @@ const BlogDetails = () => {
                         to={`/blog/${item._id}`}
                         className="group flex items-start gap-3"
                       >
-                        {item.images && item.images.length > 0 && (
-                          <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
-                            <img
-                              src={item.images[0]}
-                              alt={item.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={(e) => {
-                                e.target.src = "https://via.placeholder.com/100x100?text=Blog";
-                              }}
-                            />
-                          </div>
-                        )}
+
                         <div className="flex-1">
                           <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2">
                             {item.title}
                           </span>
-                          {item.createdAt && (
-                            <p className="text-sm text-gray-500 mt-1">
-                              {formatDate(item.createdAt)}
-                            </p>
-                          )}
+
                         </div>
                       </Link>
                     </li>
