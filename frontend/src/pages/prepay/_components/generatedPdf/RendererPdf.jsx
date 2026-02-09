@@ -1,4 +1,3 @@
-import React from "react";
 import { Document, Page, View, Text } from "@react-pdf/renderer";
 import styles from "./Styles";
 import SlipThirtyFourPage from "./pages/SlipThirtyFourPage";
@@ -17,8 +16,9 @@ import SlipFourtySevenPage from "./pages/SlipFourtySevenPage";
 // ✅ Helper component for radio options
 const RadioOption = ({ label, checked }) => (
     <View style={styles.pdfRadioItem}>
-        <Text style={styles.pdfRadioBox}>{checked ? "☑" : "☐"}</Text>
-
+        <View style={styles.radioBox}>
+            {checked && <View style={styles.radioBoxChecked} />}
+        </View>
         <Text style={styles.pdfRadioText}>{label}</Text>
     </View>
 );
@@ -72,7 +72,6 @@ const AddressSection = ({ title, data }) => (
 // ✅ Main PDF Component
 const RendererPDF = ({ investorData = {} }) => {
     const data = {
-
         contributionAmount: investorData?.amount || 0,
         paymentMethod: investorData?.paymentMethod || "eft",
         rspIncrease: "yes",

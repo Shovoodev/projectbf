@@ -1,5 +1,4 @@
-import * as htmlToImage from "html-to-image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   cover,
   eight,
@@ -36,9 +35,10 @@ import {
   twentyTwo,
   two,
 } from "../../../images/index";
-import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
-import { generatePdfBlob } from "./ImageToPdf";
 
+import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+
+// slips (UI only)
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
 import SlipFourtyFive from "./SlipFourtyFive";
@@ -53,25 +53,62 @@ import SlipThirtySeven from "./SlipThirtySeven";
 import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
+
 import PDFDownloadButton from "./generatedPdf/TestDownload";
+
+// ✅ React-PDF
+import { pdf } from "@react-pdf/renderer";
+import RendererPDF from "./generatedPdf/RendererPdf";
 
 const CORE = import.meta.env.VITE_API_URL;
 
-const NATURAL_WIDTH = 794;
-const NATURAL_HEIGHT = 1123;
-
 const images = [
-  cover, one, two, three, four, five, six, seven, eight, nine, ten,
-  eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen,
-  nineteen, twenty, twentyOne, twentyTwo, twentyThree, twentyFour,
-  twentyFive, twentySix, twentySeven, twentyEight, twentyNine, thirty,
+  cover,
+  one,
+  two,
+  three,
+  four,
+  five,
+  six,
+  seven,
+  eight,
+  nine,
+  ten,
+  eleven,
+  twelve,
+  thirteen,
+  fourteen,
+  fifteen,
+  sixteen,
+  seventeen,
+  eighteen,
+  nineteen,
+  twenty,
+  twentyOne,
+  twentyTwo,
+  twentyThree,
+  twentyFour,
+  twentyFive,
+  twentySix,
+  twentySeven,
+  twentyEight,
+  twentyNine,
+  thirty,
 ];
 
-const PrePay = ({ amount }) => {
-  // IMPORTANT: separate refs for pdf-only list
-  const pdfSlipRefs = useRef([]);
+// small helper: timeout wrapper so it doesn't spin forever
+function withTimeout(promise, ms = 30000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("PDF render timeout")), ms),
+    ),
+  ]);
+}
 
+const PrePay = ({ amount }) => {
   const { submitInvestment } = usePrePayServiceApi();
+
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
@@ -79,133 +116,40 @@ const PrePay = ({ amount }) => {
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
-  // ✅ Keep your slip list exactly the same (UI uses this)
+  // UI slips only (not used for PDF generation now)
   const slips = useMemo(
     () => [
       <SlipThirtyTwo />,
       <SlipThirtyThree />,
-      <SlipThirtyFour />, //hide
+      <SlipThirtyFour />,
       <SlipThirtyFive amount={amount} />,
-      <SlipThirtySix />, //hide
+      <SlipThirtySix />,
       <SlipThirtySeven />,
-      <SlipThirtyEight />, //hide
+      <SlipThirtyEight />,
       <SlipThirtyNine />,
       <SlipFourty />,
-      <SlipFourtyOne />, //hide
+      <SlipFourtyOne />,
       <SlipFourtyTwo />,
-      <img src={fortyTwo} />, //hide
-      <img src={fortyThree} />, //hide
+      <img src={fortyTwo} alt="" />,
+      <img src={fortyThree} alt="" />,
       <SlipFourtyFive />,
       <SlipFortySix />,
       <SlipFourtySeven />,
-      <img src={fortySeven} />, //hide
+      <img src={fortySeven} alt="" />,
     ],
     [amount],
   );
-
-  // ✅ Add meta: which slips should be hidden in PDF
-  // Must match slips length exactly
-  const slipMeta = useMemo(
-    () => [
-      { id: "32", hideInPdf: false },
-      { id: "33", hideInPdf: false },
-      { id: "34", hideInPdf: true },   //hide
-      { id: "35", hideInPdf: false },
-      { id: "36", hideInPdf: true },   //hide
-      { id: "37", hideInPdf: false },
-      { id: "38", hideInPdf: true },   //hide
-      { id: "39", hideInPdf: false },
-      { id: "40", hideInPdf: false },
-      { id: "41", hideInPdf: true },   //hide
-      { id: "42", hideInPdf: false },
-      { id: "42img", hideInPdf: true }, //hide
-      { id: "43img", hideInPdf: true }, //hide
-      { id: "45", hideInPdf: false },
-      { id: "46", hideInPdf: false },
-      { id: "47", hideInPdf: false },
-      { id: "47img", hideInPdf: true }, //hide
-    ],
-    [],
-  );
-
-  // ✅ Full UI list (overlay uses this)
-  const uiSlips = slips;
-
-  // ✅ PDF list (ONLY capture pages not hidden)
-  const pdfSlips = useMemo(() => {
-    return slips
-      .map((el, idx) => ({ el, meta: slipMeta[idx], idx }))
-      .filter((x) => !x.meta.hideInPdf);
-  }, [slips, slipMeta]);
-
-  // Reset step if slips changed (safety)
-  useEffect(() => {
-    if (step > uiSlips.length - 1) setStep(0);
-  }, [uiSlips.length, step]);
 
   useEffect(() => {
     document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
   }, [isGeneratingPdf]);
 
-  const sendPdfByEmail = async () => {
-    try {
-      setIsGeneratingPdf(true);
-      setLoadingText("Rendering application pages…");
-
-      // await submitInvestment();
-
-      // ✅ Capture only the pdfSlips nodes
-      const slipImages = [];
-
-      for (let i = 0; i < pdfSlipRefs.current.length; i++) {
-        setLoadingText(`Processing page ${i + 1} of ${pdfSlipRefs.current.length}…`);
-
-        const node = pdfSlipRefs.current[i];
-        if (!node) continue;
-
-        const originalOverflow = node.style.overflow;
-        node.style.overflow = "hidden";
-
-        const img = await htmlToImage.toJpeg(node, {
-          backgroundColor: "#FFFFFF", // ✅ avoid null => weird capture / black bg sometimes
-          width: NATURAL_WIDTH,
-          height: NATURAL_HEIGHT,
-          pixelRatio: 3,
-          style: {
-            width: `${NATURAL_WIDTH}px`,
-            height: `${NATURAL_HEIGHT}px`,
-            transform: "none",
-          },
-        });
-
-        node.style.overflow = originalOverflow;
-        slipImages.push(img);
-      }
-
-      setLoadingText("Generating PDF document…");
-      const pdfBlob = await generatePdfBlob(slipImages);
-
-      setLoadingText("Sending document to your email…");
-      const formData = new FormData();
-      formData.append("file", new File([pdfBlob], "bond.pdf", { type: "application/pdf" }));
-
-      const res = await fetch(`${CORE}/send-pdf-on-email`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-
-      const out = await res.json();
-      if (!out.success) throw new Error("Email failed");
-
-      setLoadingText("Completed successfully 🎉");
-    } catch (error) {
-      console.error("PDF generation failed:", error);
-      alert("Something went wrong while generating the PDF.");
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
+  useEffect(() => {
+    document.body.style.overflow = formActive ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [formActive]);
 
   const handleToggleForm = () => {
     if (formActive) {
@@ -218,12 +162,96 @@ const PrePay = ({ amount }) => {
     }
   };
 
-  useEffect(() => {
-    document.body.style.overflow = formActive ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [formActive]);
+  // ✅ ONLY RendererPDF is generated and sent
+  const sendPdfByEmail = async () => {
+    if (isGeneratingPdf) return; // prevent double click
+
+    try {
+      setIsGeneratingPdf(true);
+      setLoadingText("Rendering application (RendererPDF)…");
+
+      // ✅ MOCK VALUES (you asked mock values only)
+      // Make sure this shape matches what RendererPDF expects:
+      const investorData = {
+        investorOne: {
+          title: "Mr",
+          surname: "Doe",
+          givenNames: "John",
+          dob: "1990-01-01",
+          gender: "Male",
+          unit: "1",
+          streetNo: "10",
+          streetName: "Main Street",
+          suburb: "Sydney",
+          state: "NSW",
+          postcode: "2000",
+          country: "AUSTRALIA",
+
+          mailunit: "",
+          mailstreetNo: "",
+          mailstreetName: "",
+          mailsuburb: "",
+          mailstate: "NSW",
+          mailpostcode: "",
+          mailcountry: "AUSTRALIA",
+
+          daytimeTelephone: "0299999999",
+          mobile: "0412345678",
+          daytimeAddress: "10 Main Street, Sydney",
+          email: "john@example.com",
+        },
+        questionnaire: {
+          bondType: "Nominated",
+          ageOver10: true,
+          hasExistingBonds: false,
+          excessContribution: false,
+          requiresCapitalAccess: false,
+        },
+      };
+
+      // ✅ render to blob (browser)
+      const blob = await withTimeout(
+        pdf(<RendererPDF investorData={investorData} />).toBlob(),
+        30000,
+      );
+
+      setLoadingText("Sending PDF to your email…");
+
+      const formData = new FormData();
+      formData.append(
+        "file",
+        new File([blob], "KeyInvest-Application-Form.pdf", {
+          type: "application/pdf",
+        }),
+      );
+
+      const res = await fetch(`${CORE}/send-pdf-on-email`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      // if server returns non-json
+      const text = await res.text();
+      let out;
+      try {
+        out = JSON.parse(text);
+      } catch {
+        throw new Error(text || "Server error");
+      }
+
+      if (!out.success) throw new Error(out.error || "Email failed");
+
+      setLoadingText("Completed successfully 🎉");
+    } catch (error) {
+      console.error("RendererPDF send failed:", error);
+      alert(
+        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`,
+      );
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   return (
     <div className="relative font-roboto">
@@ -267,7 +295,19 @@ const PrePay = ({ amount }) => {
                 }}
                 className="w-full bg-[#2c5aa0] hover:bg-blue-700 text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98]"
               >
-                {buttonStatus ? "Continue to Application Form" : "Back to Documentation"}
+                {buttonStatus
+                  ? "Continue to Application Form"
+                  : "Back to Documentation"}
+              </button>
+
+              {/* ✅ send RendererPDF */}
+              <button
+                onClick={sendPdfByEmail}
+                disabled={isGeneratingPdf}
+                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                  }`}
+              >
+                {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
               </button>
             </div>
           </div>
@@ -280,18 +320,28 @@ const PrePay = ({ amount }) => {
             <h1 className="text-[#2c5aa0] text-2xl font-semibold mb-4">
               {buttonStatus ? "Funeral Bond Information" : "Application Form"}
             </h1>
-            <p className="text-[#666666] text-base leading-[1.5] mb-5">
-              {buttonStatus ? "Page 5 - Image 4 of 30" : "Section in Progress"}
-            </p>
 
             <button
               onClick={handleToggleForm}
               className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
             >
-              {buttonStatus ? "Continue to Application Form" : "Move back to Documentation"}
+              {buttonStatus
+                ? "Continue to Application Form"
+                : "Move back to Documentation"}
             </button>
 
+            {/* ✅ your download button can remain */}
             <PDFDownloadButton />
+
+            {/* ✅ send to email button */}
+            <button
+              onClick={sendPdfByEmail}
+              disabled={isGeneratingPdf}
+              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                }`}
+            >
+              {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
+            </button>
           </div>
         </div>
       </div>
@@ -308,13 +358,15 @@ const PrePay = ({ amount }) => {
         ))}
       </div>
 
-      {/* Form Interaction Overlay (UI uses full slips) */}
+      {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
           }`}
       >
         <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
-          <div className="w-full flex-1 overflow-y-scroll">{uiSlips[step]}</div>
+          <div className="w-full flex-1 overflow-y-scroll">{slips[step]}</div>
 
           <div className="sticky bottom-0 bg-white border-t p-4 flex justify-between gap-3">
             {step > 0 && (
@@ -326,7 +378,7 @@ const PrePay = ({ amount }) => {
               </button>
             )}
 
-            {step < uiSlips.length - 1 ? (
+            {step < slips.length - 1 ? (
               <button
                 onClick={() => setStep(step + 1)}
                 className="bg-[#3129a6] hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold ml-auto"
@@ -345,32 +397,6 @@ const PrePay = ({ amount }) => {
             )}
           </div>
         </div>
-      </div>
-
-      {/* ✅ HIDDEN RENDER NODE (PDF uses filtered list ONLY) */}
-      <div
-        style={{
-          position: "absolute",
-          left: "-9999px",
-          top: 0,
-          pointerEvents: "none",
-        }}
-      >
-        {pdfSlips.map((item, pdfIndex) => (
-          <div
-            key={`${item.meta.id}-${item.idx}`}
-            ref={(el) => (pdfSlipRefs.current[pdfIndex] = el)}
-            style={{
-              width: `${NATURAL_WIDTH}px`,
-              height: `${NATURAL_HEIGHT}px`,
-              padding: "40px",
-              boxSizing: "border-box",
-            }}
-            className="bg-white overflow-hidden"
-          >
-            {item.el}
-          </div>
-        ))}
       </div>
 
       {/* Loading Modal */}

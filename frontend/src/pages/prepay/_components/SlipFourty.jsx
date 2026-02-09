@@ -1,4 +1,4 @@
-import img from "./images/Scott Harris Sign.png";
+import img from "./images/adminsign.png";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourty = () => {
 
@@ -61,7 +61,7 @@ const SlipFourty = () => {
               <input
                 type="text"
                 name="funeral_director_name"
-                value="Black Tulip Funerals"
+                value="Emma Hollingsworth"
                 readOnly
                 placeholder="Enter funeral director's full name"
                 className="pdf-input"

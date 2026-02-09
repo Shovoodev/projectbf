@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
   // Instead of styling checkbox as a box with border shorthand
   pdfRadioBox: {
-    fontSize: 12,
+    fontSize: 25,
     marginRight: 6,
     color: "#3129A6",
   },
@@ -84,6 +84,20 @@ const styles = StyleSheet.create({
     color: "#3129A6",
   },
 
+  radioBox: {
+  width: 12,
+  height: 12,
+  borderWidth: 1,
+  borderColor: "#000",
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+radioBoxChecked: {
+  width: 8,
+  height: 8,
+  backgroundColor: "#000",
+},
   // ===============================
   // FOOTER
   // ===============================
@@ -276,8 +290,8 @@ page: { padding: 18 },
 
 mainHeader: { marginBottom: 10 }, // was 20
 
-title: { fontSize: 20, fontWeight: 700, color: "#3129A6", textAlign: "center" }, // was 24
-subtitle: { fontSize: 14, fontWeight: 400, color: "#3129A6", textAlign: "center", textTransform: "uppercase", marginTop: 2 }, // was 18 + mt 4
+title: { fontSize: 20, fontWeight: 700, color: "#3129A6", textAlign: "left" }, // was 24
+subtitle: { fontSize: 14, fontWeight: 400, color: "#3129A6", textAlign: "left", textTransform: "uppercase", marginTop: 2 }, // was 18 + mt 4
 
 pdfIntroP: { fontSize: 11, lineHeight: 1.35, marginBottom: 8, color: "#3129A6" }, // was 14 + mb 16
 pdfLabel: { fontSize: 11, fontWeight: 700, marginBottom: 2, color: "#3129A6" }, // was 14 + mb4

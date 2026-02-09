@@ -6,30 +6,40 @@ import { AuthenticatedRequest } from "../lib/types";
 
 // CREATE BLOG
 
+import striptags from "striptags";
+
 export const createBlog = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     const { title, content, category, excerpt, author } = req.body;
 
     if (!title || !content) {
       return res.status(400).json({
-        message: "Title, content, and excerpt are required",
+        message: "Title and content are required",
       });
     }
+
     // Uploaded images (multer)
     const images =
       req.files && Array.isArray(req.files)
         ? req.files.map((file: any) => file.path)
         : [];
 
+    // Generate excerpt from content if not provided
+    let generatedExcerpt = excerpt;
+    if (!generatedExcerpt) {
+      const plainText = striptags(content);
+      generatedExcerpt = plainText.slice(0, 150) + "...";
+    }
+
     const blog = await blogModel.create({
       title,
       content,
       author: author || "Anonymous",
       category: category || "Uncategorized",
-      excerpt: excerpt || "",
+      excerpt: generatedExcerpt,
       images,
     });
 
@@ -42,14 +52,14 @@ export const createBlog = async (
 
 export const getallBlogs = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   const blogs = await getBlogs().sort({ createdAt: -1 });
   res.json(blogs);
 };
 export const getSingleBlog = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   const { id } = req.params;
   const blogs = await getBlogById(id);
@@ -67,7 +77,7 @@ export const getBlog = async (req: express.Request, res: express.Response) => {
 // UPDATE BLOG
 export const updateBlog = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     const blog = await blogModel.findById(req.params.id);
@@ -102,7 +112,7 @@ export const updateBlog = async (
 
     // Keep remaining images
     const updatedImages = existingImages.filter(
-      (img: string) => !imagesToRemove.includes(img)
+      (img: string) => !imagesToRemove.includes(img),
     );
 
     // Add newly uploaded images
@@ -112,7 +122,7 @@ export const updateBlog = async (
     blog.title = req.body.title || blog.title;
     blog.content = req.body.content || blog.content;
     blog.category = req.body.category || blog.category;
-    blog.excerpt = req.body.excerpt || blog.excerpt;
+    // blog.excerpt = req.body.excerpt || blog.excerpt;
 
     await blog.save();
 
@@ -126,7 +136,7 @@ export const updateBlog = async (
 // DELETE BLOG
 export const deleteBlog = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ) => {
   try {
     const blog = await blogModel.findById(req.params.id);

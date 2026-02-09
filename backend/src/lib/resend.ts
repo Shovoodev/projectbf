@@ -17,7 +17,8 @@ export async function SendPrePayBond(pdfBuffer: Buffer) {
   });
   const info = await transporter.sendMail({
     from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-    to: "shovoodev@gmail.com",
+    to: " mdathikhasan136@gmail.com",
+    // to: "shovoodev@gmail.com",
     subject: `Thanks  beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>
