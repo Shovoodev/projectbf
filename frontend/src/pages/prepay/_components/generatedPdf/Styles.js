@@ -1,291 +1,364 @@
-import { StyleSheet, Font } from "@react-pdf/renderer";
-
-// Font.register({
-//     family: 'Roboto',
-//     fonts: [
-//         { src: '/fonts/Roboto-Regular.ttf' },
-//         { src: '/fonts/Roboto-Bold.ttf', fontWeight: 'bold' },
-//     ],
-// });
+import { StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
-  page: {
-    // fontFamily: 'Roboto',
-    fontSize: 11,
-    color: "#3129A6",
-    backgroundColor: "#ffffff",
-  },
-
-  container: {
-    flex: 1,
-  },
-
-  section: {
-    marginBottom: 15,
-  },
-  formSection: {
-    marginBottom: 20,
-  },
-  h2: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 10,
-    color: "#666",
-    marginBottom: 15,
-  },
-  sectionTitle: {
+  // ===============================
+  // BASE
+  // ===============================
+  p: {
     fontSize: 12,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 5,
+    lineHeight: 1.6,
+    marginBottom: 16,
+    color: "#3129A6",
   },
-  note: {
-    fontSize: 10,
-    color: "#666",
-    fontWeight: "normal",
-  },
-  label: {
-    fontSize: 10,
-    marginBottom: 5,
-    fontWeight: "bold",
-  },
-  labelSm: {
-    fontSize: 9,
-    marginBottom: 3,
-    fontWeight: "bold",
-  },
-  input: {
-    fontSize: 10,
-    padding: 5,
-    border: "1 solid #ccc",
-    borderRadius: 3,
-    marginBottom: 8,
-    minHeight: 25,
-  },
-  readonlyInput: {
-    backgroundColor: "#f5f5f5",
-    color: "#666",
-  },
-  row: {
-    flexDirection: "row",
-    marginBottom: 10,
-    gap: 15,
-  },
-  column: {
-    flex: 1,
-  },
-  radioGroup: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 10,
-    gap: 15,
-  },
-  radioItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 10,
-    marginBottom: 5,
-  },
-  radioCircle: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    border: "1 solid #000",
-    marginRight: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  radioDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#000",
-  },
-  radioText: {
-    fontSize: 10,
-  },
-  gridRow: {
-    flexDirection: "row",
-    marginBottom: 8,
-    gap: 10,
-  },
-  gridCol2: {
-    flex: 2,
-  },
-  gridCol3: {
-    flex: 3,
-  },
-  gridCol4: {
-    flex: 4,
-  },
-  noteSection: {
-    marginTop: 15,
-    marginBottom: 20,
-  },
-  introText: {
-    fontSize: 9,
-    color: "#666",
-    lineHeight: 1.4,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 30,
-    left: 30,
-    right: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderTop: "1 solid #ddd",
-    paddingTop: 10,
-  },
-  footerText: {
-    fontSize: 9,
-    color: "#666",
-  },
-  brand: {
-    color: "#1e3a8a", // blue-900 equivalent
-    fontWeight: "bold",
-  },
+
+  // ===============================
+  // UTILITIES
+  // ===============================
+  textPdfPrimary: { color: "#3129A6" },
+  textPdfAccent: { color: "#00A99D" },
+
+  // ===============================
+  // ROOT LAYOUT
+  // ===============================
   formContainerBase: {
     width: "100%",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: "#E5E7EB",
     borderRadius: 8,
+    padding: 18,
   },
 
-  paragraph: {
-    fontSize: 11,
-    lineHeight: 1.625,
-    marginBottom: 16,
+  formHeaderArea: {
+    backgroundColor: "#F8FAFC",
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
   },
 
-  pdfH2: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
+  // ===============================
+  // TYPOGRAPHY
+  // ===============================
+
+  // ===============================
+  // INPUT-LIKE BOXES
+  // ===============================
+  pdfInput: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 4,
   },
 
-  pdfLabel: {
-    fontSize: 11,
-    fontWeight: "bold",
+  pdfInputReadonly: {
+    backgroundColor: "#F8FAFC",
+    fontWeight: 700,
+  },
+
+  pdfAdviserRow: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 4,
   },
 
-  pdfInput: {
-    width: "100%",
-    padding: 8,
-    borderWidth: 1,
-    borderColor: "#d1d5db",
-    borderRadius: 4,
-    fontSize: 11,
-    backgroundColor: "#ffffff",
+  pdfAdviserLabel: {
+    fontSize: 14,
+    fontWeight: 500,
+    color: "#3129A6",
+    minWidth: 180,
   },
 
+  // ===============================
+  // RADIO GROUPS (NO GAP)
+  // ===============================
+
+  // Instead of styling checkbox as a box with border shorthand
+  pdfRadioBox: {
+    fontSize: 12,
+    marginRight: 6,
+    color: "#3129A6",
+  },
+
+  pdfRadioText: {
+    fontSize: 12,
+    color: "#3129A6",
+  },
+
+  // ===============================
+  // FOOTER
+  // ===============================
+
+  // ===============================
+  // TABLES (use borderWidth/borderColor)
+  // ===============================
+  pdfTableWrapper: { width: "100%" },
+
+  pdfTable: {
+    width: "100%",
+    marginTop: 16,
+    fontSize: 12,
+  },
+
+  pdfTableTh: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 4,
+    paddingRight: 4,
+    textAlign: "left",
+    fontWeight: 700,
+    color: "#00A99D",
+  },
+
+  pdfTableTd: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 4,
+    paddingRight: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#00A99D",
+    color: "#3129A6",
+  },
+
+  pdfTableTrHighlight: {
+    backgroundColor: "#00A99D",
+    color: "#FFFFFF",
+    fontWeight: 700,
+  },
+
+  // ===============================
+  // GRID (avoid % marginRight)
+  // ===============================
+  pdfAspGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 4,
+  },
+
+  gridColumn: {
+    width: "48%",
+    marginRight: 8, // ✅ numeric instead of "2%"
+  },
+
+  // ===============================
+  // DECLARATION
+  // ===============================
+  pdfDeclarationList: { marginTop: 4, marginBottom: 4 },
+
+  pdfDeclarationItem: { flexDirection: "row", alignItems: "center" },
+
+  pdfDeclarationText: {
+    fontSize: 10,
+    lineHeight: 1.6,
+    color: "#3129A6",
+  },
+
+  // ===============================
+  // SIGNATURE
+  // ===============================
+  pdfSignatureZone: {
+    width: "100%",
+    borderWidth: 2,
+    borderColor: "#D1D5DB",
+    borderStyle: "dashed",
+    borderRadius: 8,
+    padding: 24,
+    backgroundColor: "#F8FAFC",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  pdfUploadBtn: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 6,
+    paddingBottom: 6,
+    borderRadius: 4,
+    fontSize: 14,
+    fontWeight: 700,
+    color: "#3129A6",
+  },
+
+  // ===============================
+  // MISC
+  // ===============================
+  pdfHr: {
+    borderTopWidth: 1,
+    borderTopColor: "rgba(30, 58, 138, 0.2)",
+    marginTop: 24,
+    marginBottom: 24,
+  },
+
+  pdfInstructionBold: {
+    fontSize: 14,
+    fontWeight: 700,
+    lineHeight: 1.6,
+    marginBottom: 8,
+    color: "#3129A6",
+  },
+
+  pdfLegalList: {
+    paddingLeft: 16,
+    marginTop: 4,
+  },
+
+  // ⚠️ remove `gap`, simulate with marginRight
+  pdfLegalListItem: {
+    flexDirection: "row",
+    fontSize: 14,
+    lineHeight: 1.6,
+    color: "#374151",
+  },
+
+  pdfLegalLetter: {
+    fontWeight: 700,
+    fontStyle: "italic",
+    minWidth: 15,
+    color: "#3129A6",
+    marginRight: 4,
+  },
+
+  pdfAgreementH3: {
+    fontWeight: 700,
+    marginBottom: 4,
+    fontSize: 18,
+    color: "#3129A6",
+  },
+
+  // ===============================
+  // LAYOUT HELPERS
+  // ===============================
+  flexRow: { flexDirection: "row" },
+  flexCol: { flexDirection: "column" },
+  flexWrap: { flexWrap: "wrap" },
+  itemsCenter: { alignItems: "center" },
+  justifyBetween: { justifyContent: "space-between" },
+  wFull: { width: "100%" },
+
+  mb4: { marginBottom: 16 },
+  mb2: { marginBottom: 8 },
+  mb1: { marginBottom: 4 },
+  mt4: { marginTop: 16 },
+  mt2: { marginTop: 8 },
+  mt1: { marginTop: 4 },
+
+  px4: { paddingLeft: 16, paddingRight: 16 },
+  py2: { paddingTop: 8, paddingBottom: 8 },
+
+  // ===============================
+  // PAGE HEADER (Slip 32)
+  // ===============================
+  page: { padding: 18 },
+
+  noteBox: {
+    backgroundColor: "#FEF3C7",
+    borderWidth: 1,
+    borderColor: "#F59E0B",
+    padding: 16,
+    borderRadius: 6,
+    marginTop: 32,
+  },
+
+  highlightText: {
+    color: "#00A99D",
+    fontWeight: 700,
+  },
+
+  paragraph: {
+    fontSize: 12,
+    lineHeight: 1.6,
+    color: "#3129A6",
+  },
+
+  mainHeader: { marginBottom: 10 }, // was 20
+
+  title: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: "#3129A6",
+    textAlign: "center",
+  }, // was 24
+  subtitle: {
+    fontSize: 14,
+    fontWeight: 400,
+    color: "#3129A6",
+    textAlign: "center",
+    textTransform: "uppercase",
+    marginTop: 2,
+  }, // was 18 + mt 4
+
+  pdfIntroP: {
+    fontSize: 11,
+    lineHeight: 1.35,
+    marginBottom: 8,
+    color: "#3129A6",
+  }, // was 14 + mb 16
+  pdfLabel: {
+    fontSize: 11,
+    fontWeight: 700,
+    marginBottom: 2,
+    color: "#3129A6",
+  }, // was 14 + mb4
+
+  pdfH2: {
+    fontSize: 14,
+    fontWeight: 700,
+    color: "#00A99D",
+    marginTop: 6,
+    marginBottom: 6,
+  }, // add tighter spacing
+  pdfSectionTitle: {
+    fontSize: 13,
+    fontWeight: 700,
+    marginTop: 6,
+    marginBottom: 4,
+    color: "#3129A6",
+  }, // was 18
+
+  pdfHighlightBox: {
+    backgroundColor: "#F0F9FF",
+    borderWidth: 1,
+    borderColor: "#3B82F6",
+    padding: 10, // was 16
+    borderRadius: 6,
+    marginBottom: 10, // was 16
+  },
+
+  // radio group tighter
   pdfRadioGroup: {
     flexDirection: "row",
     flexWrap: "wrap",
-    padding: 16,
-    backgroundColor: "#f8fafc",
+    padding: 6, // was 8
+    backgroundColor: "#F8FAFC",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#f1f5f9",
+    borderColor: "#F1F5F9",
   },
 
   pdfRadioItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 24,
-    marginBottom: 8,
+    marginRight: 10, // was 14
+    marginBottom: 4, // was 6
   },
 
-  pdfRadioInput: {
-    width: 14,
-    height: 14,
-    borderWidth: 1,
-    borderColor: "#93c5fd",
-    backgroundColor: "#dbeafe",
-    marginRight: 8,
-  },
-
-  pdfCheckboxBox: {
-    width: 24,
-    height: 24,
-    borderWidth: 1,
-    borderColor: "#93c5fd",
-    backgroundColor: "#dbeafe",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  pdfTable: {
-    width: "100%",
-    marginTop: 16,
-  },
-
-  pdfTableTh: {
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    fontWeight: "bold",
-    lineHeight: 1.25,
-  },
-
-  pdfTableTd: {
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: "#4BA6A6",
-  },
-
-  pdfInfoBox: {
-    marginTop: 24,
-    padding: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: "#1e40af",
-    backgroundColor: "#dbeafe",
-    fontSize: 11,
-    lineHeight: 1.625,
-  },
-
-  noteBox: {
-    fontSize: 11,
-    lineHeight: 1.5,
-    marginTop: 24,
-    padding: 16,
-    backgroundColor: "#f8fafc",
-    borderLeftWidth: 4,
-    borderLeftColor: "#d1d5db",
-  },
-
+  // Footer: reduce huge top gap
   pdfFooter: {
-    marginTop: 48,
-    paddingTop: 16,
+    marginTop: 14,
+    paddingTop: 4,
     borderTopWidth: 1,
-    borderTopColor: "#e5e7eb",
+    borderTopColor: "#E2E8F0",
     flexDirection: "row",
     justifyContent: "space-between",
     fontSize: 9,
+    color: "#9CA3AF",
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
-
-  spacer: { height: 16 },
-  spacerSm: { height: 8 },
-  spacerLg: { height: 32 },
-
-  textCenter: { textAlign: "center" },
-  textRight: { textAlign: "right" },
-  textLeft: { textAlign: "left" },
-
-  flexRow: { flexDirection: "row" },
-  flexCol: { flexDirection: "column" },
-  itemsCenter: { alignItems: "center" },
-  justifyBetween: { justifyContent: "space-between" },
-
-  rounded: { borderRadius: 4 },
-  roundedMd: { borderRadius: 6 },
-  roundedLg: { borderRadius: 8 },
-  roundedFull: { borderRadius: 9999 },
 });
 
 export default styles;

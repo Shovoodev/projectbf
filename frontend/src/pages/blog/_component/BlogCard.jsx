@@ -8,6 +8,36 @@ import {
 import { Link } from "react-router-dom";
 
 const BlogCard = ({ blog }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, "0");
+
+    const months = [
+      "jan",
+      "feb",
+      "mar",
+      "apr",
+      "may",
+      "jun",
+      "jul",
+      "aug",
+      "sep",
+      "oct",
+      "nov",
+      "dec",
+    ];
+
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  };
+
+  const cutExcerpt = (text) => {
+    if (text.length <= 3) return text;
+    return text.slice(3);
+  };
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col h-full">
       {/* Image Container */}

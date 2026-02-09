@@ -1,5 +1,5 @@
 import * as htmlToImage from "html-to-image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   cover,
   eight,
@@ -38,7 +38,7 @@ import {
 } from "../../../images/index";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 import { generatePdfBlob } from "./ImageToPdf";
-// import all the slips in order
+
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
 import SlipFourtyFive from "./SlipFourtyFive";
@@ -53,9 +53,10 @@ import SlipThirtySeven from "./SlipThirtySeven";
 import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
+import PDFDownloadButton from "./generatedPdf/TestDownload";
+
 const CORE = import.meta.env.VITE_API_URL;
 
-// These are the "Natural" dimensions for CSS layouts to look correct
 const NATURAL_WIDTH = 794;
 const NATURAL_HEIGHT = 1123;
 
@@ -94,40 +95,81 @@ const images = [
 ];
 
 const PrePay = ({ amount }) => {
-  const slipRefs = useRef([]);
+  // IMPORTANT: separate refs for pdf-only list
+  const pdfSlipRefs = useRef([]);
+
   const { submitInvestment } = usePrePayServiceApi();
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [step, setStep] = useState(0);
-
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
+  // ✅ Keep your slip list exactly the same (UI uses this)
+  const slips = useMemo(
+    () => [
+      <SlipThirtyTwo />,
+      <SlipThirtyThree />,
+      <SlipThirtyFour />, //hide
+      <SlipThirtyFive amount={amount} />,
+      <SlipThirtySix />, //hide
+      <SlipThirtySeven />,
+      <SlipThirtyEight />, //hide
+      <SlipThirtyNine />,
+      <SlipFourty />,
+      <SlipFourtyOne />, //hide
+      <SlipFourtyTwo />,
+      <img src={fortyTwo} />, //hide
+      <img src={fortyThree} />, //hide
+      <SlipFourtyFive />,
+      <SlipFortySix />,
+      <SlipFourtySeven />,
+      <img src={fortySeven} />, //hide
+    ],
+    [amount],
+  );
 
-  const slips = [
-    // <SlipFourtyTwo />,
-    // <SlipFourtyFive />,
-    // <SlipFourtySeven />,
+  // ✅ Add meta: which slips should be hidden in PDF
+  // Must match slips length exactly
+  const slipMeta = useMemo(
+    () => [
+      { id: "32", hideInPdf: false },
+      { id: "33", hideInPdf: false },
+      { id: "34", hideInPdf: true }, //hide
+      { id: "35", hideInPdf: false },
+      { id: "36", hideInPdf: true }, //hide
+      { id: "37", hideInPdf: false },
+      { id: "38", hideInPdf: true }, //hide
+      { id: "39", hideInPdf: false },
+      { id: "40", hideInPdf: false },
+      { id: "41", hideInPdf: true }, //hide
+      { id: "42", hideInPdf: false },
+      { id: "42img", hideInPdf: true }, //hide
+      { id: "43img", hideInPdf: true }, //hide
+      { id: "45", hideInPdf: false },
+      { id: "46", hideInPdf: false },
+      { id: "47", hideInPdf: false },
+      { id: "47img", hideInPdf: true }, //hide
+    ],
+    [],
+  );
 
-    <SlipThirtyTwo />,
-    // <SlipThirtyThree />,
-    <SlipThirtyFour />,
-    <SlipThirtyFive amount={amount} />,
-    // <SlipThirtySix />,
-    <SlipThirtySeven />,
-    <SlipThirtyEight />,
-    <SlipThirtyNine />,
-    <SlipFourty />,
-    // <SlipFourtyOne />,
-    // <SlipFourtyTwo />,
-    // <img src={fortyTwo} />,
-    // <img src={fortyThree} />,
-    // <SlipFourtyFive />,
-    // <SlipFortySix />,
-    <SlipFourtySeven />,
-    <img src={fortySeven} />,
-  ];
+  // ✅ Full UI list (overlay uses this)
+  const uiSlips = slips;
+
+  // ✅ PDF list (ONLY capture pages not hidden)
+  const pdfSlips = useMemo(() => {
+    return slips
+      .map((el, idx) => ({ el, meta: slipMeta[idx], idx }))
+      .filter((x) => !x.meta.hideInPdf);
+  }, [slips, slipMeta]);
+
+  // Reset step if slips changed (safety)
+  useEffect(() => {
+    if (step > uiSlips.length - 1) setStep(0);
+  }, [uiSlips.length, step]);
+
   useEffect(() => {
     document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
   }, [isGeneratingPdf]);
@@ -136,26 +178,28 @@ const PrePay = ({ amount }) => {
     try {
       setIsGeneratingPdf(true);
       setLoadingText("Rendering application pages…");
+
       // await submitInvestment();
+
+      // ✅ Capture only the pdfSlips nodes
       const slipImages = [];
 
-      for (let i = 0; i < slipRefs.current.length; i++) {
+      for (let i = 0; i < pdfSlipRefs.current.length; i++) {
         setLoadingText(
-          `Processing page ${i + 1} of ${slipRefs.current.length}…`,
+          `Processing page ${i + 1} of ${pdfSlipRefs.current.length}…`,
         );
 
-        const node = slipRefs.current[i];
+        const node = pdfSlipRefs.current[i];
         if (!node) continue;
 
-        // Normalize layout before capture
         const originalOverflow = node.style.overflow;
         node.style.overflow = "hidden";
 
         const img = await htmlToImage.toJpeg(node, {
-          backgroundColor: null,
+          backgroundColor: "#FFFFFF", // ✅ avoid null => weird capture / black bg sometimes
           width: NATURAL_WIDTH,
           height: NATURAL_HEIGHT,
-          pixelRatio: 3, // 🔥 correct way to get high resolution
+          pixelRatio: 3,
           style: {
             width: `${NATURAL_WIDTH}px`,
             height: `${NATURAL_HEIGHT}px`,
@@ -183,8 +227,8 @@ const PrePay = ({ amount }) => {
         credentials: "include",
       });
 
-      const data = await res.json();
-      if (!data.success) throw new Error("Email failed");
+      const out = await res.json();
+      if (!out.success) throw new Error("Email failed");
 
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
@@ -229,61 +273,31 @@ const PrePay = ({ amount }) => {
 
       {/* MOBILE CARD */}
       {mobileInfoOpen && (
-        <div className="
-    fixed 
-    bottom-0 left-0 right-0
-    z-[1100] 
-    md:hidden
-    animate-slide-up">
-
+        <div className="fixed bottom-0 left-0 right-0 z-[1100] md:hidden animate-slide-up">
           <div
             className="absolute inset-0 bg-black/20 backdrop-blur-sm"
             onClick={() => setMobileInfoOpen(false)}
           />
-
-          <div className="
-      relative
-      mx-4 mb-4
-      bg-white 
-      rounded-2xl 
-      shadow-2xl 
-      p-5
-      border border-gray-200">
-
+          <div className="relative mx-4 mb-4 bg-white rounded-2xl shadow-2xl p-5 border border-gray-200">
             <div className="flex items-start justify-between mb-4">
-              <h1 className="
-          text-[#2c5aa0] 
-          text-lg font-bold
-          flex items-center gap-2">
-
+              <h1 className="text-[#2c5aa0] text-lg font-bold flex items-center gap-2">
                 {buttonStatus ? " Funeral Bond Info" : " Application Form"}
               </h1>
-
               <button
                 onClick={() => setMobileInfoOpen(false)}
-                className="
-            text-gray-400 hover:text-gray-600
-            p-1"
+                className="text-gray-400 hover:text-gray-600 p-1"
               >
                 ✕
               </button>
             </div>
+
             <div className="space-y-4">
               <button
                 onClick={() => {
                   handleToggleForm();
                   setMobileInfoOpen(false);
                 }}
-                className="
-            w-full
-            bg-[#2c5aa0] hover:bg-blue-700
-            text-white
-            font-semibold
-            text-base
-            py-3.5
-            rounded-xl
-            transition-colors
-            active:scale-[0.98]"
+                className="w-full bg-[#2c5aa0] hover:bg-blue-700 text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98]"
               >
                 {buttonStatus
                   ? "Continue to Application Form"
@@ -294,7 +308,6 @@ const PrePay = ({ amount }) => {
         </div>
       )}
 
-
       <div className="hidden md:block fixed right-6 top-10 z-[1100]">
         <div className="bg-white rounded-xl shadow-2xl p-8 w-[380px]">
           <div className="w-full flex-1">
@@ -304,6 +317,7 @@ const PrePay = ({ amount }) => {
             <p className="text-[#666666] text-base leading-[1.5] mb-5">
               {buttonStatus ? "Page 5 - Image 4 of 30" : "Section in Progress"}
             </p>
+
             <button
               onClick={handleToggleForm}
               className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
@@ -312,6 +326,8 @@ const PrePay = ({ amount }) => {
                 ? "Continue to Application Form"
                 : "Move back to Documentation"}
             </button>
+
+            <PDFDownloadButton />
           </div>
         </div>
       </div>
@@ -328,7 +344,7 @@ const PrePay = ({ amount }) => {
         ))}
       </div>
 
-      {/* Form Interaction Overlay */}
+      {/* Form Interaction Overlay (UI uses full slips) */}
       <div
         className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${
           formActive
@@ -337,7 +353,8 @@ const PrePay = ({ amount }) => {
         }`}
       >
         <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
-          <div className="w-full flex-1 overflow-y-scroll ">{slips[step]}</div>
+          <div className="w-full flex-1 overflow-y-scroll">{uiSlips[step]}</div>
+
           <div className="sticky bottom-0 bg-white border-t p-4 flex justify-between gap-3">
             {step > 0 && (
               <button
@@ -347,7 +364,8 @@ const PrePay = ({ amount }) => {
                 Previous Section
               </button>
             )}
-            {step < slips.length - 1 ? (
+
+            {step < uiSlips.length - 1 ? (
               <button
                 onClick={() => setStep(step + 1)}
                 className="bg-[#3129a6] hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold ml-auto"
@@ -358,7 +376,9 @@ const PrePay = ({ amount }) => {
               <button
                 onClick={sendPdfByEmail}
                 disabled={isGeneratingPdf}
-                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"}`}
+                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${
+                  isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                }`}
               >
                 {isGeneratingPdf ? "Processing..." : "Finish Submission"}
               </button>
@@ -367,7 +387,7 @@ const PrePay = ({ amount }) => {
         </div>
       </div>
 
-      {/* HIDDEN RENDER NODE: This is what is captured for the PDF */}
+      {/* ✅ HIDDEN RENDER NODE (PDF uses filtered list ONLY) */}
       <div
         style={{
           position: "absolute",
@@ -376,19 +396,19 @@ const PrePay = ({ amount }) => {
           pointerEvents: "none",
         }}
       >
-        {slips.map((SlipComponent, index) => (
+        {pdfSlips.map((item, pdfIndex) => (
           <div
-            key={index}
-            ref={(el) => (slipRefs.current[index] = el)}
+            key={`${item.meta.id}-${item.idx}`}
+            ref={(el) => (pdfSlipRefs.current[pdfIndex] = el)}
             style={{
               width: `${NATURAL_WIDTH}px`,
               height: `${NATURAL_HEIGHT}px`,
-              padding: "40px", // Prevents text from touching PDF edges
+              padding: "40px",
               boxSizing: "border-box",
             }}
             className="bg-white overflow-hidden"
           >
-            {SlipComponent}
+            {item.el}
           </div>
         ))}
       </div>

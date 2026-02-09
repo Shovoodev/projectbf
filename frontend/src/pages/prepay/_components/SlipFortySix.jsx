@@ -1,18 +1,6 @@
-import { useState } from "react";
 import { Sign } from "../../../images";
 
 const SlipFortySix = () => {
-  const [formData, setFormData] = useState({
-    adviserSignature: "",
-    adviserName: "",
-    adviserNumber: "",
-    date: "",
-    acceptTerms: false,
-    dealerGroup: "",
-    licenseNumber: "",
-    contactEmail: "",
-    contactPhone: "",
-  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 font-sans">
