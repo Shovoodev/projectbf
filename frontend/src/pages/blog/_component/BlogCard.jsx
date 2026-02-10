@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FaArrowRight,
   FaCalendarDays,
@@ -34,9 +33,11 @@ const BlogCard = ({ blog }) => {
     return `${day} ${month} ${year}`;
   };
 
-  const cutExcerpt = (text) => {
-    if (text.length <= 3) return text;
-    return text.slice(3);
+  const stripTags = (html, maxLength = 120) => {
+    const text = html.replace(/<[^>]*>/g, "").trim();
+
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
   };
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col h-full">
@@ -76,7 +77,7 @@ const BlogCard = ({ blog }) => {
 
         {/* Excerpt */}
         <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1 text-justify">
-          {cutExcerpt(blog.excerpt)}
+          {stripTags(blog.content || "", 150)}
         </p>
 
         {/* Button */}
