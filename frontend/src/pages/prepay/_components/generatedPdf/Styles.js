@@ -245,8 +245,8 @@ const styles = StyleSheet.create({
   // ===============================
   // LAYOUT HELPERS
   // ===============================
-  flexRow: { flexDirection: "row" },
-  flexCol: { flexDirection: "column" },
+  flexRow: { flexDirection: "row", gap: 4 },
+  flexCol: { flexDirection: "column", gap: 4 },
   flexWrap: { flexWrap: "wrap" },
   itemsCenter: { alignItems: "center" },
   justifyBetween: { justifyContent: "space-between" },
@@ -350,13 +350,14 @@ const styles = StyleSheet.create({
   pdfRadioItem: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 2,
     marginRight: 10, // was 14
     marginBottom: 4, // was 6
   },
 
   // Footer: reduce huge top gap
   pdfFooter: {
-    marginTop: 14,
+    marginTop: 10,
     paddingTop: 4,
     borderTopWidth: 1,
     borderTopColor: "#E2E8F0",
@@ -364,8 +365,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     fontSize: 9,
     color: "#9CA3AF",
-    fontWeight: 700,
-    textTransform: "uppercase",
+    fontWeight: 500,
     letterSpacing: 1,
   },
 });

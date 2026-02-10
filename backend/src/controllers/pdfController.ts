@@ -44,7 +44,7 @@ export const sendPdfOfInvoice = async (
     }
 
     const reference = identity.reference || invoiceNumber || "INV-001";
-    const userEmail = recipientEmail || "shovoodev@gmail.com";
+    const userEmail = recipientEmail || "mdathikhasan136@gmail.com";
 
     const pdfBuffer = Buffer.from(pdfAttachment, "base64");
 
