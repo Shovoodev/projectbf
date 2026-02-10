@@ -1,7 +1,7 @@
 const ChapelSection = ({ title, image, children, background = "bg-white" }) => {
   return (
     <section className={`section-padding ${background}`}>
-      <div className="section-container">
+      <div className="section-container p-2">
         {/* Image Area */}
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-xl overflow-hidden shadow-lg mb-12 group">
           <img

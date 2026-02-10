@@ -3,6 +3,7 @@ import Header from "./components/layouts/Header/Header";
 import Footer from "./components/layouts/Footer/Footer";
 import { useEffect } from "react";
 import { useUserFront } from "./utility/use-userFront";
+import Intro_video from "./pages/Intro_video";
 
 function App() {
   const { user } = useUserFront();
@@ -26,13 +27,24 @@ function App() {
     }
   }, [user, pathname, navigate]);
 
+  const location = useLocation();
+
+  const isHomeRoute = location.pathname === "/";
   return (
     <section>
-      <Header />
-      <main className="mx-auto">
-        <Outlet />
-      </main>
-      <Footer />
+      {isHomeRoute ? (
+        <Intro_video />
+      ) : (
+        <>
+          <Header />
+
+          <main className="mx-auto">
+            <Outlet />
+          </main>
+
+          <Footer />
+        </>
+      )}
     </section>
   );
 }

@@ -54,6 +54,8 @@ import NewsDetails from "./components/pages/News/_components/NewsDetails";
 import EditBlog from "./pages/blog/_component/EditBlog";
 import SignIn from "./pages/admin/SignIn";
 import Register from "./pages/admin/Register";
+import Error from "./pages/Error";
+import Intro_video from "./pages/Intro_video";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -61,9 +63,13 @@ export const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
+        path: "/home",
         element: <Home />,
         isPrivate: false,
+      },
+      {
+        path: "/video",
+        element: <Intro_video />,
       },
       {
         path: "/team",
@@ -213,6 +219,7 @@ export const routes = createBrowserRouter([
         element: <InvoicePage />,
         isPrivate: true,
       },
+      { path: "*", element: <Error /> },
     ],
   },
   {

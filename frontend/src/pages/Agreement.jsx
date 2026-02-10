@@ -531,8 +531,8 @@ const AgreementForm = () => {
   };
 
   return (
-    <section className="py-8 w-full md:max-w-5xl mx-auto px-6">
-      <div className="rounded-xl p-8">
+    <section className="py-8 w-full md:max-w-5xl mx-auto p-0 md:px-6">
+      <div className="rounded-xl p-1 md:p-8 ">
         <div className="w-full space-y-4 text-black text-center  font-medium  font-body leading-relaxed ">
           <p className="text-lg text-black ">
             I authorise{" "}
@@ -561,7 +561,7 @@ const AgreementForm = () => {
             that if I choose to delay the service, cost variations may occur.
           </p>
         </div>
-        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-4 md:p-12 rounded-2xl shadow-sm border border-gray-100">
           <form className="space-y-12">
             {/* ==========================================
                 SECTION 1: DECEASED PERSONS DETAILS
@@ -1125,7 +1125,7 @@ const AgreementForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full text-2xl bg-black text-white p-2 md:py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>

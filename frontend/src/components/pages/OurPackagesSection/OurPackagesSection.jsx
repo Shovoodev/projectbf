@@ -1,5 +1,6 @@
 import { FaArrowRight, FaEye } from "react-icons/fa6";
 import { MdOutlineChurch } from "react-icons/md"; // Example icon for 'Attending Service'
+import { Link } from "react-router-dom";
 import img1 from "../Home/images/Attending-Service-Cremation.png";
 import img2 from "../Home/images/No-Service-Direct-Cremation.png";
 import img3 from "../Home/images/Viewing-Cremation.png";
@@ -65,16 +66,16 @@ const PackageCard = ({
         <p className="text-4xl font-body font-bold text-black">{price}</p>
       </div>
       {/* CTA Button */}
-      <a
-        href={link}
-        target="_blank"
+      {console.log(link)}
+      <Link
+        to={link}
         rel="noopener noreferrer"
         className={`inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-all duration-300 bg-black text-white hover:bg-gray-800"
           
         }`}
       >
         More Information <FaArrowRight />
-      </a>
+      </Link>
     </div>
   </div>
 );
@@ -87,25 +88,25 @@ const OurPackagesSection = () => {
       description:
         "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process. We handle your loved one’s remains with the utmost respect and dignity, offering a simplified farewell that honours your wishes.",
       image: img1,
-      link: "https://blacktulipfunerals.com.au/no-service-cremation/",
+      link: "/packages/no-service-cremention",
       isTopRated: true,
     },
     {
       title: "Private Viewing & Cremation",
-      price: "$3599",
+      price: "$3399",
       description:
         "The Black Tulip Private Viewing & Cremation Package provides families with a dignified, compassionate, and cost-effective option during a difficult time. This package allows for a respectful farewell in a private setting that brings comfort to family and friends. Maximum 30 Guests.",
       image: img2,
-      link: "https://blacktulipfunerals.com.au/viewing-cremation/",
+      link: "/packages/viewing-and-cremention",
       isPopular: false,
     },
     {
       title: "Attending Service & Cremation",
-      price: "$4899",
+      price: "$4499",
       description:
         "A lavish, all‑inclusive cremation package in our exclusive 288‑seat auditorium chapel. Includes quality coffin, flowers, celebrant, audio‑visual tribute, livestream, printed stationery, all cremation costs, death certificate and preparation of your loved one. Every detail is handled for a truly memorable farewell.",
       image: img3,
-      link: "https://blacktulipfunerals.com.au/attending-service-cremation/",
+      link: "/packages/attending-service-cremation",
       isPopular: true,
     },
   ];

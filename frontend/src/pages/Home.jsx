@@ -1,5 +1,6 @@
 import Facilities from "../components/pages/Home/Facilities";
 import Hero from "../components/pages/Home/Hero";
+import TestimonialsCarousel from "../components/pages/Home/HomeTestimonial";
 import Musicians from "../components/pages/Home/Musicians";
 import Packages from "../components/pages/Home/Packages";
 import ServiceArea from "../components/pages/Home/ServiceArea";
@@ -14,6 +15,7 @@ function Home() {
       <Musicians />
       <Facilities />
       <ServiceArea />
+      <TestimonialsCarousel />
     </section>
   );
 }

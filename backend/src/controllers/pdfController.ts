@@ -1,7 +1,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
-import { AuthenticatedRequest } from "../lib/types";
 import { SendPrePayBond } from "../lib/resend";
+import { AuthenticatedRequest } from "../lib/types";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -44,7 +44,7 @@ export const sendPdfOfInvoice = async (
     }
 
     const reference = identity.reference || invoiceNumber || "INV-001";
-    const userEmail = recipientEmail || "mdathikhasan136@gmail.com";
+    const userEmail = "mdathikhasan136@gmail.com";
 
     const pdfBuffer = Buffer.from(pdfAttachment, "base64");
 
@@ -103,7 +103,7 @@ export const sendPdfOfInvoice = async (
       ],
     });
 
-    console.log("Email sent:", data.messageId);
+    console.log("Email sent:", data);
 
     res.json({
       success: true,

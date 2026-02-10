@@ -15,12 +15,6 @@ const ServiceArea = () => {
           North Ryde, Sutherland, Kemps Creek, Minchinbury, Macquarie Park,
           Greater Western Sydney & the Sydney Metropolitan.
         </p>
-        <p className="text-xs text-gray-400">
-          Click here to download our{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Funeral Goods & Services Information Standard Price List
-          </a>
-        </p>
       </div>
     </section>
   );

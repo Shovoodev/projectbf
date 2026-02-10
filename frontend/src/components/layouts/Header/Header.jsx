@@ -18,13 +18,13 @@ const Header = () => {
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8 py-4">
         <div className="flex justify-between items-center h-26">
           {/* Logo */}
-          <Link to="/" className="">
+          <Link to="/home" className="">
             <img className="h-[130px]" src={logo} alt="" />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-8 items-center text-xl font-medium text-gray-700">
-            <Link to="/" className="hover:text-primary">
+            <Link to="/home" className="hover:text-primary">
               Home
             </Link>
 
@@ -162,20 +162,20 @@ const Header = () => {
           }`}
         >
           <div className="p-6">
-            <Link to="/" className="block text-lg font-bold mb-6">
+            <Link to="/home" className="block text-lg font-medium mb-4">
               Home
             </Link>
 
             {/* Packages */}
-            <a
-              href="/packages"
+            <Link
+              to="/packages"
               onClick={() => toggleMobileDropdown("packages")}
-              className="flex items-center gap-1 hover:text-primary"
+              className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 block"
             >
               Packages <FaChevronDown className="text-[10px]" />
-            </a>
+            </Link>
             {openMobileDropdown === "packages" && (
-              <div className="ml-4 mb-4 flex flex-col space-y-2">
+              <div className="ml-4 mb-4 flex flex-col space-y-1">
                 <Link
                   to="/packages/attending-service-cremation"
                   className="dropdown-item"
@@ -198,22 +198,22 @@ const Header = () => {
             )}
 
             {/* BTF */}
-            <a
-              href="/about-btf"
+            <Link
+              to="/about-btf"
               onClick={() => toggleMobileDropdown("btf")}
-              className="flex items-center gap-1 hover:text-primary"
+              className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 "
             >
               BTF <FaChevronDown className="text-[10px]" />
-            </a>
+            </Link>
             {openMobileDropdown === "btf" && (
-              <div className="ml-4 mb-4 flex flex-col space-y-2">
-                <Link to="/team" className="block">
+              <div className="ml-4 mb-4 flex flex-col space-y-1">
+                <Link to="/team" className="dropdown-item">
                   Team
                 </Link>
-                <Link to="/contact" className="block">
+                <Link to="/contact" className="dropdown-item">
                   Contact
                 </Link>
-                <Link to="/news" className="block">
+                <Link to="/news" className="dropdown-item">
                   News
                 </Link>
               </div>
@@ -222,12 +222,12 @@ const Header = () => {
             {/* Options */}
             <button
               onClick={() => toggleMobileDropdown("options")}
-              className="flex justify-between w-full text-lg font-medium mb-2"
+              className="flex items-center gap-1 w-full text-lg font-medium mb-4"
             >
-              Options <FaChevronDown />
+              Options <FaChevronDown className="text-[10px]" />
             </button>
             {openMobileDropdown === "options" && (
-              <div className="ml-4 mb-4 flex flex-col space-y-2">
+              <div className="ml-4 mb-4 flex flex-col space-y-1">
                 <Link
                   to="https://funeralstationery.com.au/"
                   target="_blank"
@@ -251,25 +251,25 @@ const Header = () => {
             )}
             <button
               onClick={() => toggleMobileDropdown("info")}
-              className="flex justify-between w-full text-lg font-medium mb-2"
+              className="flex items-center gap-1 w-full text-lg font-medium mb-4"
             >
-              Info <FaChevronDown />
+              Info <FaChevronDown className="text-[10px]" />
             </button>
             {openMobileDropdown === "info" && (
-              <div className="ml-4 mb-4 flex flex-col space-y-2">
-                <Link to="/resources" className="block">
+              <div className="ml-4 mb-4 flex flex-col space-y-1">
+                <Link to="/resources" className="dropdown-item">
                   Resources
                 </Link>
-                <Link to="/options/option-two" className="block">
+                <Link to="/options/option-two" className="dropdown-item">
                   Upcoming Funerals
                 </Link>
-                <Link to="/blog" className="block">
+                <Link to="/blog" className="dropdown-item">
                   Blog
                 </Link>
               </div>
             )}
 
-            <Link to="/agreement" className="block text-lg font-bold mb-6">
+            <Link to="/agreement" className="block text-lg font-medium mb-4">
               Agreement
             </Link>
             <a href="tel:1300110031" className="btn-primary">
