@@ -21,7 +21,7 @@ const SignIn = () => {
             .then(async (data) => {
                 if (data._id) {
                     navigate("/");
-                    localStorage.setItem("user", JSON.stringify(data));
+                    localStorage.setItem("clienUser", JSON.stringify(data));
                 }
             });
     };

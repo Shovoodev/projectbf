@@ -4,7 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import ConfirmModal from "../../../components/ConfirmModal";
 import CommentSection from "./CommentSection";
-
+import SearchResult from "./SearchResult";
+import logo from "../../../components/layouts/Header/btf-logo.png";
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -27,6 +28,9 @@ const BlogDetails = () => {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
 
   const [blogData, setBlogData] = useState([]);
   useEffect(() => {
@@ -136,6 +140,21 @@ const BlogDetails = () => {
       console.log(error)
     }
   }
+  const handleSelectSearchResult = () => {
+    setSearchTerm("");
+    setFilteredBlogs([]);
+  };
+
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`http://localhost:4000/search-blogs?search=${searchTerm}`);
+    const data = await res.json();
+
+    setFilteredBlogs(data);
+    setSearchTerm("");
+  };
+
   return (
     <div className="bg-white min-h-screen flex flex-col">
 
@@ -311,14 +330,19 @@ const BlogDetails = () => {
                 <FaEdit size={18} />  Edit blog
               </button>}
             </div>
+            {/* //search box */}
             <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-3">
               <h3 className="font-bold text-lg mb-4">Search Blogs</h3>
-              <form className="relative">
+
+              <form className="relative" onSubmit={handleSearch}>
                 <input
                   type="text"
                   placeholder="Search articles..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 />
+
                 <button
                   type="submit"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
@@ -327,6 +351,16 @@ const BlogDetails = () => {
                 </button>
               </form>
             </div>
+
+            {Array.isArray(filteredBlogs) &&
+              filteredBlogs.map((blog) => (
+                <SearchResult
+                  key={blog._id || blog.id}
+                  blog={blog}
+                  onSelect={handleSelectSearchResult}
+                />
+              ))}
+
             {/* Author Bio Card */}
             <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-8">
               <div className="flex items-center gap-4 mb-4">
@@ -344,8 +378,6 @@ const BlogDetails = () => {
                   : `Writer and contributor at Black Tulip Funerals.`}
               </p>
             </div>
-
-            {/* resent blogs */}
 
             {/* Recent Posts */}
             <div className="bg-white border border-gray-200 rounded-xl p-3 mb-4">
@@ -374,6 +406,11 @@ const BlogDetails = () => {
                     </li>
                   ))}
               </ul>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-3 mb-4">
+              <img src={logo} alt="Black Tulip Funerals Logo" className="w-full h-auto object-contain" />
+
             </div>
           </aside>
         </div>

@@ -60,6 +60,25 @@ const blogContentStorage = new CloudinaryStorage({
   },
 });
 
+export const uploadSignatureStorage = new CloudinaryStorage({
+  cloudinary: claudinaryConfig(),
+  params: async () => ({
+    folder: "kin/sign",
+    allowed_formats: ["jpg", "png", "jpeg", "gif", "webp"],
+    transformation: [
+      { width: 800, crop: "limit" },
+      { quality: "auto:good" },
+      { fetch_format: "auto" },
+    ],
+    public_id: `sign-${Date.now()}-${Math.round(Math.random() * 1e9)}`,
+  }),
+});
+
+// ✅ IMPORTANT: multer middleware
+export const uploadSignature = multer({ storage: uploadSignatureStorage }).fields([
+  { name: "sign", maxCount: 1 },
+]);
+
 // Configuration for blog featured images
 const featuredImageStorage = new CloudinaryStorage({
   cloudinary: claudinaryConfig(),

@@ -25,7 +25,7 @@ const SignIn = () => {
       const loginData = await loginRes.json();
       if (!loginData._id) throw new Error("Login failed");
 
-      localStorage.setItem("user", JSON.stringify(loginData));
+      localStorage.setItem("clienUser", JSON.stringify(loginData));
 
       navigate(`/user`);
     } catch (err) {

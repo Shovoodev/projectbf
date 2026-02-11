@@ -29,10 +29,10 @@ import { geAdminBySessionToken } from "../db/admin";
 export const isAuthenticated = async (
   req: AuthenticatedRequest,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) => {
   try {
-    const { sessionToken } = req.cookies;
+    const sessionToken = req.cookies?.sessionToken as string | undefined;
 
     if (!sessionToken) {
       return res.status(401).json({ message: "No session token provided" });
@@ -46,9 +46,9 @@ export const isAuthenticated = async (
 
     req.identity = {
       _id: user._id.toString(),
-      email: user.email,
-      reference: user.reference,
-      role: user.role,
+      email: user.email ?? "", // ✅ fallback
+      reference: user.reference ?? "", // ✅ fallback
+      role: user.role ?? "user", // ✅ fallback (or "")
     };
 
     next();
@@ -58,10 +58,11 @@ export const isAuthenticated = async (
   }
 };
 
-export const isAuthenticatedAdmin = async ( 
+export const isAuthenticatedAdmin = async (
   req: AuthenticatedRequest,
   res: express.Response,
-  next: express.NextFunction) => {
+  next: express.NextFunction,
+) => {
   const token = req.cookies.sessionToken;
 
   if (!token) {
@@ -75,15 +76,14 @@ export const isAuthenticatedAdmin = async (
   }
 
   req.user = user;
-  
+
   next();
 };
-
 
 export const AccessAuthentication = async (
   req: AuthenticatedRequest,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) => {
   try {
     if (!req.identity) {

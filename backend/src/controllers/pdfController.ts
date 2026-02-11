@@ -2,6 +2,9 @@ import express from "express";
 import nodemailer from "nodemailer";
 import { SendPrePayBond } from "../lib/resend";
 import { AuthenticatedRequest } from "../lib/types";
+import { getAttendenceByUserId } from "../db/attendence";
+import { getVandCByUserId } from "../db/viewingAndCremention";
+import { getNoCreByUserId } from "../db/noViewingCremention";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -27,25 +30,21 @@ import { AuthenticatedRequest } from "../lib/types";
 //   }
 // };
 // Send PDF via Email
+
+
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
   res: express.Response,
 ): Promise<any> => {
   try {
-    const { pdfAttachment, recipientEmail, invoiceNumber } = req.body;
-    const identity = req.identity;
+    const { pdfAttachment } = req.body;
+    const response = req.identity;
 
-    if (!identity) {
+    if (!response) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
-    if (!pdfAttachment) {
-      return res.status(400).json({ message: "PDF attachment is required" });
-    }
-
-    const reference = identity.reference || invoiceNumber || "INV-001";
-    const userEmail = "mdathikhasan136@gmail.com";
-
+    const reference = response.reference;
+    // Convert base64 to buffer for attachment
     const pdfBuffer = Buffer.from(pdfAttachment, "base64");
 
     const transporter = nodemailer.createTransport({
@@ -57,39 +56,40 @@ export const sendPdfOfInvoice = async (
         pass: process.env.RESEND_API_KEY,
       },
     });
-
     const data = await transporter.sendMail({
-      from: '"Black Tulip Funerals" <Blacktulipfunerals@toukir.cc>',
-      to: userEmail,
-      subject: `Invoice ${reference} - KeyInvest Funeral Bond`,
-      text: "Please find your invoice attached",
+      from: '"Administrator" <Blacktulipfunerals@toukir.cc',
+      to: "mdathikhasan136@gmail.com , shovoodev@gmail.com",
+      subject: `Thanks  hi beleaving us for trusting us `,
+      text: "we get all you documents",
       html: `
         <!DOCTYPE html>
         <html>
           <head>
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              body { font-family: Arial, sans-serif; line-height: 1.6; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: #f8f9fa; padding: 20px; text-align: center; border-bottom: 2px solid #003da5; }
-              .header h1 { color: #003da5; margin: 0; }
+              .header { background: #f8f9fa; padding: 20px; text-align: center; }
               .content { padding: 20px; }
-              .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; }
+              .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
             </style>
           </head>
           <body>
             <div class="container">
               <div class="header">
-                <h1>KeyInvest Funeral Bond</h1>
-                <p>Invoice Number: <strong>${reference}</strong></p>
+                <h1>Tax Invoice</h1>
+                <p>Invoice Number: ${reference}</p>
               </div>
+
               <div class="content">
                 <h2>Invoice Details</h2>
-                <p>Dear Valued Customer,</p>
+
                 <p>Please find your tax invoice attached as a PDF.</p>
                 <p>We kindly ask that payment is made immediately to secure the funeral service date and time.</p>
               </div>
+
               <div class="footer">
-                <p>Best regards,<br><strong>Black Tulip Funerals</strong></p>
+                <p>Best regards,<br>Scott and the Black Tulip team</p>
+                <p>OVANTA PTY LTD<br>25 Renown Avenue, Oatley NSW 2223</p>
               </div>
             </div>
           </body>
@@ -102,19 +102,19 @@ export const sendPdfOfInvoice = async (
         },
       ],
     });
-
-    console.log("Email sent:", data);
+    console.log({ data });
 
     res.json({
       success: true,
+
       message: "Invoice sent successfully",
-      messageId: data.messageId,
     });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Failed to send invoice" });
   }
 };
+
 
 export const sendPdfOfPrepay = async (
   req: express.Request,
@@ -153,11 +153,30 @@ export const sendPdfOfPrepay = async (
 export const sendAttendenceServiceSelection = async (
   req: AuthenticatedRequest,
   res: express.Response,
-): Promise<any> => {
+) => {
   try {
-    res.json({ success: true, message: "Selections retrieved" });
+    if (!req.identity) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.identity._id;
+
+    const doc =
+      (await getAttendenceByUserId(userId)) ||
+      (await getVandCByUserId(userId)) ||
+      (await getNoCreByUserId(userId));
+
+    if (!doc) {
+      return res.status(404).json({ message: "No service selection found" });
+    }
+
+    // ✅ SEND THE FULL DOCUMENT
+    return res.status(200).json({
+      success: true,
+      data: doc,
+    });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Failed to retrieve selections" });
+    console.error("ERROR:", error);
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };

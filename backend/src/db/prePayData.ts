@@ -1,148 +1,46 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-/* -------------------- COMMON SUB-SCHEMAS -------------------- */
-
-const AddressSchema = new mongoose.Schema(
+const InvestmentApplicationSchema = new Schema(
   {
-    unit: String,
-    streetNo: String,
-    streetName: String,
-    suburb: String,
-    state: String,
-    postcode: String,
-    country: { type: String, default: "AUSTRALIA" },
-  },
-  { _id: false }
-);
+    userid: { type: String, default: "" }, // ✅ add this if you query by userid
 
-const ContactSchema = new mongoose.Schema(
-  {
-    daytimeTelephone: String,
-    mobile: String,
-    daytimeAddress: String,
-    email: String,
-  },
-  { _id: false }
-);
+    status: { type: String, default: "draft" },
 
-const InvestorSchema = new mongoose.Schema(
-  {
-    investor: String,
-    saturation: String,
-    title: String,
-    surname: String,
-    givenNames: String,
-    dob: Date,
-    gender: String,
+    investorOne: { type: Schema.Types.Mixed, default: {} },
+    investorTwo: { type: Schema.Types.Mixed, default: {} },
 
-    residentialAddress: AddressSchema,
-    mailingAddress: AddressSchema,
+    accountHolders: { type: Schema.Types.Mixed, default: {} },
 
-    contact: ContactSchema,
-  },
-  { _id: false }
-);
-
-const AccountHolderSchema = new mongoose.Schema(
-  {
-    title: String,
-    surnameOrEntityName: String,
-    givenNames: String,
-  },
-  { _id: false }
-);
-
-const SignatureSchema = new mongoose.Schema(
-  {
-    signature: String,
-    signatureDate: Date,
-  },
-  { _id: false }
-);
-
-const InvestmentApplicationSchema = new mongoose.Schema(
-  {
-    // userId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-    // email: String,
-    status: {
-      type: String,
-      enum: ["draft", "submitted"],
-      default: "draft",
-    },
-    /* Investors */
-    investorOne: InvestorSchema,
-    investorTwo: InvestorSchema,
-
-    /* Account Holders */
-    accountHolders: {
-      holderOne: AccountHolderSchema,
-      holderTwo: AccountHolderSchema,
-
-      addressabn: String,
-      suburbabn: String,
-      stateabn: String,
-      postcodeabn: String,
-      countryabn: { type: String, default: "AUSTRALIA" },
-
-      institutionName: String,
-      branch: String,
-      accountName: String,
-      bsbNumber: String,
-      accountNumber: String,
-
-      formType: {
-        type: String,
-        default: "KEYINVEST_DIRECT_DEBIT_REQUEST",
-      },
-      version: {
-        type: String,
-        default: "July 2025",
-      },
-      submittedAt: Date,
-    },
-
-    /* Contributions */
     lumpSum: {
-      selected: { type: Boolean, default: false },
-      amount: Number,
+      type: Schema.Types.Mixed,
+      default: { selected: false, amount: 0 },
     },
 
     regularSavingsPlan: {
-      selected: { type: Boolean, default: false },
-      amount: Number,
+      type: Schema.Types.Mixed,
+      default: { selected: false, amount: 0 },
     },
 
-    rspEndCondition: String,
+    rspEndCondition: { type: String, default: "" },
 
-    contributionAmount: Number,
-    aspFrequency: {
-      type: String,
-      enum: ["Weekly", "Fortnightly", "Monthly", "Quarterly"],
-    },
+    contributionAmount: { type: Number, default: 0 },
 
-    paymentMethod: {
-      type: String,
-      enum: ["Direct Debit", "BPAY", "Credit Card", "Bank Transfer"],
-    },
+    aspFrequency: { type: String, default: "" },
 
-    /* Signatures */
-    signatures: {
-      accountHolder1: SignatureSchema,
-      accountHolder2: SignatureSchema,
-    },
+    paymentMethod: { type: String, default: "" },
+
+    signatures: { type: Schema.Types.Mixed, default: {} },
   },
   {
     timestamps: true,
-  }
+    strict: false, // ✅ allows extra fields without errors
+  },
 );
-
-/* -------------------- EXPORT -------------------- */
 
 export const InvestmentApplicationModel = mongoose.model(
   "InvestmentApplication",
-  InvestmentApplicationSchema
+  InvestmentApplicationSchema,
 );
+
+export const getPrepaydataByUserId = (userid: string) =>
+  InvestmentApplicationModel.findOne({ userid });

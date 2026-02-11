@@ -1,13 +1,13 @@
+import { pdf } from "@react-pdf/renderer";
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { pdf } from "@react-pdf/renderer";
 import { useLocation, useNavigate } from "react-router-dom";
 import base64ToFile from "../../utility";
-const CORE = import.meta.env.VITE_API_URL;
-import Paragraph from "./aggrementComponent/Paragraph";
+import { showToast } from "../../utility/toast";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
-import { showToast } from "../../utility/toast";
+import Paragraph from "./aggrementComponent/Paragraph";
+const CORE = import.meta.env.VITE_API_URL;
 /* ================= Reusable Components ================= */
 
 const FormLabel = ({ children, required }) => (
@@ -193,8 +193,46 @@ const AgreementForm = () => {
     setError("");
     setMessage("");
 
+    const transformSelectionsForBackend = (selections) => {
+      if (!selections) return null;
+
+      const transformed = {};
+      const keyMapping = {
+        stationery: selections.stationery,
+        bodyPreparation: selections.bodyPreparation,
+        coffin: selections.coffin,
+        flowers: selections.flowers,
+        urn: selections.urn,
+        collectionOfUrn: selections.collectionOfUrn,
+        transferOption: selections.transferOption,
+      };
+
+      Object.entries(keyMapping).forEach(([key, value]) => {
+        if (!value) return;
+        transformed[key] = {
+          value: value?.value ?? value,
+          price: value?.price ?? "0",
+        };
+      });
+
+      return Object.keys(transformed).length ? transformed : null;
+    };
+
+    const toBase64FromBlob = (blob) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("FileReader failed"));
+        reader.onloadend = () => {
+          const base64 = reader.result?.toString().split(",")[1];
+          if (!base64)
+            return reject(new Error("Failed to convert PDF to base64"));
+          resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+      });
+
     try {
-      // Validate required fields
+      // 0) Validate required fields
       const requiredFields = [
         { field: formKinValues.email, message: "Email is required" },
         { field: formKinValues.givenName, message: "First name is required" },
@@ -210,57 +248,21 @@ const AgreementForm = () => {
       ];
 
       for (const { field, message } of requiredFields) {
-        if (!field || field.trim() === "") {
-          throw new Error(message);
-        }
+        if (!field || field.trim() === "") throw new Error(message);
       }
 
-      // Transform selections to match backend expected format
-      const transformSelectionsForBackend = (selections) => {
-        if (!selections) return null;
-
-        const transformed = {};
-
-        // Map frontend keys to backend keys with proper structure
-        const keyMapping = {
-          // Format: { value: "selected option", price: "price" }
-          stationery: selections.stationery,
-          bodyPreparation: selections.bodyPreparation,
-          coffin: selections.coffin,
-          flowers: selections.flowers,
-          urn: selections.urn,
-          collectionOfUrn: selections.collectionOfUrn,
-          transferOption:
-            selections.transferOption || selections.transferOption,
-        };
-
-        // Convert to backend expected format
-        Object.entries(keyMapping).forEach(([key, value]) => {
-          if (value) {
-            transformed[key] = {
-              value: value.value || value,
-              price: value.price || "0",
-            };
-          }
-        });
-
-        return transformed;
-      };
-
-      // Get transformed selections
+      // 1) Transform selections (optional)
       const backendSelections = transformSelectionsForBackend(selections);
-
-      // Warn if no selections but allow to continue
       if (!backendSelections) {
         console.warn(
           "No selections provided - continuing without package selections",
         );
       }
 
-      // 1. Register user
+      // 2) Register user
       const registerPayload = {
         email: formKinValues.email,
-        password: formKinValues.givenName,
+        password: formKinValues.givenName, // NOTE: you probably want a real password
       };
 
       const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
@@ -270,11 +272,11 @@ const AgreementForm = () => {
       });
 
       if (!responseUser.ok) {
-        const errorData = await responseUser.json();
-        throw new Error(errorData.message || "Registration failed");
+        const errorText = await responseUser.text();
+        throw new Error(errorText || "Registration failed");
       }
 
-      // 2. Login user
+      // 3) Login user
       const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -283,10 +285,11 @@ const AgreementForm = () => {
       });
 
       if (!loginRes.ok) {
-        throw new Error("Login failed");
+        const errorText = await loginRes.text();
+        throw new Error(errorText || "Login failed");
       }
 
-      // 3. Save selections if available
+      // 4) Save selections if available (don’t block whole flow if it fails)
       if (backendSelections && path) {
         try {
           const selectionRes = await fetch(`${CORE}/${path}`, {
@@ -302,26 +305,23 @@ const AgreementForm = () => {
           if (!selectionRes.ok) {
             const errorText = await selectionRes.text();
             console.warn("Failed to save selections:", errorText);
-            // Don't throw here, continue with form submission
           }
         } catch (selectionError) {
           console.warn("Error saving selections:", selectionError);
         }
       }
 
-      // 4. Save deceased details
-
+      // 5) Save deceased details
       const deceasedFD = new FormData();
-
       Object.entries(deceasedFormValues).forEach(([key, value]) => {
-        if (key !== "photo") {
-          deceasedFD.append(key, value);
-        }
+        if (key !== "photo") deceasedFD.append(key, value);
       });
 
-      deceasedFormValues.photo.forEach((file) => {
-        deceasedFD.append("photo", file);
-      });
+      if (Array.isArray(deceasedFormValues.photo)) {
+        deceasedFormValues.photo.forEach((file) =>
+          deceasedFD.append("photo", file),
+        );
+      }
 
       const deceasedRes = await fetch(`${CORE}/desencepersondetailsanswer`, {
         method: "POST",
@@ -334,16 +334,11 @@ const AgreementForm = () => {
         throw new Error(text || "Failed to save deceased details");
       }
 
-      // 6. Save next of kin details
+      // 6) Save next of kin details (DON’T early-return, throw)
       const signFile = await saveSignature();
-      if (!signFile) {
-        alert("Please provide a signature");
-        return;
-      }
-      await new Promise((r) => setTimeout(r, 0));
+      if (!signFile) throw new Error("Please provide a signature");
 
       const fd = new FormData();
-
       fd.append("salutation", formKinValues.salutation);
       fd.append("givenName", formKinValues.givenName);
       fd.append("surname", formKinValues.surname);
@@ -365,85 +360,70 @@ const AgreementForm = () => {
       });
 
       if (!resforkin.ok) {
-        console.error(await resforkin.text());
-        return;
+        const text = await resforkin.text();
+        throw new Error(text || "Failed to save next of kin details");
       }
 
-      // 7. Get final selections and generate invoice
-      try {
-        const resSelections = await fetch(`${CORE}/all-selected-selections`, {
-          credentials: "include",
-        });
+      // 7) Generate + Send invoice (NO silent fail)
+      const resSelections = await fetch(`${CORE}/all-selected-selections`, {
+        credentials: "include",
+      });
 
-        if (!resSelections.ok) {
-          throw new Error(`HTTP error! status: ${resSelections.status}`);
-        }
-
-        const data = await resSelections.json();
-        const invoiceData = data.data;
-
-        console.log("Invoice data received:", data);
-
-        // Generate PDF with the data we just received
-        if (invoiceData) {
-          const blob = await pdf(
-            <StaticInvoicePDF
-              invoiceDetails={invoiceData}
-              deceasedName={deceasedFormValues.givenName}
-              kinName={formKinValues.givenName}
-            />,
-          ).toBlob();
-
-          const base64data = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              const base64 = reader.result?.toString().split(",")[1];
-              resolve(base64);
-            };
-            reader.onerror = reject;
-          });
-
-          // Send invoice email
-          const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              selections: backendSelections || selections || {},
-              pdfAttachment: base64data,
-            }),
-          });
-
-          if (!invoiceRes.ok) {
-            const err = await invoiceRes.json();
-            console.warn("Invoice email failed:", err);
-            // Don't throw here - just warn and continue
-          }
-
-          // Set invoice details for UI if needed
-          setInvoiceDetails(invoiceData);
-        }
-      } catch (invoiceError) {
-        console.warn("Invoice generation skipped:", invoiceError);
+      if (!resSelections.ok) {
+        const t = await resSelections.text();
+        throw new Error(`Failed to load selections: ${t}`);
       }
-      // Success
+
+      const data = await resSelections.json();
+      const invoiceData = data?.data;
+
+      if (!invoiceData) {
+        throw new Error(
+          "No invoice data returned from /all-selected-selections",
+        );
+      }
+
+      const blob = await pdf(
+        <StaticInvoicePDF
+          invoiceDetails={invoiceData}
+          deceasedName={deceasedFormValues.givenName}
+          kinName={formKinValues.givenName}
+        />,
+      ).toBlob();
+
+      console.log("Invoice PDF blob size:", blob.size);
+
+      const base64data = await toBase64FromBlob(blob);
+
+      const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          selections: backendSelections ?? selections ?? {},
+          pdfAttachment: base64data,
+        }),
+      });
+
+      const invoiceText = await invoiceRes.text();
+      console.log("send-invoice status:", invoiceRes.status, invoiceText);
+
+      if (!invoiceRes.ok) {
+        throw new Error(`Send invoice failed: ${invoiceText}`);
+      }
+
+      // Optional: update UI
+      setInvoiceDetails(invoiceData);
+
+      // 8) Success
       setMessage("Form submitted successfully!");
+      showToast.success("completed Your Registration");
 
-      // Clear localStorage
       localStorage.removeItem("packageSelections");
       localStorage.removeItem("packagePath");
-
-      // Navigate after delay
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 2000);
-      showToast.success("completed Your Regsitration");
     } catch (err) {
       console.error("Submit error:", err);
-      setError(err.message || "Something went wrong");
+      setError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
