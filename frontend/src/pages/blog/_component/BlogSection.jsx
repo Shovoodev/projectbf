@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogCard from "./BlogCard";
 import { useUserFront } from "../../../utility/use-userFront";
+import Card from "../../../components/common/Card";
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
@@ -146,18 +147,9 @@ const BlogSection = () => {
                 {/* ✅ Blog Cards (only 12 per page) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {currentBlogs.map((item) => (
-                    <BlogCard
-                      key={item._id}
-                      blog={{
-                        id: item._id,
-                        title: item.title,
-                        author: item.author,
-                        content: item.content,
-                        category: item.category,
-                        excerpt: item.excerpt,
-                        images: item.images,
-                        date: item.createdAt || item.date,
-                      }}
+                    <Card
+                      item={item}
+                      getLink={(b) => `/blog/${b._id}`}
                     />
                   ))}
                 </div>

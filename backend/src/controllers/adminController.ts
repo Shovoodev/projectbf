@@ -6,7 +6,7 @@ import { authentication } from "../lib";
 
 export const getAllUsers = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const user = await getUsers();
@@ -18,12 +18,12 @@ export const getAllUsers = async (
 
 export const registerAdmin = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const { adminEmail, password } = req.body;
-    console.log({adminEmail , password});
-    
+    console.log({ adminEmail, password });
+
     if (!adminEmail || !password) {
       return res.status(400);
     }
@@ -51,7 +51,7 @@ export const registerAdmin = async (
 
 export const MarkInvoicePaid = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   const { paymentIntentId, amount, status } = req.body;
 
@@ -73,21 +73,30 @@ export const MarkInvoicePaid = async (
   });
 };
 
-
-export const adminlogin = async (req: express.Request, res: express.Response) => {
+export const adminlogin = async (
+  req: express.Request,
+  res: express.Response,
+) => {
   try {
     const { adminEmail, password } = req.body;
 
     if (!adminEmail || !password) {
-      return res.status(403).json({ error: "Email or password is wrong" });
+      return res.status(400).json({ error: "Email and password are required" });
     }
 
     const user = await geAdminByEmail(adminEmail).select(
-      "+authentication.salt +authentication.password"
+      "+authentication.salt +authentication.password +authentication.sessionToken +authentication.expiresAt",
     );
 
     if (!user) {
       return res.status(403).json({ error: "User is not registered" });
+    }
+
+    // ✅ Make sure authentication exists
+    if (!user.authentication?.salt || !user.authentication?.password) {
+      return res
+        .status(403)
+        .json({ error: "Account authentication data missing" });
     }
 
     const expectedHash = authentication(user.authentication.salt, password);
@@ -96,32 +105,25 @@ export const adminlogin = async (req: express.Request, res: express.Response) =>
       return res.status(403).json({ error: "Email or password is wrong" });
     }
 
+    const ONE_HOUR = 60 * 60 * 1000;
     const salt = random();
+
+    // ✅ If authentication object might be missing, initialize it
+    user.authentication = user.authentication || ({} as any);
+
     user.authentication.sessionToken = authentication(
       salt,
-      user._id.toString()
+      user._id.toString(),
     );
-    const ONE_HOUR = 60 * 60 * 1000;
-    
     user.authentication.expiresAt = new Date(Date.now() + ONE_HOUR);
-    
-    await user.save();
-    
-    res.cookie("sessionToken", user.authentication.sessionToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: ONE_HOUR, // ⏱ browser auto logout
-    });
-    
+
     await user.save();
 
-    // send session token as HTTP-only cookie
     res.cookie("sessionToken", user.authentication.sessionToken, {
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 1000,
+      maxAge: ONE_HOUR,
     });
 
     return res.status(200).json({
@@ -131,6 +133,6 @@ export const adminlogin = async (req: express.Request, res: express.Response) =>
     });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ error: "Something went wrong" });
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };

@@ -56,12 +56,6 @@ import SlipThirtyTwo from "./SlipThirtyTwo";
 
 import PDFDownloadButton from "./generatedPdf/TestDownload";
 
-// ✅ React-PDF
-import { pdf } from "@react-pdf/renderer";
-import RendererPDF from "./generatedPdf/RendererPdf";
-
-const CORE = import.meta.env.VITE_API_URL;
-
 const images = [
   cover,
   one,
@@ -96,23 +90,12 @@ const images = [
   thirty,
 ];
 
-// small helper: timeout wrapper so it doesn't spin forever
-function withTimeout(promise, ms = 30000) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("PDF render timeout")), ms),
-    ),
-  ]);
-}
-
 const PrePay = ({ amount }) => {
   const { submitInvestment } = usePrePayServiceApi();
-
+  const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
@@ -151,6 +134,11 @@ const PrePay = ({ amount }) => {
     };
   }, [formActive]);
 
+  // ✅ FIX 1: If form overlay opens, close the mobile sheet so it can't block clicks
+  useEffect(() => {
+    if (formActive) setMobileInfoOpen(false);
+  }, [formActive]);
+
   const handleToggleForm = () => {
     if (formActive) {
       setFormActive(false);
@@ -162,101 +150,22 @@ const PrePay = ({ amount }) => {
     }
   };
 
-  // ✅ ONLY RendererPDF is generated and sent
-  const sendPdfByEmail = async () => {
-    if (isGeneratingPdf) return; // prevent double click
-
+  const fetchAndSendPdf = async () => {
     try {
-      setIsGeneratingPdf(true);
-      setLoadingText("Rendering application (RendererPDF)…");
-
-      // ✅ MOCK VALUES (you asked mock values only)
-      // Make sure this shape matches what RendererPDF expects:
-      const investorData = {
-        investorOne: {
-          title: "Mr",
-          surname: "Doe",
-          givenNames: "John",
-          dob: "1990-01-01",
-          gender: "Male",
-          unit: "1",
-          streetNo: "10",
-          streetName: "Main Street",
-          suburb: "Sydney",
-          state: "NSW",
-          postcode: "2000",
-          country: "AUSTRALIA",
-
-          mailunit: "",
-          mailstreetNo: "",
-          mailstreetName: "",
-          mailsuburb: "",
-          mailstate: "NSW",
-          mailpostcode: "",
-          mailcountry: "AUSTRALIA",
-
-          daytimeTelephone: "0299999999",
-          mobile: "0412345678",
-          daytimeAddress: "10 Main Street, Sydney",
-          email: "john@example.com",
-        },
-        questionnaire: {
-          bondType: "Nominated",
-          ageOver10: true,
-          hasExistingBonds: false,
-          excessContribution: false,
-          requiresCapitalAccess: false,
-        },
-      };
-
-      // ✅ render to blob (browser)
-      const blob = await withTimeout(
-        pdf(<RendererPDF investorData={investorData} />).toBlob(),
-        30000,
-      );
-
-      setLoadingText("Sending PDF to your email…");
-
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File([blob], "KeyInvest-Application-Form.pdf", {
-          type: "application/pdf",
-        }),
-      );
-
-      const res = await fetch(`${CORE}/send-pdf-on-email`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-
-      // if server returns non-json
-      const text = await res.text();
-      let out;
-      try {
-        out = JSON.parse(text);
-      } catch {
-        throw new Error(text || "Server error");
-      }
-
-      if (!out.success) throw new Error(out.error || "Email failed");
-
+      await submitInvestment();
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
-      console.error("RendererPDF send failed:", error);
+      console.error("PDF send failed:", error);
       alert(
-        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`,
+        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`
       );
-    } finally {
-      setIsGeneratingPdf(false);
     }
   };
 
   return (
     <div className="relative font-roboto">
-      {/* Sidebar/Control UI */}
-      <div className="fixed bottom-4 flex items-center justify-center inset-x-4 z-[1100] md:hidden">
+      {/* Toggle Button (top-right) */}
+      <div className="fixed top-4 right-4 flex items-center justify-center z-[1100] md:hidden">
         {!mobileInfoOpen && (
           <button
             onClick={() => setMobileInfoOpen(true)}
@@ -267,17 +176,20 @@ const PrePay = ({ amount }) => {
         )}
       </div>
 
-      {/* MOBILE CARD */}
+      {/* MOBILE CARD (top-right panel) */}
       {mobileInfoOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-[1100] md:hidden animate-slide-up">
+        <div className="fixed top-4 right-4 z-[1100] md:hidden w-[90%] max-w-sm">
+          {/* backdrop */}
           <div
-            className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
             onClick={() => setMobileInfoOpen(false)}
           />
-          <div className="relative mx-4 mb-4 bg-white rounded-2xl shadow-2xl p-5 border border-gray-200">
+
+          {/* card */}
+          <div className="relative bg-white rounded-2xl shadow-2xl p-5 border border-gray-200">
             <div className="flex items-start justify-between mb-4">
               <h1 className="text-[#2c5aa0] text-lg font-bold flex items-center gap-2">
-                {buttonStatus ? " Funeral Bond Info" : " Application Form"}
+                {buttonStatus ? "Funeral Bond Info" : "Application Form"}
               </h1>
               <button
                 onClick={() => setMobileInfoOpen(false)}
@@ -300,9 +212,8 @@ const PrePay = ({ amount }) => {
                   : "Back to Documentation"}
               </button>
 
-              {/* ✅ send RendererPDF */}
               <button
-                onClick={sendPdfByEmail}
+                onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
                 className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
                   }`}
@@ -314,6 +225,8 @@ const PrePay = ({ amount }) => {
         </div>
       )}
 
+
+      {/* Desktop sidebar */}
       <div className="hidden md:block fixed right-6 top-10 z-[1100]">
         <div className="bg-white rounded-xl shadow-2xl p-8 w-[380px]">
           <div className="w-full flex-1">
@@ -330,12 +243,10 @@ const PrePay = ({ amount }) => {
                 : "Move back to Documentation"}
             </button>
 
-            {/* ✅ your download button can remain */}
             <PDFDownloadButton />
 
-            {/* ✅ send to email button */}
             <button
-              onClick={sendPdfByEmail}
+              onClick={fetchAndSendPdf}
               disabled={isGeneratingPdf}
               className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
                 }`}
@@ -360,9 +271,7 @@ const PrePay = ({ amount }) => {
 
       {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
       >
         <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
@@ -371,8 +280,9 @@ const PrePay = ({ amount }) => {
           <div className="sticky bottom-0 bg-white border-t p-4 flex justify-between gap-3">
             {step > 0 && (
               <button
-                onClick={() => setStep(step - 1)}
-                className="bg-[#3129a6] hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold"
+                // ✅ FIX 2: functional update (safer)
+                onClick={() => setStep((s) => s - 1)}
+                className="bg-[#3129a6] hover:bg-blue-700 z-[1105] text-white px-8 py-3 rounded-md font-bold"
               >
                 Previous Section
               </button>
@@ -380,14 +290,15 @@ const PrePay = ({ amount }) => {
 
             {step < slips.length - 1 ? (
               <button
-                onClick={() => setStep(step + 1)}
-                className="bg-[#3129a6] hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold ml-auto"
+                // ✅ FIX 2: functional update (safer)
+                onClick={() => setStep((s) => s + 1)}
+                className="bg-[#3129a6] hover:bg-blue-700 text-white z-[1105] px-8 py-3 rounded-md font-bold ml-auto"
               >
                 Next Section
               </button>
             ) : (
               <button
-                onClick={sendPdfByEmail}
+                onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
                 className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
                   }`}

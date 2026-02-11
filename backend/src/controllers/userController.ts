@@ -59,34 +59,48 @@ import { getDeceasedByUserId } from "../db/deceasedPerson";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as {
+      email?: string;
+      password?: string;
+    };
 
+    // ✅ 400 = bad request (missing fields)
     if (!email || !password) {
-      return res.status(403).json({ error: "Email or password is wrong" });
+      return res.status(400).json({ error: "Email and password are required" });
     }
 
     const user = await getUserByEmail(email).select(
-      "+authentication.salt +authentication.password"
+      "+authentication.salt +authentication.password +authentication.sessionToken +authentication.expiresAt",
     );
 
     if (!user) {
-      return res.status(403).json({ error: "User is not registered" });
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // ✅ TS + runtime safety
+    if (!user.authentication?.salt || !user.authentication?.password) {
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const expectedHash = authentication(user.authentication.salt, password);
 
     if (user.authentication.password !== expectedHash) {
-      return res.status(403).json({ error: "Email or password is wrong" });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const salt = random();
+
+    // ✅ ensure object exists (TS safety)
+    user.authentication = user.authentication || ({} as any);
+
     user.authentication.sessionToken = authentication(
       salt,
-      user._id.toString()
+      user._id.toString(),
     );
+
     await user.save();
 
-    // send session token as HTTP-only cookie
+    // ✅ Send session token as HTTP-only cookie
     res.cookie("sessionToken", user.authentication.sessionToken, {
       httpOnly: true,
       sameSite: "lax",
@@ -95,55 +109,18 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     return res.status(200).json({
       _id: user._id,
-      email: user.email,
+      email: user.email ?? "", // ✅ avoid TS string|undefined issues
       message: "Login successful",
     });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ error: "Something went wrong" });
-  }
-};
-
-export const guestLogin = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    // create a random reference for tracking
-    const reference = `GUEST-${Date.now()}`;
-
-    const user = await userModel.create({
-      email: null, // optional
-      reference,
-      authentication: {
-        salt: random(),
-      },
-    });
-
-    const sessionToken = authentication(random(), user._id.toString());
-
-    user.authentication.sessionToken = sessionToken;
-    await user.save();
-
-    res.cookie("sessionToken", sessionToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-    });
-
-    return res.status(200).json({
-      message: "Guest session created",
-      reference,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Failed to create guest session" });
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };
 
 export const registerUser = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     const { email, password } = req.body;
@@ -176,7 +153,7 @@ export const registerUser = async (
 };
 export const logOut = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
 ): Promise<any> => {
   try {
     res.clearCookie("VIDEO", {

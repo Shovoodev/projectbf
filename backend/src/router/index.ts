@@ -18,12 +18,12 @@ export default (): express.Router => {
   deceasedPersonRouter(router);
   kinDetailsRouter(router);
   userRouter(router);
-  adminRouter(router);
   enquireyRouter(router);
   paymentRouter(router);
   pdfRouter(router);
+  adminRouter(router);
   blogRouter(router);
   prePayRouter(router);
-  signatureRouter(router)
+  signatureRouter(router);
   return router;
 };
