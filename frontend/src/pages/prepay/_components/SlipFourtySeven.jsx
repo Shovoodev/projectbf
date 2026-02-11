@@ -34,7 +34,7 @@ const SlipFourtySeven = () => {
 
           {/* Declarations List */}
           <div className="p-2 md:p-2">
-            <div>
+            <div className=" pb-5">
               <p className="text-gray-700 font-medium mb-1">
                 You authorise the nominated financial adviser, or authorised
                 delegate:
@@ -42,12 +42,12 @@ const SlipFourtySeven = () => {
 
               <div className="pdf-declaration-list">
                 {declarations.map((text, index) => (
-                  <label key={index} className="pdf-declaration-item p-0">
+                  <label key={index} className="pdf-declaration-item p-0 gap-2">
                     <input
                       type="checkbox"
                       className="pdf-declaration-checkbox"
                     />
-                    <span className="pdf-declaration-text">{text}</span>
+                    <span className="pdf-declaration-text text-sm">{text}</span>
                   </label>
                 ))}
               </div>
