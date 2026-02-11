@@ -86,7 +86,7 @@ export const viewingAndCremention = [
 ];
 
 const ViewingAndCrementionPage = () => {
-  const BASE_PRICE = 3399;
+  const BASE_PRICE = 3595;
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();

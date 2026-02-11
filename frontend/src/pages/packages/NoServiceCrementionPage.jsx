@@ -83,7 +83,7 @@ const noServiceFunralData = [
   },
 ];
 const NoServiceCrementionPage = () => {
-  const BASE_PRICE = 2299;
+  const BASE_PRICE = 2295;
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
     urn: { value: "Funera Preferred Scattering Tube", price: 0 },

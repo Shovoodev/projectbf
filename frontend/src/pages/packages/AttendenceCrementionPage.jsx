@@ -386,7 +386,7 @@ const attendenceData = [
 // --- Reusable Row Select Component ---
 
 const AttendenceCrementionPage = () => {
-  const BASE_PRICE = 4499;
+  const BASE_PRICE = 4895;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },

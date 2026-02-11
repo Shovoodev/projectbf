@@ -16,9 +16,7 @@ const BlogSection = () => {
         const res = await fetch("http://localhost:4000/publish-all-blog-data");
         const data = await res.json();
         const filteredNews = Array.isArray(data)
-          ? data.filter(
-            (item) => item?.category?.toLowerCase() === "btf news"
-          )
+          ? data.filter((item) => item?.category?.toLowerCase() === "btf news")
           : [];
 
         setNewsData(filteredNews);
@@ -31,7 +29,6 @@ const BlogSection = () => {
 
     getNews();
   }, []);
-  console.log([newsData]);
 
   return (
     <section className="bg-white py-16 md:py-24">
@@ -94,7 +91,6 @@ const BlogSection = () => {
                   />
                 ))}
               </div>
-
             )}
           </>
         )}

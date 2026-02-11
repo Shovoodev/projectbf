@@ -1,68 +1,103 @@
-import React from "react";
 import {
-    FaArrowRight,
-    FaCalendarDays,
-    FaFolderOpen,
-    FaUser,
+  FaArrowRight,
+  FaCalendarDays,
+  FaFolderOpen,
+  FaUser,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
+  /* ========== Same helpers as BlogCard ========== */
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
 
-    return (
-        <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col h-full">
-            {/* Image Container */}
-            <div className="h-56 overflow-hidden relative group">
-                <img
-                    src={news.images?.[0]}
-                    alt={news.title}
-                    className="w-full h-full object-cover  transform group-hover:scale-110 transition-transform duration-700"
-                />
-                {/* Overlay for hover effect (optional, adds polish) */}
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
+    const day = date.getDate().toString().padStart(2, "0");
 
-            {/* Content */}
-            <div className="p-6 flex flex-col flex-1">
-                {/* Title */}
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-gray-600 transition-colors cursor-pointer">
-                    <Link to={`/blog/${news.id}`}>{news.title}</Link>
-                </h3>
+    const months = [
+      "jan",
+      "feb",
+      "mar",
+      "apr",
+      "may",
+      "jun",
+      "jul",
+      "aug",
+      "sep",
+      "oct",
+      "nov",
+      "dec",
+    ];
 
-                {/* Meta Data */}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 mb-4 border-b border-gray-100 pb-4">
-                    <div className="flex items-center gap-1.5">
-                        <FaUser className="text-gray-400" />
-                        <span>By {news.author}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <FaCalendarDays className="text-gray-400" />
-                        <span>{news.date}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <FaFolderOpen className="text-gray-400" />
-                        <span>{news.category}</span>
-                    </div>
-                </div>
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
 
-                {/* Excerpt */}
-                <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1 text-justify">
-                    {news.excerpt}
-                </p>
+    return `${day} ${month} ${year}`;
+  };
 
-                {/* Button */}
-                <div className="mt-auto flex items-center">
-                    <Link
-                        to={`/news/${news.id}`}
-                        className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center text-center gap-2 hover:bg-gray-800 transition-all active:scale-95"
-                    >
-                        Read More <FaArrowRight className="text-xs" />
-                    </Link>
-                </div>
-            </div>
+  const stripTags = (html, maxLength = 120) => {
+    const text = html.replace(/<[^>]*>/g, "").trim();
+
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  return (
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 flex flex-col h-full">
+      {/* Image Container */}
+      <div className="h-56 overflow-hidden relative group">
+        <img
+          src={news.images?.[0]}
+          alt={news.title}
+          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+        />
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-1">
+        {/* Title */}
+        <h3 className="font-display text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-gray-600 transition-colors cursor-pointer">
+          <Link to={`/news/${news.id}`}>{news.title}</Link>
+        </h3>
+
+        {/* Meta */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 mb-4 border-b border-gray-100 pb-4">
+          <div className="flex items-center gap-1.5">
+            <FaUser className="text-gray-400" />
+            <span>By {news.author}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <FaCalendarDays className="text-gray-400" />
+            <span>{formatDate(news.date)}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <FaFolderOpen className="text-gray-400" />
+            <span>{news.category}</span>
+          </div>
         </div>
-    );
+
+        {/* Excerpt */}
+        <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1 text-justify">
+          {stripTags(news.content || news.excerpt || "", 150)}
+        </p>
+
+        {/* Button */}
+        <div className="mt-auto flex items-center">
+          <Link
+            to={`/news/${news.id}`}
+            className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-medium flex items-center text-center gap-2 hover:bg-gray-800 transition-all active:scale-95"
+          >
+            Read More <FaArrowRight className="text-xs" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default NewsCard;

@@ -382,7 +382,7 @@ const AgreementForm = () => {
         const data = await resSelections.json();
         const invoiceData = data.data;
 
-        console.log("Invoice data received:", invoiceData);
+        console.log("Invoice data received:", data);
 
         // Generate PDF with the data we just received
         if (invoiceData) {

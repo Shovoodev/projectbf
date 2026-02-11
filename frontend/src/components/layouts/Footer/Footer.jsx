@@ -41,7 +41,7 @@ const Footer = () => {
       "Payment Terms": "/payment-terms",
       "Privacy Policy": "/privacy-policy",
       "Service Area": "/service-area",
-      Blog: "/news",
+      Blog: "/blog",
       FAQ: "/faq",
       "Landing Page": "/landing-page",
       "Pay Now": "/pay-now",

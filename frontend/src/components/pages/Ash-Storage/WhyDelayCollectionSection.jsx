@@ -2,14 +2,14 @@ import React from "react";
 import img from "./images/Secure-Storage-scaled.jpg";
 const WhyDelayCollectionSection = () => {
   return (
-    <section className="bg-surface py-16 md:py-24 border-t border-gray-100">
+    <section className="bg-surface p-2 py-16 md:py-24 border-t border-gray-100">
       <div className="section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* --- LEFT SIDE: IMAGE --- */}
           {/* --- RIGHT SIDE: CONTENT --- */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 leading-tight">
+              <h2 className="text-3xl text-center md:text-left md:text-4xl font-display font-bold text-gray-900 leading-tight">
                 Why Families May Delay Collection
               </h2>
               <div className="w-20 h-1 bg-black opacity-10"></div>

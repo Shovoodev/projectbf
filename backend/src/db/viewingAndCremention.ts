@@ -27,7 +27,7 @@ const formVandCSchema = new mongoose.Schema(
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
-    baseTotal: { type: Number, default: 3399 },
+    baseTotal: { type: Number, default: 3595 },
     transferOption: { type: Number, default: 0 },
 
     service: { type: String, default: "Viewing and Cremention" },
@@ -36,12 +36,12 @@ const formVandCSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const FormVandCResponseModel = mongoose.model(
   "ViewingAndCremention",
-  formVandCSchema
+  formVandCSchema,
 );
 
 export const createResponseVandC = (values: Record<string, any>) =>

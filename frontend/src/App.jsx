@@ -1,9 +1,9 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import Header from "./components/layouts/Header/Header";
-import Footer from "./components/layouts/Footer/Footer";
 import { useEffect } from "react";
-import { useUserFront } from "./utility/use-userFront";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import Footer from "./components/layouts/Footer/Footer";
+import Header from "./components/layouts/Header/Header";
 import Intro_video from "./pages/Intro_video";
+import { useUserFront } from "./utility/use-userFront";
 
 function App() {
   const { user } = useUserFront();
