@@ -1,5 +1,3 @@
-import { Resend } from "resend";
-
 import nodemailer from "nodemailer";
 
 // export async function SendEmail(email: string, pdfBuffer: Buffer) {
@@ -49,7 +47,7 @@ export async function SendInvoice(pdfBuffer: Buffer) {
   });
   const info = await transporter.sendMail({
     from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-    to: "shovoodev@gmail.com",
+    to: "mdathikhasan136@gmail.com",
     subject: `Thanks  hi beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>

@@ -1,7 +1,4 @@
-
-
 const SlipFourtyFive = () => {
-
   return (
     <div className="form-container-base">
       <div>

@@ -34,7 +34,7 @@ const SlipFourtySeven = () => {
 
           {/* Declarations List */}
           <div className="p-2 md:p-2">
-            <div >
+            <div>
               <p className="text-gray-700 font-medium mb-1">
                 You authorise the nominated financial adviser, or authorised
                 delegate:

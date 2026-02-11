@@ -29,9 +29,11 @@ import AttendenceCrementionPage from "./pages/packages/AttendenceCrementionPage"
 import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
-import BlogPage from './pages/blog/BlogPage'
-import CreateBlog from './pages/blog/_component/CreateBlog'
-import BlogDetails from './pages/blog/_component/BlogDetails'
+
+import BlogPage from "./pages/blog/BlogPage";
+import CreateBlog from "./pages/blog/_component/CreateBlog";
+import BlogDetails from "./pages/blog/_component/BlogDetails";
+
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
 import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
@@ -42,12 +44,18 @@ import AgreementFormPage from "./pages/packages/Agreement";
 import Packages from "./pages/Packages";
 
 import Registration from "./pages/Registration";
+
 import InvoicePage from "./pages/pay/InvoicePage";
+
+import UserPage from "./pages/dashboard/UserPage";
+
 import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 import NewsDetails from "./components/pages/News/_components/NewsDetails";
 import EditBlog from "./pages/blog/_component/EditBlog";
 import SignIn from "./pages/admin/SignIn";
 import Register from "./pages/admin/Register";
+import Error from "./pages/Error";
+import Intro_video from "./pages/Intro_video";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -55,9 +63,13 @@ export const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
+        path: "/home",
         element: <Home />,
         isPrivate: false,
+      },
+      {
+        path: "/video",
+        element: <Intro_video />,
       },
       {
         path: "/team",
@@ -207,6 +219,7 @@ export const routes = createBrowserRouter([
         element: <InvoicePage />,
         isPrivate: true,
       },
+      { path: "*", element: <Error /> },
     ],
   },
   {

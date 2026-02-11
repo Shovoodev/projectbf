@@ -17,7 +17,7 @@ const SlipSeven = () => {
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
         {/* Main Header */}
-        <div >
+        <div>
           <h2 className="pdf-h2">
             6. Nominate a funeral director to perform the funeral
           </h2>

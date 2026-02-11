@@ -3,10 +3,8 @@ import express from "express";
 import fs from "fs";
 import { blogModel, getBlogById, getBlogs } from "../db/blog";
 import { AuthenticatedRequest } from "../lib/types";
-
-// CREATE BLOG
-
 import striptags from "striptags";
+// CREATE BLOG
 
 export const createBlog = async (
   req: express.Request,

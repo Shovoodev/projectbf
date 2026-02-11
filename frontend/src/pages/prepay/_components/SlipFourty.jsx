@@ -1,8 +1,7 @@
 import img from "./images/adminsign.png";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 const SlipFourty = () => {
-
-  const { date } = usePrePayServiceApi()
+  const { date } = usePrePayServiceApi();
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>

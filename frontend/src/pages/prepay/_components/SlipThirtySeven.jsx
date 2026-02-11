@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+
 import Signature from "./common/Signature";
 import { showToast } from "../../../utility/toast";
 
@@ -16,9 +17,9 @@ const SlipThirtySeven = () => {
     showToast.error("signature has been removed", {
       duration: 800,
       options: {
-        position: "bottom-right"
-      }
-    })
+        position: "bottom-right",
+      },
+    });
   }, [setSignature, sigCanvasRef]);
 
   const declarations = [

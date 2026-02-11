@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
-const SignatureField = ({
-  sigPadRef,
-  clearSignature,
-  onStrokeEnd,
-}) => {
+const SignatureField = ({ sigPadRef, clearSignature, onStrokeEnd }) => {
   const wrapperRef = useRef(null);
   const [size, setSize] = useState({ width: 0, height: 150 });
 

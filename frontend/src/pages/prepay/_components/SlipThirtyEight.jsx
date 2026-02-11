@@ -2,10 +2,9 @@ import { FaUpload } from "react-icons/fa";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 
 const SlipThirtyEight = () => {
-
   const { signature, date } = usePrePayServiceApi();
 
-
+  // const { signature, currentDate } = usePrePayServiceApi();
   return (
     <div className="form-container-base">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -65,8 +64,8 @@ const SlipThirtyEight = () => {
         <div className="space-y-6">
           <div className="pdf-highlight-box !my-0 !border-[#4BA6A6] bg-[#F1F6F7]">
             <p className="font-bold text-[rgb(49,41,166)]">
-              Acknowledgement of nomination – Investor (where
-              applicable) signatures are required.
+              Acknowledgement of nomination – Investor (where applicable)
+              signatures are required.
             </p>
           </div>
 
@@ -75,9 +74,7 @@ const SlipThirtyEight = () => {
               <div className="flex flex-col  gap-6 mt-4 items-stretch">
                 {/* Signature Upload Area */}
                 <div className="flex-[2] space-y-2">
-                  <label className="pdf-label-sm">
-                    Signature of investor
-                  </label>
+                  <label className="pdf-label-sm">Signature of investor</label>
                   <div className="pdf-signature-zone !py-4">
                     {signature && (
                       <img

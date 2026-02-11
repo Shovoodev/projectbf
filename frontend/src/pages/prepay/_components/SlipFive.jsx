@@ -6,10 +6,7 @@ const SlipFive = () => {
 
   return (
     <div className="form-container-base">
-      <form
-
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form onSubmit={(e) => e.preventDefault()}>
         {/* Section 2.2: RSP Increase */}
         <section>
           <h2 className="pdf-h2 text-[#00A99D]">
@@ -56,7 +53,7 @@ const SlipFive = () => {
             </span>
           </h2>
 
-          <div >
+          <div>
             <h3 className="font-bold text-[rgb(49,41,166)] text-sm">
               Initial Service Fee
             </h3>

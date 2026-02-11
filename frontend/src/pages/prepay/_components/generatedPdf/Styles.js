@@ -85,19 +85,19 @@ const styles = StyleSheet.create({
   },
 
   radioBox: {
-  width: 12,
-  height: 12,
-  borderWidth: 1,
-  borderColor: "#000",
-  justifyContent: "center",
-  alignItems: "center",
-},
+    width: 12,
+    height: 12,
+    borderWidth: 1,
+    borderColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-radioBoxChecked: {
-  width: 8,
-  height: 8,
-  backgroundColor: "#000",
-},
+  radioBoxChecked: {
+    width: 8,
+    height: 8,
+    backgroundColor: "#000",
+  },
   // ===============================
   // FOOTER
   // ===============================
@@ -245,8 +245,8 @@ radioBoxChecked: {
   // ===============================
   // LAYOUT HELPERS
   // ===============================
-  flexRow: { flexDirection: "row" },
-  flexCol: { flexDirection: "column" },
+  flexRow: { flexDirection: "row", gap: 4 },
+  flexCol: { flexDirection: "column", gap: 4 },
   flexWrap: { flexWrap: "wrap" },
   itemsCenter: { alignItems: "center" },
   justifyBetween: { justifyContent: "space-between" },
@@ -265,8 +265,7 @@ radioBoxChecked: {
   // ===============================
   // PAGE HEADER (Slip 32)
   // ===============================
-page: { padding: 18 },
-
+  page: { padding: 18 },
 
   noteBox: {
     backgroundColor: "#FEF3C7",
@@ -288,58 +287,87 @@ page: { padding: 18 },
     color: "#3129A6",
   },
 
-mainHeader: { marginBottom: 10 }, // was 20
+  mainHeader: { marginBottom: 10 }, // was 20
 
-title: { fontSize: 20, fontWeight: 700, color: "#3129A6", textAlign: "left" }, // was 24
-subtitle: { fontSize: 14, fontWeight: 400, color: "#3129A6", textAlign: "left", textTransform: "uppercase", marginTop: 2 }, // was 18 + mt 4
+  title: { fontSize: 20, fontWeight: 700, color: "#3129A6", textAlign: "left" }, // was 24
+  subtitle: {
+    fontSize: 14,
+    fontWeight: 400,
+    color: "#3129A6",
+    textAlign: "left",
+    textTransform: "uppercase",
+    marginTop: 2,
+  }, // was 18 + mt 4
 
-pdfIntroP: { fontSize: 11, lineHeight: 1.35, marginBottom: 8, color: "#3129A6" }, // was 14 + mb 16
-pdfLabel: { fontSize: 11, fontWeight: 700, marginBottom: 2, color: "#3129A6" }, // was 14 + mb4
+  pdfIntroP: {
+    fontSize: 11,
+    lineHeight: 1.35,
+    marginBottom: 8,
+    color: "#3129A6",
+  }, // was 14 + mb 16
+  pdfLabel: {
+    fontSize: 11,
+    fontWeight: 700,
+    marginBottom: 2,
+    color: "#3129A6",
+  }, // was 14 + mb4
 
-pdfH2: { fontSize: 14, fontWeight: 700, color: "#00A99D", marginTop: 6, marginBottom: 6 }, // add tighter spacing
-pdfSectionTitle: { fontSize: 13, fontWeight: 700, marginTop: 6, marginBottom: 4, color: "#3129A6" }, // was 18
+  pdfH2: {
+    fontSize: 14,
+    fontWeight: 700,
+    color: "#00A99D",
+    marginTop: 6,
+    marginBottom: 6,
+  }, // add tighter spacing
+  pdfSectionTitle: {
+    fontSize: 13,
+    fontWeight: 700,
+    marginTop: 6,
+    marginBottom: 4,
+    color: "#3129A6",
+  }, // was 18
 
-pdfHighlightBox: {
-  backgroundColor: "#F0F9FF",
-  borderWidth: 1,
-  borderColor: "#3B82F6",
-  padding: 10,     // was 16
-  borderRadius: 6,
-  marginBottom: 10 // was 16
-},
+  pdfHighlightBox: {
+    backgroundColor: "#F0F9FF",
+    borderWidth: 1,
+    borderColor: "#3B82F6",
+    padding: 10, // was 16
+    borderRadius: 6,
+    marginBottom: 10, // was 16
+  },
 
-// radio group tighter
-pdfRadioGroup: {
-  flexDirection: "row",
-  flexWrap: "wrap",
-  padding: 6,      // was 8
-  backgroundColor: "#F8FAFC",
-  borderRadius: 6,
-  borderWidth: 1,
-  borderColor: "#F1F5F9",
-},
+  // radio group tighter
+  pdfRadioGroup: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    padding: 6, // was 8
+    backgroundColor: "#F8FAFC",
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
+  },
 
-pdfRadioItem: {
-  flexDirection: "row",
-  alignItems: "center",
-  marginRight: 10,  // was 14
-  marginBottom: 4,  // was 6
-},
+  pdfRadioItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+    marginRight: 10, // was 14
+    marginBottom: 4, // was 6
+  },
 
-// Footer: reduce huge top gap
-pdfFooter: {
-  marginTop: 14,     
-  paddingTop: 4,
-  borderTopWidth: 1,
-  borderTopColor: "#E2E8F0",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  fontSize: 9,
-  color: "#9CA3AF",
-  fontWeight: 700,
-  textTransform: "uppercase",
-  letterSpacing: 1,
-},
+  // Footer: reduce huge top gap
+  pdfFooter: {
+    marginTop: 10,
+    paddingTop: 4,
+    borderTopWidth: 1,
+    borderTopColor: "#E2E8F0",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 9,
+    color: "#9CA3AF",
+    fontWeight: 500,
+    letterSpacing: 1,
+  },
 });
 
 export default styles;

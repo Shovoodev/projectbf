@@ -63,9 +63,9 @@ const Footer = () => {
   return (
     <footer className="bg-surface pt-2 pb-8 border-t border-gray-200 relative">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
           {/* Brand */}
-          <div className="flex items-start">
+          <div className="flex items-center justify-center md:items-start md:justify-start">
             <div className="flex items-center gap-3">
               <img className="h-[130px]" src={logo} alt="" />
             </div>
@@ -73,7 +73,10 @@ const Footer = () => {
 
           {/* Links Columns */}
           {[links.col1, links.col2, links.col3].map((col, idx) => (
-            <div key={idx} className="space-y-3 text-sm font-body">
+            <div
+              key={idx}
+              className="space-y-3 text-sm font-body flex flex-col items-center md:items-start"
+            >
               {col.map((link) => (
                 <Link
                   key={link}
@@ -91,7 +94,10 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-body">
-          <p>Copyright © 2025 blacktulipfunerals. All rights reserved.</p>
+          <p>
+            Copyright © {new Date().getFullYear()} blacktulipfunerals. All
+            rights reserved.
+          </p>
           <div className="flex space-x-4">
             {[<FaFacebookF />, <FaTwitter />, <FaYoutube />].map((icon, i) => (
               <a

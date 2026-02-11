@@ -381,15 +381,11 @@ const attendenceData = [
       },
     ],
   },
-
 ];
 
 // --- Reusable Row Select Component ---
 
-
-
 const AttendenceCrementionPage = () => {
-
   const BASE_PRICE = 4499;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
@@ -445,7 +441,7 @@ const AttendenceCrementionPage = () => {
   useEffect(() => {
     const extras = Object.values(selections || {}).reduce(
       (sum, opt) => sum + Number(opt?.price || 0),
-      0
+      0,
     );
 
     const finalPrice = BASE_PRICE + extras;
@@ -453,13 +449,12 @@ const AttendenceCrementionPage = () => {
     setAmount(finalPrice);
   }, [selections]);
 
-
   const handleSelectChange = (itemId, selectedValue) => {
     const item = attendenceData.find((data) => data.id === itemId);
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue
+      (opt) => opt.value === selectedValue,
     );
     if (!selectedOption) return;
 
@@ -468,7 +463,6 @@ const AttendenceCrementionPage = () => {
 
     handleOptionChange(item.question, selectedValue, price);
   };
-
 
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
@@ -481,11 +475,11 @@ const AttendenceCrementionPage = () => {
           options: {
             position: "bottom-right",
           },
-        })
+        });
         navigate("/prepay", {
           state: {
             selections,
-            amount: totalPrice
+            amount: totalPrice,
           },
         });
       }, 100);
@@ -496,11 +490,9 @@ const AttendenceCrementionPage = () => {
     }
   };
 
-
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
     return <div className="p-20 text-center text-red-500">Error: {error}</div>;
-
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
@@ -512,18 +504,16 @@ const AttendenceCrementionPage = () => {
         options: {
           position: "bottom-right",
         },
-      })
+      });
       setTimeout(() => {
-
         navigate("/fill-agreement-form", {
           state: {
             selections,
             path: "newattendingservicecremationanswers",
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
           },
         });
       }, 1000);
-
     } catch (err) {
       setMessage(err.message, "error");
     } finally {
@@ -572,7 +562,6 @@ const AttendenceCrementionPage = () => {
                 "Cremation Fee",
               ]}
             />
-
           </Card>
 
           {/* 2. Disbursements */}
@@ -603,7 +592,9 @@ const AttendenceCrementionPage = () => {
         {/* --- BOTTOM ROW: 2 COLUMNS --- */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           {/* Left: Included Variables (Dynamic) - 70% */}
-          <div className="lg:col-span-8"> {/* 8/12 = 66.67% ≈ 70% */}
+          <div className="lg:col-span-8">
+            {" "}
+            {/* 8/12 = 66.67% ≈ 70% */}
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
                 {attendenceData.map((item) => {
@@ -640,7 +631,9 @@ const AttendenceCrementionPage = () => {
           </div>
 
           {/* Right: Options (Static) - 30% */}
-          <div className="lg:col-span-4"> {/* 4/12 = 33.33% ≈ 30% */}
+          <div className="lg:col-span-4">
+            {" "}
+            {/* 4/12 = 33.33% ≈ 30% */}
             <Card title="Options">
               <div className="flex flex-col gap-4">
                 <RowSelect
@@ -704,10 +697,11 @@ const AttendenceCrementionPage = () => {
         {/* Message Display */}
         {message && (
           <div
-            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
-              ? "bg-red-50 text-red-600 border border-red-100"
-              : "bg-green-50 text-green-600 border border-green-100"
-              }`}
+            className={`mt-6 p-4 rounded text-center font-medium ${
+              message.includes("Error")
+                ? "bg-red-50 text-red-600 border border-red-100"
+                : "bg-green-50 text-green-600 border border-green-100"
+            }`}
           >
             {message}
           </div>

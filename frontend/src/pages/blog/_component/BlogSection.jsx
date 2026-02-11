@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BlogCard from "./BlogCard";
 import { useUserFront } from "../../../utility/use-userFront";
 import Card from "../../../components/common/Card";
 

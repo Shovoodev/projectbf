@@ -81,11 +81,9 @@ const noServiceFunralData = [
       },
     ],
   },
-
 ];
 const NoServiceCrementionPage = () => {
-
-  const BASE_PRICE = 2299
+  const BASE_PRICE = 2299;
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
     urn: { value: "Funera Preferred Scattering Tube", price: 0 },
@@ -103,7 +101,7 @@ const NoServiceCrementionPage = () => {
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Add any static option costs here if needed
     const finalTotal = BASE_PRICE + totalPriceImpact;
@@ -116,21 +114,18 @@ const NoServiceCrementionPage = () => {
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
       (sum, opt) => sum + (Number(opt.price) || 0),
-      0
+      0,
     );
 
     setTotalPrice(BASE_PRICE + variableTotal);
     setAmount(BASE_PRICE + variableTotal);
   }, [selections, BASE_PRICE]);
 
-
-
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-
       setTimeout(() => {
         navigate("/fill-agreement-form", {
           state: {
@@ -139,7 +134,6 @@ const NoServiceCrementionPage = () => {
           },
         });
       }, 1000);
-
     } catch (err) {
       setMessage(err.message, "error");
     } finally {
@@ -153,18 +147,17 @@ const NoServiceCrementionPage = () => {
 
     try {
       setTimeout(() => {
-
         showToast.info("Getting PrePay document Ready for your Selections", {
           duration: 3000,
           options: {
             position: "bottom-right",
           },
-        })
+        });
         navigate(`/prepay`);
       }, 100);
     } catch (err) {
       setMessage(err.message, "error");
-      setError(err.message)
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -193,7 +186,7 @@ const NoServiceCrementionPage = () => {
       // Calculate total price impact
       const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0
+        0,
       );
 
       setTotalPrice(BASE_PRICE + totalPriceImpact);
@@ -208,7 +201,7 @@ const NoServiceCrementionPage = () => {
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue
+      (opt) => opt.value === selectedValue,
     );
     if (!selectedOption) return;
 
@@ -218,11 +211,10 @@ const NoServiceCrementionPage = () => {
     handleOptionChange(item.question, selectedValue, price);
   };
 
-
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Add any static option costs here if needed
     const finalTotal = BASE_PRICE + totalPriceImpact;
@@ -230,7 +222,6 @@ const NoServiceCrementionPage = () => {
     setTotalPrice(finalTotal);
     setAmount(finalTotal);
   }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
-
 
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
@@ -279,8 +270,6 @@ const NoServiceCrementionPage = () => {
                 "Cremation Fee",
               ]}
             />
-
-
           </Card>
 
           {/* 2. Disbursements */}

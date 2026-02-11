@@ -98,7 +98,7 @@ Text: Montserrat (Normal) */
     @apply px-3 py-1 border border-gray-300 rounded text-sm text-gray-600;
   }
   .dropdown-item {
-    @apply block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 hover:text-primary;
+    @apply block p-1 text-lg text-gray-700 hover:bg-gray-100 hover:text-primary;
   }
 
   /* =========================================
@@ -147,8 +147,6 @@ Text: Montserrat (Normal) */
   }
 
   /*  This is about for PDF  */
-
-  
 
   /*  This is about for PDF  */
 }

@@ -2,7 +2,7 @@ import img from "./Banner.jpg";
 
 const Hero = ({ title, subtitle }) => {
   return (
-    <header className="relative  h-64 md:h-80 flex items-center justify-start overflow-hidden">
+    <header className="relative  h-64 md:h-80 flex items-center justify-start overflow-hidden p-2">
       <img
         alt="Elegant floral background pattern"
         className="absolute inset-0 w-full h-full object-cover"

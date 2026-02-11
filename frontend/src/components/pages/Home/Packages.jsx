@@ -1,10 +1,10 @@
-import { FaArrowRight, FaPhone } from "react-icons/fa6";
+import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import img3 from "./images/Attending-Service-Cremation.png";
 import img1 from "./images/No-Service-Direct-Cremation.png";
 import img2 from "./images/Viewing-Cremation.png";
-import { Link } from "react-router-dom";
-import { FaLongArrowAltRight } from "react-icons/fa";
-const PackageCard = ({ img, title, desc, price }) => (
+const PackageCard = ({ img, title, desc, price, link }) => (
   <div className="bg-surface rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
     <div className="h-48 overflow-hidden">
       <img
@@ -25,7 +25,9 @@ const PackageCard = ({ img, title, desc, price }) => (
         <div className="text-5xl  font-display font-semibold mb-4 text-gray-900">
           ${price}
         </div>
-        <button className="btn-primary btn-sm">Learn More</button>
+        <Link to={link} className="btn-primary btn-sm">
+          Learn More
+        </Link>
       </div>
     </div>
   </div>
@@ -38,18 +40,21 @@ const Packages = () => {
       desc: "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process. We handle your loved one’s remains with the utmost respect and dignity.",
       price: "2299",
       img: img1,
+      link: "/packages/no-service-cremention",
     },
     {
       title: "Private Viewing &<br/>Cremation",
       desc: "The Black Tulip Private Viewing & Cremation Package provides families with a dignified, compassionate, and cost-effective option during a difficult time. This package allows for a respectful farewell in a private setting.",
       price: "3399",
       img: img2,
+      link: "/packages/viewing-and-cremention",
     },
     {
       title: "Attending Service<br/>& Cremation",
       desc: "A lavish, all-inclusive cremation package in our exclusive 288-seat auditorium chapel. Includes quality coffin, flowers, celebrant, audio-visual tribute, livestream, printed stationery, all cremation costs, death certificate.",
       price: "4499",
       img: img3,
+      link: "/packages/attending-service-cremation",
     },
   ];
 

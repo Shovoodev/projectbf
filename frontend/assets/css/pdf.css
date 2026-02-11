@@ -45,7 +45,6 @@
    COMPONENTS
 ================================ */
 @layer components {
-
   /* Root Layout */
   .form-container-base {
     @apply w-full min-h-[1123px] bg-white border border-gray-200 rounded-lg overflow-hidden font-roboto shadow-xl p-4 md:p-8;

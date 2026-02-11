@@ -271,7 +271,9 @@ const PrePay = ({ amount }) => {
 
       {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
           }`}
       >
         <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">

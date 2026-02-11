@@ -50,7 +50,6 @@ export const viewingAndCremention = [
     ],
   },
   {
-
     id: 2,
     question: "Urn",
     type: "select",
@@ -84,11 +83,9 @@ export const viewingAndCremention = [
       },
     ],
   },
-
 ];
 
 const ViewingAndCrementionPage = () => {
-
   const BASE_PRICE = 3399;
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
@@ -115,18 +112,15 @@ const ViewingAndCrementionPage = () => {
   useEffect(() => {
     const variableTotal = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Base + Variables + Transfer Cost
     setTotalPrice(BASE_PRICE + variableTotal);
   }, [selections]);
 
-
-
   if (loading) return <div className="p-20 text-center">Loading...</div>;
   if (error)
     return <div className="p-20 text-center text-red-500">Error: {error}</div>;
-
 
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
@@ -143,7 +137,7 @@ const ViewingAndCrementionPage = () => {
       // Calculate total price impact
       const totalPriceImpact = Object.values(updated).reduce(
         (sum, opt) => sum + (opt.price || 0),
-        0
+        0,
       );
 
       setTotalPrice(BASE_PRICE + totalPriceImpact);
@@ -151,13 +145,13 @@ const ViewingAndCrementionPage = () => {
 
       return updated;
     });
-  }
+  };
   const handleSelectChange = (itemId, selectedValue) => {
     const item = viewingAndCremention.find((data) => data.id === itemId);
     if (!item) return;
 
     const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue
+      (opt) => opt.value === selectedValue,
     );
     if (!selectedOption) return;
 
@@ -166,7 +160,6 @@ const ViewingAndCrementionPage = () => {
 
     handleOptionChange(item.question, selectedValue, price);
   };
-
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
@@ -181,7 +174,6 @@ const ViewingAndCrementionPage = () => {
           },
         });
       }, 1000);
-
     } catch (err) {
       setMessage(err.message, "error");
     } finally {
@@ -189,27 +181,23 @@ const ViewingAndCrementionPage = () => {
     }
   };
 
-
-
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-
       setTimeout(() => {
-
         showToast.info("Getting PrePay document Ready for your Selections", {
           duration: 3000,
           options: {
             position: "bottom-right",
           },
-        })
+        });
         navigate(`/prepay`);
       }, 100);
     } catch (err) {
       message(err.message, "error");
-      setError(error)
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -218,7 +206,7 @@ const ViewingAndCrementionPage = () => {
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
       (sum, opt) => sum + (opt.price || 0),
-      0
+      0,
     );
     // Add any static option costs here if needed
     const finalTotal = BASE_PRICE + totalPriceImpact;
@@ -356,7 +344,6 @@ const ViewingAndCrementionPage = () => {
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
-
         </div>
       </div>
     </div>

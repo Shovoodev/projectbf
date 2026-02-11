@@ -66,7 +66,7 @@ export const generatePdfBlob = async (images) => {
     }
 
     // Fill page (centered, maintaining aspect ratio)
-    pdf.addImage(img, 'JPEG', x, y, finalWidth, finalHeight, '', 'FAST');
+    pdf.addImage(img, "JPEG", x, y, finalWidth, finalHeight, "", "FAST");
   }
 
   return pdf.output("blob");
