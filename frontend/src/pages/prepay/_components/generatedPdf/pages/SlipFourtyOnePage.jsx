@@ -49,8 +49,8 @@ export default function SlipFourtyOnePage({ data }) {
     const titles = ["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"];
 
     return (
-        <Page size="A4" style={styles.page} wrap={false}>
-            <View style={styles.formContainerBase}>
+        <Page size="A4" style={styles.pageWithoutpaddingborrom} wrap={false}>
+            <View style={styles.formContainerBasewithoutpaddingbottom}>
                 {/* Header */}
                 <Text style={{ fontSize: 22, fontWeight: 700, color: "#2b2e83", lineHeight: 1.1 }}>
                     KeyInvest Direct{"\n"}Debit Request

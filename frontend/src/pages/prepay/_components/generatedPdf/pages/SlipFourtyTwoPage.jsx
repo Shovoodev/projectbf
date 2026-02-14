@@ -92,7 +92,7 @@ export default function SlipFourtyTwoPage({ data }) {
 
     return (
         <Page size="A4" style={styles.page}>
-            <View style={styles.formContainerBase}>
+            <View style={styles.formContainerBasewithoutpaddingbottom}>
                 {/* Header */}
                 <Text style={{ fontSize: 16, fontWeight: 700, color: "#111827", marginBottom: 4 }}>
                     Direct Debit Request

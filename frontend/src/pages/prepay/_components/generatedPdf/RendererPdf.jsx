@@ -13,9 +13,24 @@ import SlipFortySixPage from "./pages/SlipFortySixPage";
 import SlipFourtySevenPage from "./pages/SlipFourtySevenPage";
 import SlipThirtyThreePage from "./pages/SlipThirtyThreePage";
 import SlipThirtyTwoPage from "./pages/SlipThirtyTwoPage";
+import SlipFourtyThreePage from "./pages/SlipFourtyThreePage";
 
 
 const RendererPDF = ({ investorData = {} }) => {
+    const formatDate = (iso) => {
+        if (!iso) return "";
+        const d = new Date(iso);
+        return d.toLocaleDateString("en-AU", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
+    const investorOne = investorData?.investorOne || {};
+    const toCheckedIndexes = (boolArray = []) =>
+        (Array.isArray(boolArray) ? boolArray : [])
+            .map((v, i) => (v ? i : -1))
+            .filter((i) => i !== -1);
     const data = {
         contributionAmount: investorData?.amount || 0,
         paymentMethod: investorData?.paymentMethod || "eft",
@@ -23,6 +38,10 @@ const RendererPDF = ({ investorData = {} }) => {
         annualIncreasePercent: "10",
         serviceFeeFixed: "220",
         serviceFeePercent: "",
+        declarationsChecked: toCheckedIndexes(investorOne?.declarations || []),
+        optionalChecked: toCheckedIndexes(investorOne?.optionalConsents || []),
+        signatureImage: investorData?.signatures?.prePaySign || null,
+
         adviser: {
             providerName: "Black Tulip Funerals",
             groupName: "",
@@ -34,29 +53,29 @@ const RendererPDF = ({ investorData = {} }) => {
             adviserCode: "",
         },
         investorOne: {
-            title: investorData?.investorOne?.title || "",
-            surname: investorData?.investorOne?.surname || "",
-            givenNames: investorData?.investorOne?.givenNames || "",
-            dob: investorData?.investorOne?.dob || "",
-            gender: investorData?.investorOne?.gender || "",
-            unit: investorData?.investorOne?.unit || "",
-            streetNo: investorData?.investorOne?.streetNo || "",
-            streetName: investorData?.investorOne?.streetName || "",
-            suburb: investorData?.investorOne?.suburb || "",
-            state: investorData?.investorOne?.state || "NSW",
-            postcode: investorData?.investorOne?.postcode || "",
-            country: investorData?.investorOne?.country || "AUSTRALIA",
-            mailunit: investorData?.investorOne?.mailunit || "",
-            mailstreetNo: investorData?.investorOne?.mailstreetNo || "",
-            mailstreetName: investorData?.investorOne?.mailstreetName || "",
-            mailsuburb: investorData?.investorOne?.mailsuburb || "",
-            mailstate: investorData?.investorOne?.mailstate || "NSW",
-            mailpostcode: investorData?.investorOne?.mailpostcode || "",
-            mailcountry: investorData?.investorOne?.mailcountry || "AUSTRALIA",
-            daytimeTelephone: investorData?.investorOne?.daytimeTelephone || "",
-            mobile: investorData?.investorOne?.mobile || "",
-            daytimeAddress: investorData?.investorOne?.daytimeAddress || "",
-            email: investorData?.investorOne?.email || "",
+            title: investorOne?.title || "",
+            surname: investorOne?.surname || "",
+            givenNames: investorOne?.givenNames || "",
+            dob: investorOne?.dob || "",
+            gender: investorOne?.gender || "",
+            unit: investorOne?.unit || "",
+            streetNo: investorOne?.streetNo || "",
+            streetName: investorOne?.streetName || "",
+            suburb: investorOne?.suburb || "",
+            state: investorOne?.state || "NSW",
+            postcode: investorOne?.postcode || "",
+            country: investorOne?.country || "AUSTRALIA",
+            mailunit: investorOne?.mailunit || "",
+            mailstreetNo: investorOne?.mailstreetNo || "",
+            mailstreetName: investorOne?.mailstreetName || "",
+            mailsuburb: investorOne?.mailsuburb || "",
+            mailstate: investorOne?.mailstate || "NSW",
+            mailpostcode: investorOne?.mailpostcode || "",
+            mailcountry: investorOne?.mailcountry || "AUSTRALIA",
+            daytimeTelephone: investorOne?.daytimeTelephone || "",
+            mobile: investorOne?.mobile || "",
+            daytimeAddress: investorOne?.daytimeAddress || "",
+            email: investorOne?.email || "",
         },
         questionnaire: {
             bondType: investorData?.questionnaire?.bondType || "Nominated",
@@ -65,6 +84,7 @@ const RendererPDF = ({ investorData = {} }) => {
             excessContribution: !!investorData?.questionnaire?.excessContribution,
             requiresCapitalAccess: !!investorData?.questionnaire?.requiresCapitalAccess,
         },
+        updatedDate: formatDate(investorData?.updatedAt),
     };
 
     return (
@@ -81,6 +101,7 @@ const RendererPDF = ({ investorData = {} }) => {
             <SlipFourtyPage data={data} />
             <SlipFourtyOnePage data={data} />
             <SlipFourtyTwoPage data={data} />
+            <SlipFourtyThreePage />
             <SlipFourtyFivePage data={data} />
             <SlipFortySixPage data={data} />
             <SlipFourtySevenPage data={data} />

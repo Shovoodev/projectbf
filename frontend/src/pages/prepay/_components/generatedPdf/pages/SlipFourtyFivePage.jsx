@@ -35,8 +35,8 @@ export default function SlipFourtyFivePage({ data }) {
     const adviser = f?.adviser || {};
 
     return (
-        <Page size="A4" style={styles.page}>
-            <View style={styles.formContainerBase}>
+        <Page size="A4" style={styles.pageWithoutpaddingborrom}>
+            <View style={styles.formContainerBasewithoutpaddingbottom}>
                 {/* Adviser only */}
                 <Text style={{ fontSize: 11, fontWeight: 700, color: "#111827", marginBottom: 6 }}>
                     ADVISER ONLY

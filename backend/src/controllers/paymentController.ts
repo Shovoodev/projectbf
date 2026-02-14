@@ -3,8 +3,8 @@ import axios, { AxiosError } from "axios";
 
 const POWERBOARD_BASE_URL =
   process.env.POWERBOARD_BASE_URL ||
-  "https://api.preproduction.powerboard.commbank.com.au"; // pre-prod base :contentReference[oaicite:3]{index=3}
-
+  "https://api.preproduction.powerboard.commbank.com.au";
+  
 export const chargesPayment = async (
   req: express.Request,
   res: express.Response,

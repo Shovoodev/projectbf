@@ -3,7 +3,8 @@ import { Page, View, Text, Image } from "@react-pdf/renderer";
 import styles from "../Styles";
 
 export default function SlipThirtyNinePage({ data }) {
-    const signatureImage = data?.signatureImage || null; // data URL recommended
+
+    const signatureImage = data?.signatureImage || null;
     const date = data?.date || "";
 
     const directorName = data?.funeralDirectorName || "Black Tulip Funerals";
