@@ -51,7 +51,7 @@
   }
 
   .form-header-area {
-    @apply bg-slate-50 p-1 font-roboto border-b border-gray-200;
+    @apply bg-slate-50 p-3 font-roboto border-b border-gray-200;
   }
 
   /* Typography */
@@ -60,7 +60,7 @@
   }
 
   .pdf-section-title {
-    @apply text-lg font-bold uppercase font-roboto tracking-wide border-b border-gray-200 pb-1 mt-1 mb-1 text-pdf-primary;
+    @apply text-lg font-bold uppercase font-roboto tracking-wide border-b border-gray-200 pb-2 mt-1 mb-1 text-pdf-primary;
   }
 
   .pdf-label {
@@ -81,7 +81,7 @@
   }
 
   .pdf-adviser-row {
-    @apply flex flex-col font-roboto md:flex-row md:items-center gap-1 mb-1;
+    @apply flex flex-col font-roboto md:flex-row md:items-center gap-2 mb-2;
   }
 
   .pdf-adviser-label {
@@ -94,25 +94,25 @@
 
   /* Radio / Checkbox */
   .pdf-radio-group {
-    @apply flex flex-wrap gap-2 p-1 bg-slate-50 rounded-md border border-slate-100;
+    @apply flex flex-wrap gap-2 p-3 bg-slate-50 rounded-md border border-slate-100;
   }
 
   .pdf-radio-item {
-    @apply flex items-center space-x-1 cursor-pointer text-pdf-primary;
+    @apply flex items-center space-x-2 cursor-pointer text-pdf-primary;
   }
 
   /* Footer */
   .pdf-footer {
-    @apply mt-12 pt-1 border-t border-slate-200 flex flex-col md:flex-row justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest;
+    @apply mt-12 pt-2 border-t border-slate-200 flex flex-col md:flex-row justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest;
   }
 
   /* Buttons */
   .btn-primary-pdf {
-    @apply flex items-center justify-center bg-blue-900 text-white px-10 py-1 rounded-md shadow-md hover:bg-blue-950 transition-all active:scale-95 font-bold;
+    @apply flex items-center justify-center bg-blue-900 text-white px-10 py-2 rounded-md shadow-md hover:bg-blue-950 transition-all active:scale-95 font-bold;
   }
 
   .btn-secondary {
-    @apply font-bold py-1 px-1 text-pdf-primary;
+    @apply font-bold py-3 px-2 text-pdf-primary;
   }
 
   /* Tables */
@@ -125,11 +125,11 @@
   }
 
   .pdf-table-th {
-    @apply py-2 px-1 text-left font-bold text-pdf-accent;
+    @apply py-2 px-3 text-left font-bold text-pdf-accent;
   }
 
   .pdf-table-td {
-    @apply py-2 px-1 border-b border-pdf-accent text-pdf-primary;
+    @apply py-2 px-3 border-b border-pdf-accent text-pdf-primary;
   }
 
   .pdf-table-tr-highlight {
@@ -138,12 +138,12 @@
 
   /* ASP Grid */
   .pdf-asp-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 mt-1;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 mt-2;
   }
 
   /* Declaration */
   .pdf-declaration-list {
-    @apply space-y-0 mt-1 mb-1;
+    @apply space-y-2 mt-2 mb-2;
   }
 
   .pdf-declaration-item {
@@ -160,7 +160,7 @@
   }
 
   .pdf-upload-btn {
-    @apply bg-white border border-gray-300 px-1 py-1 rounded shadow-sm text-sm font-bold text-pdf-primary hover:bg-slate-50 active:scale-95 transition-all;
+    @apply bg-white border border-gray-300 px-1 py-3 rounded shadow-sm text-sm font-bold text-pdf-primary hover:bg-slate-50 active:scale-95 transition-all;
   }
 
   /* Misc */
@@ -173,11 +173,11 @@
   }
 
   .pdf-legal-list {
-    @apply pl-1 space-y-1 mt-1;
+    @apply pl-2 space-y-2 mt-2;
   }
 
   .pdf-legal-list-item {
-    @apply flex gap-1 text-[14px] leading-relaxed text-slate-700;
+    @apply flex gap-2 text-[14px] leading-relaxed text-slate-700;
   }
 
   .pdf-legal-letter {

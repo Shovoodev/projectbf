@@ -123,6 +123,43 @@ const PrePay = ({ amount }) => {
     [amount],
   );
 
+  // ✅ ADD: config for conditional rendering (same length as slips)
+  // Set enabled: false to hide a slip in the overlay
+  const slipConfig = useMemo(
+    () => [
+      { id: "32", enabled: true },
+      { id: "33", enabled: true },
+      { id: "34", enabled: false },
+      { id: "35", enabled: false },
+      { id: "36", enabled: false },
+      { id: "37", enabled: true },
+      { id: "38", enabled: true },
+      { id: "39", enabled: true },
+      { id: "40", enabled: true },
+      { id: "41", enabled: false },
+      { id: "42", enabled: false },
+      { id: "42img", enabled: false },
+      { id: "43img", enabled: false },
+      { id: "45", enabled: false },
+      { id: "46", enabled: false },
+      { id: "47", enabled: true },
+      { id: "47img", enabled: true },
+    ],
+    [],
+  );
+
+  // ✅ ADD: build the list that actually renders in UI + controls navigation
+  const renderedSlips = useMemo(() => {
+    return slips
+      .map((comp, idx) => ({ comp, cfg: slipConfig[idx], originalIndex: idx }))
+      .filter((x) => x.cfg?.enabled !== false);
+  }, [slips, slipConfig]);
+
+  // ✅ ADD: keep step always valid if some slips are hidden dynamically
+  useEffect(() => {
+    if (step > renderedSlips.length - 1) setStep(0);
+  }, [renderedSlips.length, step]);
+
   useEffect(() => {
     document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
   }, [isGeneratingPdf]);
@@ -225,7 +262,6 @@ const PrePay = ({ amount }) => {
         </div>
       )}
 
-
       {/* Desktop sidebar */}
       <div className="hidden md:block fixed right-6 top-10 z-[1100]">
         <div className="bg-white rounded-xl shadow-2xl p-8 w-[380px]">
@@ -271,18 +307,18 @@ const PrePay = ({ amount }) => {
 
       {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
       >
-        <div className="box-border w-[595px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
-          <div className="w-full flex-1 overflow-y-scroll">{slips[step]}</div>
+        <div className="box-border w-[650px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
+          {/* ✅ CHANGE: use renderedSlips */}
+          <div className="flex-1 px-3 py-3 overflow-y-scroll">
+            {renderedSlips[step]?.comp}
+          </div>
 
-          <div className="sticky bottom-0 bg-white border-t p-4 flex justify-between gap-3">
+          <div className="sticky bottom-0 p-4 flex justify-between gap-3">
             {step > 0 && (
               <button
-                // ✅ FIX 2: functional update (safer)
                 onClick={() => setStep((s) => s - 1)}
                 className="bg-[#3129a6] hover:bg-blue-700 z-[1105] text-white px-8 py-3 rounded-md font-bold"
               >
@@ -290,9 +326,9 @@ const PrePay = ({ amount }) => {
               </button>
             )}
 
-            {step < slips.length - 1 ? (
+            {/* ✅ CHANGE: use renderedSlips.length */}
+            {step < renderedSlips.length - 1 ? (
               <button
-                // ✅ FIX 2: functional update (safer)
                 onClick={() => setStep((s) => s + 1)}
                 className="bg-[#3129a6] hover:bg-blue-700 text-white z-[1105] px-8 py-3 rounded-md font-bold ml-auto"
               >

@@ -1,16 +1,11 @@
-import PdfRadio from "./common/PdfRadio";
-
-
 const SlipThirtyTwo = () => {
-
-
   return (
-    <div className="form-container-base">
+    <div className="">
       {/* Decorative Brand Top Border */}
 
-      <section className=" p-2">
+      <section className="p-2">
         {/* Main Header */}
-        <header className="mb-0">
+        <header className="mb-2">
           <h1 className="text-3xl font-black text-blue-900 leading-tight">
             KeyInvest Funeral Bond
             <br />
@@ -22,7 +17,7 @@ const SlipThirtyTwo = () => {
         </header>
 
         {/* Introduction Text */}
-        <div className="space-y-1">
+        <div className="space-y-4">
           <p className="pdf-intro-p">
             This Application Form (including the Direct Debit Request and the
             Adviser Electronic Transaction Authority Form) accompanies and forms
@@ -79,71 +74,74 @@ const SlipThirtyTwo = () => {
         {/* Questionnaire Section */}
         <h2 className="pdf-h2">Target market questionnaire</h2>
 
-        <div className="space-y-1">
+        <div className="space-y-8">
           {/* Q1 */}
-          <div className="space-y-4">
-
-            {/* Q1 */}
-            <div>
-              <label className="pdf-label">1. Funeral Bond Type:</label>
-              <div className="flex gap-10 mt-1">
-                <PdfRadio label="Nominated" checked />
-                <PdfRadio label="Unassigned" />
-                <PdfRadio label="Prepaid/Assigned" />
-              </div>
+          <div>
+            <label className="pdf-label">1. Funeral Bond Type:</label>
+            <div className="pdf-radio-group mt-2">
+              {["Nominated", "Unassigned", "Prepaid/Assigned"].map((opt) => (
+                <label key={opt} className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name="bondType"
+                    disabled={
+                      opt === "Unassigned" || opt === "Prepaid/Assigned"
+                    }
+                    className="pdf-radio-input"
+                    defaultChecked={opt === "Prepaid/Assigned"}
+                    checked={opt === "Nominated"}
+                  />
+                  <span className="text-slate-700">{opt}</span>
+                </label>
+              ))}
             </div>
-
-            {/* Q2 */}
-            <div>
-              <label className="pdf-label">2. Is the applicant aged 10+?</label>
-              <div className="flex gap-16 mt-1">
-                <PdfRadio label="Yes" checked />
-                <PdfRadio label="No" />
-              </div>
-            </div>
-
-            {/* Q3 */}
-            <div>
-              <label className="pdf-label">
-                3. Does the Applicant currently have 1 or more funeral bonds?
-              </label>
-              <div className="flex gap-16 mt-1">
-                <PdfRadio label="Yes" />
-                <PdfRadio label="No" checked />
-              </div>
-            </div>
-
-            {/* Q4 */}
-            <div>
-              <label className="pdf-label">
-                4. Does the Applicant intend to contribute more than the actual or
-                reasonable cost of a funeral?
-              </label>
-              <div className="flex gap-16 mt-1">
-                <PdfRadio label="Yes" />
-                <PdfRadio label="No" checked />
-              </div>
-            </div>
-
-            {/* Q5 */}
-            <div>
-              <label className="pdf-label">
-                5. Does the Applicant require access to the capital after the 30 day
-                cooling off period?
-              </label>
-              <div className="flex gap-16 mt-1">
-                <PdfRadio label="Yes" />
-                <PdfRadio label="No" checked />
-              </div>
-            </div>
-
           </div>
 
+          {/* Q2 - Q5 */}
+          {[
+            { id: "age10", q: "2. Is the applicant aged 10+?" },
+            {
+              id: "existingBonds",
+              q: "3. Does the Applicant currently have 1 or more funeral bonds?",
+            },
+            {
+              id: "overCost",
+              q: "4. Does the Applicant intend to contribute more than the actual or reasonable cost of a funeral?",
+            },
+            {
+              id: "accessCapital",
+              q: "5. Does the Applicant require access to the capital after the 30 day cooling off period?",
+            },
+          ].map((item) => (
+            <div key={item.id}>
+              <label className="pdf-label">{item.q}</label>
+              <div className="pdf-radio-group mt-2">
+                <label className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name={item.id}
+                    className="pdf-radio-input"
+                    defaultChecked
+                  />
+                  <span className="text-slate-700">Yes</span>
+                </label>
+
+                <label className="pdf-radio-item">
+                  <input
+                    type="radio"
+                    name={item.id}
+                    className="pdf-radio-input"
+                    disabled
+                  />
+                  <span className="text-slate-700">No</span>
+                </label>
+              </div>
+            </div>
+          ))}
         </div>
 
-
         {/* Final Notes */}
-        <footer className=" p-3 text-sm">
+        <footer className="pdf-q-note text-sm">
           <strong>Note:</strong> Investors must be at least 10 years old and
           those under 16 require written consent from a parent or guardian.
           Pre-Paid (Assigned) Funeral Bonds are exempt from Centrelink and/or
