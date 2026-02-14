@@ -64,7 +64,7 @@
   }
 
   .pdf-label {
-    @apply text-sm font-bold block font-roboto mb-1 text-pdf-primary;
+    @apply text-sm font-bold block font-roboto mb-2 text-pdf-primary;
   }
 
   .pdf-label-sm {
@@ -72,7 +72,7 @@
   }
 
   .pdf-intro-p {
-    @apply text-sm leading-relaxed font-roboto mb-4 text-pdf-primary;
+    @apply text-sm p-2 leading-relaxed font-roboto mb-4 text-pdf-primary;
   }
 
   /* Inputs */
@@ -121,7 +121,7 @@
   }
 
   .pdf-table {
-    @apply min-w-[600px] w-full border-collapse mt-4 text-[12px];
+    @apply min-w-[600px] w-full border-collapse mt-4 text-[14px];
   }
 
   .pdf-table-th {
@@ -147,11 +147,11 @@
   }
 
   .pdf-declaration-item {
-    @apply flex items-center;
+    @apply flex items-center gap-1;
   }
 
   .pdf-declaration-text {
-    @apply text-[10px] leading-relaxed text-pdf-primary;
+    @apply text-[13px] leading-relaxed text-pdf-primary;
   }
 
   /* Signature */

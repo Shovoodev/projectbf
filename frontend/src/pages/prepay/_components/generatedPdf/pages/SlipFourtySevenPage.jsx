@@ -31,15 +31,9 @@ export default function SlipFourtySevenPage({ data }) {
         "KeyInvest can cancel or vary these conditions by giving you not less than seven (7) days written notice.",
     ];
 
-    // Put into data:
-    // data.investorDeclaration = {
-    //   checked: [true,false,...] // optional
-    //   signatureImage: "data:image/png;base64,..."
-    //   date: "2026-02-09"
-    // }
+
     const checked = data?.investorDeclaration?.checked || [];
-    const signatureImage = data?.investorDeclaration?.signatureImage || null;
-    const sigDate = data?.investorDeclaration?.date || "";
+    const signatureImage = data?.signatureImage || null;
 
     return (
         <Page size="A4" style={styles.page}>
@@ -62,61 +56,65 @@ export default function SlipFourtySevenPage({ data }) {
                     ))}
                 </View>
 
-                {/* Signature Box */}
+                {/* Signature block */}
                 <View
                     style={{
                         borderWidth: 1,
                         borderColor: "#E5E7EB",
-                        borderRadius: 10,
+                        borderRadius: 8,
+                        backgroundColor: "#F8FAFC",
                         padding: 10,
-                        backgroundColor: "#F9FAFB",
-                        marginTop: 4,
                     }}
                 >
-                    <Text style={{ fontSize: 12, fontWeight: 700, color: "#111827", marginBottom: 6 }}>
-                        Signature
-                    </Text>
+                    <View style={{ flexDirection: "row", gap: 10 }}>
+                        {/* Signature */}
+                        <View style={{ width: "65%" }}>
+                            <Text style={styles.pdfLabelSm}>Signature of investor</Text>
 
-                    <Text style={[styles.pdfLabel, { fontSize: 9.5, marginBottom: 3 }]}>
-                        Signature of Investor
-                    </Text>
+                            <View
+                                style={{
+                                    marginTop: 6,
+                                    borderWidth: 2,
+                                    borderColor: "#D1D5DB",
+                                    borderStyle: "dashed",
+                                    borderRadius: 8,
+                                    padding: 10,
+                                    minHeight: 90,
+                                    backgroundColor: "#FFFFFF",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                {signatureImage ? (
+                                    <Image
+                                        src={signatureImage}
+                                        style={{ width: "100%", height: 70, objectFit: "contain" }}
+                                    />
+                                ) : (
+                                    <Text style={{ fontSize: 9, color: "#9CA3AF" }}>
+                                        Signature captured in web form
+                                    </Text>
+                                )}
+                            </View>
+                        </View>
 
-                    <View
-                        style={{
-                            borderWidth: 2,
-                            borderColor: "#D1D5DB",
-                            borderStyle: "dashed",
-                            borderRadius: 8,
-                            padding: 10,
-                            minHeight: 80,
-                            backgroundColor: "#FFFFFF",
-                            justifyContent: "center",
-                            marginBottom: 6,
-                        }}
-                    >
-                        {signatureImage ? (
-                            <Image src={signatureImage} style={{ width: "100%", height: 60, objectFit: "contain" }} />
-                        ) : (
-                            <Text style={{ fontSize: 9, color: "#9CA3AF" }}>Signature not provided</Text>
-                        )}
-                    </View>
-
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                        <Text style={[styles.pdfLabel, { fontSize: 9.5, marginBottom: 0 }]}>Date:</Text>
-                        <View
-                            style={{
-                                width: 160,
-                                borderWidth: 1,
-                                borderColor: "#D1D5DB",
-                                borderRadius: 4,
-                                paddingVertical: 5,
-                                paddingHorizontal: 8,
-                                backgroundColor: "#F8FAFC",
-                            }}
-                        >
-                            <Text style={{ fontSize: 9.5, fontWeight: 700, color: "#3129A6" }}>
-                                {sigDate || "-"}
-                            </Text>
+                        {/* Date */}
+                        <View style={{ width: "35%" }}>
+                            <Text style={styles.pdfLabelSm}>Date:</Text>
+                            <View
+                                style={{
+                                    marginTop: 6,
+                                    borderWidth: 1,
+                                    borderColor: "#D1D5DB",
+                                    borderRadius: 4,
+                                    paddingVertical: 6,
+                                    paddingHorizontal: 8,
+                                    backgroundColor: "#FFFFFF",
+                                }}
+                            >
+                                <Text style={{ fontSize: 10, fontWeight: 700, color: "#3129A6" }}>
+                                    {data.updatedDate}
+                                </Text>
+                            </View>
                         </View>
                     </View>
                 </View>

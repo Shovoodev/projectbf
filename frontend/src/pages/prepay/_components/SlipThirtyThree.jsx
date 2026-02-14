@@ -1,11 +1,76 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
+import { useFormValidator, validators } from "../../../utility/formValidation";
 
 const SlipThirtyThree = () => {
   const { updateInvestor, handleChange } = usePrePayServiceApi();
+
+  const digitsOnly = (v) => String(v || "").replace(/\D/g, "");
+
+  const rules = useMemo(
+    () => ({
+      surname: [validators.required("Surname")],
+      givenNames: [validators.required("Given Names")],
+      dob: [validators.required("Date of Birth")],
+      postcode: [validators.postcodeAU("Postcode")],
+      mailpostcode: [validators.postcodeAU("Mail Postcode")],
+      daytimeTelephone: [validators.phoneAU("Daytime Telephone")],
+      mobile: [validators.phoneAU("Mobile")],
+      email: [validators.required("Email"), validators.email("Email")],
+    }),
+    []
+  );
+
+  const {
+    setValue,
+    register,
+    errorFor,
+    hasError,
+  } = useFormValidator({
+    rules,
+    initialValues: {
+      title: "",
+      surname: "",
+      givenNames: "",
+      dob: "",
+      gender: "",
+
+      unit: "",
+      streetNo: "",
+      streetName: "",
+      suburb: "",
+      state: "NSW",
+      postcode: "",
+      country: "AUSTRALIA",
+
+      mailunit: "",
+      mailstreetNo: "",
+      mailstreetName: "",
+      mailsuburb: "",
+      mailstate: "NSW",
+      mailpostcode: "",
+      mailcountry: "AUSTRALIA",
+
+      daytimeTelephone: "",
+      mobile: "",
+      daytimeAddress: "",
+      email: "",
+    },
+    onChangeField: (name, value) => {
+      updateInvestor("investorOne", [name], value);
+    },
+    onValidSubmit: () => handleChange(),
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const Err = ({ name }) =>
+    errorFor(name) ? (
+      <p className="text-red-600 text-xs mt-1">{errorFor(name)}</p>
+    ) : null;
+
   return (
     <div className="form-container-base p-2">
       <div>
@@ -27,14 +92,10 @@ const SlipThirtyThree = () => {
                     type="radio"
                     name="title"
                     value={t}
-                    onChange={(e) =>
-                      updateInvestor("investorOne", ["title"], e.target.value)
-                    }
+                    onChange={(e) => setValue("title", e.target.value)}
                     className="pdf-radio-input"
                   />
-                  <span className="text-gray-700 hover:text-blue-900">
-                    {t}
-                  </span>
+                  <span className="text-gray-700 hover:text-blue-900">{t}</span>
                 </label>
               ))}
             </div>
@@ -44,36 +105,30 @@ const SlipThirtyThree = () => {
             <label className="pdf-label">Surname:</label>
             <input
               type="text"
-              name="surname"
-              className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["surname"], e.target.value)
-              }
+              className={`pdf-input ${hasError("surname") ? "border-red-500" : ""}`}
+              {...register("surname")}
             />
+            <Err name="surname" />
           </div>
 
           <div>
             <label className="pdf-label">Given Names:</label>
             <input
               type="text"
-              name="givenNames"
-              className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["givenNames"], e.target.value)
-              }
+              className={`pdf-input ${hasError("givenNames") ? "border-red-500" : ""}`}
+              {...register("givenNames")}
             />
+            <Err name="givenNames" />
           </div>
 
           <div>
             <label className="pdf-label">Date of Birth:</label>
             <input
               type="date"
-              name="dob"
-              className="pdf-input"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["dob"], e.target.value)
-              }
+              className={`pdf-input ${hasError("dob") ? "border-red-500" : ""}`}
+              {...register("dob")}
             />
+            <Err name="dob" />
           </div>
 
           <div>
@@ -85,9 +140,7 @@ const SlipThirtyThree = () => {
                     type="radio"
                     name="gender"
                     value={g}
-                    onChange={(e) =>
-                      updateInvestor("investorOne", ["gender"], e.target.value)
-                    }
+                    onChange={(e) => setValue("gender", e.target.value)}
                     className="pdf-radio-input"
                   />
                   <span className="text-gray-700">{g}</span>
@@ -100,177 +153,110 @@ const SlipThirtyThree = () => {
         {/* Residential Address */}
         <h3 className="pdf-section-title">
           Residential Address{" "}
-          <span className="pdf-note">
-            (must not be a PO box, RMB or Locked Bag)
-          </span>
+          <span className="pdf-note">(must not be a PO box, RMB or Locked Bag)</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
-            <input
-              type="text"
-              name="res_unit"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["unit"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("unit")} />
           </div>
+
           <div className="col-span-4">
             <label className="pdf-label-sm">Street No</label>
-            <input
-              type="text"
-              name="res_streetNo"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["streetNo"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("streetNo")} />
           </div>
+
           <div className="col-span-3">
             <label className="pdf-label-sm">Street Name</label>
-            <input
-              type="text"
-              name="res_streetName"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["streetName"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("streetName")} />
           </div>
+
           <div className="col-span-3">
             <label className="pdf-label-sm">Suburb</label>
-            <input
-              type="text"
-              name="res_suburb"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["suburb"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("suburb")} />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">State</label>
             <input
               type="text"
-              defaultValue="NSW"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["state"], e.target.value)
-              }
               className="pdf-input pdf-input-readonly"
+              {...register("state")}
             />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">Postcode</label>
             <input
               type="text"
-              name="res_postcode"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["postcode"], e.target.value)
-              }
-              className="pdf-input"
+              className={`pdf-input ${hasError("postcode") ? "border-red-500" : ""}`}
+              {...register("postcode", { transform: digitsOnly })}
             />
+            <Err name="postcode" />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">Country</label>
             <input
               type="text"
-              defaultValue="AUSTRALIA"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["country"], e.target.value)
-              }
               className="pdf-input pdf-input-readonly"
+              {...register("country")}
             />
           </div>
         </div>
 
         {/* Mailing Address */}
         <h3 className="pdf-section-title">
-          Mailing Address{" "}
-          <span className="pdf-note">(if different to above address)</span>
+          Mailing Address <span className="pdf-note">(if different to above address)</span>
         </h3>
 
         <div className="grid grid-cols-6 gap-2">
           <div className="col-span-2">
             <label className="pdf-label-sm">Unit Number</label>
-            <input
-              type="text"
-              name="mail_unit"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailunit"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("mailunit")} />
           </div>
+
           <div className="col-span-4">
             <label className="pdf-label-sm">Street No</label>
-            <input
-              type="text"
-              name="mail_streetNo"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailstreetNo"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("mailstreetNo")} />
           </div>
+
           <div className="col-span-3">
             <label className="pdf-label-sm">Street Name</label>
-            <input
-              type="text"
-              name="mail_streetName"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["mailstreetName"],
-                  e.target.value,
-                )
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("mailstreetName")} />
           </div>
+
           <div className="col-span-3">
             <label className="pdf-label-sm">Suburb</label>
-            <input
-              type="text"
-              name="mail_suburb"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailsuburb"], e.target.value)
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("mailsuburb")} />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">State</label>
             <input
               type="text"
-              defaultValue="NSW"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailstate"], e.target.value)
-              }
               className="pdf-input pdf-input-readonly"
+              {...register("mailstate")}
             />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">Postcode</label>
             <input
               type="text"
-              name="mail_postcode"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailpostcode"], e.target.value)
-              }
-              className="pdf-input"
+              className={`pdf-input ${hasError("mailpostcode") ? "border-red-500" : ""}`}
+              {...register("mailpostcode", { transform: digitsOnly })}
             />
+            <Err name="mailpostcode" />
           </div>
+
           <div className="col-span-2">
             <label className="pdf-label-sm">Country</label>
             <input
               type="text"
-              defaultValue="AUSTRALIA"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mailcountry"], e.target.value)
-              }
               className="pdf-input pdf-input-readonly"
+              {...register("mailcountry")}
             />
           </div>
         </div>
@@ -282,62 +268,43 @@ const SlipThirtyThree = () => {
             <label className="pdf-label">Daytime Telephone:</label>
             <input
               type="tel"
-              name="daytimeTelephone"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["daytimeTelephone"],
-                  e.target.value,
-                )
-              }
-              className="pdf-input"
+              className={`pdf-input ${hasError("daytimeTelephone") ? "border-red-500" : ""}`}
+              {...register("daytimeTelephone", { transform: digitsOnly })}
             />
+            <Err name="daytimeTelephone" />
           </div>
+
           <div>
             <label className="pdf-label">Mobile:</label>
             <input
               type="tel"
-              name="mobile"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["mobile"], e.target.value)
-              }
-              className="pdf-input"
+              className={`pdf-input ${hasError("mobile") ? "border-red-500" : ""}`}
+              {...register("mobile", { transform: digitsOnly })}
             />
+            <Err name="mobile" />
           </div>
+
           <div>
             <label className="pdf-label">Daytime Address:</label>
-            <input
-              type="text"
-              name="daytimeAddress"
-              onChange={(e) =>
-                updateInvestor(
-                  "investorOne",
-                  ["daytimeAddress"],
-                  e.target.value,
-                )
-              }
-              className="pdf-input"
-            />
+            <input type="text" className="pdf-input" {...register("daytimeAddress")} />
           </div>
+
           <div>
             <label className="pdf-label">Email:</label>
             <input
               type="email"
-              name="email"
-              onChange={(e) =>
-                updateInvestor("investorOne", ["email"], e.target.value)
-              }
-              className="pdf-input"
+              className={`pdf-input ${hasError("email") ? "border-red-500" : ""}`}
+              {...register("email")}
             />
+            <Err name="email" />
           </div>
         </div>
 
         <p className="pdf-intro-p">
           If the application is being completed under a Power of Attorney (POA),
-          please include the attorney's contact details under
+          please include the attorney&apos;s contact details under
         </p>
 
-        {/* Footer */}
         <div className="pdf-footer">
           <div>
             <span className="text-blue-900">KeyInvest</span> Funeral Bond PDS

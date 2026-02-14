@@ -2,81 +2,89 @@ import express from "express";
 import { InvestmentApplicationModel } from "../db/prePayData";
 import { AuthenticatedRequest } from "../lib/types";
 import { claudinaryConfig } from "../config/cloudinary";
+import { getUploadedFile } from "../middlewear/upload";
 
-export const saveInvestmentApplication = async (
-  req: AuthenticatedRequest,
-  res: express.Response
-) => {
+// ✅ parses only when needed (FormData gives strings, JSON gives objects)
+const parseMaybeJson = <T>(value: any, fallback: T): T => {
+  if (value == null) return fallback;
+  if (typeof value === "object") return value as T; // already parsed JSON body
+  if (typeof value !== "string") return fallback;
+
   try {
-    if (!req.identity) {
+    return JSON.parse(value) as T;
+  } catch (e) {
+    // helpful error to debug which field is bad
+    throw new Error(`"${String(value)}" is not valid JSON`);
+  }
+};
+
+// parseMaybeJson stays same
+
+export const saveInvestmentApplication = async ( 
+  req: AuthenticatedRequest,
+  res: express.Response) => {
+  try {
+    if (!req.identity?._id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // ✅ Parse FormData JSON fields (because req.body values are strings)
-    const investorOne = req.body.investorOne ? JSON.parse(req.body.investorOne) : {};
-    const investorTwo = req.body.investorTwo ? JSON.parse(req.body.investorTwo) : {};
-    const accountHolders = req.body.accountHolders ? JSON.parse(req.body.accountHolders) : {};
-    const lumpSum = req.body.lumpSum ? JSON.parse(req.body.lumpSum) : { selected: false, amount: 0 };
-    const regularSavingsPlan = req.body.regularSavingsPlan
-      ? JSON.parse(req.body.regularSavingsPlan)
-      : { selected: false, amount: 0 };
-    const signatures = req.body.signatures ? JSON.parse(req.body.signatures) : {};
+    const investorOne = parseMaybeJson(req.body.investorOne, {});
+    const investorTwo = parseMaybeJson(req.body.investorTwo, {});
+    const accountHolders = parseMaybeJson(req.body.accountHolders, {});
+    const lumpSum = parseMaybeJson(req.body.lumpSum, { selected: false, amount: 0 });
+    const regularSavingsPlan = parseMaybeJson(req.body.regularSavingsPlan, { selected: false, amount: 0 });
+    const signatures = parseMaybeJson(req.body.signatures, {});
+
+    // ✅ NEW: declarations + optionalConsents (works for JSON or FormData)
+    const declarations = parseMaybeJson(req.body.declarations, []);
+    const optionalConsents = parseMaybeJson(req.body.optionalConsents, []);
 
     const rspEndCondition = req.body.rspEndCondition || "";
     const contributionAmount = Number(req.body.contributionAmount || 0);
     const aspFrequency = req.body.aspFrequency || "";
     const paymentMethod = req.body.paymentMethod || "";
 
-    // ✅ Get file url from CloudinaryStorage
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
-
     let signUrl = "";
-    if (files?.sign?.[0]) {
-      // ✅ With CloudinaryStorage, `path` is the Cloudinary URL
-      signUrl = files.sign[0].path;
-    }
+    const uploadFile = getUploadedFile(req, "prePaySign");
 
-    // ✅ save/update
-    let existingApplication = await InvestmentApplicationModel.findOne({
-      userid: req.identity._id, // make sure schema field is userid
-    });
-
-    let savedApplication;
-
-    const finalSignatures = signUrl ? { ...signatures, sign: signUrl } : signatures;
-
-    if (existingApplication) {
-      existingApplication.investorOne = investorOne;
-      existingApplication.investorTwo = investorTwo;
-      existingApplication.accountHolders = accountHolders;
-
-      existingApplication.lumpSum = lumpSum;
-      existingApplication.regularSavingsPlan = regularSavingsPlan;
-      existingApplication.rspEndCondition = rspEndCondition;
-
-      existingApplication.contributionAmount = contributionAmount;
-      existingApplication.aspFrequency = aspFrequency;
-      existingApplication.paymentMethod = paymentMethod;
-
-      existingApplication.signatures = finalSignatures;
-
-      savedApplication = await existingApplication.save();
-    } else {
-      savedApplication = await InvestmentApplicationModel.create({
-        userid: req.identity._id,
-        investorOne,
-        investorTwo,
-        accountHolders,
-        lumpSum,
-        regularSavingsPlan,
-        rspEndCondition,
-        contributionAmount,
-        aspFrequency,
-        paymentMethod,
-        signatures: finalSignatures,
-        status: "draft",
+    if (uploadFile?.path) {
+      const signUpload = await claudinaryConfig().uploader.upload(uploadFile.path, {
+        folder: "kin/sign",
       });
+      signUrl = signUpload.secure_url;
     }
+    const finalSignatures = signUrl ? { ...signatures, prePaySign: signUrl } : signatures;
+
+    // ✅ MERGE into investorOne
+    const investorOneFinal = {
+      ...investorOne,
+      declarations,
+      optionalConsents,
+    };
+
+    // ✅ IMPORTANT: use userid everywhere (matches schema + helper)
+    const filter = { userid: String(req.identity._id) };
+
+    const update = {
+      userid: String(req.identity._id),
+      investorOne: investorOneFinal,
+      investorTwo,
+      accountHolders,
+      lumpSum,
+      regularSavingsPlan,
+      rspEndCondition,
+      contributionAmount,
+      aspFrequency,
+      paymentMethod,
+      signatures: finalSignatures,
+      status: "draft",
+    };
+
+    const savedApplication = await InvestmentApplicationModel.findOneAndUpdate(
+      filter,
+      update,
+      { new: true, upsert: true }
+    );
 
     return res.status(200).json({
       message: "Investment application saved successfully",
@@ -91,27 +99,23 @@ export const saveInvestmentApplication = async (
   }
 };
 
-
 export const getApplicationdata = async (
   req: AuthenticatedRequest,
-  // req: express.Request,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
-    if (!req.identity) {
+    if (!req.identity?._id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    /* ---------------- FIND EXISTING DRAFT ---------------- */
     const existingApplication = await InvestmentApplicationModel.findOne({
-      _id: req.identity._id,
-    });
+      userid: String(req.identity._id),
+    }).sort({ createdAt: -1 });
 
     if (!existingApplication) {
       return res.status(404).json({ message: "No application found" });
     }
 
-    /* ---------------- RESPONSE ---------------- */
     return res.status(200).json({
       message: "Investment application retrieved successfully",
       data: existingApplication,

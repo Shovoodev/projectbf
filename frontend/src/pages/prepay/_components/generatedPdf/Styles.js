@@ -10,7 +10,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#3129A6",
   },
-
+  pdfLabelSm: {
+    fontSize: 9,        // small label
+    fontWeight: 700,    // ✅ use number (React-PDF supports 100–900)
+    color: "#3129A6",
+    marginBottom: 2,
+  },
   // ===============================
   // UTILITIES
   // ===============================
@@ -21,6 +26,15 @@ const styles = StyleSheet.create({
   // ROOT LAYOUT
   // ===============================
   formContainerBase: {
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    padding: 18,
+    paddingBottom: 70,
+  },
+  formContainerBasewithoutpaddingbottom: {
     width: "100%",
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
@@ -265,8 +279,22 @@ const styles = StyleSheet.create({
   // ===============================
   // PAGE HEADER (Slip 32)
   // ===============================
-  page: { padding: 18 },
-
+  page: { padding: 18, },
+  pageWithoutpaddingborrom: { padding: 18, paddingBottom: 90, }
+  ,
+  Photopage: {
+    position: "relative",
+    padding: 0,
+    margin: 0,
+  },
+  full: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover", // use "contain" if you don't want cropping
+  },
   noteBox: {
     backgroundColor: "#FEF3C7",
     borderWidth: 1,

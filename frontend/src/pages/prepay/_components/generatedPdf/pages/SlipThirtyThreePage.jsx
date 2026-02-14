@@ -125,7 +125,7 @@ const SlipThirtyThreePage = ({ data }) => {
                     <Field label="Email" value={investor.email} width="48%" />
                 </View>
 
-                <Text style={{ fontSize: 10, color: "#3129A6", marginTop: 6 }}>
+                <Text style={{ fontSize: 6, color: "#3129A6", marginTop: 2 }}>
                     If the application is being completed under a Power of Attorney (POA),
                     please include the attorney&apos;s contact details under
                 </Text>

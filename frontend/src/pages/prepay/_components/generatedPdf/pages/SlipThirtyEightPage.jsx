@@ -3,9 +3,7 @@ import { Page, View, Text, Image } from "@react-pdf/renderer";
 import styles from "../Styles";
 
 export default function SlipThirtyEightPage({ data }) {
-    const signatureImage = data?.signatureImage || null; // data URL recommended
-    const date = data?.date || "";
-
+    const signatureImage = data?.signatureImage || null;
     const directorName = data?.funeralDirectorName || "Black Tulip Funerals";
     const directorPhone = data?.funeralDirectorPhone || "1300110031";
 
@@ -153,7 +151,7 @@ export default function SlipThirtyEightPage({ data }) {
                                 }}
                             >
                                 <Text style={{ fontSize: 10, fontWeight: 700, color: "#3129A6" }}>
-                                    {date || "-"}
+                                    {data.updatedDate}
                                 </Text>
                             </View>
                         </View>

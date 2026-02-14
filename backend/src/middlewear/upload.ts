@@ -16,6 +16,28 @@ export const upload = multer({
 });
 
 // middleware/upload.js
+import type { Request } from "express";
+
+export const getUploadedFile = (req: Request, fieldName: string) => {
+  // upload.single(fieldName) puts it in req.file
+  const single = (req as any).file as Express.Multer.File | undefined;
+  if (single) return single;
+
+  // upload.fields(...) puts it in req.files as an object map
+  const files = (req as any).files as
+    | { [fieldname: string]: Express.Multer.File[] }
+    | Express.Multer.File[]
+    | undefined;
+
+  if (!files) return undefined;
+
+  // If it's already an array (upload.array), just take first
+  if (Array.isArray(files)) return files[0];
+
+  // Otherwise it's a map (upload.fields)
+  return files[fieldName]?.[0];
+};
+
 
 // Configuration for blog images
 const blogStorage = new CloudinaryStorage({
@@ -59,26 +81,6 @@ const blogContentStorage = new CloudinaryStorage({
     };
   },
 });
-
-export const uploadSignatureStorage = new CloudinaryStorage({
-  cloudinary: claudinaryConfig(),
-  params: async () => ({
-    folder: "kin/sign",
-    allowed_formats: ["jpg", "png", "jpeg", "gif", "webp"],
-    transformation: [
-      { width: 800, crop: "limit" },
-      { quality: "auto:good" },
-      { fetch_format: "auto" },
-    ],
-    public_id: `sign-${Date.now()}-${Math.round(Math.random() * 1e9)}`,
-  }),
-});
-
-// ✅ IMPORTANT: multer middleware
-export const uploadSignature = multer({ storage: uploadSignatureStorage }).fields([
-  { name: "sign", maxCount: 1 },
-]);
-
 // Configuration for blog featured images
 const featuredImageStorage = new CloudinaryStorage({
   cloudinary: claudinaryConfig(),
@@ -118,43 +120,6 @@ export const uploadBlogImages = multer({
   },
 });
 
-export const uploadFeaturedImage = multer({
-  storage: featuredImageStorage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB for featured images
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(
-        new multer.MulterError(
-          "LIMIT_UNEXPECTED_FILE",
-          "Only image files (JPEG, PNG, GIF, WebP) are allowed"
-        )
-      );
-    }
-  },
-});
-
-export const uploadContentImage = multer({
-  storage: blogContentStorage,
-  limits: {
-    fileSize: 3 * 1024 * 1024, // 3MB for content images
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(
-        new multer.MulterError(
-          "LIMIT_UNEXPECTED_FILE",
-          "Only image files (JPEG, PNG, GIF, WebP) are allowed"
-        )
-      );
-    }
-  },
-});
 
 // Fallback memory storage for large text fields
 export const memoryStorage = multer({
