@@ -1,6 +1,6 @@
 const NeedMoreTimeSection = () => {
   return (
-    <section className="bg-surface py-16 md:py-24">
+    <section className="bg-surface p-2 py-16 md:py-24">
       <div className="section-container">
         {/* --- CONTENT CONTAINER --- */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12 text-center max-w-4xl mx-auto">
@@ -30,7 +30,7 @@ const NeedMoreTimeSection = () => {
 
             {/* Arrange a Visit Button */}
             <a
-              href="#"
+              href="/contact"
               className="btn-secondary flex items-center justify-center gap-3 bg-transparent text-black border border-black px-8 py-3 rounded-full uppercase font-bold text-sm w-full sm:w-auto hover:bg-black hover:text-white transition-all shadow-sm hover:shadow-md"
             >
               Arrange a Visit

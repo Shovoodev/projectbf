@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 import img from "./images/About-us-image-1-e1760255666343.png";
 const About = () => {
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24 p-2">
       <div className="section-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Image */}
-          <div className="rounded-xl overflow-hidden shadow-lg">
+          <div className="rounded-xl overflow-hidden  flex justify-center">
             <img
               src={img}
               alt="Black funeral hearse"
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover  md:max-w-full"
             />
           </div>
 
           {/* Content */}
-          <div className="space-y-6">
+          <div className="space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
             <div className="inline-block px-4 py-1 border border-black rounded-full text-xs font-bold uppercase tracking-widest">
               About Us
             </div>
@@ -26,7 +26,7 @@ const About = () => {
               <br />
               And Care
             </h2>
-            <p className="text-gray-600 font-body leading-relaxed text-justify">
+            <p className="text-gray-600 font-body leading-relaxed text-justify md:text-left md:mx-0 mx-auto max-w-md">
               At Black Tulip Funerals, we believe every life deserves to be
               honored with dignity, compassion, and care. With over 10,000
               families served and a 5-star customer rating, our dedicated team
@@ -35,7 +35,7 @@ const About = () => {
               professionalism-every step of the way.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-4 items-center justify-center md:justify-start w-full">
               <a
                 href="tel:1300110031"
                 className="flex items-center gap-2 font-bold text-black border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white transition-colors"

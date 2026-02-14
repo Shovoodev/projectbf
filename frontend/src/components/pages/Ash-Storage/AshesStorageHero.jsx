@@ -7,7 +7,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 const AshesStorageHero = () => {
   return (
-    <header className="relative min-h-[500px] md:h-[600px] flex items-center justify-start overflow-hidden">
+    <header className="relative p-2 min-h-[500px] md:h-[600px] flex items-center justify-start overflow-hidden">
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -16,19 +16,19 @@ const AshesStorageHero = () => {
           src={img}
         />
         {/* Overlay ensures text readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0"></div>
       </div>
 
       <div className="relative z-10 section-container w-full py-12 md:py-0">
         <div className="max-w-3xl">
           {/* Responsive Heading */}
-          <h1 className="heading-hero text-white">
+          <h1 className="heading-hero text-white text-center md:text-left">
             Secure Ashes Storage After Cremation
           </h1>
 
           {/* Responsive Description */}
-          <div className="text-base md:text-lg lg:text-xl font-medium text-gray-100 tracking-wide mb-10 leading-relaxed">
-            <p>
+          <div className="md:text-lg text-center md:text-left lg:text-xl font-medium  tracking-wide mb-10 leading-relaxed">
+            <p className="text-white">
               We understand that every family’s journey through grief is
               different. We offer safe, discreet, and respectful storage for
               your loved one’s ashes — for as long as you need — giving you
@@ -44,7 +44,10 @@ const AshesStorageHero = () => {
             >
               <FaPhone /> 1300 11 0031
             </a>
-            <Link to="/contact" className="btn-enquire">
+            <Link
+              to="/contact"
+              className="btn-enquire flex items-center justify-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg"
+            >
               <span className="">Enquire Now</span>
               <FaLongArrowAltRight />
             </Link>

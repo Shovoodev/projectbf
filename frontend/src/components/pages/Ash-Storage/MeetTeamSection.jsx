@@ -12,7 +12,7 @@ const MeetTeamSection = () => {
   const teamImages = [team1, team2, team3, team4, team5, team6, team7];
 
   return (
-    <section className="bg-white py-16 md:py-24 overflow-hidden">
+    <section className="bg-white py-16 md:py-24 overflow-hidden p-2">
       <div className="section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* --- LEFT SIDE: INFINITE SCROLLING GALLERY --- */}
@@ -49,17 +49,17 @@ const MeetTeamSection = () => {
           </div>
 
           {/* --- RIGHT SIDE: CONTENT --- */}
-          <div className="space-y-6">
-            <div>
-              <span className="font-display text-sm text-gray-500 uppercase tracking-widest">
-                Meet Black Tulip Funerals Team
-              </span>
-              <h2 className="text-3xl md:text-4xl  font-bold text-gray-900 mt-2 leading-tight">
-                Guiding You with Care
-              </h2>
-            </div>
+          {/* --- RIGHT SIDE: CONTENT --- */}
+          <div className="space-y-6 text-center md:text-left flex flex-col items-center md:items-start">
+            <span className="font-display text-sm text-gray-500 uppercase tracking-widest">
+              Meet Black Tulip Funerals Team
+            </span>
 
-            <p className="text-gray-600 font-body text-base md:text-lg leading-relaxed text-justify">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              Guiding You with Care
+            </h2>
+
+            <p className="text-gray-600 font-body text-base md:text-lg leading-relaxed md:text-justify max-w-lg">
               Our team is committed to respectful care and flexible arrangements
               to suit diverse needs and beliefs. If uncertain about immediate
               collection or final plans for ashes, families are welcome to
@@ -67,7 +67,7 @@ const MeetTeamSection = () => {
             </p>
 
             <a
-              href="#"
+              href="/team"
               className="inline-flex items-center gap-2 bg-transparent text-black border border-black hover:bg-black hover:text-white px-8 py-3 rounded-full uppercase font-bold text-sm transition-all duration-300 shadow-sm hover:shadow-md"
             >
               Explore Our Team <FaArrowRight />

@@ -70,7 +70,7 @@ const SlipThirtySeven = () => {
         <h1 className="pdf-h2 text-3xl mb-0">5. Application</h1>
 
         <div className="pdf-info-box bg-blue-50/50">
-          <p className="text-[13px]">
+          <p className="pdf-intro-p">
             Before signing this Application Form, Investors should read the PDS
             to which this application is attached.
           </p>

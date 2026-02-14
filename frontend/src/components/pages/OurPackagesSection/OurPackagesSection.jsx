@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import img1 from "../Home/images/Attending-Service-Cremation.png";
 import img2 from "../Home/images/No-Service-Direct-Cremation.png";
 import img3 from "../Home/images/Viewing-Cremation.png";
+import { packagePricesDetail } from "../../../utility/config";
 
 const PackageCard = ({
   title,
@@ -42,15 +43,9 @@ const PackageCard = ({
     </div>
 
     {/* Content Body */}
-    <div className="p-8 flex flex-col flex-grow">
+    <div className="p-6 flex flex-col flex-grow">
       {/* Icon (Optional Visual Cue) */}
-      <div className="mb-4 text-3xl  group-hover:text-black transition-colors">
-        {isPopular ? (
-          <MdOutlineChurch />
-        ) : title.includes("Viewing") ? (
-          <FaEye />
-        ) : null}
-      </div>
+      <div className="mb-4 text-3xl  group-hover:text-black transition-colors"></div>
 
       <h3 className="text-2xl font-display font-bold text-gray-900 mb-2 leading-tight min-h-[3.5rem]">
         {title}
@@ -66,7 +61,7 @@ const PackageCard = ({
         <p className="text-4xl font-body font-bold text-black">{price}</p>
       </div>
       {/* CTA Button */}
-      {console.log(link)}
+
       <Link
         to={link}
         rel="noopener noreferrer"
@@ -84,7 +79,7 @@ const OurPackagesSection = () => {
   const packages = [
     {
       title: "No Service Direct Cremation",
-      price: "$2299",
+      price: packagePricesDetail.noViewCremention,
       description:
         "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process. We handle your loved one’s remains with the utmost respect and dignity, offering a simplified farewell that honours your wishes.",
       image: img1,
@@ -93,7 +88,7 @@ const OurPackagesSection = () => {
     },
     {
       title: "Private Viewing & Cremation",
-      price: "$3399",
+      price: packagePricesDetail.viewingAndCremention,
       description:
         "The Black Tulip Private Viewing & Cremation Package provides families with a dignified, compassionate, and cost-effective option during a difficult time. This package allows for a respectful farewell in a private setting that brings comfort to family and friends. Maximum 30 Guests.",
       image: img2,
@@ -102,7 +97,7 @@ const OurPackagesSection = () => {
     },
     {
       title: "Attending Service & Cremation",
-      price: "$4499",
+      price: packagePricesDetail.attendence,
       description:
         "A lavish, all‑inclusive cremation package in our exclusive 288‑seat auditorium chapel. Includes quality coffin, flowers, celebrant, audio‑visual tribute, livestream, printed stationery, all cremation costs, death certificate and preparation of your loved one. Every detail is handled for a truly memorable farewell.",
       image: img3,

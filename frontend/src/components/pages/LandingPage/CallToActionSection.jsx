@@ -77,7 +77,7 @@ const CallToActionSection = () => {
       <div className="section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* LEFT */}
-          <div className="flex flex-col justify-center space-y-6 lg:pr-12">
+          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-6 lg:pr-12">
             <span className="font-display text-lg text-gray-500 uppercase tracking-widest">
               Start Here
             </span>
@@ -89,13 +89,13 @@ const CallToActionSection = () => {
               simple.
             </p>
 
-            <div className="flex items-center gap-4 mt-6">
-              <div className="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full">
+            <div className="flex flex-col items-center gap-4 mt-6 sm:flex-row sm:items-center sm:justify-start">
+              <div className="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mx-auto sm:mx-0">
                 <FaPhone />
               </div>
               <a
                 href="tel:1300110031"
-                className="text-3xl font-display font-bold text-gray-900"
+                className="text-2xl font-body  text-gray-900"
               >
                 1300 11 0031
               </a>
@@ -103,23 +103,23 @@ const CallToActionSection = () => {
           </div>
 
           {/* RIGHT FORM */}
-          <div className="bg-white p-8 rounded-xl shadow-lg border">
-            <h3 className="text-2xl font-display font-bold mb-2">
+          <div className="bg-white p-8 rounded-xl shadow-lg border flex flex-col items-center">
+            <h3 className="text-2xl font-display font-bold mb-2 text-center w-full">
               Request A Call Back
             </h3>
-            <p className="text-gray-500 text-sm mb-6">
+            <p className="text-gray-500 text-sm mb-6 text-center w-full">
               Our caring team will respond promptly.
             </p>
 
             <form
               ref={formRef}
               onSubmit={handleSubmit}
-              className="space-y-4"
+              className="space-y-4 w-full"
               noValidate
             >
               {status.error && (
                 <div
-                  className="text-red-600 font-medium mb-2"
+                  className="text-red-600 font-medium mb-2 text-center"
                   role="alert"
                   aria-live="assertive"
                 >
@@ -128,7 +128,7 @@ const CallToActionSection = () => {
               )}
               {status.success && (
                 <div
-                  className="text-green-600 font-medium mb-2"
+                  className="text-green-600 font-medium mb-2 text-center"
                   role="status"
                   aria-live="polite"
                 >

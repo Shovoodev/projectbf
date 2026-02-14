@@ -147,11 +147,7 @@ const NewsSection = () => {
                 {/* ✅ Blog Cards (only 12 per page) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {currentBlogs.map((item) => (
-                    <Card
-                      item={item}
-                      getLink={(b) => `/blog/${b.id}`}
-
-                    />
+                    <Card item={item} getLink={(b) => `/blog/${b.id}`} />
                   ))}
                 </div>
 
@@ -161,10 +157,11 @@ const NewsSection = () => {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded border text-sm ${currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`px-4 py-2 rounded border text-sm ${
+                        currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       Prev
                     </button>
@@ -185,10 +182,11 @@ const NewsSection = () => {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded border text-sm ${page === currentPage
-                          ? "bg-black text-white border-black"
-                          : "hover:bg-gray-100"
-                          }`}
+                        className={`px-4 py-2 rounded border text-sm ${
+                          page === currentPage
+                            ? "bg-black text-white border-black"
+                            : "hover:bg-gray-100"
+                        }`}
                       >
                         {page}
                       </button>
@@ -196,24 +194,25 @@ const NewsSection = () => {
 
                     {getPageNumbers()[getPageNumbers().length - 1] !==
                       totalPages && (
-                        <>
-                          <span className="px-2 text-gray-500">...</span>
-                          <button
-                            onClick={() => goToPage(totalPages)}
-                            className="px-4 py-2 rounded border text-sm hover:bg-gray-100"
-                          >
-                            {totalPages}
-                          </button>
-                        </>
-                      )}
+                      <>
+                        <span className="px-2 text-gray-500">...</span>
+                        <button
+                          onClick={() => goToPage(totalPages)}
+                          className="px-4 py-2 rounded border text-sm hover:bg-gray-100"
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
 
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`px-4 py-2 rounded border text-sm ${
+                        currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       Next
                     </button>

@@ -2,7 +2,7 @@ import { FaCreditCard, FaDollarSign, FaRegClock } from "react-icons/fa6";
 import img from "./images/Combination-lock-scaled.jpg";
 const StorageOptionsSection = () => {
   return (
-    <section className="bg-white py-16 md:py-24 border-t border-gray-100">
+    <section className="bg-white p-2 py-16 md:py-24 border-t border-gray-100">
       <div className="section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* --- LEFT SIDE: IMAGE --- */}
@@ -17,7 +17,7 @@ const StorageOptionsSection = () => {
           {/* --- RIGHT SIDE: CONTENT --- */}
           <div className="space-y-8 order-2 lg:order-2">
             <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 leading-tight">
+              <h2 className="text-3xl text-center md:text-left md:text-4xl font-display font-bold text-gray-900 leading-tight">
                 Transparent and Flexible Storage Options
               </h2>
               <div className="w-20 h-1 bg-black opacity-10"></div>

@@ -20,8 +20,10 @@ function Testimonials() {
     <>
       <Hero title={"Testimonials"} subtitle={"Testimonials"} />
       <section className="max-w-[1360px] mx-auto px-2.5 sm:px-4 lg:px-8 py-12 space-y-16">
+        <GoogleReviews />
+
         <div
-          className="trustpilot-widget"
+          class="trustpilot-widget"
           data-locale="en-US"
           data-template-id="56278e9abfbbba0bdcd568bc"
           data-businessunit-id="6988382e52b30924cefa223f"
@@ -32,12 +34,12 @@ function Testimonials() {
           <a
             href="https://www.trustpilot.com/review/blacktulipfunerals.com.au"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
           >
             Trustpilot
           </a>
         </div>
-        <GoogleReviews />
+
         <TestimonialsGridSection />
       </section>
     </>

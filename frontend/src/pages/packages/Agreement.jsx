@@ -1,13 +1,13 @@
+import { pdf } from "@react-pdf/renderer";
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { pdf } from "@react-pdf/renderer";
 import { useLocation, useNavigate } from "react-router-dom";
 import base64ToFile from "../../utility";
-const CORE = import.meta.env.VITE_API_URL;
-import Paragraph from "./aggrementComponent/Paragraph";
+import { showToast } from "../../utility/toast";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
-import { showToast } from "../../utility/toast";
+import Paragraph from "./aggrementComponent/Paragraph";
+const CORE = import.meta.env.VITE_API_URL;
 /* ================= Reusable Components ================= */
 
 const FormLabel = ({ children, required }) => (
@@ -187,14 +187,11 @@ const AgreementForm = () => {
     }));
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setMessage("");
-
 
     const transformSelectionsForBackend = (selections) => {
       if (!selections) return null;
@@ -227,7 +224,8 @@ const AgreementForm = () => {
         reader.onerror = () => reject(new Error("FileReader failed"));
         reader.onloadend = () => {
           const base64 = reader.result?.toString().split(",")[1];
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
+          if (!base64)
+            return reject(new Error("Failed to convert PDF to base64"));
           resolve(base64);
         };
         reader.readAsDataURL(blob);
@@ -239,8 +237,14 @@ const AgreementForm = () => {
         { field: formKinValues.email, message: "Email is required" },
         { field: formKinValues.givenName, message: "First name is required" },
         { field: formKinValues.mobile, message: "Mobile number is required" },
-        { field: deceasedFormValues.givenName, message: "Deceased first name is required" },
-        { field: deceasedFormValues.surname, message: "Deceased surname is required" },
+        {
+          field: deceasedFormValues.givenName,
+          message: "Deceased first name is required",
+        },
+        {
+          field: deceasedFormValues.surname,
+          message: "Deceased surname is required",
+        },
       ];
 
       for (const { field, message } of requiredFields) {
@@ -250,7 +254,9 @@ const AgreementForm = () => {
       // 1) Transform selections (optional)
       const backendSelections = transformSelectionsForBackend(selections);
       if (!backendSelections) {
-        console.warn("No selections provided - continuing without package selections");
+        console.warn(
+          "No selections provided - continuing without package selections",
+        );
       }
 
       // 2) Register user
@@ -312,7 +318,9 @@ const AgreementForm = () => {
       });
 
       if (Array.isArray(deceasedFormValues.photo)) {
-        deceasedFormValues.photo.forEach((file) => deceasedFD.append("photo", file));
+        deceasedFormValues.photo.forEach((file) =>
+          deceasedFD.append("photo", file),
+        );
       }
 
       const deceasedRes = await fetch(`${CORE}/desencepersondetailsanswer`, {
@@ -370,7 +378,9 @@ const AgreementForm = () => {
       const invoiceData = data?.data;
 
       if (!invoiceData) {
-        throw new Error("No invoice data returned from /all-selected-selections");
+        throw new Error(
+          "No invoice data returned from /all-selected-selections",
+        );
       }
 
       const blob = await pdf(
@@ -378,7 +388,7 @@ const AgreementForm = () => {
           invoiceDetails={invoiceData}
           deceasedName={deceasedFormValues.givenName}
           kinName={formKinValues.givenName}
-        />
+        />,
       ).toBlob();
 
       console.log("Invoice PDF blob size:", blob.size);
@@ -419,9 +429,8 @@ const AgreementForm = () => {
     }
   };
 
-
-  const deceasedLabel = deceasedFormValues.givenName || "deceased"
-  const kinLabel = formKinValues.givenName || "Next of kin"
+  const deceasedLabel = deceasedFormValues.givenName || "deceased";
+  const kinLabel = formKinValues.givenName || "Next of kin";
 
   const translations = {
     deceasedSectionTitle: { en: "Deceased Person Details", zh: "逝者信息" },

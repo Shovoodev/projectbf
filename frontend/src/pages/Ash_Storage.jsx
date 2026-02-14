@@ -7,14 +7,14 @@ import WhyDelayCollectionSection from "../components/pages/Ash-Storage/WhyDelayC
 
 function Ash_Storage() {
   return (
-    <>
+    <section>
       <AshesStorageHero />
       <AshesStorageContentSection />
       <WhyDelayCollectionSection />
       <StorageOptionsSection />
       <MeetTeamSection />
       <NeedMoreTimeSection />
-    </>
+    </section>
   );
 }
 

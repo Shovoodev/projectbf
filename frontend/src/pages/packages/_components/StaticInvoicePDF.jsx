@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
 });
 
 const StaticInvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
+  console.log("Invoice Details in PDF:", invoiceDetails);
   if (!invoiceDetails) return null;
   const formattedDate2 = new Date(invoiceDetails.createdAt)
     .toLocaleDateString("en-GB")

@@ -2,7 +2,7 @@ import React from "react";
 import img1 from "./images/service/Attending-Service-Cremation.png";
 import img2 from "./images/service/No-Service-Direct-Cremation.png";
 import img3 from "./images/service/Viewing-Cremation.png";
-const PackageCard = ({ title, price, image, desc }) => (
+const PackageCard = ({ title, price, image, desc, link }) => (
   <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col h-full">
     <div className="h-48 overflow-hidden">
       <img
@@ -24,7 +24,7 @@ const PackageCard = ({ title, price, image, desc }) => (
       ></h3>
       <div className="w-12 h-0.5 bg-gray-200 mx-auto mb-4"></div>
       <p className="text-sm text-gray-600 mb-6 font-body flex-1">{desc}</p>
-      <a href="#" className="btn-primary text-xs py-2 w-full mt-auto">
+      <a href={link} className="btn-primary text-xs py-2 w-full mt-auto">
         Read More
       </a>
     </div>
@@ -35,26 +35,29 @@ const PackagesPreview = () => {
   const packages = [
     {
       title: "No Service<br/>Direct Cremation",
-      price: "$ 2200",
+      price: "$ 2295",
       image: img1,
       desc: "If you prefer a farewell without a formal viewing or ceremony, consider this streamlined package that focuses solely on the cremation process.",
+      link: "/packages/no-service-cremention",
     },
     {
       title: "Viewing &<br/>Cremation",
-      price: "$ 3300",
+      price: "$ 3595",
       image: img2,
       desc: "Our Viewing & Cremation Package provides families in Sydney with a dignified, compassionate, and cost effective option during a difficult time.",
+      link: "/packages/viewing-and-cremention",
     },
     {
       title: "Attending Service<br/>Cremation",
-      price: "$ 4400",
+      price: "$ 4895",
       image: img3,
       desc: "This package offers a compassionate and affordable way to say goodbye, allowing families to gather with loved ones for a meaningful ceremony.",
+      link: "/packages/attending-service-cremation",
     },
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24 p-2">
       <div className="section-container">
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2">

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
+import { packagePricesDetail } from "../../utility/config";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -24,11 +25,6 @@ const attendenceData = [
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
       {
         label: "Sydney Metro",
         value: "Sydney Metro",
@@ -51,6 +47,11 @@ const attendenceData = [
     question: "Stationery",
     type: "select",
     options: [
+      {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
       {
         label: "50 Memoriam Cards",
         value: "50-memoriam-cards",
@@ -119,6 +120,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "General Wash | Dress | Makeup",
         priceAdjustment: 0,
         value: "General Wash | Dress | Makeup",
@@ -136,6 +142,11 @@ const attendenceData = [
     question: "Coffin",
     type: "select",
     options: [
+      {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
       {
         label: "Contract - Raw (Included)",
         value: "contract-raw",
@@ -331,6 +342,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "100cm Mixed Seasonal Coffin Cover - White",
         value: "100cm Mixed Seasonal Coffin Cover - White",
         priceAdjustment: 0,
@@ -353,6 +369,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -370,6 +391,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "Collect in Person",
         value: "Collect in Person",
         priceAdjustment: 0,
@@ -385,17 +411,19 @@ const attendenceData = [
 
 // --- Reusable Row Select Component ---
 
-const AttendenceCrementionPage = () => {
-  const BASE_PRICE = 4499;
+const AttendenceCrementionPage = ({ isLanding }) => {
+  const BASE_PRICE = isLanding
+    ? packagePricesDetail.attendingLanding
+    : packagePricesDetail.attendence;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },
-    stationery: { value: "50 Memoriam Cards", price: 0 },
-    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
-    coffin: { value: "contract-raw", price: 0 },
-    flowers: { value: "100cm Mixed Seasonal Coffin Cover - White", price: 0 },
-    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
-    collectionOfUrn: { value: "Collect in Person", price: 0 },
+    stationery: { value: "Select an Option", price: 0 },
+    bodyPreparation: { value: "Select an Option", price: 0 },
+    coffin: { value: "Select an Option", price: 0 },
+    flowers: { value: "Select an Option", price: 0 },
+    urn: { value: "Select an Option", price: 0 },
+    collectionOfUrn: { value: "Select an Option", price: 0 },
   });
 
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
@@ -523,12 +551,12 @@ const AttendenceCrementionPage = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen pb-20">
+    <div className="bg-white  pb-2">
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-10">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-6">
               Attending Service Cremation
             </h1>
             <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
@@ -655,7 +683,7 @@ const AttendenceCrementionPage = () => {
         </div>
 
         {/* --- ACTIONS --- */}
-        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
+        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-2">
           {/* Make Agreement button */}
           <div>
             <button

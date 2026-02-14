@@ -26,7 +26,14 @@ const Footer = () => {
       "Privacy Policy",
       "Service Area",
     ],
-    col3: ["Blog", "FAQ", "Landing Page", "Pay Now", "Testimonials"],
+    col3: [
+      "Blog",
+      "FAQ",
+      "Landing Page",
+      "Attending Landing",
+      "Pay Now",
+      "Testimonials",
+    ],
   };
 
   const getPathFromLabel = (label) => {
@@ -41,9 +48,10 @@ const Footer = () => {
       "Payment Terms": "/payment-terms",
       "Privacy Policy": "/privacy-policy",
       "Service Area": "/service-area",
-      Blog: "/news",
+      Blog: "/blog",
       FAQ: "/faq",
       "Landing Page": "/landing-page",
+      "Attending Landing": "/attending-cremation-landing",
       "Pay Now": "/pay-now",
       Testimonials: "/testimonials",
     };

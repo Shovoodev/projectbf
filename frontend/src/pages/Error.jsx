@@ -1,12 +1,9 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Footer from "../components/layouts/Footer/Footer";
-import Header from "../components/layouts/Header/Header";
 // import img from "../components/layouts/Header/btf-logo.png";
 const Error = () => {
   return (
     <>
-      <Header />
       <div className="min-h-screen bg-white flex items-center justify-center px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
           {/* --- ERROR CODE --- */}
@@ -53,7 +50,6 @@ const Error = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
