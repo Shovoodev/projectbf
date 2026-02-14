@@ -1,13 +1,12 @@
 import React from "react";
 import styles from "../Styles";
 
-const SlipFourtyThreePage = () => {
+import { Page, Image } from "@react-pdf/renderer";
+const SlipFourtyThreePage = ({ photoSrc }) => {
+
     return (
         <Page size="A4" style={styles.Photopage} wrap={false}>
-            <Image
-                src="/42.jpg"         // ✅ put the image in your public folder
-                style={styles.full}
-            />
+            {photoSrc ? <Image src={photoSrc} style={styles.full} /> : null}
         </Page>
     );
 };

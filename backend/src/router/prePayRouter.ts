@@ -7,7 +7,10 @@ import { isAuthenticated } from "../middlewear";
 import { upload } from "../middlewear/upload";
 
 export default (router: express.Router) => {
-  router.post("/save-investment-prepay", isAuthenticated, upload.single("prePaySign"), saveInvestmentApplication);
+  router.post("/save-investment-prepay", isAuthenticated,   upload.fields([
+    { name: "prePayPhoto", maxCount: 1 },
+    { name: "prePaySign", maxCount: 1 },
+  ]), saveInvestmentApplication);
 
    
   router.post(

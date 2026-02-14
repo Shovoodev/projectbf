@@ -153,7 +153,13 @@ const NoServiceCrementionPage = () => {
             position: "bottom-right",
           },
         });
-        navigate(`/prepay`);
+        navigate("/prepay", {
+          state: {
+            selections,
+            path: "new-no-service-cremation",
+            totalPrice: totalPrice,
+          },
+        });
       }, 100);
     } catch (err) {
       setMessage(err.message, "error");

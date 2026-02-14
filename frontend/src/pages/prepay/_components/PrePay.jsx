@@ -35,9 +35,8 @@ import {
   twentyTwo,
   two,
 } from "../../../images/index";
-
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
-
+const CORE = import.meta.env.VITE_API_URL;
 // slips (UI only)
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
@@ -55,6 +54,9 @@ import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
 
 import PDFDownloadButton from "./generatedPdf/TestDownload";
+import { useLocation } from "react-router-dom";
+import { pdf } from "@react-pdf/renderer";
+import PrePayInvoicePDF from "./generatedPdf/PrepayinvoicePDF";
 
 const images = [
   cover,
@@ -97,6 +99,136 @@ const PrePay = ({ amount }) => {
   const [buttonStatus, setButtonStatus] = useState(true);
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
+
+
+  const location = useLocation();
+  const { selections, path, totalPrice } = location.state || {};
+  console.log({ selections, path, totalPrice })
+
+  const clientInvoice = async (e) => {
+    e?.preventDefault?.();
+
+    const transformSelectionsForBackend = (selectionsObj) => {
+      if (!selectionsObj) return null;
+
+      const transformed = {};
+      const keyMapping = {
+        stationery: selectionsObj.stationery,
+        bodyPreparation: selectionsObj.bodyPreparation,
+        coffin: selectionsObj.coffin,
+        flowers: selectionsObj.flowers,
+        urn: selectionsObj.urn,
+        collectionOfUrn: selectionsObj.collectionOfUrn,
+        transferOption: selectionsObj.transferOption,
+      };
+
+      Object.entries(keyMapping).forEach(([key, value]) => {
+        if (!value) return;
+        transformed[key] = {
+          value: value?.value ?? value,
+          price: Number(value?.price ?? 0),
+        };
+      });
+
+      return Object.keys(transformed).length ? transformed : null;
+    };
+
+    const toBase64FromBlob = (blob) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("FileReader failed"));
+        reader.onloadend = () => {
+          const result = String(reader.result || "");
+          const base64 = result.split(",")[1];
+          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
+          resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+      });
+
+    try {
+      setLoadingText("Preparing invoice…");
+
+      const backendSelections = transformSelectionsForBackend(selections);
+
+      // ✅ selections/path may be missing on refresh
+      if (!backendSelections || !path) {
+        console.warn("Missing selections or path from location.state. Skipping save selections step.");
+      } else {
+        // save selections
+        const selectionRes = await fetch(`${CORE}/${path}`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            selections: backendSelections,
+            totalPrice: totalPrice ?? 0,
+          }),
+        });
+
+        if (!selectionRes.ok) {
+          const errorText = await selectionRes.text();
+          console.warn("Failed to save selections:", errorText);
+        }
+      }
+
+      setLoadingText("Fetching invoice data…");
+      const resSelections = await fetch(`${CORE}/all-selected-selections`, {
+        credentials: "include",
+      });
+
+      if (!resSelections.ok) {
+        const t = await resSelections.text();
+        throw new Error(`Failed to load selections: ${t}`);
+      }
+
+      const data = await resSelections.json();
+      const invoiceData = data?.data;
+
+      if (!invoiceData) {
+        throw new Error("No invoice data returned from /all-selected-selections");
+      }
+
+      setLoadingText("Rendering invoice PDF…");
+      const blob = await pdf(
+        <PrePayInvoicePDF
+          invoiceDetails={invoiceData}
+        />
+      ).toBlob();
+
+      if (!blob || blob.size === 0) {
+        throw new Error("Invoice PDF generated as empty blob");
+      }
+
+      const base64data = await toBase64FromBlob(blob);
+
+      setLoadingText("Sending invoice…");
+      const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          selections: backendSelections ?? selections ?? {},
+          totalPrice: invoiceData?.totalPrice ?? totalPrice ?? 0,
+          pdfAttachment: base64data,
+        }),
+      });
+
+      const invoiceText = await invoiceRes.text();
+
+      if (!invoiceRes.ok) {
+        throw new Error(`Send invoice failed: ${invoiceText}`);
+      }
+
+      setLoadingText("Invoice sent ✅");
+      return true;
+    } catch (err) {
+      console.error("clientInvoice error:", err);
+      setLoadingText(err?.message || "Invoice failed");
+      throw err;
+    }
+  };
+
 
   // UI slips only (not used for PDF generation now)
   const slips = useMemo(
@@ -189,6 +321,7 @@ const PrePay = ({ amount }) => {
   const fetchAndSendPdf = async () => {
     try {
       await submitInvestment();
+      await clientInvoice()
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
       console.error("PDF send failed:", error);

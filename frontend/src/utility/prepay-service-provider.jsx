@@ -116,7 +116,9 @@ export const PrePayServiceProvider = ({ children }) => {
 
   // ------------------- Signature -------------------
   const sigCanvasRef = useRef(null);
-  const [signature, setSignature] = useState("");
+  const [signature, setSignature] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState("");
   const [currentDate, setCurrentDate] = useState("");
 
   const saveSignature = async () => {
@@ -144,6 +146,37 @@ export const PrePayServiceProvider = ({ children }) => {
     const day = String(d.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // optional: validate
+    if (!file.type.startsWith("image/")) {
+      showToast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      showToast.error("Image too large (max 8MB)");
+      return;
+    }
+
+    setPhotoFile(file);
+
+    // create preview URL
+    const url = URL.createObjectURL(file);
+    setPhotoPreviewUrl(url);
+  };
+
+  // allow removing photo
+  const clearPhoto = () => {
+    setPhotoFile(null);
+    setPhotoPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return "";
+    });
+  };
+
+
 
   const [date, setDate] = useState(getCurrentDate());
 
@@ -196,6 +229,7 @@ export const PrePayServiceProvider = ({ children }) => {
       return updated;
     });
   };
+
 
   const submitInvestment = async () => {
     if (isGeneratingPdf) return;
@@ -259,22 +293,31 @@ export const PrePayServiceProvider = ({ children }) => {
       // 3) Save investment prepay
       let resPrePay;
 
-      // ✅ If you have a file -> use FormData
-      if (signature instanceof File) {
+      const hasSignFile = signature instanceof File;
+      const hasPhotoFile = photoFile instanceof File; // ✅ you need to have this variable
+
+      if (hasSignFile || hasPhotoFile) {
         const fd = new FormData();
+
         fd.append("investorOne", JSON.stringify(payload.investorOne));
         fd.append("investorTwo", JSON.stringify(payload.investorTwo));
         fd.append("accountHolders", JSON.stringify(payload.accountHolders));
         fd.append("lumpSum", JSON.stringify(payload.lumpSum));
         fd.append("regularSavingsPlan", JSON.stringify(payload.regularSavingsPlan));
         fd.append("signatures", JSON.stringify(payload.signatures));
-        fd.append("rspEndCondition", payload.rspEndCondition);
-        fd.append("contributionAmount", String(payload.contributionAmount));
-        fd.append("aspFrequency", payload.aspFrequency);
-        fd.append("paymentMethod", payload.paymentMethod);
 
-        // ✅ file field name must match backend multer: upload.single("prePaySign")
-        fd.append("prePaySign", signature);
+        // ✅ Send these (your backend reads them)
+        fd.append("declarations", JSON.stringify(payload.investorOne?.declarations || []));
+        fd.append("optionalConsents", JSON.stringify(payload.investorOne?.optionalConsents || []));
+
+        fd.append("rspEndCondition", payload.rspEndCondition || "");
+        fd.append("contributionAmount", String(payload.contributionAmount ?? 0));
+        fd.append("aspFrequency", payload.aspFrequency || "");
+        fd.append("paymentMethod", payload.paymentMethod || "");
+
+        // ✅ MUST match multer field names
+        if (hasSignFile) fd.append("prePaySign", signature);
+        if (hasPhotoFile) fd.append("prePayPhoto", photoFile);
 
         resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
           method: "POST",
@@ -282,26 +325,20 @@ export const PrePayServiceProvider = ({ children }) => {
           body: fd,
         });
       } else {
-        // ✅ No file -> send JSON (works with express.json())
         resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            ...payload,
+            // ✅ still send these
+            declarations: payload.investorOne?.declarations || [],
+            optionalConsents: payload.investorOne?.optionalConsents || [],
+          }),
         });
       }
 
-      if (!resPrePay.ok) {
-        const errorText = await resPrePay.text();
-        let msg = "Failed to save application";
-        try {
-          msg = JSON.parse(errorText)?.message || msg;
-        } catch {
-          msg = errorText || msg;
-        }
-        throw new Error(msg);
-      }
-
+      if (!resPrePay) return
       // 4) Fetch application data (this route uses req.identity, so userId not needed)
       setLoadingText("Fetching application data…");
 
@@ -418,6 +455,11 @@ export const PrePayServiceProvider = ({ children }) => {
 
       loadingText,
       isGeneratingPdf,
+      photoFile,
+      setPhotoFile,
+      photoPreviewUrl,
+      handlePhotoChange,
+      clearPhoto,
     }),
     [
       application,
@@ -431,6 +473,11 @@ export const PrePayServiceProvider = ({ children }) => {
       currentDate,
       loadingText,
       isGeneratingPdf,
+      photoFile,
+      setPhotoFile,
+      photoPreviewUrl,
+      handlePhotoChange,
+      clearPhoto,
     ],
   );
 

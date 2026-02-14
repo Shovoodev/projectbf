@@ -282,18 +282,14 @@ const styles = StyleSheet.create({
   page: { padding: 18, },
   pageWithoutpaddingborrom: { padding: 18, paddingBottom: 90, }
   ,
-  Photopage: {
-    position: "relative",
-    padding: 0,
-    margin: 0,
-  },
+  Photopage: { padding: 0, margin: 0, position: "relative" },
   full: {
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    objectFit: "cover", // use "contain" if you don't want cropping
+    objectFit: "contain", // or "cover"
   },
   noteBox: {
     backgroundColor: "#FEF3C7",

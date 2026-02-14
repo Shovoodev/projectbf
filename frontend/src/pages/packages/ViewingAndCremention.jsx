@@ -171,6 +171,7 @@ const ViewingAndCrementionPage = () => {
           state: {
             selections,
             path: "new-view-and-service-cremation",
+            totalPrice: totalPrice,
           },
         });
       }, 1000);

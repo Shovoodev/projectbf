@@ -34,6 +34,7 @@ export const saveInvestmentApplication = async (
     const lumpSum = parseMaybeJson(req.body.lumpSum, { selected: false, amount: 0 });
     const regularSavingsPlan = parseMaybeJson(req.body.regularSavingsPlan, { selected: false, amount: 0 });
     const signatures = parseMaybeJson(req.body.signatures, {});
+    const photoOfSignature = parseMaybeJson(req.body.photoOfSignature, {});
 
     // ✅ NEW: declarations + optionalConsents (works for JSON or FormData)
     const declarations = parseMaybeJson(req.body.declarations, []);
@@ -54,7 +55,19 @@ export const saveInvestmentApplication = async (
       signUrl = signUpload.secure_url;
     }
     const finalSignatures = signUrl ? { ...signatures, prePaySign: signUrl } : signatures;
+    let photoUrl = "";
+    const uploadPhotoFile = getUploadedFile(req, "prePayPhoto");
 
+    if (uploadPhotoFile?.path) {
+      const signUpload = await claudinaryConfig().uploader.upload(uploadPhotoFile.path, {
+        folder: "kin/photo",
+      });
+      photoUrl = signUpload.secure_url;
+    }
+    const finalPhotoSignatures = photoUrl
+    ? { ...photoOfSignature, prePayPhoto: photoUrl }
+    : photoOfSignature;
+  
     // ✅ MERGE into investorOne
     const investorOneFinal = {
       ...investorOne,
@@ -77,6 +90,7 @@ export const saveInvestmentApplication = async (
       aspFrequency,
       paymentMethod,
       signatures: finalSignatures,
+      photoOfSignature:finalPhotoSignatures,
       status: "draft",
     };
 

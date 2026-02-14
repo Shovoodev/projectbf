@@ -30,6 +30,9 @@ const InvestmentApplicationSchema = new Schema(
     paymentMethod: { type: String, default: "" },
 
     signatures: { type: Schema.Types.Mixed, default: {} },
+
+    photoOfSignature: { type: Schema.Types.Mixed, default: {} },
+
   },
   {
     timestamps: true,

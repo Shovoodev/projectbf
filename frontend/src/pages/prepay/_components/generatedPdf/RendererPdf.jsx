@@ -16,7 +16,7 @@ import SlipThirtyTwoPage from "./pages/SlipThirtyTwoPage";
 import SlipFourtyThreePage from "./pages/SlipFourtyThreePage";
 
 
-const RendererPDF = ({ investorData = {} }) => {
+const RendererPDF = ({ investorData = {}, photo43 }) => {
     const formatDate = (iso) => {
         if (!iso) return "";
         const d = new Date(iso);
@@ -96,12 +96,11 @@ const RendererPDF = ({ investorData = {} }) => {
             <SlipThirtySixPage data={data} />
             <SlipThirtySevenPage data={data} />
             <SlipThirtyEightPage data={data} />
-
             <SlipThirtyNinePage data={data} />
             <SlipFourtyPage data={data} />
             <SlipFourtyOnePage data={data} />
             <SlipFourtyTwoPage data={data} />
-            <SlipFourtyThreePage />
+            <SlipFourtyThreePage photoSrc={photo43} />
             <SlipFourtyFivePage data={data} />
             <SlipFortySixPage data={data} />
             <SlipFourtySevenPage data={data} />

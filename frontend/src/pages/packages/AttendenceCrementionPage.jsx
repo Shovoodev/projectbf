@@ -479,7 +479,8 @@ const AttendenceCrementionPage = () => {
         navigate("/prepay", {
           state: {
             selections,
-            amount: totalPrice,
+            path: "newattendingservicecremationanswers",
+            totalPrice: totalPrice,
           },
         });
       }, 100);
@@ -697,11 +698,10 @@ const AttendenceCrementionPage = () => {
         {/* Message Display */}
         {message && (
           <div
-            className={`mt-6 p-4 rounded text-center font-medium ${
-              message.includes("Error")
+            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
                 ? "bg-red-50 text-red-600 border border-red-100"
                 : "bg-green-50 text-green-600 border border-green-100"
-            }`}
+              }`}
           >
             {message}
           </div>

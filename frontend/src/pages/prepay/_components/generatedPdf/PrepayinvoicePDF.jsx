@@ -57,8 +57,9 @@ const styles = StyleSheet.create({
     tableHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
-        borderBottom: "2px solid #000",
         paddingBottom: 6,
+        borderBottomWidth: 2,
+        borderBottomColor: "#000",
         marginBottom: 10,
         fontWeight: "bold",
     },
@@ -69,7 +70,9 @@ const styles = StyleSheet.create({
     },
     totalRow: {
         flexDirection: "row",
-        gap: "10px",
+        borderTopWidth: 2,
+        borderTopColor: "#000",
+
         justifyContent: "flex-end",
         borderTop: "2px solid #000",
         paddingTop: 10,
@@ -105,7 +108,8 @@ const styles = StyleSheet.create({
     detailLeft: {
         width: 150,
         paddingRight: 10,
-        borderRight: "1px solid #eee",
+        borderRightWidth: 1,
+        borderRightColor: "#eee",
         textAlign: "right",
     },
     detailRight: {
@@ -126,7 +130,8 @@ const styles = StyleSheet.create({
 
     bankingBox: {
         width: 170,
-        border: "1px solid #E0B07A",
+        borderWidth: 1,
+        borderColor: "#E0B07A",
         padding: 10,
         fontSize: 10,
         lineHeight: 1.4,
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const PrepayinvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
+const PrePayInvoicePDF = ({ invoiceDetails, client }) => {
     if (!invoiceDetails) return null;
 
 
@@ -228,10 +233,9 @@ const PrepayinvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
                         <View style={styles.middleBox}>
                             <Text style={styles.label}>Customer Details</Text>
 
-                            <Text>{kinName}</Text>
+                            <Text>{client}</Text>
                             {/* <Text>{invoiceDetails?.nextOfKin}</Text> */}
                             <Text style={[styles.label, { marginTop: 12 }]}>Reference</Text>
-                            <Text>{deceasedName}</Text>
                         </View>
 
                         {/* INVOICE DETAILS */}
@@ -305,4 +309,4 @@ const PrepayinvoicePDF = ({ invoiceDetails, deceasedName, kinName }) => {
     );
 };
 
-export default PrepayinvoicePDF;
+export default PrePayInvoicePDF;
