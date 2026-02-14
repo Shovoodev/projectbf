@@ -197,14 +197,13 @@ export const PrePayServiceProvider = ({ children }) => {
     });
   };
 
-  // ------------------- Submit + Generate + Email -------------------
   const submitInvestment = async () => {
-    if (isGeneratingPdf) return; // ✅ prevent double click / multiple submissions
+    if (isGeneratingPdf) return;
 
     try {
       setIsGeneratingPdf(true);
 
-      // 1) Register user
+      // 1) Register
       const registerPayload = {
         email: application?.investorOne?.email || "",
         password:
@@ -219,11 +218,15 @@ export const PrePayServiceProvider = ({ children }) => {
       });
 
       if (!responseUser.ok) {
-        const errorData = await responseUser.json().catch(() => ({}));
-        throw new Error(errorData.message || "Registration failed");
+        const errorText = await responseUser.text();
+        let msg = "Registration failed";
+        try {
+          msg = JSON.parse(errorText)?.message || msg;
+        } catch { /* empty */ }
+        throw new Error(msg);
       }
 
-      // 2) Login user
+      // 2) Login
       const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -232,50 +235,75 @@ export const PrePayServiceProvider = ({ children }) => {
       });
 
       if (!loginRes.ok) {
-        throw new Error("Login failed");
+        const errorText = await loginRes.text();
+        throw new Error(errorText || "Login failed");
       }
-      const loginData = await loginRes.json();
-      localStorage.setItem("clienUser", JSON.stringify(loginData));
+      // ✅ Build a plain JS object first (we'll send as JSON or FormData)
+      const payload = {
+        investorOne: application?.investorOne || {},
+        investorTwo: application?.investorTwo || {},
+        accountHolders: directDebitForm?.accountHolders || {},
+        lumpSum: deptRequest?.lumpSum || { selected: false, amount: 0 },
+        regularSavingsPlan:
+          deptRequest?.regularSavingsPlan || { selected: false, amount: 0 },
+        signatures: {
+          accountHolder1: deptRequest?.accountHolder1 || {},
+          accountHolder2: deptRequest?.accountHolder2 || {},
+        },
+        rspEndCondition: deptRequest?.rspEndCondition || "",
+        contributionAmount: contributionamount ?? 0,
+        aspFrequency: aspFrequency || "",
+        paymentMethod: paymentMethod || "",
+      };
 
-      const userId = JSON.parse(localStorage.getItem("clienUser") || "{}")._id;
-      // ✅ Build payload for backend based on simplified schema
-      const fd = new FormData();
+      // 3) Save investment prepay
+      let resPrePay;
 
-
-      fd.append("investorOne", JSON.stringify(application.investorOne));
-      fd.append("investorTwo", JSON.stringify(application.investorTwo));
-      fd.append("accountHolders", JSON.stringify(directDebitForm.accountHolders || {}));
-      fd.append("lumpSum", JSON.stringify(deptRequest.lumpSum || { selected: false, amount: 0 }));
-      fd.append("regularSavingsPlan", JSON.stringify(deptRequest.regularSavingsPlan || { selected: false, amount: 0 }));
-      fd.append("signatures", JSON.stringify({
-        accountHolder1: deptRequest.accountHolder1 || {},
-        accountHolder2: deptRequest.accountHolder2 || {},
-      }));
-      fd.append("rspEndCondition", deptRequest.rspEndCondition || "");
-      fd.append("contributionAmount", String(contributionamount || 0));
-      fd.append("aspFrequency", aspFrequency || "");
-      fd.append("paymentMethod", paymentMethod || "");
-
+      // ✅ If you have a file -> use FormData
       if (signature instanceof File) {
-        fd.append("sign", signature);
-      }
-      // ✅ Save application
-      const resPrePay = await fetch(
-        "http://localhost:4000/save-investment-prepay",
-        {
+        const fd = new FormData();
+        fd.append("investorOne", JSON.stringify(payload.investorOne));
+        fd.append("investorTwo", JSON.stringify(payload.investorTwo));
+        fd.append("accountHolders", JSON.stringify(payload.accountHolders));
+        fd.append("lumpSum", JSON.stringify(payload.lumpSum));
+        fd.append("regularSavingsPlan", JSON.stringify(payload.regularSavingsPlan));
+        fd.append("signatures", JSON.stringify(payload.signatures));
+        fd.append("rspEndCondition", payload.rspEndCondition);
+        fd.append("contributionAmount", String(payload.contributionAmount));
+        fd.append("aspFrequency", payload.aspFrequency);
+        fd.append("paymentMethod", payload.paymentMethod);
+
+        // ✅ file field name must match backend multer: upload.single("prePaySign")
+        fd.append("prePaySign", signature);
+
+        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
+          method: "POST",
+          credentials: "include",
+          body: fd,
+        });
+      } else {
+        // ✅ No file -> send JSON (works with express.json())
+        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: fd,
-        },
-      );
-      if (!resPrePay.ok) {
-        const errorData = await resPrePay.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to save application");
+          body: JSON.stringify(payload),
+        });
       }
-      // 3️⃣ Fetch investor data (send id if your endpoint needs it)
-      setLoadingText("Fetching application data…");
 
+      if (!resPrePay.ok) {
+        const errorText = await resPrePay.text();
+        let msg = "Failed to save application";
+        try {
+          msg = JSON.parse(errorText)?.message || msg;
+        } catch {
+          msg = errorText || msg;
+        }
+        throw new Error(msg);
+      }
+
+      // 4) Fetch application data (this route uses req.identity, so userId not needed)
+      setLoadingText("Fetching application data…");
 
       const res = await fetch(
         "http://localhost:4000/get-investment-appplication-data",
@@ -283,24 +311,27 @@ export const PrePayServiceProvider = ({ children }) => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(userId),
-        },
+          body: JSON.stringify({}), // ✅ not required, route reads req.identity
+        }
       );
 
-      const json = await res.json().catch(() => ({}));
-      const data = json?.data ?? json;
-      const normalized = Array.isArray(data) ? data[0] : data;
-      const investorDataLocal = normalized || {};
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || "Failed to fetch application data");
+      }
 
-      // 4️⃣ Generate PDF
+      const json = await res.json().catch(() => ({}));
+      const investorDataLocal = json?.data ?? json ?? {};
+
+      // 5) Generate PDF
       setLoadingText("Rendering application (RendererPDF)…");
 
       const blob = await withTimeout(
         pdf(<RendererPDF investorData={investorDataLocal} />).toBlob(),
-        30000,
+        30000
       );
 
-      // 5️⃣ Send email
+      // 6) Send email
       setLoadingText("Sending PDF to your email…");
 
       const formData = new FormData();
@@ -308,7 +339,7 @@ export const PrePayServiceProvider = ({ children }) => {
         "file",
         new File([blob], "KeyInvest-Application-Form.pdf", {
           type: "application/pdf",
-        }),
+        })
       );
 
       const emailRes = await fetch(`${CORE}/send-pdf-on-email`, {
@@ -325,14 +356,19 @@ export const PrePayServiceProvider = ({ children }) => {
         throw new Error(text || "Server error");
       }
 
-      if (!out.success) throw new Error(out.error || "Email failed");
+      if (!out?.success) throw new Error(out?.error || "Email failed");
 
       setLoadingText("Completed successfully 🎉");
       return out;
+    } catch (err) {
+      console.error("submitInvestment error:", err);
+      setLoadingText(err?.message || "Something went wrong");
+      throw err;
     } finally {
       setIsGeneratingPdf(false);
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

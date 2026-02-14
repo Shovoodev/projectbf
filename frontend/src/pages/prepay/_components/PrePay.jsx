@@ -91,11 +91,10 @@ const images = [
 ];
 
 const PrePay = ({ amount }) => {
-  const { submitInvestment } = usePrePayServiceApi();
+  const { submitInvestment, isGeneratingPdf } = usePrePayServiceApi();
   const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
