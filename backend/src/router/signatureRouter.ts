@@ -6,8 +6,13 @@ import { getSignatureRegisterAnswer } from "../controllers/signatureController";
 
 export default (router: express.Router) => {
   router.post(
-    "/signature-register", upload.array("photo", 2),
+    "/signature-register",
     isAuthenticated,
+    upload.fields([
+      { name: "photo", maxCount: 2 },
+      { name: "sign", maxCount: 1 },
+    ]),
     getSignatureRegisterAnswer
   );
+  
 };

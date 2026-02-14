@@ -199,21 +199,31 @@ const BlogDetails = () => {
 
             {/* Content Body - Render HTML content safely */}
             <article
-              className="prose prose-lg prose-gray max-w-none 
-                            prose-headings:font-display prose-headings:font-bold 
-                            prose-a:text-blue-600 hover:prose-a:text-blue-800 
-                            prose-img:rounded-lg prose-img:shadow-md
-                            prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50
-                            prose-blockquote:py-2 prose-blockquote:px-4"
+              className="prose prose-lg max-w-none
+             text-black
+             prose-headings:font-display
+             prose-headings:font-bold
+             prose-headings:text-black
+             prose-p:text-black
+             prose-li:text-black
+             prose-strong:text-black
+             prose-a:text-black
+             prose-a:no-underline
+             prose-img:rounded-lg
+             prose-img:shadow-md"
             >
               {/* Render HTML content if it exists */}
               {article.content &&
                 typeof article.content === "string" &&
                 article.content.includes("<") ? (
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                <div
+                  className="blog-content"
+                  dangerouslySetInnerHTML={{ __html: article.content }}
+                />
+
               ) : (
                 /* Fallback for plain text */
-                <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+                <div className="whitespace-pre-line text-black leading-relaxed">
                   {article.content}
                 </div>
               )}
