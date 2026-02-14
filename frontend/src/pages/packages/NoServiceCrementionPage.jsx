@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { List } from "../../components/common/Reusables";
 import { useNavigate } from "react-router-dom";
+import { List } from "../../components/common/Reusables";
+import { showToast } from "../../utility/toast";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
-import { showToast } from "../../utility/toast";
 
 const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
@@ -25,11 +25,6 @@ const noServiceFunralData = [
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Select an option",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
       {
         label: "Sydney Metro",
         value: "Sydney Metro",
@@ -53,6 +48,11 @@ const noServiceFunralData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -70,6 +70,11 @@ const noServiceFunralData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "Collect in Person",
         value: "Collect in Person",
         priceAdjustment: 0,
@@ -86,8 +91,8 @@ const NoServiceCrementionPage = () => {
   const BASE_PRICE = 2295;
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
-    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
-    collectionOfUrn: { value: "Collect in Person", price: 0 },
+    urn: { value: "Select an Option", price: 0 },
+    collectionOfUrn: { value: "Select an Option", price: 0 },
   });
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
   const [error, setError] = useState(null);

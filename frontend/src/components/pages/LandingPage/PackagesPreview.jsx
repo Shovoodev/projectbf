@@ -57,7 +57,7 @@ const PackagesPreview = () => {
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24 p-2">
       <div className="section-container">
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2">

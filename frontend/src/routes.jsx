@@ -56,6 +56,8 @@ import SignIn from "./pages/admin/SignIn";
 import Register from "./pages/admin/Register";
 import Error from "./pages/Error";
 import Intro_video from "./pages/Intro_video";
+
+import Attending_Cremation_Landing from "./pages/Attending_Cremation_Landing";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -219,6 +221,11 @@ export const routes = createBrowserRouter([
         element: <InvoicePage />,
         isPrivate: true,
       },
+      {
+        path: "/attending-cremation-landing",
+        element: <Attending_Cremation_Landing />,
+      },
+
       { path: "*", element: <Error /> },
     ],
   },

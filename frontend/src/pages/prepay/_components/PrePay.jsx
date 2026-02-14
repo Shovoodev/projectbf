@@ -129,9 +129,9 @@ const PrePay = ({ amount }) => {
     () => [
       { id: "32", enabled: true },
       { id: "33", enabled: true },
-      { id: "34", enabled: false },
-      { id: "35", enabled: false },
-      { id: "36", enabled: false },
+      { id: "34", enabled: true },
+      { id: "35", enabled: true },
+      { id: "36", enabled: true },
       { id: "37", enabled: true },
       { id: "38", enabled: true },
       { id: "39", enabled: true },
@@ -194,7 +194,7 @@ const PrePay = ({ amount }) => {
     } catch (error) {
       console.error("PDF send failed:", error);
       alert(
-        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`
+        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`,
       );
     }
   };
@@ -252,8 +252,9 @@ const PrePay = ({ amount }) => {
               <button
                 onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
-                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                  }`}
+                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${
+                  isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                }`}
               >
                 {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
               </button>
@@ -284,8 +285,9 @@ const PrePay = ({ amount }) => {
             <button
               onClick={fetchAndSendPdf}
               disabled={isGeneratingPdf}
-              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                }`}
+              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${
+                isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+              }`}
             >
               {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
             </button>
@@ -307,8 +309,11 @@ const PrePay = ({ amount }) => {
 
       {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${
+          formActive
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
       >
         <div className="box-border w-[650px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
           {/* ✅ CHANGE: use renderedSlips */}
@@ -338,8 +343,9 @@ const PrePay = ({ amount }) => {
               <button
                 onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
-                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                  }`}
+                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${
+                  isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                }`}
               >
                 {isGeneratingPdf ? "Processing..." : "Finish Submission"}
               </button>

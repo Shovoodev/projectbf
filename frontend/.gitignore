@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+D:\BTF\react-btf\projectbf\frontend\src\utility\config.js
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

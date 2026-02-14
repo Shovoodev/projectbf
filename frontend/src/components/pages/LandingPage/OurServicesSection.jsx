@@ -28,7 +28,7 @@ const OurServicesSection = () => {
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24 p-2">
       <div className="section-container">
         {/* --- HEADER --- */}
         <div className="text-center max-w-3xl mx-auto mb-16">

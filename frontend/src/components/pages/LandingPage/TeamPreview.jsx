@@ -6,6 +6,7 @@ import team3 from "./images/team/team3.png";
 import team4 from "./images/team/team4.png";
 import team5 from "./images/team/team5.png";
 import team6 from "./images/team/team6.png";
+import team7 from "./images/team/team7.png";
 
 // Individual Team Card Component (Vertical Layout)
 const TeamMemberCard = ({ name, role, bio, image }) => {
@@ -29,7 +30,7 @@ const TeamMemberCard = ({ name, role, bio, image }) => {
         <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 min-h-[3rem]">
           {role}
         </p>
-        <p className="text-gray-600 font-body text-sm leading-relaxed text-justify">
+        <p className="text-gray-600 font-body text-center text-lg leading-relaxed ">
           {bio}
         </p>
       </div>
@@ -64,22 +65,28 @@ const MeetYourCareTeamSection = () => {
       image: team3,
     },
     {
+      name: "DAVID HARMON",
+      role: "Pastoral Care & Master of Ceremonies",
+      bio: "With a deep commitment to serving others, David Harrison has dedicated his career to providing compassionate and meaningful support to grieving families. As a chaplain with extensive experience in prisons, hospitals, and aged care facilities, David has developed a unique ability to connect with individuals from diverse backgrounds and faith traditions. Holding a degree in theology, David is well-equipped to provide a prayerful Christian service.",
+      image: team4,
+    },
+    {
       name: "GELYN PESCUELA",
       role: "Senior SEO Strategist & Development Coordinator",
       bio: "Bringing an analytical edge from Accounting Technology, Gelyn drives BLACK TULIP FUNERALS’s online growth through SEO and front-end WordPress design. She crafts search-friendly content and user-centric interfaces.",
-      image: team4,
+      image: team5,
     },
     {
       name: "PATRICK HARRISON",
       role: "Pianist & Live Music Coordinator",
       bio: "A classically trained pianist with nearly 20 years’ performance experience, Patrick sets the tone at funerals, weddings and corporate events. Versatile across jazz, blues and contemporary genres, his live music provides comfort.",
-      image: team5,
+      image: team6,
     },
     {
       name: "EMMA HOLLINGSWORTH",
       role: "Digital Receptionist & Family Adviser",
       bio: "Emma is the welcoming digital face of BLACK TULIP FUNERALS—available 24/7 to guide families through their first steps. Combining cutting-edge responsiveness with genuine empathy, she ensures every inquiry feels personal.",
-      image: team6,
+      image: team7,
     },
   ];
 
