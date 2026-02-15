@@ -309,7 +309,6 @@ export const PrePayServiceProvider = ({ children }) => {
         // ✅ Send these (your backend reads them)
         fd.append("declarations", JSON.stringify(payload.investorOne?.declarations || []));
         fd.append("optionalConsents", JSON.stringify(payload.investorOne?.optionalConsents || []));
-
         fd.append("rspEndCondition", payload.rspEndCondition || "");
         fd.append("contributionAmount", String(payload.contributionAmount ?? 0));
         fd.append("aspFrequency", payload.aspFrequency || "");

@@ -1,21 +1,23 @@
 import React from "react";
 import { Page, View, Text, Image } from "@react-pdf/renderer";
 import styles from "../Styles";
+
+// ✅ checkbox line that always renders in react-pdf
 const CheckboxLine = ({ text, checked }) => (
-    <View style={{ flexDirection: "row", marginBottom: 4 }}>
+    <View style={{ flexDirection: "row", marginBottom: 4, alignItems: "flex-start" }}>
         <View
             style={{
                 width: 10,
                 height: 10,
-                border: "1px solid #3129A6",
-                marginRight: 4,
+                borderWidth: 1,
+                borderColor: "#3129A6",
+                marginRight: 6,
+                marginTop: 2,
                 alignItems: "center",
                 justifyContent: "center",
             }}
         >
-            {checked && (
-                <Text style={{ fontSize: 8, color: "#3129A6" }}>X</Text>
-            )}
+            {checked ? <Text style={{ fontSize: 8, color: "#3129A6" }}>X</Text> : null}
         </View>
 
         <Text style={[styles.pdfDeclarationText, { flex: 1 }]}>
@@ -24,6 +26,34 @@ const CheckboxLine = ({ text, checked }) => (
     </View>
 );
 
+// ✅ helper: supports boolean[] OR index[] or investorDeclaration.checked
+function getCheckedArray(data, total) {
+    // 1) Preferred: stored in investorOne.adviserDeclarations as boolean[]
+    const boolArr = data?.investorOne?.adviserDeclarations;
+    if (Array.isArray(boolArr) && typeof boolArr[0] === "boolean") {
+        return boolArr.length === total
+            ? boolArr
+            : Array.from({ length: total }, (_, i) => !!boolArr[i]);
+    }
+
+    // 2) If you store as indexes: adviserDeclarationsChecked = [0,2,5]
+    const idxArr = data?.adviserDeclarationsChecked;
+    if (Array.isArray(idxArr) && (typeof idxArr[0] === "number" || typeof idxArr[0] === "string")) {
+        const idx = idxArr.map(Number).filter((n) => Number.isFinite(n));
+        return Array.from({ length: total }, (_, i) => idx.includes(i));
+    }
+
+    // 3) Your current prop: data.investorDeclaration.checked
+    const legacy = data?.investorDeclaration?.checked;
+    if (Array.isArray(legacy) && typeof legacy[0] === "boolean") {
+        return legacy.length === total
+            ? legacy
+            : Array.from({ length: total }, (_, i) => !!legacy[i]);
+    }
+
+    // fallback
+    return Array.from({ length: total }, () => false);
+}
 
 export default function SlipFourtySevenPage({ data }) {
     const declarations = [
@@ -43,15 +73,29 @@ export default function SlipFourtySevenPage({ data }) {
         "KeyInvest can cancel or vary these conditions by giving you not less than seven (7) days written notice.",
     ];
 
+    // ✅ now we build checked[] correctly
+    const checked = getCheckedArray(data, declarations.length);
 
-    const checked = data?.investorDeclaration?.checked || [];
-    const signatureImage = data?.signatureImage || null;
+    // ✅ signature (url OR data:image base64)
+    const signatureImage =
+        data?.signatureImage ||
+        data?.signatures?.prePaySign || // if you store it inside signatures
+        null;
+
+    const displayDate = data?.updatedDate || data?.date || "";
 
     return (
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" style={styles.page} wrap={false}>
             <View style={styles.formContainerBase}>
                 {/* Header */}
-                <View style={{ borderBottomWidth: 1, borderBottomColor: "#E5E7EB", paddingBottom: 6, marginBottom: 8 }}>
+                <View
+                    style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#E5E7EB",
+                        paddingBottom: 6,
+                        marginBottom: 8,
+                    }}
+                >
                     <Text style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>
                         4. Investor(s) declaration
                     </Text>
@@ -62,7 +106,7 @@ export default function SlipFourtySevenPage({ data }) {
                 </Text>
 
                 {/* Declarations */}
-                <View style={{ marginBottom: 8 }}>
+                <View style={{ marginBottom: 10 }}>
                     {declarations.map((t, i) => (
                         <CheckboxLine key={i} text={t} checked={!!checked[i]} />
                     ))}
@@ -78,9 +122,9 @@ export default function SlipFourtySevenPage({ data }) {
                         padding: 10,
                     }}
                 >
-                    <View style={{ flexDirection: "row", gap: 10 }}>
+                    <View style={{ flexDirection: "row" }}>
                         {/* Signature */}
-                        <View style={{ width: "65%" }}>
+                        <View style={{ width: "65%", paddingRight: 10 }}>
                             <Text style={styles.pdfLabelSm}>Signature of investor</Text>
 
                             <View
@@ -124,14 +168,14 @@ export default function SlipFourtySevenPage({ data }) {
                                 }}
                             >
                                 <Text style={{ fontSize: 10, fontWeight: 700, color: "#3129A6" }}>
-                                    {data.updatedDate}
+                                    {displayDate}
                                 </Text>
                             </View>
                         </View>
                     </View>
                 </View>
 
-                {/* Footer pinned bottom */}
+                {/* Footer */}
                 <View style={styles.pdfFooter}>
                     <Text>KeyInvest Funeral Bond PDS</Text>
                     <Text>Version: July 2026</Text>
