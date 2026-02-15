@@ -5,8 +5,6 @@ import styles from "../Styles";
 export default function SlipThirtyNinePage({ data }) {
 
     const signatureImage = data?.signatureImage || null;
-    const date = data?.date || "";
-
     const directorName = data?.funeralDirectorName || "Black Tulip Funerals";
     const directorPhone = data?.funeralDirectorPhone || "1300110031";
 
@@ -169,7 +167,7 @@ export default function SlipThirtyNinePage({ data }) {
                                 }}
                             >
                                 <Text style={{ fontSize: 10, fontWeight: 700, color: "#3129A6" }}>
-                                    {date || "-"}
+                                    {data.updatedDate}
                                 </Text>
                             </View>
                         </View>

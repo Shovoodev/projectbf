@@ -12,14 +12,13 @@ const CheckboxLine = ({ text, checked }) => (
 );
 
 export default function SlipFourtyPage({ data }) {
-    const date = data?.date || "";
+    const date = data?.updatedDate || "";
 
     const directorName = data?.funeralDirectorName || "Black Tulip Funerals";
 
-    // base64 dataURL recommended: "data:image/png;base64,..."
     const directorSig = data?.funeralDirectorSignatureImage || null;
 
-    const checks = data?.directorAcceptanceChecks || []; // e.g. [0,1]
+    const checks = data?.directorAcceptanceChecks || [];
 
     return (
         <Page size="A4" style={styles.page} wrap={false}>

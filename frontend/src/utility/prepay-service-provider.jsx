@@ -11,7 +11,6 @@ import base64ToFile from ".";
 import { showToast } from "./toast";
 import { pdf } from "@react-pdf/renderer";
 import RendererPDF from "../pages/prepay/_components/generatedPdf/RendererPdf";
-
 const CORE = import.meta.env.VITE_API_URL;
 const PrePayServiceProviderContext = createContext(null);
 
@@ -231,7 +230,7 @@ export const PrePayServiceProvider = ({ children }) => {
   };
 
 
-  const submitInvestment = async () => {
+  const submitInvestment = async ({ totalPriceOfpageThirtyFive }) => {
     if (isGeneratingPdf) return;
 
     try {
@@ -272,6 +271,7 @@ export const PrePayServiceProvider = ({ children }) => {
         const errorText = await loginRes.text();
         throw new Error(errorText || "Login failed");
       }
+
       // ✅ Build a plain JS object first (we'll send as JSON or FormData)
       const payload = {
         investorOne: application?.investorOne || {},
@@ -285,7 +285,7 @@ export const PrePayServiceProvider = ({ children }) => {
           accountHolder2: deptRequest?.accountHolder2 || {},
         },
         rspEndCondition: deptRequest?.rspEndCondition || "",
-        contributionAmount: contributionamount ?? 0,
+        contributionAmount: totalPriceOfpageThirtyFive ?? 0,
         aspFrequency: aspFrequency || "",
         paymentMethod: paymentMethod || "",
       };

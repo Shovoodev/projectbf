@@ -1,7 +1,8 @@
 import PdfRadio from "./common/PdfRadio";
 
-const SlipThirtyFive = ({ amount }) => {
-  const addedAmount = amount + 220;
+const SlipThirtyFive = ({ totalPrice }) => {
+  const addedAmount = totalPrice + 220;
+
   const investmentOptions = [
     {
       no: 1,

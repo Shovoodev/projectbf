@@ -2,10 +2,31 @@ import React from "react";
 import { Page, View, Text } from "@react-pdf/renderer";
 import styles from "../Styles";
 
-const RadioOption = ({ label, checked, disabled }) => (
-    <View style={[styles.pdfRadioItem, disabled ? { opacity: 0.5 } : null]}>
-        <Text style={styles.pdfRadioBox}>{checked ? "☑" : "☐"}</Text>
-        <Text style={styles.pdfRadioText}>{label}</Text>
+const RadioOption = ({ label, checked }) => (
+    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}>
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                borderWidth: 1,
+                borderColor: "#000",
+                marginRight: 6,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked && (
+                <View
+                    style={{
+                        width: 6,
+                        height: 6,
+                        backgroundColor: "#000",
+                    }}
+                />
+            )}
+        </View>
+
+        <Text style={{ fontSize: 11 }}>{label}</Text>
     </View>
 );
 
@@ -70,7 +91,7 @@ export default function SlipThirtyFivePage({ data }) {
                         }}
                     >
                         <Text style={{ fontSize: 12, fontWeight: 700, color: "#3129A6" }}>
-                            {addedAmount || "0.00"}
+                            {addedAmount.toFixed(2)}
                         </Text>
                     </View>
                 </View>

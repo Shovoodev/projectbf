@@ -2,12 +2,31 @@ import React from "react";
 import { Page, View, Text } from "@react-pdf/renderer";
 import styles from "../Styles";
 
-// ✅ Checkbox/Radio renderer
-const PdfRadio = ({ label, checked }) => (
-    <View style={styles.pdfRadioItem}>
-        <Text style={styles.pdfRadioText}>
-            {checked ? "☑" : "☐"} {label}
-        </Text>
+const RadioOption = ({ label, checked }) => (
+    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}>
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                borderWidth: 1,
+                borderColor: "#000",
+                marginRight: 6,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked && (
+                <View
+                    style={{
+                        width: 6,
+                        height: 6,
+                        backgroundColor: "#000",
+                    }}
+                />
+            )}
+        </View>
+
+        <Text style={{ fontSize: 11 }}>{label}</Text>
     </View>
 );
 
@@ -60,9 +79,9 @@ const SlipThirtyThreePage = ({ data }) => {
                     <View style={{ width: "48%" }}>
                         <Text style={styles.pdfLabel}>Gender</Text>
                         <View style={styles.pdfRadioGroup}>
-                            <PdfRadio label="Female" checked={investor.gender === "Female"} />
-                            <PdfRadio label="Male" checked={investor.gender === "Male"} />
-                            <PdfRadio label="Other" checked={investor.gender === "Other"} />
+                            <RadioOption label="Female" checked={investor.gender === "Female"} />
+                            <RadioOption label="Male" checked={investor.gender === "Male"} />
+                            <RadioOption label="Other" checked={investor.gender === "Other"} />
                         </View>
                     </View>
                 </View>
@@ -72,7 +91,7 @@ const SlipThirtyThreePage = ({ data }) => {
                     <Text style={styles.pdfLabel}>Title</Text>
                     <View style={styles.pdfRadioGroup}>
                         {["Mr", "Mrs", "Ms", "Miss", "Dr", "Other"].map((t) => (
-                            <PdfRadio key={t} label={t} checked={investor.title === t} />
+                            <RadioOption key={t} label={t} checked={investor.title === t} />
                         ))}
                     </View>
                 </View>

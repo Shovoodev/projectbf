@@ -78,6 +78,16 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         marginTop: 10,
     },
+    totalRowPrice: {
+        flexDirection: "row",
+        borderTopWidth: 2,
+        borderTopColor: "#000",
+        gap: 3,
+        justifyContent: "flex-end",
+        borderTop: "2px solid #000",
+        paddingTop: 10,
+        marginTop: 10,
+    },
     totalAmount: {
         fontSize: 18,
         fontWeight: "bold",

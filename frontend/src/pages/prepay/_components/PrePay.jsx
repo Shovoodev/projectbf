@@ -92,7 +92,7 @@ const images = [
   thirty,
 ];
 
-const PrePay = ({ amount }) => {
+const PrePay = ({ totalPrice }) => {
   const { submitInvestment, isGeneratingPdf } = usePrePayServiceApi();
   const [loadingText, setLoadingText] = useState("Preparing your documents…");
   const [formActive, setFormActive] = useState(false);
@@ -100,10 +100,8 @@ const PrePay = ({ amount }) => {
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
-
   const location = useLocation();
-  const { selections, path, totalPrice } = location.state || {};
-  console.log({ selections, path, totalPrice })
+  const { selections, path } = location.state || {};
 
   const clientInvoice = async (e) => {
     e?.preventDefault?.();
@@ -184,6 +182,12 @@ const PrePay = ({ amount }) => {
 
       const data = await resSelections.json();
       const invoiceData = data?.data;
+      console.log({ invoiceData });
+
+      const total = Number(invoiceData?.totalPrice ?? 0);
+
+      await submitInvestment({ totalPriceOfpageThirtyFive: total });
+
 
       if (!invoiceData) {
         throw new Error("No invoice data returned from /all-selected-selections");
@@ -236,7 +240,7 @@ const PrePay = ({ amount }) => {
       <SlipThirtyTwo />,
       <SlipThirtyThree />,
       <SlipThirtyFour />,
-      <SlipThirtyFive amount={amount} />,
+      <SlipThirtyFive totalPrice={totalPrice} />,
       <SlipThirtySix />,
       <SlipThirtySeven />,
       <SlipThirtyEight />,
@@ -251,7 +255,7 @@ const PrePay = ({ amount }) => {
       <SlipFourtySeven />,
       <img src={fortySeven} alt="" />,
     ],
-    [amount],
+    [totalPrice],
   );
 
   // ✅ ADD: config for conditional rendering (same length as slips)
@@ -320,7 +324,6 @@ const PrePay = ({ amount }) => {
 
   const fetchAndSendPdf = async () => {
     try {
-      await submitInvestment();
       await clientInvoice()
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
@@ -384,9 +387,8 @@ const PrePay = ({ amount }) => {
               <button
                 onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
-                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${
-                  isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                }`}
+                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                  }`}
               >
                 {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
               </button>
@@ -417,9 +419,8 @@ const PrePay = ({ amount }) => {
             <button
               onClick={fetchAndSendPdf}
               disabled={isGeneratingPdf}
-              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${
-                isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-              }`}
+              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                }`}
             >
               {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
             </button>
@@ -441,11 +442,10 @@ const PrePay = ({ amount }) => {
 
       {/* Form Overlay */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${
-          formActive
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+          }`}
       >
         <div className="box-border w-[650px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
           {/* ✅ CHANGE: use renderedSlips */}
@@ -475,9 +475,8 @@ const PrePay = ({ amount }) => {
               <button
                 onClick={fetchAndSendPdf}
                 disabled={isGeneratingPdf}
-                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${
-                  isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                }`}
+                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
+                  }`}
               >
                 {isGeneratingPdf ? "Processing..." : "Finish Submission"}
               </button>

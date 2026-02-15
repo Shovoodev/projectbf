@@ -33,6 +33,12 @@ const InvestmentApplicationSchema = new Schema(
 
     photoOfSignature: { type: Schema.Types.Mixed, default: {} },
 
+    funeralDirectorSignatureImage: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dnrc6jtmv/image/upload/v1771151178/adminsign_wrs9iz.png",
+    },
+    
   },
   {
     timestamps: true,

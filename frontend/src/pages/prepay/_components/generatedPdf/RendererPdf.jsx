@@ -16,7 +16,7 @@ import SlipThirtyTwoPage from "./pages/SlipThirtyTwoPage";
 import SlipFourtyThreePage from "./pages/SlipFourtyThreePage";
 
 
-const RendererPDF = ({ investorData = {}, photo43 }) => {
+const RendererPDF = ({ investorData = {} }) => {
     const formatDate = (iso) => {
         if (!iso) return "";
         const d = new Date(iso);
@@ -32,7 +32,7 @@ const RendererPDF = ({ investorData = {}, photo43 }) => {
             .map((v, i) => (v ? i : -1))
             .filter((i) => i !== -1);
     const data = {
-        contributionAmount: investorData?.amount || 0,
+        contributionAmount: Number(investorData?.contributionAmount ?? investorData?.amount ?? 0),
         paymentMethod: investorData?.paymentMethod || "eft",
         rspIncrease: "yes",
         annualIncreasePercent: "10",
@@ -41,7 +41,6 @@ const RendererPDF = ({ investorData = {}, photo43 }) => {
         declarationsChecked: toCheckedIndexes(investorOne?.declarations || []),
         optionalChecked: toCheckedIndexes(investorOne?.optionalConsents || []),
         signatureImage: investorData?.signatures?.prePaySign || null,
-
         adviser: {
             providerName: "Black Tulip Funerals",
             groupName: "",
@@ -77,14 +76,9 @@ const RendererPDF = ({ investorData = {}, photo43 }) => {
             daytimeAddress: investorOne?.daytimeAddress || "",
             email: investorOne?.email || "",
         },
-        questionnaire: {
-            bondType: investorData?.questionnaire?.bondType || "Nominated",
-            ageOver10: investorData?.questionnaire?.ageOver10 !== false,
-            hasExistingBonds: !!investorData?.questionnaire?.hasExistingBonds,
-            excessContribution: !!investorData?.questionnaire?.excessContribution,
-            requiresCapitalAccess: !!investorData?.questionnaire?.requiresCapitalAccess,
-        },
         updatedDate: formatDate(investorData?.updatedAt),
+        funeralDirectorSignatureImage:
+            investorData?.funeralDirectorSignatureImage || null,
     };
 
     return (
@@ -100,7 +94,6 @@ const RendererPDF = ({ investorData = {}, photo43 }) => {
             <SlipFourtyPage data={data} />
             <SlipFourtyOnePage data={data} />
             <SlipFourtyTwoPage data={data} />
-            <SlipFourtyThreePage photoSrc={photo43} />
             <SlipFourtyFivePage data={data} />
             <SlipFortySixPage data={data} />
             <SlipFourtySevenPage data={data} />

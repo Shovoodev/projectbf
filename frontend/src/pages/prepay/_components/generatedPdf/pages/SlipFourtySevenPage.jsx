@@ -1,17 +1,29 @@
 import React from "react";
 import { Page, View, Text, Image } from "@react-pdf/renderer";
 import styles from "../Styles";
-
 const CheckboxLine = ({ text, checked }) => (
-    <View style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: 4 }}>
-        <Text style={{ width: 14, fontSize: 10.5, color: "#3129A6", marginTop: 1 }}>
-            {checked ? "☑" : "☐"}
-        </Text>
-        <Text style={{ flex: 1, fontSize: 8.8, color: "#374151", lineHeight: 1.2 }}>
+    <View style={{ flexDirection: "row", marginBottom: 4 }}>
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                border: "1px solid #3129A6",
+                marginRight: 4,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked && (
+                <Text style={{ fontSize: 8, color: "#3129A6" }}>X</Text>
+            )}
+        </View>
+
+        <Text style={[styles.pdfDeclarationText, { flex: 1 }]}>
             {text}
         </Text>
     </View>
 );
+
 
 export default function SlipFourtySevenPage({ data }) {
     const declarations = [
