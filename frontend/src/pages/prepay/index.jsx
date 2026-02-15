@@ -8,12 +8,12 @@ const PrePayindex = () => {
     window.scrollTo(0, 0);
   }, []);
   const location = useLocation();
-  const { amount } = location.state || {};
+  const { totalPrice } = location.state || {};
 
   return (
     <div>
       <PrePayServiceProvider>
-        <PrePay amount={amount} />
+        <PrePay amount={totalPrice} />
       </PrePayServiceProvider>
     </div>
   );

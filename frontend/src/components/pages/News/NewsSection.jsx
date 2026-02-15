@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
-import NewsCard from "./_components/NewsCard";
 import Card from "../../common/Card";
 
 const NewsSection = () => {
@@ -83,7 +82,7 @@ const NewsSection = () => {
         <div className="flex justify-center items-start md:items-center mb-16 flex-col md:flex-row gap-4">
           <div className="text-left">
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-              Latest Blog Posts
+              Latest News Posts
             </h2>
             <p className="text-gray-500 max-w-2xl ml-[-40px]">
               Stay updated with our latest articles, guides, and company
@@ -139,7 +138,7 @@ const NewsSection = () => {
             {blogData.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">
-                  No blog posts yet. Create your first one!
+                  No news posts yet. Create your first one!
                 </p>
               </div>
             ) : (
@@ -147,7 +146,7 @@ const NewsSection = () => {
                 {/* ✅ Blog Cards (only 12 per page) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {currentBlogs.map((item) => (
-                    <Card item={item} getLink={(b) => `/blog/${b.id}`} />
+                    <Card item={item} getLink={(b) => `/news/${b._id}`} />
                   ))}
                 </div>
 

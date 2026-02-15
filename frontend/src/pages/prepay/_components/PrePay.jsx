@@ -100,10 +100,9 @@ const PrePay = ({ amount }) => {
   const [step, setStep] = useState(0);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
 
-
   const location = useLocation();
   const { selections, path, totalPrice } = location.state || {};
-  console.log({ selections, path, totalPrice })
+  console.log({ selections, path, totalPrice });
 
   const clientInvoice = async (e) => {
     e?.preventDefault?.();
@@ -140,7 +139,8 @@ const PrePay = ({ amount }) => {
         reader.onloadend = () => {
           const result = String(reader.result || "");
           const base64 = result.split(",")[1];
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
+          if (!base64)
+            return reject(new Error("Failed to convert PDF to base64"));
           resolve(base64);
         };
         reader.readAsDataURL(blob);
@@ -153,7 +153,9 @@ const PrePay = ({ amount }) => {
 
       // ✅ selections/path may be missing on refresh
       if (!backendSelections || !path) {
-        console.warn("Missing selections or path from location.state. Skipping save selections step.");
+        console.warn(
+          "Missing selections or path from location.state. Skipping save selections step.",
+        );
       } else {
         // save selections
         const selectionRes = await fetch(`${CORE}/${path}`, {
@@ -186,14 +188,14 @@ const PrePay = ({ amount }) => {
       const invoiceData = data?.data;
 
       if (!invoiceData) {
-        throw new Error("No invoice data returned from /all-selected-selections");
+        throw new Error(
+          "No invoice data returned from /all-selected-selections",
+        );
       }
 
       setLoadingText("Rendering invoice PDF…");
       const blob = await pdf(
-        <PrePayInvoicePDF
-          invoiceDetails={invoiceData}
-        />
+        <PrePayInvoicePDF invoiceDetails={invoiceData} />,
       ).toBlob();
 
       if (!blob || blob.size === 0) {
@@ -229,7 +231,6 @@ const PrePay = ({ amount }) => {
     }
   };
 
-
   // UI slips only (not used for PDF generation now)
   const slips = useMemo(
     () => [
@@ -260,9 +261,9 @@ const PrePay = ({ amount }) => {
     () => [
       { id: "32", enabled: true },
       { id: "33", enabled: true },
-      { id: "34", enabled: true },
+      { id: "34", enabled: false },
       { id: "35", enabled: true },
-      { id: "36", enabled: true },
+      { id: "36", enabled: false },
       { id: "37", enabled: true },
       { id: "38", enabled: true },
       { id: "39", enabled: true },
@@ -321,7 +322,7 @@ const PrePay = ({ amount }) => {
   const fetchAndSendPdf = async () => {
     try {
       await submitInvestment();
-      await clientInvoice()
+      await clientInvoice();
       setLoadingText("Completed successfully 🎉");
     } catch (error) {
       console.error("PDF send failed:", error);
