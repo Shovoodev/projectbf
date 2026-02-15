@@ -402,6 +402,7 @@ const AgreementForm = () => {
         body: JSON.stringify({
           selections: backendSelections ?? selections ?? {},
           pdfAttachment: base64data,
+          to: formKinValues.email
         }),
       });
 

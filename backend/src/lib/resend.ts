@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { validateRecipient } from ".";
 
 // export async function SendEmail(email: string, pdfBuffer: Buffer) {
 export async function SendPrePayBond(pdfBuffer: Buffer) {
@@ -13,10 +14,10 @@ export async function SendPrePayBond(pdfBuffer: Buffer) {
       pass: process.env.RESEND_API_KEY,
     },
   });
+  const email = validateRecipient("shovoodev@gmail.com")
   const info = await transporter.sendMail({
     from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-    to: " mdathikhasan136@gmail.com , shovoodev@gmail.com",
-    // to: "shovoodev@gmail.com",
+    to: email,
     subject: `Thanks  beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>
@@ -45,9 +46,10 @@ export async function SendInvoice(pdfBuffer: Buffer) {
       pass: process.env.RESEND_API_KEY,
     },
   });
+  const email = validateRecipient("shovoodev@gmail.com")
   const info = await transporter.sendMail({
     from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-    to: "mdathikhasan136@gmail.com",
+    to: email,
     subject: `Thanks  hi beleaving us for trusting us `,
     text: "we get all you documents",
     html: `<h4>black tulip funerals test suver email resend test <h4><br/>

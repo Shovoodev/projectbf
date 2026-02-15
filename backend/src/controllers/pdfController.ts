@@ -5,6 +5,7 @@ import { AuthenticatedRequest } from "../lib/types";
 import { getAttendenceByUserId } from "../db/attendence";
 import { getVandCByUserId } from "../db/viewingAndCremention";
 import { getNoCreByUserId } from "../db/noViewingCremention";
+import { validateRecipient } from "../lib";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -37,7 +38,7 @@ export const sendPdfOfInvoice = async (
   res: express.Response,
 ): Promise<any> => {
   try {
-    const { pdfAttachment } = req.body;
+    const { pdfAttachment , to } = req.body;
     const response = req.identity;
 
     if (!response) {
@@ -56,9 +57,10 @@ export const sendPdfOfInvoice = async (
         pass: process.env.RESEND_API_KEY,
       },
     });
+    const email = validateRecipient(to)
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
-      to: "mdathikhasan136@gmail.com , shovoodev@gmail.com",
+      to: email,
       subject: `Thanks  hi beleaving us for trusting us `,
       text: "we get all you documents",
       html: `
@@ -145,7 +147,6 @@ export const sendPdfOfPrepay = async (
     return res.status(500).json({
       success: false,
       error: "Email failed",
-      details: error?.message || "Unknown error",
     });
   }
 };
