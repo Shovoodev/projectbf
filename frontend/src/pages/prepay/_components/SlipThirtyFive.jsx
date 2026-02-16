@@ -9,7 +9,7 @@ const SlipThirtyFive = ({ totalPrice }) => {
       fund: "Capital Guaranteed Fund",
       ufm: "Janus Henderson & KeyInvest Managed Investments",
       benefitNo: 50,
-    }
+    },
   ];
 
   return (
@@ -73,7 +73,6 @@ const SlipThirtyFive = ({ totalPrice }) => {
                   );
                 })}
               </div>
-
             </div>
           </div>
 

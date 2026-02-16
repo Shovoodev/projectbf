@@ -1,5 +1,3 @@
-import React from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 import { FaLocationDot, FaPhone, FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
@@ -85,9 +83,10 @@ const ServiceAreasSection = () => {
           >
             <FaPhone className="text-sm" /> 1300 11 0031
           </a>
-          <Link to="/contact" className="btn-enquire">
-            <span className="">Enquire Now</span>
-            <FaLongArrowAltRight />
+          <Link to="/contact" className="">
+            <span className="bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+              Enquire Now
+            </span>
           </Link>
         </div>
       </div>

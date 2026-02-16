@@ -9,7 +9,7 @@ const PrePayindex = () => {
   }, []);
   const location = useLocation();
   const { totalPrice } = location.state || {};
-
+  console.log("Total Price from location state:", totalPrice);
   return (
     <div>
       <PrePayServiceProvider>

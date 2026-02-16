@@ -1,11 +1,11 @@
 import express from "express";
 import nodemailer from "nodemailer";
+import { getAttendenceByUserId } from "../db/attendence";
+import { getNoCreByUserId } from "../db/noViewingCremention";
+import { getVandCByUserId } from "../db/viewingAndCremention";
+import { validateRecipient } from "../lib";
 import { SendPrePayBond } from "../lib/resend";
 import { AuthenticatedRequest } from "../lib/types";
-import { getAttendenceByUserId } from "../db/attendence";
-import { getVandCByUserId } from "../db/viewingAndCremention";
-import { getNoCreByUserId } from "../db/noViewingCremention";
-import { validateRecipient } from "../lib";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -32,13 +32,12 @@ import { validateRecipient } from "../lib";
 // };
 // Send PDF via Email
 
-
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
   res: express.Response,
 ): Promise<any> => {
   try {
-    const { pdfAttachment , to } = req.body;
+    const { pdfAttachment, to } = req.body;
     const response = req.identity;
 
     if (!response) {
@@ -57,7 +56,7 @@ export const sendPdfOfInvoice = async (
         pass: process.env.RESEND_API_KEY,
       },
     });
-    const email = validateRecipient(to)
+    const email = validateRecipient(to);
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: email,
@@ -116,7 +115,6 @@ export const sendPdfOfInvoice = async (
     res.status(500).json({ error: "Failed to send invoice" });
   }
 };
-
 
 export const sendPdfOfPrepay = async (
   req: express.Request,
