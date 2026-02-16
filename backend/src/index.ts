@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
@@ -9,7 +11,6 @@ import Stripe from "stripe";
 
 import { claudinaryConfig } from "./config/cloudinary";
 import router from "./router";
-dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;
 const AUTH_SECRET = process.env.AUTH_SECRET;
