@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaCalendarAlt, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+const CORE = import.meta.env.VITE_API_URL;
+
 
 const CommentSection = () => {
   // ... (keep your existing CommentSection code)
@@ -27,7 +29,7 @@ const BlogDetails = () => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
       try {
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
         setBlogData(data);
       } catch (error) {
@@ -48,7 +50,7 @@ const BlogDetails = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`http://localhost:4000/single-blog-data/${id}`);
+        const res = await fetch(`${CORE}/single-blog-data/${id}`);
 
         if (!res.ok) {
           throw new Error(
@@ -178,8 +180,8 @@ const BlogDetails = () => {
             >
               {/* Render HTML content if it exists */}
               {article.content &&
-              typeof article.content === "string" &&
-              article.content.includes("<") ? (
+                typeof article.content === "string" &&
+                article.content.includes("<") ? (
                 <div dangerouslySetInnerHTML={{ __html: article.content }} />
               ) : (
                 /* Fallback for plain text */

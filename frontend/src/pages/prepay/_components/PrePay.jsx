@@ -95,7 +95,8 @@ const displayImages = [
   thirty,
 ];
 
-const PrePay = ({ amount }) => {
+const PrePay = ({ totalPrice }) => {
+  console.log("PrePay component received totalPrice:", totalPrice);
   // --- VERSION 2 LOGIC ---
   const { submitInvestment, isGeneratingPdf } = usePrePayServiceApi();
   const [loadingText, setLoadingText] = useState("Preparing your documents...");
@@ -103,7 +104,7 @@ const PrePay = ({ amount }) => {
   const [buttonStatus, setButtonStatus] = useState(true);
   const [step, setStep] = useState(0);
   const location = useLocation();
-  const { selections, path, totalPrice } = location.state || {};
+  const { selections, path } = location.state || {};
 
   // --- VERSION 1 UI STATE ---
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -203,7 +204,7 @@ const PrePay = ({ amount }) => {
       <SlipThirtyTwo />,
       <SlipThirtyThree />,
       <SlipThirtyFour />,
-      <SlipThirtyFive amount={amount} />,
+      <SlipThirtyFive totalPrice={totalPrice} />,
       <SlipThirtySix />,
       <SlipThirtySeven />,
       <SlipThirtyEight />,
@@ -218,7 +219,7 @@ const PrePay = ({ amount }) => {
       <SlipFourtySeven />,
       <img src={fortySeven} alt="" />,
     ],
-    [amount],
+    [totalPrice],
   );
 
   const slipConfig = useMemo(

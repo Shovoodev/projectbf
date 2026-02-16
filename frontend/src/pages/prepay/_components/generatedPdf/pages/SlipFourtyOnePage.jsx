@@ -27,13 +27,25 @@ const Field = ({ label, value, w }) => (
     </View>
 );
 
-const Checkbox = ({ label, checked }) => (
-    <View style={{ flexDirection: "row", alignItems: "center", marginRight: 10, marginBottom: 4 }}>
-        <Text style={{ width: 14, fontSize: 11, color: "#3129A6" }}>
-            {checked ? "☑" : "☐"}
-        </Text>
-        <Text style={[styles.pdfIntroP, { marginBottom: 0, fontSize: 9, lineHeight: 1.2 }]}>
-            {label}
+const Checkbox = ({ text, checked }) => (
+    <View style={{ flexDirection: "row", marginBottom: 4 }}>
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                border: "1px solid #3129A6",
+                marginRight: 4,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked && (
+                <Text style={{ fontSize: 8, color: "#3129A6" }}>X</Text>
+            )}
+        </View>
+
+        <Text style={[styles.pdfDeclarationText, { flex: 1 }]}>
+            {text}
         </Text>
     </View>
 );

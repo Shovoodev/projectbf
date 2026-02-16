@@ -3,12 +3,33 @@ import { Page, View, Text, Link } from "@react-pdf/renderer";
 import styles from "../Styles";
 
 const RadioOption = ({ label, checked }) => (
-    <View style={styles.pdfRadioItem}>
-        <Text style={styles.pdfRadioText}>
-            {checked ? "☑" : "☐"} {label}
-        </Text>
+    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}>
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                borderWidth: 1,
+                borderColor: "#000",
+                marginRight: 6,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked && (
+                <View
+                    style={{
+                        width: 6,
+                        height: 6,
+                        backgroundColor: "#000",
+                    }}
+                />
+            )}
+        </View>
+
+        <Text style={{ fontSize: 11 }}>{label}</Text>
     </View>
 );
+
 
 const YesNo = ({ yesChecked }) => (
     <View style={styles.pdfRadioGroup}>

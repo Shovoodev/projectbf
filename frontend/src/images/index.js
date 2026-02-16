@@ -48,7 +48,7 @@ import fortySix from "./funeral/46.jpg";
 import fortySeven from "./funeral/47.jpg";
 import Sign from "./funeral/ScottHarrisSign.png"
 import LogoPdf from "./invoicepdf/BTF.png"
-import btficon from "./invoicepdf/btficon.png"
+import btficon from "./invoicepdf/btfIcon.png"
 import invoice from "./invoicepdf/invoice.jpg"
 
 export {

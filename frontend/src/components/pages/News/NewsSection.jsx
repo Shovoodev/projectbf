@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import Card from "../../common/Card";
+const CORE = import.meta.env.VITE_API_URL;
 
 const NewsSection = () => {
   const [error, setError] = useState(null);
@@ -21,7 +22,7 @@ const NewsSection = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
 
         const filteredData = Array.isArray(data)
@@ -76,15 +77,15 @@ const NewsSection = () => {
   };
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white p-4 py-16 md:py-24">
       <div className="section-container">
         {/* Section Header with Button in Corner */}
-        <div className="flex justify-center items-start md:items-center mb-16 flex-col md:flex-row gap-4">
-          <div className="text-left">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+        <div className="flex flex-col items-center justify-center mb-16 md:flex-row md:justify-center gap-4">
+          <div className="text-center">
+            <h2 className="text-4xl  md:text-5xl font-display font-bold text-gray-900 mb-4">
               Latest News Posts
             </h2>
-            <p className="text-gray-500 max-w-2xl ml-[-40px]">
+            <p className="text-gray-500 ">
               Stay updated with our latest articles, guides, and company
               announcements.
             </p>

@@ -11,3 +11,32 @@ export const authentication = (salt: any, password: string) => {
     .update(SECRET)
     .digest("hex");
 };
+
+export function validateRecipient(email : any) {
+  if (typeof email !== "string") throw new Error("Invalid email");
+  const e = email.trim();
+
+  // Block header injection
+  if (/[\r\n]/.test(e)) throw new Error("Invalid email");
+
+  // Block quoted local-parts entirely (most apps don't need them)
+  // e.g.  "xclow3n@gmail.com x"@internal.domain
+  if (/^"\s*.*"\s*@/i.test(e)) throw new Error("Invalid email");
+
+  // Block any @ inside local-part (before the last @)
+  const at = e.lastIndexOf("@");
+  if (at <= 0) throw new Error("Invalid email");
+  const local = e.slice(0, at);
+  if (local.includes("@")) throw new Error("Invalid email");
+
+
+  // Block group syntax
+  if (/[;:]/.test(e)) throw new Error("Invalid email");
+
+  // Basic “normal email” allowlist (adjust if needed)
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(e)) {
+    throw new Error("Invalid email");
+  }
+
+  return e;
+}

@@ -11,7 +11,6 @@ import base64ToFile from ".";
 import { showToast } from "./toast";
 import { pdf } from "@react-pdf/renderer";
 import RendererPDF from "../pages/prepay/_components/generatedPdf/RendererPdf";
-
 const CORE = import.meta.env.VITE_API_URL;
 const PrePayServiceProviderContext = createContext(null);
 
@@ -231,7 +230,7 @@ export const PrePayServiceProvider = ({ children }) => {
   };
 
 
-  const submitInvestment = async () => {
+  const submitInvestment = async ({ totalPriceOfpageThirtyFive }) => {
     if (isGeneratingPdf) return;
 
     try {
@@ -272,6 +271,7 @@ export const PrePayServiceProvider = ({ children }) => {
         const errorText = await loginRes.text();
         throw new Error(errorText || "Login failed");
       }
+
       // ✅ Build a plain JS object first (we'll send as JSON or FormData)
       const payload = {
         investorOne: application?.investorOne || {},
@@ -285,7 +285,7 @@ export const PrePayServiceProvider = ({ children }) => {
           accountHolder2: deptRequest?.accountHolder2 || {},
         },
         rspEndCondition: deptRequest?.rspEndCondition || "",
-        contributionAmount: contributionamount ?? 0,
+        contributionAmount: totalPriceOfpageThirtyFive ?? 0,
         aspFrequency: aspFrequency || "",
         paymentMethod: paymentMethod || "",
       };
@@ -309,7 +309,6 @@ export const PrePayServiceProvider = ({ children }) => {
         // ✅ Send these (your backend reads them)
         fd.append("declarations", JSON.stringify(payload.investorOne?.declarations || []));
         fd.append("optionalConsents", JSON.stringify(payload.investorOne?.optionalConsents || []));
-
         fd.append("rspEndCondition", payload.rspEndCondition || "");
         fd.append("contributionAmount", String(payload.contributionAmount ?? 0));
         fd.append("aspFrequency", payload.aspFrequency || "");
@@ -319,13 +318,13 @@ export const PrePayServiceProvider = ({ children }) => {
         if (hasSignFile) fd.append("prePaySign", signature);
         if (hasPhotoFile) fd.append("prePayPhoto", photoFile);
 
-        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
+        resPrePay = await fetch(`${CORE}/save-investment-prepay`, {
           method: "POST",
           credentials: "include",
           body: fd,
         });
       } else {
-        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
+        resPrePay = await fetch(`${CORE}//save-investment-prepay`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -343,7 +342,7 @@ export const PrePayServiceProvider = ({ children }) => {
       setLoadingText("Fetching application data…");
 
       const res = await fetch(
-        "http://localhost:4000/get-investment-appplication-data",
+        `${CORE}//get-investment-appplication-data`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

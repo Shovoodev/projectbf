@@ -4,17 +4,31 @@ import styles from "../Styles";
 
 const CheckboxLine = ({ text, checked }) => (
     <View style={{ flexDirection: "row", marginBottom: 4 }}>
-        <Text style={{ width: 14, fontSize: 11, color: "#3129A6" }}>
-            {checked ? "☑" : "☐"}
+        <View
+            style={{
+                width: 10,
+                height: 10,
+                borderWidth: 1,
+                borderColor: "#3129A6",
+                marginRight: 4,
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            {checked ? <Text style={{ fontSize: 8, color: "#3129A6" }}>✓</Text> : null}
+        </View>
+
+        <Text style={[styles.pdfDeclarationText, { flex: 1 }]}>
+            {text}
         </Text>
-        <Text style={[styles.pdfDeclarationText, { flex: 1 }]}>{text}</Text>
     </View>
 );
 
+
+
 export default function SlipThirtySevenPage({ data }) {
-    // pass these from your app if needed
-    const declarationsChecked = data?.declarationsChecked || []; // array of indexes
-    const optionalChecked = data?.optionalChecked || [];         // array of indexes
+    const declarationsChecked = (data?.declarationsChecked || []).map(Number);
+    const optionalChecked = (data?.optionalChecked || []).map(Number);
 
     // signature can be:
     // - a base64 data URL: "data:image/png;base64,...."

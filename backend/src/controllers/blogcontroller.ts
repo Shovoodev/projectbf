@@ -59,9 +59,11 @@ export const getSingleBlog = async (
   req: express.Request,
   res: express.Response,
 ) => {
-  const { id } = req.params;
-  const blogs = await getBlogById(id);
+  const id = Array.isArray((req.params as any).id)
+    ? (req.params as any).id[0]
+    : (req.params as any).id;
 
+  const blogs = await getBlogById(String(id));
   res.json(blogs);
 };
 

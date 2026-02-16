@@ -269,9 +269,13 @@ const BlogEditor = ({ value, onChange }) => {
     content: value,
     editorProps: {
       attributes: {
-        class: "min-h-[400px] p-4 focus:outline-none prose prose-lg max-w-none",
+        class:
+          "min-h-[400px] p-4 focus:outline-none max-w-none " +
+          "prose prose-lg prose-p:text-black prose-headings:text-black prose-strong:text-black prose-li:text-black " +
+          "prose-a:text-black prose-a:no-underline text-black",
       },
     },
+
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -540,7 +544,7 @@ const BlogEditor = ({ value, onChange }) => {
                 value={embedUrl}
                 onChange={(e) => setEmbedUrl(e.target.value)}
                 placeholder="Enter YouTube or video embed URL..."
-                className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleEmbedVideo();
                 }}

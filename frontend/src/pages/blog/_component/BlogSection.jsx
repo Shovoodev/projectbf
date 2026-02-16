@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import Card from "../../../components/common/Card";
+const CORE = import.meta.env.VITE_API_URL;
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
@@ -21,7 +22,7 @@ const BlogSection = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
 
         const filteredData = Array.isArray(data)
@@ -76,7 +77,7 @@ const BlogSection = () => {
   };
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white p-4 py-16 md:py-24">
       <div className="section-container">
         {/* Section Header with Button in Corner */}
         <div className="flex justify-center items-start md:items-center mb-16 flex-col md:flex-row gap-4">
@@ -84,7 +85,7 @@ const BlogSection = () => {
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
               Latest Blog Posts
             </h2>
-            <p className="text-gray-500 max-w-2xl ml-[-40px]">
+            <p className="text-gray-500">
               Stay updated with our latest articles, guides, and company
               announcements.
             </p>
@@ -146,10 +147,7 @@ const BlogSection = () => {
                 {/* ✅ Blog Cards (only 12 per page) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {currentBlogs.map((item) => (
-                    <Card
-                      item={item}
-                      getLink={(b) => `/blog/${b._id}`}
-                    />
+                    <Card item={item} getLink={(b) => `/blog/${b._id}`} />
                   ))}
                 </div>
 
@@ -159,10 +157,11 @@ const BlogSection = () => {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded border text-sm ${currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`px-4 py-2 rounded border text-sm ${
+                        currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       Prev
                     </button>
@@ -183,10 +182,11 @@ const BlogSection = () => {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded border text-sm ${page === currentPage
-                          ? "bg-black text-white border-black"
-                          : "hover:bg-gray-100"
-                          }`}
+                        className={`px-4 py-2 rounded border text-sm ${
+                          page === currentPage
+                            ? "bg-black text-white border-black"
+                            : "hover:bg-gray-100"
+                        }`}
                       >
                         {page}
                       </button>
@@ -194,24 +194,25 @@ const BlogSection = () => {
 
                     {getPageNumbers()[getPageNumbers().length - 1] !==
                       totalPages && (
-                        <>
-                          <span className="px-2 text-gray-500">...</span>
-                          <button
-                            onClick={() => goToPage(totalPages)}
-                            className="px-4 py-2 rounded border text-sm hover:bg-gray-100"
-                          >
-                            {totalPages}
-                          </button>
-                        </>
-                      )}
+                      <>
+                        <span className="px-2 text-gray-500">...</span>
+                        <button
+                          onClick={() => goToPage(totalPages)}
+                          className="px-4 py-2 rounded border text-sm hover:bg-gray-100"
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
 
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`px-4 py-2 rounded border text-sm ${
+                        currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       Next
                     </button>

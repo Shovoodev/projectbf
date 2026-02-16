@@ -1,14 +1,15 @@
 import PdfRadio from "./common/PdfRadio";
 
-const SlipThirtyFive = ({ amount }) => {
-  const addedAmount = amount + 220;
+const SlipThirtyFive = ({ totalPrice }) => {
+  const addedAmount = totalPrice + 220;
+
   const investmentOptions = [
     {
       no: 1,
       fund: "Capital Guaranteed Fund",
       ufm: "Janus Henderson & KeyInvest Managed Investments",
       benefitNo: 50,
-    }
+    },
   ];
 
   return (
@@ -72,7 +73,6 @@ const SlipThirtyFive = ({ amount }) => {
                   );
                 })}
               </div>
-
             </div>
           </div>
 

@@ -6,6 +6,9 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import CommentSection from "./CommentSection";
 import SearchResult from "./SearchResult";
 import logo from "../../../components/layouts/Header/btf-logo.png";
+const CORE = import.meta.env.VITE_API_URL;
+
+
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -37,7 +40,7 @@ const BlogDetails = () => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
       try {
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
         setBlogData(data);
       } catch (error) {
@@ -59,7 +62,7 @@ const BlogDetails = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`http://localhost:4000/single-blog-data/${id}`);
+        const res = await fetch(`${CORE}/single-blog-data/${id}`);
 
         if (!res.ok) {
           throw new Error(
@@ -148,7 +151,7 @@ const BlogDetails = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:4000/search-blogs?search=${searchTerm}`);
+    const res = await fetch(`${CORE}/search-blogs?search=${searchTerm}`);
     const data = await res.json();
 
     setFilteredBlogs(data);
@@ -199,21 +202,31 @@ const BlogDetails = () => {
 
             {/* Content Body - Render HTML content safely */}
             <article
-              className="prose prose-lg prose-gray max-w-none 
-                            prose-headings:font-display prose-headings:font-bold 
-                            prose-a:text-blue-600 hover:prose-a:text-blue-800 
-                            prose-img:rounded-lg prose-img:shadow-md
-                            prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50
-                            prose-blockquote:py-2 prose-blockquote:px-4"
+              className="prose prose-lg max-w-none
+             text-black
+             prose-headings:font-display
+             prose-headings:font-bold
+             prose-headings:text-black
+             prose-p:text-black
+             prose-li:text-black
+             prose-strong:text-black
+             prose-a:text-black
+             prose-a:no-underline
+             prose-img:rounded-lg
+             prose-img:shadow-md"
             >
               {/* Render HTML content if it exists */}
               {article.content &&
                 typeof article.content === "string" &&
                 article.content.includes("<") ? (
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                <div
+                  className="blog-content"
+                  dangerouslySetInnerHTML={{ __html: article.content }}
+                />
+
               ) : (
                 /* Fallback for plain text */
-                <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+                <div className="whitespace-pre-line text-black leading-relaxed">
                   {article.content}
                 </div>
               )}

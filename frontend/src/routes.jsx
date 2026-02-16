@@ -47,8 +47,6 @@ import Registration from "./pages/Registration";
 
 import InvoicePage from "./pages/pay/InvoicePage";
 
-import UserPage from "./pages/dashboard/UserPage";
-
 import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 import NewsDetails from "./components/pages/News/_components/NewsDetails";
 import EditBlog from "./pages/blog/_component/EditBlog";

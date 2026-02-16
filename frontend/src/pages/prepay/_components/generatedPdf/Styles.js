@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     padding: 6, // was 8
+    gap: 4,
     backgroundColor: "#F8FAFC",
     borderRadius: 6,
     borderWidth: 1,

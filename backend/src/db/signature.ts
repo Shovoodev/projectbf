@@ -1,31 +1,28 @@
 import mongoose from "mongoose";
-
 const signatureSchema = new mongoose.Schema(
   {
-    deaceasedSalutation: {
-      type: String,
-      required: true,
-    },
+    userid: { type: String, required: true },
+
+    deaceasedSalutation: { type: String, required: true },
     deaceasedGivenName: { type: String, required: true },
     deaceasedSurname: { type: String, required: true },
-    nextToKeenSalutation: {
-        type: String,
-        required: true,
-      },
+
+    nextToKeenSalutation: { type: String, required: true },
     nextToKeenGivenName: { type: String, required: true },
-    nextToKeenOtherGivenName: { type: String, required: true },
+
+    nextToKeenOtherGivenName: { type: String, default: "" },
     nextToKeenSurname: { type: String, required: true },
     nextToKeenCurrentAddress: { type: String, required: true },
     nextToKeenMobile: { type: String, required: true },
     nextToKeenEmail: { type: String, required: true },
     nextToKeenRelation: { type: String, required: true },
+
     nextToKeenPhoto: [{ type: String }],
     nextToKeenSignPhoto: [{ type: String }],
-
-    nextToKeenSign: { type: String },
   },
   { timestamps: true }
 );
+
 
 export const signatureModel = mongoose.model("signature", signatureSchema);
 

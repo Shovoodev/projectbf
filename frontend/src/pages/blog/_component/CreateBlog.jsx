@@ -398,7 +398,7 @@ const CreateBlog = () => {
                 Blog Content *
               </label>
 
-              <div className="w-full flex-1">
+              <div className="w-full flex-1 ">
                 <BlogEditor
                   value={blogData.content}
                   onChange={(content) => setBlogData({ ...blogData, content })}

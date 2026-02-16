@@ -1,38 +1,70 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
 import Signature from "./common/Signature";
 import { showToast } from "../../../utility/toast";
 
 const SlipThirtySeven = () => {
-  const { signature, setSignature, sigCanvasRef, updateInvestor } = usePrePayServiceApi();
+  const { application, signature, setSignature, sigCanvasRef, updateInvestor } =
+    usePrePayServiceApi();
 
-  const declarations = useMemo(() => ([
-    "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
-    "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
-    "I/We have not relied on statements or representations made by any person, other than those made in the PDS to which this Application Form relates;",
-    "The information I/We have provided in this Application Form is true and correct;",
-    "The KeyInvest Funeral Bond does not mature until my/our death and that no withdrawals under the KeyInvest Funeral Bond are possible (other than where the KeyInvest Funeral Bond is 'cooled-off' in accordance with the terms of this PDS);",
-    "The amount of my/our contributions to the KeyInvest Funeral Bond do not exceed my/our anticipated total amount of funeral expenses;",
-    "Except for in respect of the repayment of capital of the 'Capital Guaranteed Fund', KeyInvest does not guarantee the performance of any other 'Investment Option' of the KeyInvest Funeral Bond;",
-    "In the event KeyInvest is wound up and unable to meet its liabilities, I/We will contribute to the sum of $1.00 only, towards the meeting of KeyInvest's liabilities;",
-    "I/We may be responsible for any Stamp Duty payable on the issue of my/our KeyInvest Funeral Bond or any subsequent assignment to a funeral director;",
-    "My/Our financial adviser (where applicable), may process an application under the KeyInvest Funeral Bond using KeyInvest's online application portal;",
-    "That my/our personal information will be collected, used and disclosed by KeyInvest in accordance with its Privacy Policy.",
-  ]), []);
+  const declarations = useMemo(
+    () => [
+      "I/We have read and understood this Application Form and the PDS attached and to which this Application Form relates;",
+      "To be bound by the terms and conditions of the PDS, this Application Form and the Constitution of KeyInvest (as amended from time to time);",
+      "I/We have not relied on statements or representations made by any person, other than those made in the PDS to which this Application Form relates;",
+      "The information I/We have provided in this Application Form is true and correct;",
+      "The KeyInvest Funeral Bond does not mature until my/our death and that no withdrawals under the KeyInvest Funeral Bond are possible (other than where the KeyInvest Funeral Bond is 'cooled-off' in accordance with the terms of this PDS);",
+      "The amount of my/our contributions to the KeyInvest Funeral Bond do not exceed my/our anticipated total amount of funeral expenses;",
+      "Except for in respect of the repayment of capital of the 'Capital Guaranteed Fund', KeyInvest does not guarantee the performance of any other 'Investment Option' of the KeyInvest Funeral Bond;",
+      "In the event KeyInvest is wound up and unable to meet its liabilities, I/We will contribute to the sum of $1.00 only, towards the meeting of KeyInvest's liabilities;",
+      "I/We may be responsible for any Stamp Duty payable on the issue of my/our KeyInvest Funeral Bond or any subsequent assignment to a funeral director;",
+      "My/Our financial adviser (where applicable), may process an application under the KeyInvest Funeral Bond using KeyInvest's online application portal;",
+      "That my/our personal information will be collected, used and disclosed by KeyInvest in accordance with its Privacy Policy.",
+    ],
+    []
+  );
 
-  const optionalCheckboxes = useMemo(() => ([
-    "If you do not wish to receive newsletters or information in relation to our other products and services, please mark this box",
-    "If you do not wish to receive newsletters or information about goods or services from other suppliers which Keylnvest reasonably consider may be of interest to you, please mark this box.",
-  ]), []);
+  const optionalCheckboxes = useMemo(
+    () => [
+      "If you do not wish to receive newsletters or information in relation to our other products and services, please mark this box",
+      "If you do not wish to receive newsletters or information about goods or services from other suppliers which Keylnvest reasonably consider may be of interest to you, please mark this box.",
+    ],
+    []
+  );
 
-  // ✅ store checkbox states
-  const [checkedDecl, setCheckedDecl] = useState(() => declarations.map(() => false));
-  const [checkedOpt, setCheckedOpt] = useState(() => optionalCheckboxes.map(() => false));
+  // ✅ initialize from store if exists
+  const storeDecl = application?.investorOne?.declarations;
+  const storeOpt = application?.investorOne?.optionalConsents;
 
-  // ✅ whenever checkbox changes, also sync to store (so submit page can send it)
+  const [checkedDecl, setCheckedDecl] = useState(() =>
+    Array.isArray(storeDecl) && storeDecl.length === declarations.length
+      ? storeDecl
+      : declarations.map(() => false)
+  );
+
+  const [checkedOpt, setCheckedOpt] = useState(() =>
+    Array.isArray(storeOpt) && storeOpt.length === optionalCheckboxes.length
+      ? storeOpt
+      : optionalCheckboxes.map(() => false)
+  );
+
+  // ✅ keep local state synced if store updates (e.g. from fetch)
+  useEffect(() => {
+    if (Array.isArray(storeDecl) && storeDecl.length === declarations.length) {
+      setCheckedDecl(storeDecl);
+    }
+  }, [storeDecl, declarations.length]);
+
+  useEffect(() => {
+    if (Array.isArray(storeOpt) && storeOpt.length === optionalCheckboxes.length) {
+      setCheckedOpt(storeOpt);
+    }
+  }, [storeOpt, optionalCheckboxes.length]);
+
+  // ✅ FIXED: field must be string, not array
   const syncToStore = (nextDecl, nextOpt) => {
-    updateInvestor("investorOne", ["declarations"], nextDecl);
-    updateInvestor("investorOne", ["optionalConsents"], nextOpt);
+    updateInvestor("investorOne", "declarations", nextDecl);
+    updateInvestor("investorOne", "optionalConsents", nextOpt);
   };
 
   const toggleDecl = (index) => {
@@ -55,7 +87,6 @@ const SlipThirtySeven = () => {
 
   const clearSavedSignature = useCallback(() => {
     setSignature(null);
-
     if (sigCanvasRef.current) sigCanvasRef.current.clear();
 
     showToast.error("signature has been removed", {
@@ -129,17 +160,6 @@ const SlipThirtySeven = () => {
           ) : (
             <Signature />
           )}
-        </div>
-
-        <div className="pdf-footer">
-          <div className="flex gap-1">
-            <span className="text-[rgb(49,41,166)] font-black">KeyInvest</span>
-            <span>Funeral Bond Product Disclosure Statement (PDS)</span>
-          </div>
-          <div className="flex gap-2">
-            <div>Version: July 2026</div>
-            <div className="font-bold">37</div>
-          </div>
         </div>
       </form>
     </div>

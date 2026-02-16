@@ -18,8 +18,6 @@ const parseMaybeJson = <T>(value: any, fallback: T): T => {
   }
 };
 
-// parseMaybeJson stays same
-
 export const saveInvestmentApplication = async ( 
   req: AuthenticatedRequest,
   res: express.Response) => {
@@ -68,14 +66,14 @@ export const saveInvestmentApplication = async (
     ? { ...photoOfSignature, prePayPhoto: photoUrl }
     : photoOfSignature;
   
-    // ✅ MERGE into investorOne
+    
     const investorOneFinal = {
       ...investorOne,
       declarations,
       optionalConsents,
     };
 
-    // ✅ IMPORTANT: use userid everywhere (matches schema + helper)
+    
     const filter = { userid: String(req.identity._id) };
 
     const update = {
