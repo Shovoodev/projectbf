@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "sourceMap": true,
-    "noImplicitAny": true
+    "target": "ES2020",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "outDir": "dist",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true
   },
   "include": [
-    "src/**/*",
-    "users.ts",
-    "src",
-    "src/types"
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
