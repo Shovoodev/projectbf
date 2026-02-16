@@ -22,7 +22,6 @@ export const registerAdmin = async (
 ): Promise<any> => {
   try {
     const { adminEmail, password } = req.body;
-    console.log({ adminEmail, password });
 
     if (!adminEmail || !password) {
       return res.status(400);

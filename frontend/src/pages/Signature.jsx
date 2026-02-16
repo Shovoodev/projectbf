@@ -71,6 +71,8 @@ const Signature = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [accountPassword, setAccountPassword] = useState("");
+  const [confirmAccountPassword, setConfirmAccountPassword] = useState("");
 
   const sigCanvasRef = useRef(null);
 
@@ -194,10 +196,22 @@ const Signature = () => {
     try {
       setLoading(true);
 
+      if (!accountPassword) {
+        throw new Error("Password is required");
+      }
+
+      if (accountPassword.length < 8) {
+        throw new Error("Password must be at least 8 characters");
+      }
+
+      if (accountPassword !== confirmAccountPassword) {
+        throw new Error("Passwords do not match");
+      }
+
       // 1) Register
       const registerPayload = {
         email: signatureForm.nextToKeenEmail,
-        password: signatureForm.deaceasedGivenName,
+        password: accountPassword,
       };
 
       const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
@@ -430,6 +444,30 @@ const Signature = () => {
                       onChange={(e) =>
                         handleSignatureChange("nextToKeenEmail", e.target.value)
                       }
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <FormLabel required>
+                      {isEnglish ? "Create account password" : "创建账户密码"}
+                    </FormLabel>
+                    <InputField
+                      type="password"
+                      value={accountPassword}
+                      onChange={(e) => setAccountPassword(e.target.value)}
+                      placeholder={isEnglish ? "At least 8 characters" : "至少8个字符"}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <FormLabel required>{isEnglish ? "Confirm password" : "确认密码"}</FormLabel>
+                    <InputField
+                      type="password"
+                      value={confirmAccountPassword}
+                      onChange={(e) => setConfirmAccountPassword(e.target.value)}
+                      placeholder={isEnglish ? "Re-enter password" : "再次输入密码"}
                       required
                     />
                   </div>

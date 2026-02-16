@@ -104,7 +104,7 @@ const KinDetailsPage = () => {
 
   const clearSignature = () => {
     sigPadRef.current.clear();
-    handleChange(field, null);
+    handleChange("sign", null);
   };
   if (loading) return <p className="text-white">Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;

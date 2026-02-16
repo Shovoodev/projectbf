@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
-
+import path from "path";
 import Stripe from "stripe";
 
 import { claudinaryConfig } from "./config/cloudinary";
@@ -12,11 +12,19 @@ import router from "./router";
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || null;
+const AUTH_SECRET = process.env.AUTH_SECRET;
+
+if (!AUTH_SECRET) {
+  throw new Error("Please define AUTH_SECRET environment variable");
+}
+
 const app = express();
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static(path.join(__dirname, "public")));
 
 const server = http.createServer(app);
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
@@ -71,7 +79,7 @@ server.listen(PORT, (err?: Error) => {
   }
 });
 app.get("/", (_req, res) => {
-  res.status(200).send("OK");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.use("/api", router());

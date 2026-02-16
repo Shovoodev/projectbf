@@ -1,47 +1,38 @@
-import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Footer from "./components/layouts/Footer/Footer";
 import Header from "./components/layouts/Header/Header";
 import Intro_video from "./pages/Intro_video";
-import { useUserFront } from "./utility/use-userFront";
 
 function App() {
-  const { user } = useUserFront();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const CORE = import.meta.env.VITE_API_URL;
+
+  const [showIntro, setShowIntro] = useState(
+    location.pathname === "/"
+  );
 
   useEffect(() => {
-    // 🔐 Define private routes
-    const isPrivateRoute = pathname.startsWith("/user");
+    if (location.pathname === "/") {
+      const timer = setTimeout(() => {
+        setShowIntro(false);
+        navigate("/home");
+      }, 4500);
 
-    // 🚫 Not logged in → block private routes
-    if (!user?._id && isPrivateRoute) {
-      navigate("/login", { replace: true });
-      return;
+      return () => clearTimeout(timer);
     }
+  }, [location.pathname, navigate]);
 
-    // ✅ Logged in → block login page
-    if (user?._id && pathname === "/login") {
-      navigate(`/user`, { replace: true });
-    }
-  }, [user, pathname, navigate]);
-
-  const location = useLocation();
-
-  const isHomeRoute = location.pathname === "/";
   return (
     <section>
-      {isHomeRoute ? (
+      {showIntro ? (
         <Intro_video />
       ) : (
         <>
           <Header />
-
           <main className="mx-auto">
             <Outlet />
           </main>
-
           <Footer />
         </>
       )}

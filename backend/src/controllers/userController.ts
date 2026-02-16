@@ -156,8 +156,7 @@ export const logOut = async (
   res: express.Response,
 ): Promise<any> => {
   try {
-    res.clearCookie("VIDEO", {
-      domain: "localhost",
+    res.clearCookie("sessionToken", {
       path: "/",
       sameSite: "lax",
     });

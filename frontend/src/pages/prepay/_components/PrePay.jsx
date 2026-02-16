@@ -1,4 +1,7 @@
+import { pdf } from "@react-pdf/renderer";
 import { useEffect, useMemo, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import {
   cover,
   eight,
@@ -35,9 +38,13 @@ import {
   twentyTwo,
   two,
 } from "../../../images/index";
+
+// Logic and Utilities
 import { usePrePayServiceApi } from "../../../utility/prepay-service-provider";
-const CORE = import.meta.env.VITE_API_URL;
-// slips (UI only)
+import PrePayInvoicePDF from "./generatedPdf/PrepayinvoicePDF";
+import PDFDownloadButton from "./generatedPdf/TestDownload";
+
+// Form Slips
 import SlipFortySix from "./SlipFortySix";
 import SlipFourty from "./SlipFourty";
 import SlipFourtyFive from "./SlipFourtyFive";
@@ -53,12 +60,8 @@ import SlipThirtySix from "./SlipThirtySix";
 import SlipThirtyThree from "./SlipThirtyThree";
 import SlipThirtyTwo from "./SlipThirtyTwo";
 
-import PDFDownloadButton from "./generatedPdf/TestDownload";
-import { useLocation } from "react-router-dom";
-import { pdf } from "@react-pdf/renderer";
-import PrePayInvoicePDF from "./generatedPdf/PrepayinvoicePDF";
-
-const images = [
+const CORE = import.meta.env.VITE_API_URL;
+const displayImages = [
   cover,
   one,
   two,
@@ -93,22 +96,27 @@ const images = [
 ];
 
 const PrePay = ({ totalPrice }) => {
+  console.log("PrePay component received totalPrice:", totalPrice);
+  // --- VERSION 2 LOGIC ---
   const { submitInvestment, isGeneratingPdf } = usePrePayServiceApi();
-  const [loadingText, setLoadingText] = useState("Preparing your documents…");
+  const [loadingText, setLoadingText] = useState("Preparing your documents...");
   const [formActive, setFormActive] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(true);
   const [step, setStep] = useState(0);
-  const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
-
   const location = useLocation();
   const { selections, path } = location.state || {};
 
-  const clientInvoice = async (e) => {
-    e?.preventDefault?.();
+  // --- VERSION 1 UI STATE ---
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
+  // --- BACKEND FUNCTIONS (KEPT FROM VERSION 2) ---
+  const clientInvoice = async () => {
     const transformSelectionsForBackend = (selectionsObj) => {
       if (!selectionsObj) return null;
-
       const transformed = {};
       const keyMapping = {
         stationery: selectionsObj.stationery,
@@ -119,7 +127,6 @@ const PrePay = ({ totalPrice }) => {
         collectionOfUrn: selectionsObj.collectionOfUrn,
         transferOption: selectionsObj.transferOption,
       };
-
       Object.entries(keyMapping).forEach(([key, value]) => {
         if (!value) return;
         transformed[key] = {
@@ -127,34 +134,22 @@ const PrePay = ({ totalPrice }) => {
           price: Number(value?.price ?? 0),
         };
       });
-
       return Object.keys(transformed).length ? transformed : null;
     };
 
     const toBase64FromBlob = (blob) =>
       new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onerror = () => reject(new Error("FileReader failed"));
-        reader.onloadend = () => {
-          const result = String(reader.result || "");
-          const base64 = result.split(",")[1];
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
-          resolve(base64);
-        };
+        reader.onloadend = () =>
+          resolve(String(reader.result || "").split(",")[1]);
         reader.readAsDataURL(blob);
       });
 
     try {
-      setLoadingText("Preparing invoice…");
-
+      setLoadingText("Preparing invoice...");
       const backendSelections = transformSelectionsForBackend(selections);
-
-      // ✅ selections/path may be missing on refresh
-      if (!backendSelections || !path) {
-        console.warn("Missing selections or path from location.state. Skipping save selections step.");
-      } else {
-        // save selections
-        const selectionRes = await fetch(`${CORE}/${path}`, {
+      if (backendSelections && path) {
+        await fetch(`${CORE}/${path}`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -163,51 +158,22 @@ const PrePay = ({ totalPrice }) => {
             totalPrice: totalPrice ?? 0,
           }),
         });
-
-        if (!selectionRes.ok) {
-          const errorText = await selectionRes.text();
-          console.warn("Failed to save selections:", errorText);
-        }
       }
-
-      setLoadingText("Fetching invoice data…");
+      setLoadingText("Fetching data...");
       const resSelections = await fetch(`${CORE}/all-selected-selections`, {
         credentials: "include",
       });
-
-      if (!resSelections.ok) {
-        const t = await resSelections.text();
-        throw new Error(`Failed to load selections: ${t}`);
-      }
-
       const data = await resSelections.json();
       const invoiceData = data?.data;
-      console.log({ invoiceData });
 
-      const total = Number(invoiceData?.totalPrice ?? 0);
-
-      await submitInvestment({ totalPriceOfpageThirtyFive: total });
-
-
-      if (!invoiceData) {
-        throw new Error("No invoice data returned from /all-selected-selections");
-      }
-
-      setLoadingText("Rendering invoice PDF…");
+      setLoadingText("Rendering PDF...");
       const blob = await pdf(
-        <PrePayInvoicePDF
-          invoiceDetails={invoiceData}
-        />
+        <PrePayInvoicePDF invoiceDetails={invoiceData} />,
       ).toBlob();
-
-      if (!blob || blob.size === 0) {
-        throw new Error("Invoice PDF generated as empty blob");
-      }
-
       const base64data = await toBase64FromBlob(blob);
 
-      setLoadingText("Sending invoice…");
-      const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
+      setLoadingText("Sending...");
+      await fetch(`${CORE}/api/send-invoice`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -217,24 +183,22 @@ const PrePay = ({ totalPrice }) => {
           pdfAttachment: base64data,
         }),
       });
-
-      const invoiceText = await invoiceRes.text();
-
-      if (!invoiceRes.ok) {
-        throw new Error(`Send invoice failed: ${invoiceText}`);
-      }
-
-      setLoadingText("Invoice sent ✅");
-      return true;
+      setLoadingText("Sent ✅");
     } catch (err) {
-      console.error("clientInvoice error:", err);
-      setLoadingText(err?.message || "Invoice failed");
-      throw err;
+      setLoadingText("Failed");
     }
   };
 
+  const fetchAndSendPdf = async () => {
+    try {
+      await submitInvestment();
+      await clientInvoice();
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-  // UI slips only (not used for PDF generation now)
+  // --- DYNAMIC SLIPS CONFIG (KEPT FROM VERSION 2) ---
   const slips = useMemo(
     () => [
       <SlipThirtyTwo />,
@@ -258,15 +222,13 @@ const PrePay = ({ totalPrice }) => {
     [totalPrice],
   );
 
-  // ✅ ADD: config for conditional rendering (same length as slips)
-  // Set enabled: false to hide a slip in the overlay
   const slipConfig = useMemo(
     () => [
       { id: "32", enabled: true },
       { id: "33", enabled: true },
-      { id: "34", enabled: true },
+      { id: "34", enabled: false },
       { id: "35", enabled: true },
-      { id: "36", enabled: true },
+      { id: "36", enabled: false },
       { id: "37", enabled: true },
       { id: "38", enabled: true },
       { id: "39", enabled: true },
@@ -283,34 +245,13 @@ const PrePay = ({ totalPrice }) => {
     [],
   );
 
-  // ✅ ADD: build the list that actually renders in UI + controls navigation
   const renderedSlips = useMemo(() => {
     return slips
-      .map((comp, idx) => ({ comp, cfg: slipConfig[idx], originalIndex: idx }))
+      .map((comp, idx) => ({ comp, cfg: slipConfig[idx] }))
       .filter((x) => x.cfg?.enabled !== false);
   }, [slips, slipConfig]);
 
-  // ✅ ADD: keep step always valid if some slips are hidden dynamically
-  useEffect(() => {
-    if (step > renderedSlips.length - 1) setStep(0);
-  }, [renderedSlips.length, step]);
-
-  useEffect(() => {
-    document.body.classList.toggle("is-generating-pdf", isGeneratingPdf);
-  }, [isGeneratingPdf]);
-
-  useEffect(() => {
-    document.body.style.overflow = formActive ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [formActive]);
-
-  // ✅ FIX 1: If form overlay opens, close the mobile sheet so it can't block clicks
-  useEffect(() => {
-    if (formActive) setMobileInfoOpen(false);
-  }, [formActive]);
-
+  // --- HANDLERS (VERSION 1 STYLE) ---
   const handleToggleForm = () => {
     if (formActive) {
       setFormActive(false);
@@ -322,170 +263,226 @@ const PrePay = ({ totalPrice }) => {
     }
   };
 
-  const fetchAndSendPdf = async () => {
-    try {
-      await clientInvoice()
-      setLoadingText("Completed successfully 🎉");
-    } catch (error) {
-      console.error("PDF send failed:", error);
-      alert(
-        `Failed to generate/send PDF.\n\n${error?.message || "Unknown error"}`,
-      );
+  const nextImage = () => {
+    if (currentIndex === displayImages.length - 1) {
+      // Last image reached, activate form overlay
+      setFormActive(true);
+      setButtonStatus(false);
+    } else {
+      setCurrentIndex((prev) => prev + 1);
     }
   };
+  const prevImage = () =>
+    setCurrentIndex(
+      (prev) => (prev - 1 + displayImages.length) % displayImages.length,
+    );
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    setZoom((prev) => Math.max(0.5, Math.min(3, prev + delta)));
+  };
+
+  useEffect(() => {
+    setZoom(1);
+    setDragOffset({ x: 0, y: 0 });
+  }, [currentIndex]);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setDragOffset({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = formActive ? "hidden" : "auto";
+  }, [formActive]);
 
   return (
     <div className="relative font-roboto">
-      {/* Toggle Button (top-right) */}
-      <div className="fixed top-4 right-4 flex items-center justify-center z-[1100] md:hidden">
-        {!mobileInfoOpen && (
-          <button
-            onClick={() => setMobileInfoOpen(true)}
-            className="w-[200px] py-3 bg-blue-600 text-white rounded-xl shadow-xl"
-          >
-            {buttonStatus ? "Open Funeral Bond Info" : "Open Application"}
-          </button>
-        )}
-      </div>
-
-      {/* MOBILE CARD (top-right panel) */}
-      {mobileInfoOpen && (
-        <div className="fixed top-4 right-4 z-[1100] md:hidden w-[90%] max-w-sm">
-          {/* backdrop */}
-          <div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
-            onClick={() => setMobileInfoOpen(false)}
-          />
-
-          {/* card */}
-          <div className="relative bg-white rounded-2xl shadow-2xl p-5 border border-gray-200">
-            <div className="flex items-start justify-between mb-4">
-              <h1 className="text-[#2c5aa0] text-lg font-bold flex items-center gap-2">
-                {buttonStatus ? "Funeral Bond Info" : "Application Form"}
-              </h1>
-              <button
-                onClick={() => setMobileInfoOpen(false)}
-                className="text-gray-400 hover:text-gray-600 p-1"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <button
-                onClick={() => {
-                  handleToggleForm();
-                  setMobileInfoOpen(false);
-                }}
-                className="w-full bg-[#2c5aa0] hover:bg-blue-700 text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98]"
-              >
-                {buttonStatus
-                  ? "Continue to Application Form"
-                  : "Back to Documentation"}
-              </button>
-
-              <button
-                onClick={fetchAndSendPdf}
-                disabled={isGeneratingPdf}
-                className={`w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                  }`}
-              >
-                {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Desktop sidebar */}
-      <div className="hidden md:block fixed right-6 top-10 z-[1100]">
-        <div className="bg-white rounded-xl shadow-2xl p-8 w-[380px]">
+      {/*  DESKTOP CONTROL BOX - ALWAYS VISIBLE (VERSION 1) */}
+      <div className="hidden md:block fixed right-6 top-10 z-[1300]">
+        <div className="bg-white/98 backdrop-blur-md rounded-xl shadow-2xl border-2 border-[#2c5aa0]/30 w-[400px] min-h-[200px] flex items-center p-[35px] text-center">
           <div className="w-full flex-1">
-            <h1 className="text-[#2c5aa0] text-2xl font-semibold mb-4">
+            <h1 className="text-[#2c5aa0] text-[28px] font-semibold mb-[15px]">
               {buttonStatus ? "Funeral Bond Information" : "Application Form"}
             </h1>
 
             <button
               onClick={handleToggleForm}
-              className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full"
+              className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider shadow-[0_6px_16px_rgba(44,90,160,0.4)] cursor-pointer transition-all hover:brightness-110 active:scale-95 w-full mb-3"
             >
               {buttonStatus
                 ? "Continue to Application Form"
                 : "Move back to Documentation"}
             </button>
 
+            {/* Version 2 buttons inside the Version 1 box */}
             <PDFDownloadButton />
-
             <button
               onClick={fetchAndSendPdf}
               disabled={isGeneratingPdf}
-              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-colors active:scale-[0.98] ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                }`}
+              className={`mt-3 w-full text-white font-semibold text-base py-3.5 rounded-xl transition-all ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500 hover:brightness-110"}`}
             >
-              {isGeneratingPdf ? "Processing..." : "Send PDF to Email"}
+              {isGeneratingPdf ? "Processing..." : "Email PDF to Me"}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Image Gallery */}
-      <div className="flex flex-col items-center gap-10 py-3">
-        {images.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt="Gallery item"
-            className="max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl"
-          />
-        ))}
+      {/* MOBILE CONTROL BAR (VERSION 1) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1300] p-1 bg-white border-t border-[#2c5aa0]/20">
+        <button
+          onClick={handleToggleForm}
+          className="bg-[#2c5aa0] text-white border-2 border-[#2c5aa0] px-[30px] py-[15px] rounded-lg text-base font-semibold uppercase tracking-wider w-full"
+        >
+          {buttonStatus
+            ? "Continue to Application Form"
+            : "Move back to Documentation"}
+        </button>
       </div>
 
-      {/* Form Overlay */}
+      {/* GALLERY VIEWER (VERSION 1 LOGIC) */}
+      {buttonStatus && (
+        <div
+          className="relative w-full min-h-screen py-3 pb-24 md:pb-3 flex flex-col items-center justify-center md:gap-10 md:flex-row"
+          onWheel={handleWheel}
+        >
+          {/* DESKTOP LAYOUT */}
+          <button
+            onClick={prevImage}
+            className="hidden md:flex bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg z-10 items-center justify-center hover:brightness-110 transition-all"
+          >
+            <FaChevronLeft size={24} />
+          </button>
+
+          {/* IMAGE CONTAINER */}
+          <div
+            className="relative flex items-center justify-center"
+            style={{
+              transform: `scale(${zoom}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+            }}
+          >
+            <img
+              src={displayImages[currentIndex]}
+              alt="Gallery"
+              className={`max-w-[90%] max-h-[95vh] object-contain rounded-xl shadow-2xl ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={() => setIsDragging(false)}
+              onMouseLeave={() => setIsDragging(false)}
+              draggable="false"
+            />
+          </div>
+
+          {/* DESKTOP LAYOUT */}
+          <button
+            onClick={nextImage}
+            className="hidden md:flex bg-[#2c5aa0] text-white p-4 rounded-full shadow-lg z-10 items-center justify-center hover:brightness-110 transition-all"
+          >
+            <FaChevronRight size={24} />
+          </button>
+
+          {/* MOBILE BUTTONS - BOTTOM */}
+          <div className="md:hidden fixed bottom-18 left-0 right-0 flex items-center justify-center gap-4 z-[1310]">
+            <button
+              onClick={prevImage}
+              className="bg-[#2c5aa0] text-white p-3 rounded-full shadow-lg hover:brightness-110 transition-all active:scale-95"
+            >
+              <FaChevronLeft size={20} />
+            </button>
+            <button
+              onClick={nextImage}
+              className="bg-[#2c5aa0] text-white p-3 rounded-full shadow-lg hover:brightness-110 transition-all active:scale-95"
+            >
+              <FaChevronRight size={20} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* FORM OVERLAY (VERSION 2 CONTENT, VERSION 1 WRAPPER) */}
       <div
-        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 ${formActive
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-[1200] flex items-center justify-center bg-black/50 transition-all duration-500 ${formActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
-        <div className="box-border w-[650px] h-[842px] mx-auto font-roboto bg-white shadow-2xl flex flex-col overflow-hidden">
-          {/* ✅ CHANGE: use renderedSlips */}
-          <div className="flex-1 px-3 py-3 overflow-y-scroll">
+        <div className="flex flex-col w-full max-w-[700px] h-full md:max-h-[850px] mx-auto bg-white rounded-none md:rounded-2xl shadow-2xl overflow-hidden">
+          <div className="overflow-y-scroll flex-1 px-2 md:px-3 py-5">
             {renderedSlips[step]?.comp}
           </div>
 
-          <div className="sticky bottom-0 p-4 flex justify-between gap-3">
-            {step > 0 && (
+          {/* ACTIONS - DESKTOP VERSION */}
+          <div className="hidden md:flex flex-row justify-between items-center p-2 bg-gray-50">
+            {step > 0 ? (
               <button
-                onClick={() => setStep((s) => s - 1)}
-                className="bg-[#3129a6] hover:bg-blue-700 z-[1105] text-white px-8 py-3 rounded-md font-bold"
+                onClick={() => setStep(step - 1)}
+                className="bg-[#2c5aa0] text-white px-6 py-3 rounded-lg flex items-center hover:brightness-110 transition-all active:scale-95"
               >
-                Previous Section
+                <FaChevronLeft className="mr-2" size={20} />
+                <span>Previous Section</span>
               </button>
+            ) : (
+              <div />
             )}
 
-            {/* ✅ CHANGE: use renderedSlips.length */}
             {step < renderedSlips.length - 1 ? (
               <button
-                onClick={() => setStep((s) => s + 1)}
-                className="bg-[#3129a6] hover:bg-blue-700 text-white z-[1105] px-8 py-3 rounded-md font-bold ml-auto"
+                onClick={() => setStep(step + 1)}
+                className="bg-[#3129a6] text-white px-6 py-3 rounded-lg flex items-center hover:brightness-110 transition-all active:scale-95"
               >
-                Next Section
+                <span>Next Section</span>
+                <FaChevronRight className="ml-2" size={20} />
               </button>
             ) : (
               <button
                 onClick={fetchAndSendPdf}
-                disabled={isGeneratingPdf}
-                className={`px-8 py-3 rounded-md font-bold text-white ml-auto ${isGeneratingPdf ? "bg-gray-400" : "bg-amber-500"
-                  }`}
+                className="bg-amber-500 text-white px-6 py-3 rounded-lg font-bold hover:brightness-110 transition-all active:scale-95"
               >
-                {isGeneratingPdf ? "Processing..." : "Finish Submission"}
+                <span>Finish Submission</span>
+              </button>
+            )}
+          </div>
+
+          {/* ACTIONS - MOBILE VERSION */}
+          <div className="md:hidden mb-15 flex items-center justify-center gap-4 p-1  ">
+            {step > 0 ? (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="bg-[#2c5aa0] text-white p-3 rounded-lg flex items-center justify-center hover:brightness-110 transition-all active:scale-95 shadow-md"
+              >
+                <FaChevronLeft size={24} />
+              </button>
+            ) : (
+              <div className="p-3" />
+            )}
+
+            <div className="text-center text-sm font-semibold text-[#2c5aa0]">
+              Step {step + 1} of {renderedSlips.length}
+            </div>
+
+            {step < renderedSlips.length - 1 ? (
+              <button
+                onClick={() => setStep(step + 1)}
+                className="bg-[#3129a6] text-white p-3 rounded-lg flex items-center justify-center hover:brightness-110 transition-all active:scale-95 shadow-md"
+              >
+                <FaChevronRight size={24} />
+              </button>
+            ) : (
+              <button
+                onClick={fetchAndSendPdf}
+                className="bg-amber-500 text-white px-6 py-3 rounded-lg font-bold hover:brightness-110 transition-all active:scale-95"
+              >
+                <span>Sumbit</span>
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Loading Modal */}
+      {/* LOADING MODAL */}
       {isGeneratingPdf && (
         <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center">
           <div className="bg-white p-10 rounded-2xl text-center shadow-2xl">
