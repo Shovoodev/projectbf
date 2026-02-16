@@ -1,10 +1,10 @@
 import express from "express";
 import nodemailer from "nodemailer";
+import { getAttendenceByUserId } from "../db/attendence";
+import { getNoCreByUserId } from "../db/noViewingCremention";
+import { getVandCByUserId } from "../db/viewingAndCremention";
 import { SendPrePayBond } from "../lib/resend";
 import { AuthenticatedRequest } from "../lib/types";
-import { getAttendenceByUserId } from "../db/attendence";
-import { getVandCByUserId } from "../db/viewingAndCremention";
-import { getNoCreByUserId } from "../db/noViewingCremention";
 // import { generatePdfDocument } from "./prepayPdfs/PDFDocument";
 
 // export const generatePdf = async (
@@ -30,7 +30,6 @@ import { getNoCreByUserId } from "../db/noViewingCremention";
 //   }
 // };
 // Send PDF via Email
-
 
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
@@ -114,7 +113,6 @@ export const sendPdfOfInvoice = async (
     res.status(500).json({ error: "Failed to send invoice" });
   }
 };
-
 
 export const sendPdfOfPrepay = async (
   req: express.Request,
