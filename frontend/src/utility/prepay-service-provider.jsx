@@ -318,13 +318,13 @@ export const PrePayServiceProvider = ({ children }) => {
         if (hasSignFile) fd.append("prePaySign", signature);
         if (hasPhotoFile) fd.append("prePayPhoto", photoFile);
 
-        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
+        resPrePay = await fetch(`${CORE}/save-investment-prepay`, {
           method: "POST",
           credentials: "include",
           body: fd,
         });
       } else {
-        resPrePay = await fetch("http://localhost:4000/save-investment-prepay", {
+        resPrePay = await fetch(`${CORE}//save-investment-prepay`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -342,7 +342,7 @@ export const PrePayServiceProvider = ({ children }) => {
       setLoadingText("Fetching application data…");
 
       const res = await fetch(
-        "http://localhost:4000/get-investment-appplication-data",
+        `${CORE}//get-investment-appplication-data`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

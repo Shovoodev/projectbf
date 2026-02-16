@@ -74,7 +74,7 @@ app.get("/", (_req, res) => {
   res.status(200).send("OK");
 });
 
-app.use("/", router());
+app.use("/api", router());
 app.options("*", cors());
 
 const MONGO_URI = process.env.MONGO_URL as string;

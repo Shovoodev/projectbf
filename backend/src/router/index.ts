@@ -5,7 +5,7 @@ import kinDetailsRouter from "./kinDetailsRouter";
 import userRouter from "./userRouter";
 import adminRouter from "./adminRouter";
 import enquireyRouter from "./enquireyRouter";
-import paymentRouter from "./paymentRouter";
+// import paymentRouter from "./paymentRouter";
 import pdfRouter from "./pdfRouter";
 import blogRouter from "./blogRouter";
 import prePayRouter from "./prePayRouter";
@@ -19,7 +19,7 @@ export default (): express.Router => {
   kinDetailsRouter(router);
   userRouter(router);
   enquireyRouter(router);
-  paymentRouter(router);
+  // paymentRouter(router);
   pdfRouter(router);
   adminRouter(router);
   blogRouter(router);

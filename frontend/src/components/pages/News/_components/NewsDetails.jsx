@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+const CORE = import.meta.env.VITE_API_URL;
+
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -30,7 +32,7 @@ const NewsDetails = () => {
     const getNews = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/publish-all-blog-data", // change to news endpoint if you have one
+          `${CORE}/publish-all-blog-data`, // change to news endpoint if you have one
         );
         const data = await res.json();
         setNewsData(data);
@@ -52,7 +54,7 @@ const NewsDetails = () => {
         setError(null);
 
         const res = await fetch(
-          `http://localhost:4000/single-blog-data/${id}`, // change if different
+          `${CORE}/single-blog-data/${id}`, // change if different
         );
 
         if (!res.ok) throw new Error("Failed to fetch article");
@@ -72,7 +74,7 @@ const NewsDetails = () => {
           excerpt:
             data.excerpt ||
             plainText.substring(0, 150).split(" ").slice(0, -1).join(" ") +
-              "...",
+            "...",
         };
 
         setArticle(transformed);

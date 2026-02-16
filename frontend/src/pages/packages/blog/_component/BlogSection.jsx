@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../../../../components/common/Card";
+const CORE = import.meta.env.VITE_API_URL;
+
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
@@ -12,7 +14,7 @@ const BlogSection = () => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
       try {
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
         setBlogData(data);
       } catch (error) {

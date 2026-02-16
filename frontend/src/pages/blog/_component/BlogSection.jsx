@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import Card from "../../../components/common/Card";
+const CORE = import.meta.env.VITE_API_URL;
+
 
 const BlogSection = () => {
   const [error, setError] = useState(null);
@@ -21,7 +23,7 @@ const BlogSection = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
 
         const filteredData = Array.isArray(data)

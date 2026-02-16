@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserFront } from "../../../utility/use-userFront";
 import NewsCard from "./_components/NewsCard";
 import Card from "../../common/Card";
+const CORE = import.meta.env.VITE_API_URL;
 
 const NewsSection = () => {
   const [error, setError] = useState(null);
@@ -22,7 +23,7 @@ const NewsSection = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
 
         const filteredData = Array.isArray(data)
@@ -158,8 +159,8 @@ const NewsSection = () => {
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
                       className={`px-4 py-2 rounded border text-sm ${currentPage === 1
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-gray-100"
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
                         }`}
                     >
                       Prev
@@ -182,8 +183,8 @@ const NewsSection = () => {
                         key={page}
                         onClick={() => goToPage(page)}
                         className={`px-4 py-2 rounded border text-sm ${page === currentPage
-                            ? "bg-black text-white border-black"
-                            : "hover:bg-gray-100"
+                          ? "bg-black text-white border-black"
+                          : "hover:bg-gray-100"
                           }`}
                       >
                         {page}
@@ -207,8 +208,8 @@ const NewsSection = () => {
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
                       className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-gray-100"
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
                         }`}
                     >
                       Next

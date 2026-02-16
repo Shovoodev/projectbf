@@ -6,6 +6,9 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import CommentSection from "./CommentSection";
 import SearchResult from "./SearchResult";
 import logo from "../../../components/layouts/Header/btf-logo.png";
+const CORE = import.meta.env.VITE_API_URL;
+
+
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -37,7 +40,7 @@ const BlogDetails = () => {
     window.scrollTo(0, 0);
     const getBlogs = async () => {
       try {
-        const res = await fetch("http://localhost:4000/publish-all-blog-data");
+        const res = await fetch(`${CORE}/publish-all-blog-data`);
         const data = await res.json();
         setBlogData(data);
       } catch (error) {
@@ -59,7 +62,7 @@ const BlogDetails = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`http://localhost:4000/single-blog-data/${id}`);
+        const res = await fetch(`${CORE}/single-blog-data/${id}`);
 
         if (!res.ok) {
           throw new Error(
@@ -148,7 +151,7 @@ const BlogDetails = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:4000/search-blogs?search=${searchTerm}`);
+    const res = await fetch(`${CORE}/search-blogs?search=${searchTerm}`);
     const data = await res.json();
 
     setFilteredBlogs(data);
