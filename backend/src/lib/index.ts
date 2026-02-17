@@ -1,18 +1,22 @@
 import crypto from "crypto";
-const SECRET = process.env.AUTH_SECRET;
 
-if (!SECRET) {
-  throw new Error("Missing AUTH_SECRET environment variable");
-}
+const getAuthSecret = (): string => {
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) {
+    throw new Error("Missing AUTH_SECRET environment variable");
+  }
+  return secret;
+};
 export const random = () => crypto.randomBytes(128).toString("base64");
 export const invoiceId = (): string => {
   return `BTF${Date.now().toString().slice(-5)}${crypto.randomInt(100, 999)}`;
 };
 
 export const authentication = (salt: any, password: string) => {
+  const secret = getAuthSecret();
   return crypto
     .createHmac("sha256", [salt, password].join("/"))
-    .update(SECRET)
+    .update(secret)
     .digest("hex");
 };
 

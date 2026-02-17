@@ -230,13 +230,15 @@ export const PrePayServiceProvider = ({ children }) => {
   };
 
 
-  const submitInvestment = async ({ totalPriceOfpageThirtyFive }) => {
+  const submitInvestment = async ({
+    totalPriceOfpageThirtyFive,
+    authOnly = false,
+  } = {}) => {
     if (isGeneratingPdf) return;
 
     try {
       setIsGeneratingPdf(true);
-
-      // 1) Register
+      // 1) Prepare credentials
       const registerPayload = {
         email: application?.investorOne?.email || "",
         password:
@@ -244,32 +246,51 @@ export const PrePayServiceProvider = ({ children }) => {
           (application?.investorOne?.surname || ""),
       };
 
-      const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registerPayload),
-      });
-
-      if (!responseUser.ok) {
-        const errorText = await responseUser.text();
-        let msg = "Registration failed";
-        try {
-          msg = JSON.parse(errorText)?.message || msg;
-        } catch { /* empty */ }
-        throw new Error(msg);
-      }
-
-      // 2) Login
-      const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
+      // 2) Try login first
+      let loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registerPayload),
         credentials: "include",
       });
 
+      // 3) If login fails, register then login again
       if (!loginRes.ok) {
-        const errorText = await loginRes.text();
-        throw new Error(errorText || "Login failed");
+        const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(registerPayload),
+          credentials: "include",
+        });
+
+        if (!responseUser.ok) {
+          const errorText = await responseUser.text();
+          let msg = "Registration failed";
+          try {
+            msg = JSON.parse(errorText)?.message || msg;
+          } catch (error) { console.log(error) }
+          throw new Error(msg);
+        }
+
+        // login again after registration
+        loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(registerPayload),
+          credentials: "include",
+        });
+
+        if (!loginRes.ok) {
+          const errorText = await loginRes.text();
+          throw new Error(errorText || "Login failed after registration");
+        }
+      }
+
+      // ✅ IMPORTANT: wait for login response body to ensure cookie is set
+      await loginRes.json().catch(() => ({}));
+
+      if (authOnly) {
+        return { success: true };
       }
 
       // ✅ Build a plain JS object first (we'll send as JSON or FormData)
@@ -294,7 +315,7 @@ export const PrePayServiceProvider = ({ children }) => {
       let resPrePay;
 
       const hasSignFile = signature instanceof File;
-      const hasPhotoFile = photoFile instanceof File; // ✅ you need to have this variable
+      const hasPhotoFile = photoFile instanceof File;
 
       if (hasSignFile || hasPhotoFile) {
         const fd = new FormData();
@@ -306,9 +327,9 @@ export const PrePayServiceProvider = ({ children }) => {
         fd.append("regularSavingsPlan", JSON.stringify(payload.regularSavingsPlan));
         fd.append("signatures", JSON.stringify(payload.signatures));
 
-        // ✅ Send these (your backend reads them)
         fd.append("declarations", JSON.stringify(payload.investorOne?.declarations || []));
         fd.append("optionalConsents", JSON.stringify(payload.investorOne?.optionalConsents || []));
+
         fd.append("rspEndCondition", payload.rspEndCondition || "");
         fd.append("contributionAmount", String(payload.contributionAmount ?? 0));
         fd.append("aspFrequency", payload.aspFrequency || "");
@@ -324,13 +345,12 @@ export const PrePayServiceProvider = ({ children }) => {
           body: fd,
         });
       } else {
-        resPrePay = await fetch(`${CORE}//save-investment-prepay`, {
+        resPrePay = await fetch(`${CORE}/save-investment-prepay`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
             ...payload,
-            // ✅ still send these
             declarations: payload.investorOne?.declarations || [],
             optionalConsents: payload.investorOne?.optionalConsents || [],
           }),
@@ -342,12 +362,12 @@ export const PrePayServiceProvider = ({ children }) => {
       setLoadingText("Fetching application data…");
 
       const res = await fetch(
-        `${CORE}//get-investment-appplication-data`,
+        `${CORE}/get-investment-appplication-data`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({}), // ✅ not required, route reads req.identity
+          body: JSON.stringify({}),
         }
       );
 
@@ -377,12 +397,14 @@ export const PrePayServiceProvider = ({ children }) => {
           type: "application/pdf",
         })
       );
+      formData.append("to", application?.investorOne?.email || "");
 
       const emailRes = await fetch(`${CORE}/send-pdf-on-email`, {
         method: "POST",
         body: formData,
         credentials: "include",
       });
+
 
       const text = await emailRes.text();
       let out;
@@ -410,7 +432,6 @@ export const PrePayServiceProvider = ({ children }) => {
     e.preventDefault();
     try {
       await submitInvestment();
-      alert("Investment saved & emailed successfully");
     } catch (error) {
       console.error(error);
       alert(error?.message || "Something went wrong");

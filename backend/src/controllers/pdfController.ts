@@ -32,21 +32,36 @@ import { validateRecipient } from "../lib";
 // };
 // Send PDF via Email
 
-
 export const sendPdfOfInvoice = async (
   req: AuthenticatedRequest,
   res: express.Response,
 ): Promise<any> => {
   try {
-    const { pdfAttachment , to } = req.body;
+    const { pdfAttachment, to } = req.body;
     const response = req.identity;
 
     if (!response) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const reference = response.reference;
+    const reference = response.reference || "N/A";
+
+    if (!process.env.RESEND_API_KEY) {
+      return res.status(500).json({ error: "Missing RESEND_API_KEY" });
+    }
+
+    if (!pdfAttachment || typeof pdfAttachment !== "string") {
+      return res.status(400).json({ error: "pdfAttachment is required" });
+    }
+
+    // Use explicit recipient from body, fallback to authenticated user email
+    const recipient = typeof to === "string" && to.trim() ? to : response.email;
+    const email = validateRecipient(recipient);
+
     // Convert base64 to buffer for attachment
     const pdfBuffer = Buffer.from(pdfAttachment, "base64");
+    if (!pdfBuffer.length) {
+      return res.status(400).json({ error: "Invalid pdfAttachment payload" });
+    }
 
     const transporter = nodemailer.createTransport({
       host: "smtp.resend.com",
@@ -57,7 +72,7 @@ export const sendPdfOfInvoice = async (
         pass: process.env.RESEND_API_KEY,
       },
     });
-    const email = validateRecipient(to)
+
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: email,
@@ -113,10 +128,12 @@ export const sendPdfOfInvoice = async (
     });
   } catch (error) {
     console.error("Server error:", error);
-    res.status(500).json({ error: "Failed to send invoice" });
+    res.status(500).json({
+      error: "Failed to send invoice",
+      details: error instanceof Error ? error.message : String(error),
+    });
   }
 };
-
 
 export const sendPdfOfPrepay = async (
   req: express.Request,
@@ -138,7 +155,6 @@ export const sendPdfOfPrepay = async (
     }
 
     const pdfBuffer = req.file.buffer;
-
     const result = await SendPrePayBond(pdfBuffer);
 
     return res.status(200).json({ success: true, data: result });

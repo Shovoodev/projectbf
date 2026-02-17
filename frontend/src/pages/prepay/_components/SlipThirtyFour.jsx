@@ -35,33 +35,7 @@ const SlipThirtyFour = () => {
             </label>
           ))}
         </div>
-        <p className="text-xs text-gray-500 mb-4">
-          Before making a joint application please read page 7 of the PDS. To
-          make 2 single applications please complete a separate Application Form
-          for each Investor.
-        </p>
-        <div className="pdf-radio-group">
-          {[
-            "Joint application ",
-            "Separate Life Insured",
-            "Power of Attorney",
-          ].map((t) => (
-            <label key={t} className="pdf-radio-item">
-              <input
-                type="radio"
-                name="title"
-                value={t}
-                onChange={(e) =>
-                  updateInvestor("investorOne", ["gender"], e.target.value)
-                }
-                className="pdf-radio-input"
-              />
-              <span className="text-gray-700 group-hover:text-blue-900">
-                {t}
-              </span>
-            </label>
-          ))}
-        </div>
+
         <p>
           Before making a joint application please read page 7 of the PDS. To
           make 2 single applications please complete a separate Application Form

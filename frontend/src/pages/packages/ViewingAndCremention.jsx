@@ -55,6 +55,11 @@ export const viewingAndCremention = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -71,7 +76,11 @@ export const viewingAndCremention = [
     question: "Collection of Urn",
     type: "select",
     options: [
-
+      {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
       {
         label: "Collect in Person",
         value: "Collect in Person",
@@ -92,9 +101,9 @@ const ViewingAndCrementionPage = () => {
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();
   const [selections, setSelections] = useState({
-    transferOption: { value: "Sydney Metro", price: 0 },
-    urn: { value: "BTF Preferred Scattering Tube", price: 0 },
-    collectionOfUrn: { value: "Collect in Person", price: 0 },
+    transferOption: { value: "Select an Option", price: 0 },
+    urn: { value: "Select an Option", price: 0 },
+    collectionOfUrn: { value: "Select an Option", price: 0 },
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

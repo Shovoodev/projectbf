@@ -53,6 +53,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "50 Memoriam Cards",
         value: "50-memoriam-cards",
         priceAdjustment: 0,
@@ -120,6 +125,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "General Wash | Dress | Makeup",
         priceAdjustment: 0,
         value: "General Wash | Dress | Makeup",
@@ -137,6 +147,11 @@ const attendenceData = [
     question: "Coffin",
     type: "select",
     options: [
+      {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
       {
         label: "Contract - Raw (Included)",
         value: "contract-raw",
@@ -337,6 +352,11 @@ const attendenceData = [
         priceAdjustment: 0,
       },
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "100cm Mixed Seasonal Coffin Cover - White",
         value: "100cm Mixed Seasonal Coffin Cover - White",
         priceAdjustment: 0,
@@ -359,6 +379,11 @@ const attendenceData = [
     type: "select",
     options: [
       {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
+      {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -375,6 +400,11 @@ const attendenceData = [
     question: "Collection of Urn",
     type: "select",
     options: [
+      {
+        label: "Select an Option",
+        value: "Select an Option",
+        priceAdjustment: 0,
+      },
       {
         label: "Collect in Person",
         value: "Collect in Person",
@@ -398,13 +428,13 @@ const AttendenceCrementionPage = ({ isLanding }) => {
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },
-    stationery: { value: "50-memoriam-cards", price: 0 },
-    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
-    coffin: { value: "contract-raw", price: 0 },
-    flowers: { value: "Funera Preferred Scattering Tube", price: 0 },
-    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
+    stationery: { value: "Select an Option", price: 0 },
+    bodyPreparation: { value: "Select an Option", price: 0 },
+    coffin: { value: "Select an Option", price: 0 },
+    flowers: { value: "Select an Option", price: 0 },
+    urn: { value: "Select an Option", price: 0 },
     collectionOfUrn: {
-      value: "Collect in Person", price: 0
+      value: "Select an Option", price: 0
     },
   });
 

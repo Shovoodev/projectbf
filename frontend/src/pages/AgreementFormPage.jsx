@@ -1,7 +1,7 @@
 import { pdf } from "@react-pdf/renderer";
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import base64ToFile from "../../utility";
 import { showToast } from "../../utility/toast";
 import SignatureField from "./_components/SignatureField";
@@ -53,7 +53,7 @@ const SelectField = (
 
 /* ================= Main Component ================= */
 
-const AgreementForm = () => {
+const AgreementFormPage = () => {
   const salutations = [
     "Mr",
     "Mrs",
@@ -70,7 +70,6 @@ const AgreementForm = () => {
   const [notPassed, setNotPassed] = useState(false);
   const [error, setError] = useState("");
   const [signatureType, setSignatureType] = useState("Digital Signature");
-  const navigate = useNavigate();
 
   const [isEnglish, setIsEnglish] = useState(true);
   const [deceasedFormValues, setDeceasedFormValues] = useState({
@@ -86,6 +85,7 @@ const AgreementForm = () => {
     regulardoctoraddress: "",
     photo: [],
   });
+  const navigate = useNavigate();
 
   const [formKinValues, setFormKinValues] = useState({
     salutation: "",
@@ -250,9 +250,6 @@ const AgreementForm = () => {
       for (const { field, message } of requiredFields) {
         if (!field || field.trim() === "") throw new Error(message);
       }
-
-
-
       // 1) Transform selections (optional)
       const backendSelections = transformSelectionsForBackend(selections);
       if (!backendSelections) {
@@ -264,7 +261,7 @@ const AgreementForm = () => {
       // 2) Register user
       const registerPayload = {
         email: formKinValues.email,
-        password: formKinValues.givenName + formKinValues.surname
+        password: formKinValues.givenName + formKinValues.surname,
       };
 
       const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
@@ -1178,4 +1175,4 @@ const AgreementForm = () => {
   );
 };
 
-export default AgreementForm;
+export default AgreementFormPage;
