@@ -1,23 +1,36 @@
 import { useState } from "react";
 import { FaBars, FaChevronDown, FaPhone } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router";
-import { useUser } from "../../hooks/useUser";
+import { Link, useLocation } from "react-router-dom";
 import logo from "./btf-logo.png";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
-  const { user } = useUser();
+
+  const location = useLocation();
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const navigate = useNavigate();
   const toggleMobileDropdown = (name) => {
     setOpenMobileDropdown(openMobileDropdown === name ? null : name);
   };
+
+  const isAttendingLanding = location.pathname === "/attending-cremation-landing";
+
+  const hiddenOnAttendingLanding = new Set([
+    "/chepels",
+    "/upcoming-funerals",
+  ]);
+
+  const shouldHideLink = (to) => {
+    return isAttendingLanding && hiddenOnAttendingLanding.has(to);
+  };
+
+  const hidePackagesMenu = isAttendingLanding;
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50 t font-body">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8 py-4">
         <div className="flex justify-between items-center h-26">
-          {/* Logo */}
           <Link to="/home" className="">
             <img className="h-[130px]" src={logo} alt="" />
           </Link>
@@ -28,35 +41,38 @@ const Header = () => {
               Home
             </Link>
 
-            {/* Packages Dropdown */}
-            <div className="relative group">
-              <a
-                href="/packages"
-                className="flex items-center gap-1 hover:text-primary"
-              >
-                Packages <FaChevronDown className="text-[10px]" />
-              </a>
-              <div className="absolute top-full left-0 mt-2 w-65 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link
-                  to="/packages/attending-service-cremation"
-                  className="dropdown-item"
+            {/* Packages Dropdown (optional hide on attending landing) */}
+            {!hidePackagesMenu && (
+              <div className="relative group">
+                <a
+                  href="/packages"
+                  className="flex items-center gap-1 hover:text-primary"
                 >
-                  Attending Service & Cremation
-                </Link>
-                <Link
-                  to="/packages/viewing-and-cremention"
-                  className="dropdown-item"
-                >
-                  Viewing & Cremation
-                </Link>
-                <Link
-                  to="/packages/no-service-cremention"
-                  className="dropdown-item"
-                >
-                  No Service Cremation
-                </Link>
+                  Packages <FaChevronDown className="text-[10px]" />
+                </a>
+                <div className="absolute top-full left-0 mt-2 w-65 bg-white shadow-lg border rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <Link
+                    to="/packages/attending-service-cremation"
+                    className="dropdown-item"
+                  >
+                    Attending Service & Cremation
+                  </Link>
+                  <Link
+                    to="/packages/viewing-and-cremention"
+                    className="dropdown-item"
+                  >
+                    Viewing & Cremation
+                  </Link>
+                  <Link
+                    to="/packages/no-service-cremention"
+                    className="dropdown-item"
+                  >
+                    No Service Cremation
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
+
             {/* BTF Dropdown */}
             <div className="relative group">
               <a
@@ -77,6 +93,8 @@ const Header = () => {
                 </Link>
               </div>
             </div>
+
+            {/* Options Dropdown */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary">
                 Options <FaChevronDown className="text-[10px]" />
@@ -95,15 +113,21 @@ const Header = () => {
                 <Link to="/music" className="dropdown-item">
                   Music
                 </Link>
-                <Link to="/chepels" className="dropdown-item">
-                  Chapels
-                </Link>
+
+                {/* ✅ Hide Chapels only when on /attending-cremation-landing */}
+                {!shouldHideLink("/chepels") && (
+                  <Link to="/chepels" className="dropdown-item">
+                    Chapels
+                  </Link>
+                )}
+
                 <Link to="/live-music" className="dropdown-item">
                   Live Music
                 </Link>
               </div>
             </div>
 
+            {/* Info Dropdown */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary">
                 Info <FaChevronDown className="text-[10px]" />
@@ -112,9 +136,14 @@ const Header = () => {
                 <Link to="/resources" className="dropdown-item">
                   Resources
                 </Link>
-                <Link to="/upcoming-funerals" className="dropdown-item">
-                  Upcoming Funerals
-                </Link>
+
+                {/* ✅ Hide Upcoming Funerals only when on /attending-cremation-landing */}
+                {!shouldHideLink("/upcoming-funerals") && (
+                  <Link to="/upcoming-funerals" className="dropdown-item">
+                    Upcoming Funerals
+                  </Link>
+                )}
+
                 <Link to="/blog" className="dropdown-item">
                   Blog
                 </Link>
@@ -147,54 +176,54 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed inset-0 z-50 lg:hidden transition-opacity ${
-          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-50 lg:hidden transition-opacity ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
       >
-        <div
-          className="absolute inset-0 bg-black/50"
-          onClick={toggleMenu}
-        ></div>
+        <div className="absolute inset-0 bg-black/50" onClick={toggleMenu}></div>
 
         <div
-          className={`absolute top-0 left-0 w-[80%] max-w-sm h-full bg-white shadow-xl transition-transform ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute top-0 left-0 w-[80%] max-w-sm h-full bg-white shadow-xl transition-transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           <div className="p-6">
             <Link to="/home" className="block text-lg font-medium mb-4">
               Home
             </Link>
 
-            {/* Packages */}
-            <Link
-              to="/packages"
-              onClick={() => toggleMobileDropdown("packages")}
-              className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 block"
-            >
-              Packages <FaChevronDown className="text-[10px]" />
-            </Link>
-            {openMobileDropdown === "packages" && (
-              <div className="ml-4 mb-4 flex flex-col space-y-1">
+            {/* Mobile Packages (optional hide on attending landing) */}
+            {!hidePackagesMenu && (
+              <>
                 <Link
-                  to="/packages/attending-service-cremation"
-                  className="dropdown-item"
+                  to="/packages"
+                  onClick={() => toggleMobileDropdown("packages")}
+                  className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 block"
                 >
-                  Attending Service & Cremation
+                  Packages <FaChevronDown className="text-[10px]" />
                 </Link>
-                <Link
-                  to="/packages/viewing-and-cremention"
-                  className="dropdown-item"
-                >
-                  Viewing & Cremation
-                </Link>
-                <Link
-                  to="/packages/no-service-cremention"
-                  className="dropdown-item"
-                >
-                  No Service Cremation
-                </Link>
-              </div>
+
+                {openMobileDropdown === "packages" && (
+                  <div className="ml-4 mb-4 flex flex-col space-y-1">
+                    <Link
+                      to="/packages/attending-service-cremation"
+                      className="dropdown-item"
+                    >
+                      Attending Service & Cremation
+                    </Link>
+                    <Link
+                      to="/packages/viewing-and-cremention"
+                      className="dropdown-item"
+                    >
+                      Viewing & Cremation
+                    </Link>
+                    <Link
+                      to="/packages/no-service-cremention"
+                      className="dropdown-item"
+                    >
+                      No Service Cremation
+                    </Link>
+                  </div>
+                )}
+              </>
             )}
 
             {/* BTF */}
@@ -241,14 +270,21 @@ const Header = () => {
                 <Link to="/music" className="dropdown-item">
                   Music
                 </Link>
-                <Link to="/chepels" className="dropdown-item">
-                  Chapels
-                </Link>
+
+                {/* ✅ Hide Chapels only when on /attending-cremation-landing */}
+                {!shouldHideLink("/chepels") && (
+                  <Link to="/chepels" className="dropdown-item">
+                    Chapels
+                  </Link>
+                )}
+
                 <Link to="/live-music" className="dropdown-item">
                   Live Music
                 </Link>
               </div>
             )}
+
+            {/* Info */}
             <button
               onClick={() => toggleMobileDropdown("info")}
               className="flex items-center gap-1 w-full text-lg font-medium mb-4"
@@ -260,9 +296,14 @@ const Header = () => {
                 <Link to="/resources" className="dropdown-item">
                   Resources
                 </Link>
-                <Link to="/options/option-two" className="dropdown-item">
-                  Upcoming Funerals
-                </Link>
+
+                {/* ✅ Hide Upcoming Funerals only when on /attending-cremation-landing */}
+                {!shouldHideLink("/upcoming-funerals") && (
+                  <Link to="/upcoming-funerals" className="dropdown-item">
+                    Upcoming Funerals
+                  </Link>
+                )}
+
                 <Link to="/blog" className="dropdown-item">
                   Blog
                 </Link>
@@ -272,17 +313,9 @@ const Header = () => {
             <Link to="/agreement" className="block text-lg font-medium mb-4">
               Agreement
             </Link>
+
             <a href="tel:1300110031" className="btn-primary">
               <FaPhone className="mr-2" /> Call Now
-              {/* {!user ? (
-                <button onClick={() => navigate(`/users/${user._id}`)}>
-                  View User
-                </button>
-              ) : (
-                <div>
-                  <FaPhone className="mr-2" /> Call Now
-                </div>
-              )} */}
             </a>
           </div>
         </div>

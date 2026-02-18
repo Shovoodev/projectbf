@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { List, Select } from "../../components/common/Reusables";
-import { useNavigate } from "react-router-dom";
+import { List } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
 import { packagePricesDetail } from "../../utility/config";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -26,11 +26,6 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Sydney Metro",
         value: "Sydney Metro",
         priceAdjustment: 0,
@@ -39,11 +34,49 @@ const attendenceData = [
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
         priceAdjustment: 220,
+        subOptions: [
+          "Blue Mountains",
+          "Cessnock",
+          "Dungog",
+          "Bathurst Regional",
+          "Goulburn",
+          "Kiama",
+          "Lithgow",
+          "Port Stephens",
+          "Shellharbour",
+          "Shoalhaven",
+          "Singleton",
+          "Wingecarribee",
+          "Wollongong",
+        ],
       },
       {
         label: "Zone 3 (+ $385)",
         value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
+        subOptions: [
+          "Blayney",
+          "Coffs Harbour",
+          "Cootamundra-Gundagai",
+          "Cowra",
+          "Dubbo Regional",
+          "Eurobodalla",
+          "Hilltops",
+          "Junee",
+          "Kempsey",
+          "Liverpool Plains",
+          "Mid-Coast",
+          "Mid-Western Regional",
+          "Muswellbrook",
+          "Oberon",
+          "Orange",
+          "Port Macquarie – Hastings",
+          "Queanbeyan – Palerang",
+          "Upper Hunter Shire",
+          "Upper Lachlan Shire",
+          "Yass Valley",
+          "ACT",
+        ],
       },
     ],
   },
@@ -52,11 +85,6 @@ const attendenceData = [
     question: "Stationery",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
       {
         label: "50 Memoriam Cards",
         value: "50-memoriam-cards",
@@ -125,11 +153,6 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "General Wash | Dress | Makeup",
         priceAdjustment: 0,
         value: "General Wash | Dress | Makeup",
@@ -148,51 +171,42 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Contract - Raw (Included)",
         value: "contract-raw",
         priceAdjustment: 0,
         includedInBase: true,
       },
       {
-        label: "Contract- Red Stain (Included)",
+        label: "Contract - Red Stain (Included)",
         value: "contract-red-stain",
         priceAdjustment: 0,
         includedInBase: true,
       },
       {
-        label: "Contract- Brown Stain (Included)",
+        label: "Contract - Brown Stain (Included)",
         value: "contract-brown-stain",
         priceAdjustment: 0,
         includedInBase: true,
       },
       {
-        label: "Basic - Deluxe Teak (Included)",
+        label: "Basic - Deluxe Teak + $336.70",
         value: "basic-deluxe-teak",
-        priceAdjustment: 0,
-        includedInBase: true,
+        priceAdjustment: 336.7,
       },
       {
-        label: "Basic - Country Oak (Included)",
+        label: "Basic - Country Oak + $336.70",
         value: "basic-country-oak",
-        priceAdjustment: 0,
-        includedInBase: true,
+        priceAdjustment: 336.7,
       },
       {
-        label: "Basic - Teak (Included)",
+        label: "Basic - Teak + $336.70",
         value: "basic-teak",
-        priceAdjustment: 0,
-        includedInBase: true,
+        priceAdjustment: 336.7,
       },
       {
-        label: "Basic - Sapelle (Included)",
+        label: "Basic - Sapelle + $336.70",
         value: "basic-sapelle",
-        priceAdjustment: 0,
-        includedInBase: true,
+        priceAdjustment: 336.7,
       },
       {
         label: "Blaxland - Deluxe Teak + $576.35",
@@ -235,17 +249,17 @@ const attendenceData = [
         priceAdjustment: 576.35,
       },
       {
-        label: "Blaxland - White + $576.35",
+        label: "Blaxland - White + $796.35",
         value: "blaxland-white",
-        priceAdjustment: 576.35,
+        priceAdjustment: 796.35,
       },
       {
-        label: "Wicker + $1092.92",
+        label: "Wicker + $1,092.92",
         value: "wicker",
         priceAdjustment: 1092.92,
       },
       {
-        label: "Calvary - walnut + $1,205.05",
+        label: "Calvary - Walnut + $1,205.05",
         value: "calvary-walnut",
         priceAdjustment: 1205.05,
       },
@@ -255,102 +269,109 @@ const attendenceData = [
         priceAdjustment: 1205.05,
       },
       {
-        label: "Wentworth - Walnut + $1218.75",
+        label: "Wentworth - Walnut + $1,218.75",
         value: "wentworth-walnut",
         priceAdjustment: 1218.75,
       },
       {
-        label: "Wentworth – Rosewood + $1,218.75",
+        label: "Wentworth - Rosewood + $1,218.75",
         value: "wentworth-rosewood",
         priceAdjustment: 1218.75,
       },
       {
-        label: "Portland – Creme Pearl Metallic + $1,534.55",
+        label: "Wentworth - White + $1,438.75",
+        value: "wentworth-white",
+        priceAdjustment: 1438.75,
+      },
+      {
+        label: "Portland - Creme Pearl Metallic + $1,534.55",
         value: "portland-creme-pearl",
         priceAdjustment: 1534.55,
       },
       {
-        label: "Portland – White + $1,384.72",
+        label: "Portland - White + $1,384.72",
         value: "portland-white",
         priceAdjustment: 1384.72,
       },
       {
-        label: "Creswick – Deluxe Teak + $1,423.75",
+        label: "Creswick - Deluxe Teak + $1,423.75",
         value: "creswick-deluxe-teak",
         priceAdjustment: 1423.75,
       },
       {
-        label: "Denman – Rosewood + $1,659.60",
+        label: "Denman - Rosewood + $1,659.60",
         value: "denman-rosewood",
         priceAdjustment: 1659.6,
       },
       {
-        label: "Denman – Rose Mahogany + $1,659.60",
+        label: "Denman - Rose Mahogany + $1,659.60",
         value: "denman-rose-mahogany",
         priceAdjustment: 1659.6,
       },
+
       {
-        label: "Goldline – Light Oak + $1,687.85",
+        label: "Goldline - Light Oak + $1,687.85",
         value: "goldline-light-oak",
         priceAdjustment: 1687.85,
       },
+
       {
-        label: "Dome Regal – Rosewood + $1,756.45",
+        label: "Dome Regal - Rosewood + $1,756.45",
         value: "dome-regal-rosewood",
         priceAdjustment: 1756.45,
       },
+
       {
-        label: "Enviro – Raw Pine + $1,327.95",
+        label: "Enviro - Raw Pine + $1,327.95",
         value: "enviro-raw-pine",
         priceAdjustment: 1327.95,
       },
+
       {
-        label: "White Rose – Clear + $2,022.89",
+        label: "White Rose - Clear + $2,022.89",
         value: "white-rose-clear",
         priceAdjustment: 2022.89,
       },
       {
-        label: "White Rose – Limewash + $2,022.89",
+        label: "White Rose - Limewash + $2,022.89",
         value: "white-rose-limewash",
         priceAdjustment: 2022.89,
       },
       {
-        label: "White Rose – White + $2,022.89",
+        label: "White Rose - White + $2,022.89",
         value: "white-rose-white",
         priceAdjustment: 2022.89,
       },
+
       {
         label: "Dome Regal Deluxe + $1,869.94",
         value: "dome-regal-deluxe",
         priceAdjustment: 1869.94,
       },
+
       {
-        label: "Brentwood – Cedar + $2,079.96",
+        label: "Brentwood - Cedar + $2,079.96",
         value: "brentwood-cedar",
         priceAdjustment: 2079.96,
       },
       {
-        label: "Brentwood – Rosewood + $2,079.96",
+        label: "Brentwood - Rosewood + $2,079.96",
         value: "brentwood-rosewood",
         priceAdjustment: 2079.96,
       },
+
       {
-        label: "Denman Cedar – Cedar + $2,475.96",
+        label: "Denman Cedar - Cedar + $2,475.96",
         value: "denman-cedar-cedar",
         priceAdjustment: 2475.96,
       },
-    ],
+    ]
   },
   {
     id: 5,
     question: "Flowers:",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
       {
         label: "Select an Option",
         value: "Select an Option",
@@ -379,11 +400,6 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Funera Preferred Scattering Tube",
         value: "Funera Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -391,7 +407,7 @@ const attendenceData = [
       {
         label: "Funera Preferred Adult Urn",
         value: "Funera Preferred Adult Urn",
-        priceAdjustment: 0,
+        priceAdjustment: 100,
       },
     ],
   },
@@ -401,11 +417,6 @@ const attendenceData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Collect in Person",
         value: "Collect in Person",
         priceAdjustment: 0,
@@ -413,35 +424,39 @@ const attendenceData = [
       {
         label: "Australia Post Registered Mail",
         value: "Australia Post Registered Mail",
-        priceAdjustment: 0,
+        priceAdjustment: 65,
       },
     ],
   },
 ];
-
-// --- Reusable Row Select Component ---
 
 const AttendenceCrementionPage = ({ isLanding }) => {
   const BASE_PRICE = isLanding
     ? packagePricesDetail.attendingLanding
     : packagePricesDetail.attendence;
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
+  const [transferZonePlace, setTransferZonePlace] = useState("");
+  const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
+
   const [selections, setSelections] = useState({
-    transferOption: { value: "Select an Option", price: 0 },
-    stationery: { value: "Select an Option", price: 0 },
-    bodyPreparation: { value: "Select an Option", price: 0 },
-    coffin: { value: "Select an Option", price: 0 },
+    transferOption: { value: "Sydney Metro", price: 0 },
+    transferZonePlace: { value: "", price: 0 },
+    stationery: { value: "50 Memoriam Cards", price: 0 },
+    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
+    coffin: { value: "contract-raw", price: 0 },
     flowers: { value: "Select an Option", price: 0 },
-    urn: { value: "Select an Option", price: 0 },
+    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
     collectionOfUrn: {
-      value: "Select an Option", price: 0
+      value: "Collect in Person", price: 0
     },
   });
+  const location = useLocation();
+  const isAttendingLanding = location.pathname === "/attending-cremation-landing";
 
-  const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState(0);
-  //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
   //popup
 
@@ -493,16 +508,26 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     const item = attendenceData.find((data) => data.id === itemId);
     if (!item) return;
 
-    const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
-    );
+    const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    // Make sure priceAdjustment is being used
     const price = selectedOption.priceAdjustment || 0;
 
     handleOptionChange(item.question, selectedValue, price);
+
+    if (itemId === 1) {
+      const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
+      setActiveTransferSubOptions(sub);
+
+      // reset nested choice whenever zone changes
+      setTransferZonePlace("");
+      setSelections((prev) => ({
+        ...prev,
+        transferZonePlace: { value: "", price: 0 },
+      }));
+    }
   };
+
 
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
@@ -634,39 +659,86 @@ const AttendenceCrementionPage = ({ isLanding }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           {/* Left: Included Variables (Dynamic) - 70% */}
           <div className="lg:col-span-8">
-            {" "}
-            {/* 8/12 = 66.67% ≈ 70% */}
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
                 {attendenceData.map((item) => {
-                  // Determine current value based on your mapping logic
+                  if (
+                    isAttendingLanding &&
+                    (item.question === "Urn" || item.question === "Collection of Urn")
+                  ) {
+                    return null;
+                  }
                   const categoryKeyMap = {
                     "Transfers from Place of Passing": "transferOption",
-                    "Funeral Stationery": "stationery", // Fixed typo in key map if needed
                     Stationery: "stationery",
                     "Body Preparation": "bodyPreparation",
                     Coffin: "coffin",
-                    Flowers: "flowers", // Removed colon for safer matching
                     "Flowers:": "flowers",
                     Urn: "urn",
                     "Collection of Urn": "collectionOfUrn",
                   };
-                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+
+                  const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
 
+                  const isTransfer = item.id === 1;
+                  const shouldShowNested =
+                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
+
                   return (
-                    <RowSelect
-                      key={item.id}
-                      label={item.question}
-                      value={currentValue}
-                      onChange={(e) =>
-                        handleSelectChange(item.id, e.target.value)
-                      }
-                      options={item.options}
-                      placeholder="Select an option"
-                    />
+                    <div key={item.id} className="flex flex-col gap-2">
+                      <RowSelect
+                        label={
+                          item.question === "Stationery" ? (
+                            <a
+                              href="https://funeralstationery.com.au/"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="hover:text-primary"
+                            >
+                              Stationery
+                            </a>
+                          ) : item.question === "Coffin" ? (
+                            <Link
+                              to={"/coffins"}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="hover:text-primary"
+                            >
+                              Coffin
+                            </Link>
+                          ) : (
+                            item.question
+                          )
+                        }
+                        value={currentValue}
+                        onChange={(e) => handleSelectChange(item.id, e.target.value)}
+                        options={item.options}
+                        placeholder="Select an option"
+                      />
+
+                      {/* ✅ Nested dropdown for Zone 2 / Zone 3 places (same RowSelect = same style) */}
+                      {shouldShowNested && (
+                        <RowSelect
+                          label="Select Area"
+                          value={transferZonePlace}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setTransferZonePlace(v);
+                            setSelections((prev) => ({
+                              ...prev,
+                              transferZonePlace: { value: v, price: 0 },
+                            }));
+                          }}
+                          options={activeTransferSubOptions}
+                          placeholder="Select a place"
+                        />
+                      )}
+                    </div>
                   );
                 })}
+
               </div>
             </Card>
           </div>

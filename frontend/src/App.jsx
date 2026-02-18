@@ -12,6 +12,13 @@ function App() {
     location.pathname === "/"
   );
 
+  const noFooterRoutes = [
+    "/home",
+    "/attending-cremation-landing",
+  ];
+
+  const hideFooter = noFooterRoutes.includes(location.pathname);
+
   useEffect(() => {
     if (location.pathname === "/") {
       const timer = setTimeout(() => {
@@ -33,11 +40,13 @@ function App() {
           <main className="mx-auto">
             <Outlet />
           </main>
-          <Footer />
+
+          {!hideFooter && <Footer />}
         </>
       )}
     </section>
   );
 }
+
 
 export default App;

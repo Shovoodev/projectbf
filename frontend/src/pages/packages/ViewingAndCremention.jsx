@@ -29,7 +29,7 @@ export const viewingAndCremention = [
     options: [
       {
         label: "Select an Option",
-        value: "Sydney Metro",
+        value: "Select an Option",
         priceAdjustment: 0,
       },
       {
@@ -41,11 +41,49 @@ export const viewingAndCremention = [
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
         priceAdjustment: 220,
+        subOptions: [
+          "Blue Mountains",
+          "Cessnock",
+          "Dungog",
+          "Bathurst Regional",
+          "Goulburn",
+          "Kiama",
+          "Lithgow",
+          "Port Stephens",
+          "Shellharbour",
+          "Shoalhaven",
+          "Singleton",
+          "Wingecarribee",
+          "Wollongong",
+        ],
       },
       {
         label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385",
+        value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
+        subOptions: [
+          "Blayney",
+          "Coffs Harbour",
+          "Cootamundra-Gundagai",
+          "Cowra",
+          "Dubbo Regional",
+          "Eurobodalla",
+          "Hilltops",
+          "Junee",
+          "Kempsey",
+          "Liverpool Plains",
+          "Mid-Coast",
+          "Mid-Western Regional",
+          "Muswellbrook",
+          "Oberon",
+          "Orange",
+          "Port Macquarie – Hastings",
+          "Queanbeyan – Palerang",
+          "Upper Hunter Shire",
+          "Upper Lachlan Shire",
+          "Yass Valley",
+          "ACT",
+        ],
       },
     ],
   },
@@ -55,11 +93,6 @@ export const viewingAndCremention = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -67,7 +100,7 @@ export const viewingAndCremention = [
       {
         label: "BTF Preferred Adult Urn",
         value: "BTF Preferred Adult Urn",
-        priceAdjustment: 0,
+        priceAdjustment: 100,
       },
     ],
   },
@@ -77,11 +110,6 @@ export const viewingAndCremention = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Collect in Person",
         value: "Collect in Person",
         priceAdjustment: 0,
@@ -89,7 +117,7 @@ export const viewingAndCremention = [
       {
         label: "Australia Post Registered Mail",
         value: "Australia Post Registered Mail",
-        priceAdjustment: 0,
+        priceAdjustment: 65,
       },
     ],
   },
@@ -98,12 +126,15 @@ export const viewingAndCremention = [
 const ViewingAndCrementionPage = () => {
   const BASE_PRICE = 3595;
 
+  const [transferZonePlace, setTransferZonePlace] = useState("");
+  const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
+
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const navigate = useNavigate();
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },
-    urn: { value: "Select an Option", price: 0 },
-    collectionOfUrn: { value: "Select an Option", price: 0 },
+    urn: { value: "BTF Preferred Scattering Tube", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -160,16 +191,26 @@ const ViewingAndCrementionPage = () => {
     const item = viewingAndCremention.find((data) => data.id === itemId);
     if (!item) return;
 
-    const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
-    );
+    const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    // Make sure priceAdjustment is being used
     const price = selectedOption.priceAdjustment || 0;
 
     handleOptionChange(item.question, selectedValue, price);
+
+    if (itemId === 1) {
+      const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
+      setActiveTransferSubOptions(sub);
+
+      // reset nested choice whenever zone changes
+      setTransferZonePlace("");
+      setSelections((prev) => ({
+        ...prev,
+        transferZonePlace: { value: "", price: 0 },
+      }));
+    }
   };
+
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
@@ -294,20 +335,42 @@ const ViewingAndCrementionPage = () => {
                     Urn: "urn",
                     "Collection of Urn": "collectionOfUrn",
                   };
-                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+
+                  const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
 
+                  const isTransfer = item.id === 1;
+                  const shouldShowNested =
+                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
+
                   return (
-                    <RowSelect
-                      key={item.id}
-                      label={item.question}
-                      value={currentValue}
-                      onChange={(e) =>
-                        handleSelectChange(item.id, e.target.value)
-                      }
-                      options={item.options}
-                      placeholder="Select an option"
-                    />
+                    <div key={item.id} className="flex flex-col gap-2">
+                      <RowSelect
+                        label={item.question}
+                        value={currentValue}
+                        onChange={(e) => handleSelectChange(item.id, e.target.value)}
+                        options={item.options}
+                        placeholder="Select an option"
+                      />
+
+                      {shouldShowNested && (
+                        <RowSelect
+                          label="Select Area"
+                          value={transferZonePlace}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setTransferZonePlace(v);
+                            setSelections((prev) => ({
+                              ...prev,
+                              transferZonePlace: { value: v, price: 0 },
+                            }));
+                          }}
+                          options={activeTransferSubOptions}
+                          placeholder="Select a place"
+                        />
+                      )}
+                    </div>
                   );
                 })}
               </div>

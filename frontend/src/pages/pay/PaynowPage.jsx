@@ -1,214 +1,188 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { FaLock, FaCreditCard } from "react-icons/fa";
+import { useEffect, useMemo, useState } from "react";
+import { Elements, CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const CORE = import.meta.env.VITE_API_URL;
+const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
 
-const PUBLIC_KEY = import.meta.env.VITE_POWERBOARD_PUBLIC_KEY;
-const GATEWAY_ID = import.meta.env.VITE_POWERBOARD_GATEWAY_ID;
-const PB_ENV = import.meta.env.VITE_POWERBOARD_ENV || "preproduction_cba";
+const cardElementOptions = {
+  style: {
+    base: { fontSize: "16px", color: "#111827", "::placeholder": { color: "#9ca3af" } },
+    invalid: { color: "#dc2626" },
+  },
+};
 
-// PowerBoard Hosted Client SDK (preprod). Docs show this script URL. :contentReference[oaicite:2]{index=2}
-const POWERBOARD_WIDGET_SRC =
-  "https://widget.preproduction.powerboard.commbank.com.au/sdk/latest/widget.umd.min.js";
+function StripeCheckoutForm({ amountCents, clientSecret, setPaying, setError, setSuccessInfo }) {
+  const stripe = useStripe();
+  const elements = useElements();
 
-function loadScriptOnce(src) {
-  return new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${src}"]`);
-    if (existing) return resolve();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements || !clientSecret) return;
 
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-    document.body.appendChild(script);
-  });
+    setPaying(true);
+    setError(null);
+
+    const card = elements.getElement(CardElement);
+    if (!card) {
+      setPaying(false);
+      setError("Card input is not ready yet.");
+      return;
+    }
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: { card },
+      return_url: `${window.location.origin}/payment-complete`,
+    });
+
+    if (error) {
+      setError(error.message || "Payment failed");
+      setPaying(false);
+      return;
+    }
+
+    setSuccessInfo({
+      message: `Payment submitted. Status: ${paymentIntent?.status ?? "unknown"}`,
+      paymentIntentId: paymentIntent?.id,
+    });
+    setPaying(false);
+  };
+
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="border border-gray-300 rounded-lg p-3">
+        <CardElement options={cardElementOptions} />
+      </div>
+      <button
+        type="submit"
+        disabled={!stripe}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition disabled:opacity-50"
+      >
+        Pay AUD {(amountCents / 100).toFixed(2)}
+      </button>
+    </form>
+  );
 }
 
-const PaynowPage = ({ amount = 2000 }) => {
-  const widgetContainerRef = useRef(null);
-  const widgetInstanceRef = useRef(null);
-
+export default function PaynowPage({ amount, serviceId }) {
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState(null);
   const [successInfo, setSuccessInfo] = useState(null);
-
-  const reference = useMemo(() => `ORDER-${Date.now()}`, []);
+  const [clientSecret, setClientSecret] = useState("");
+  const [amountCents, setAmountCents] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
 
-    const init = async () => {
+    async function init() {
       try {
+        setLoading(true);
         setError(null);
         setSuccessInfo(null);
-        setLoading(true);
 
-        if (!PUBLIC_KEY || !GATEWAY_ID) {
-          throw new Error(
-            "Missing VITE_POWERBOARD_PUBLIC_KEY or VITE_POWERBOARD_GATEWAY_ID"
-          );
+        if (!CORE) throw new Error("Missing VITE_API_URL");
+        if (!stripePromise) throw new Error("Missing VITE_STRIPE_PUBLISHABLE_KEY");
+        let cents = Number.isFinite(amount) ? Number(amount) : 0;
+        let email
+
+        if (!cents && serviceId) {
+          const detailsRes = await fetch(`${CORE}/service-details`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reference: serviceId }),
+          });
+          const detailsJson = await detailsRes.json();
+
+          if (!detailsRes.ok) {
+            throw new Error(detailsJson?.message || "Failed to load service-details");
+          }
+
+          email = detailsJson?.data?.email || email;
+          const totalPrice = Number(detailsJson?.data?.totalPrice ?? 0);
+          cents = Math.round(totalPrice * 100);
         }
 
-        await loadScriptOnce(POWERBOARD_WIDGET_SRC);
+        if (!cents || cents < 50) {
+          throw new Error("Invalid payment amount. Minimum is 50 cents.");
+        }
 
-        // cba.HtmlWidget usage from PowerBoard Client SDK docs :contentReference[oaicite:3]{index=3}
-        const { cba } = window;
-        if (!cba?.HtmlWidget) throw new Error("PowerBoard SDK not available (cba.HtmlWidget missing)");
-
-        // Clear container if re-mounting
-        if (widgetContainerRef.current) widgetContainerRef.current.innerHTML = "";
-
-        const widget = new cba.HtmlWidget("#powerboard-widget", PUBLIC_KEY, GATEWAY_ID);
-        widget.setEnv(PB_ENV);
-        widget.useAutoResize?.(true);
-
-        // Optional: make some fields required
-        widget.setFormFields?.(["card_name*", "email", "first_name*", "last_name"]);
-
-        // Listen for finish event (token returned after submit)
-        widget.on("finish", async (data) => {
-          // data shape can vary; be defensive
-          const paymentSourceToken =
-            data?.payment_source?.token ||
-            data?.payment_source ||
-            data?.token ||
-            data?.paymentSource ||
-            null;
-
-          if (!paymentSourceToken) {
-            setError("Payment source token missing from widget finish event.");
-            return;
-          }
-
-          try {
-            setPaying(true);
-            setError(null);
-
-            // Send token + amount to your backend route
-            const res = await fetch(`${CORE}/create-payment`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                amount,
-                currency: "AUD",
-                reference,
-                description: `Payment for ${reference}`,
-                gateway_id: GATEWAY_ID,
-                // this is the token produced by the widget
-                payment_source_token: paymentSourceToken,
-                // optional customer fields if you collected them
-                customer: {
-                  email: data?.email,
-                  first_name: data?.first_name,
-                  last_name: data?.last_name,
-                },
-              }),
-            });
-
-            const json = await res.json();
-            if (!res.ok) {
-              throw new Error(json?.message || `Payment failed (${res.status})`);
-            }
-
-            setSuccessInfo(json);
-          } catch (e) {
-            setError(e.message || "Payment failed");
-          } finally {
-            setPaying(false);
-          }
+        // 2) Create payment intent using email + totalPrice
+        const intentRes = await fetch(`${CORE}/create-payment-intent`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: cents,
+            currency: "aud",
+            customer: { email },
+            meta: { serviceId },
+          }),
         });
 
-        // Load the widget iFrame
-        widget.load();
+        const intentJson = await intentRes.json();
+        if (!intentRes.ok) {
+          throw new Error(intentJson?.message || "Failed to create payment intent");
+        }
 
-        widgetInstanceRef.current = widget;
+        const cs = intentJson?.data?.clientSecret;
+        if (!cs) throw new Error("Backend did not return clientSecret");
 
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setAmountCents(cents);
+          setClientSecret(cs);
+          setLoading(false);
+        }
       } catch (e) {
         if (isMounted) {
-          setError(e.message || "Failed to initialise PowerBoard widget");
+          setError(e?.message || "Init failed");
           setLoading(false);
         }
       }
-    };
+    }
 
     init();
-
     return () => {
       isMounted = false;
-      // no official destroy in docs; we just drop references
-      widgetInstanceRef.current = null;
     };
-  }, [amount, reference]);
+  }, [serviceId, amount]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-10">
-        <div className="h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        <span className="ml-3 text-gray-600">Preparing secure payment…</span>
-      </div>
-    );
-  }
+  const elementsOptions = useMemo(() => ({ appearance: { theme: "stripe" } }), []);
 
-  if (error) {
+  if (loading) return <div className="p-6">Loading…</div>;
+  if (error) return <div className="p-6 text-red-600">{error}</div>;
+  if (successInfo) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
-        <p className="font-medium">Payment initialisation failed</p>
-        <p className="text-sm mt-1">{error}</p>
+      <div className="max-w-xl mx-auto mt-10 bg-green-50 border border-green-200 rounded-xl p-6">
+        <h2 className="text-2xl font-bold text-green-800">Payment Successful</h2>
+        <p className="mt-2 text-green-700">Your payment has been received.</p>
+
+        <div className="mt-4 text-sm text-gray-700 space-y-1">
+          <p><strong>Payment ID:</strong> {successInfo.paymentIntentId}</p>
+          <p><strong>Status:</strong> {successInfo.status}</p>
+          <p><strong>Amount:</strong> {(successInfo.amount / 100).toFixed(2)} {String(successInfo.currency).toUpperCase()}</p>
+          <p><strong>Paid At:</strong> {new Date(successInfo.paidAt).toLocaleString()}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-6">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-            <FaCreditCard className="text-blue-600" />
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold text-gray-900">Pay Now</h4>
-            <p className="text-sm text-gray-500">
-              Complete your payment securely
-            </p>
-          </div>
-        </div>
-
-        {/* Widget container */}
-        <div
-          id="powerboard-widget"
-          ref={widgetContainerRef}
-          className="min-h-[280px]"
+    <div className="p-6">
+      <Elements stripe={stripePromise} options={elementsOptions}>
+        <StripeCheckoutForm
+          amountCents={amountCents}
+          clientSecret={clientSecret}
+          setPaying={setPaying}
+          setError={setError}
+          setSuccessInfo={setSuccessInfo}
         />
+      </Elements>
 
-        {/* Status */}
-        {paying && (
-          <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-            <div className="h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-            Processing payment…
-          </div>
-        )}
-
-        {successInfo && (
-          <div className="mt-4 bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
-            <p className="font-medium">Payment submitted</p>
-            <p className="text-sm mt-1">
-              Your backend returned: {successInfo?.message || "success"}
-            </p>
-          </div>
-        )}
-
-        {/* Security Note */}
-        <div className="flex items-center gap-2 mt-6 text-sm text-gray-500">
-          <FaLock className="text-green-600" />
-          <span>Secured by CommBank PowerBoard</span>
-        </div>
-      </div>
+      {paying && <div className="mt-3">Processing…</div>}
+      {successInfo && <div className="mt-3 text-green-700">{successInfo.message}</div>}
     </div>
   );
-};
-
-export default PaynowPage;
+}

@@ -4,6 +4,7 @@ import { List } from "../../components/common/Reusables";
 import { showToast } from "../../utility/toast";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
+import { viewingAndCremention } from "./ViewingAndCremention";
 
 const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
@@ -27,7 +28,7 @@ const noServiceFunralData = [
     options: [
       {
         label: "Select an Option",
-        value: "Sydney Metro",
+        value: "Select an Option",
         priceAdjustment: 0,
       },
       {
@@ -39,11 +40,49 @@ const noServiceFunralData = [
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
         priceAdjustment: 220,
+        subOptions: [
+          "Blue Mountains",
+          "Cessnock",
+          "Dungog",
+          "Bathurst Regional",
+          "Goulburn",
+          "Kiama",
+          "Lithgow",
+          "Port Stephens",
+          "Shellharbour",
+          "Shoalhaven",
+          "Singleton",
+          "Wingecarribee",
+          "Wollongong",
+        ],
       },
       {
         label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385",
+        value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
+        subOptions: [
+          "Blayney",
+          "Coffs Harbour",
+          "Cootamundra-Gundagai",
+          "Cowra",
+          "Dubbo Regional",
+          "Eurobodalla",
+          "Hilltops",
+          "Junee",
+          "Kempsey",
+          "Liverpool Plains",
+          "Mid-Coast",
+          "Mid-Western Regional",
+          "Muswellbrook",
+          "Oberon",
+          "Orange",
+          "Port Macquarie – Hastings",
+          "Queanbeyan – Palerang",
+          "Upper Hunter Shire",
+          "Upper Lachlan Shire",
+          "Yass Valley",
+          "ACT",
+        ],
       },
     ],
   },
@@ -53,11 +92,6 @@ const noServiceFunralData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "BTF Preferred Scattering Tube",
         value: "BTF Preferred Scattering Tube",
         priceAdjustment: 0,
@@ -65,7 +99,7 @@ const noServiceFunralData = [
       {
         label: "BTF Preferred Adult Urn",
         value: "BTF Preferred Adult Urn",
-        priceAdjustment: 0,
+        priceAdjustment: 100,
       },
     ],
   },
@@ -75,11 +109,6 @@ const noServiceFunralData = [
     type: "select",
     options: [
       {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
         label: "Collect in Person",
         value: "Collect in Person",
         priceAdjustment: 0,
@@ -87,17 +116,21 @@ const noServiceFunralData = [
       {
         label: "Australia Post Registered Mail",
         value: "Australia Post Registered Mail",
-        priceAdjustment: 0,
+        priceAdjustment: 65,
       },
     ],
   },
 ];
 const NoServiceCrementionPage = () => {
   const BASE_PRICE = 2295;
+
+  const [transferZonePlace, setTransferZonePlace] = useState("");
+  const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
+
   const [selections, setSelections] = useState({
-    transferOption: { value: "SSelect an Option", price: 0 },
-    urn: { value: "Select an Option", price: 0 },
-    collectionOfUrn: { value: "Select an Option", price: 0 },
+    transferOption: { value: "Select an Option", price: 0 },
+    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
   const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
   const [error, setError] = useState(null);
@@ -216,16 +249,26 @@ const NoServiceCrementionPage = () => {
     const item = noServiceFunralData.find((data) => data.id === itemId);
     if (!item) return;
 
-    const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
-    );
+    const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    // Make sure priceAdjustment is being used
     const price = selectedOption.priceAdjustment || 0;
 
     handleOptionChange(item.question, selectedValue, price);
+
+    if (itemId === 1) {
+      const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
+      setActiveTransferSubOptions(sub);
+
+      // reset nested choice whenever zone changes
+      setTransferZonePlace("");
+      setSelections((prev) => ({
+        ...prev,
+        transferZonePlace: { value: "", price: 0 },
+      }));
+    }
   };
+
 
   useEffect(() => {
     const totalPriceImpact = Object.values(selections).reduce(
@@ -305,26 +348,47 @@ const NoServiceCrementionPage = () => {
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
                 {noServiceFunralData.map((item) => {
-                  // Determine current value based on your mapping logic
                   const categoryKeyMap = {
                     "Transfers from Place of Passing": "transferOption",
                     Urn: "urn",
                     "Collection of Urn": "collectionOfUrn",
                   };
-                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+
+                  const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
 
+                  const isTransfer = item.id === 1;
+                  const shouldShowNested =
+                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
+
                   return (
-                    <RowSelect
-                      key={item.id}
-                      label={item.question}
-                      value={currentValue}
-                      onChange={(e) =>
-                        handleSelectChange(item.id, e.target.value)
-                      }
-                      options={item.options}
-                      placeholder="Select an option"
-                    />
+                    <div key={item.id} className="flex flex-col gap-2">
+                      <RowSelect
+                        label={item.question}
+                        value={currentValue}
+                        onChange={(e) => handleSelectChange(item.id, e.target.value)}
+                        options={item.options}
+                        placeholder="Select an option"
+                      />
+
+                      {shouldShowNested && (
+                        <RowSelect
+                          label="Select Area"
+                          value={transferZonePlace}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setTransferZonePlace(v);
+                            setSelections((prev) => ({
+                              ...prev,
+                              transferZonePlace: { value: v, price: 0 },
+                            }));
+                          }}
+                          options={activeTransferSubOptions}
+                          placeholder="Select a place"
+                        />
+                      )}
+                    </div>
                   );
                 })}
               </div>
