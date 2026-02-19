@@ -55,6 +55,8 @@ import Error from "./pages/Error";
 import Intro_video from "./pages/Intro_video";
 
 import Attending_Cremation_Landing from "./pages/Attending_Cremation_Landing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PaymentTerms from "./pages/PaymentTerms";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -125,6 +127,14 @@ export const routes = createBrowserRouter([
       {
         path: "/refund-policy",
         element: <Refund_Policy />,
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/payment-terms",
+        element: <PaymentTerms />,
       },
       {
         path: "/disclaimer",

@@ -57,7 +57,6 @@ Text: Montserrat (Normal) */
 }
 
 @layer components {
-
   /* =========================================
      EXISTING CLASSES (DO NOT DELETE)
      ========================================= */
@@ -160,7 +159,6 @@ Text: Montserrat (Normal) */
 }
 
 @layer utilities {
-
   /* Utility for Team Page */
   .section-padding {
     @apply py-5 md:py-8;

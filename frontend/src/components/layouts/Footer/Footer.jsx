@@ -102,7 +102,10 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-body">
-          <p>
+          <p
+            className="text-center
+          "
+          >
             Copyright © {new Date().getFullYear()} blacktulipfunerals. All
             rights reserved.
           </p>
