@@ -16,9 +16,8 @@ const AccordionItem = ({ title, content, isOpen, onToggle }) => (
     </button>
 
     <div
-      className={`px-5 font-body text-gray-600 leading-relaxed text-sm md:text-base text-justify transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[1000px] opacity-100 py-5" : "max-h-0 opacity-0 py-0"
-      }`}
+      className={`px-5 font-body text-gray-600 leading-relaxed text-sm md:text-base text-justify transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-[1000px] opacity-100 py-5" : "max-h-0 opacity-0 py-0"
+        }`}
     >
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
@@ -70,7 +69,7 @@ const FuneralGuideSection = () => {
       <div className="section-container max-w-4xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 uppercase tracking-wide mb-4">
+          <h2 className="text-3xl md:text-4xl font-roboto font-bold text-gray-900 uppercase tracking-wide mb-4">
             Funeral
           </h2>
           <div className="w-20 h-1 bg-black mx-auto opacity-20"></div>

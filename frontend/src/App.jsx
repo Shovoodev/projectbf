@@ -12,7 +12,6 @@ function App() {
   );
 
   const noFooterRoutes = [
-    "/home",
     "/landing-page",
     "/attending-cremation-landing",
   ];

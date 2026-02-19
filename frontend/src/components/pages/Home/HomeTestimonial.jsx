@@ -62,9 +62,9 @@ export default function TestimonialsCarousel() {
     },
   ];
   return (
-    <div className="relative ">
+    <div className="relative py-5">
       {/* External Navigation Buttons */}
-      <div className="absolute top-1/2 -translate-y-1/2 -left-10 z-10 mr-2">
+      <div className="absolute top-1/2 -translate-y-1/2 -left-12 z-10 mr-2">
         <button
           ref={prevRef}
           className="p-3 bg-white rounded-full shadow hover:bg-gray-100"
@@ -72,7 +72,7 @@ export default function TestimonialsCarousel() {
           <FaArrowLeft />
         </button>
       </div>
-      <div className="absolute top-1/2 -translate-y-1/2 -right-10 z-10">
+      <div className="absolute top-1/2 -translate-y-1/2 -right-12 z-10">
         <button
           ref={nextRef}
           className="p-3 bg-white rounded-full shadow hover:bg-gray-100"

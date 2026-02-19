@@ -17,7 +17,6 @@ function Home() {
       <Facilities />
       <ServiceArea />
       <TestimonialsCarousel />
-      <FooterWithoutLinks />
     </section>
   );
 }

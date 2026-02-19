@@ -43,7 +43,7 @@ const Stationery = () => {
           ))}
         </div> */}
 
-        <p className="mt-8 text-sm text-gray-500 max-w-4xl mx-auto font-body">
+        <p className="max-w-3xl mx-auto text-body-light">
           Preserve the legacy of your loved one with thoughtfully designed
           funeral stationery from Sydney's leading funeral parlours. From
           elegant service booklets to heartfelt thank you cards, each piece

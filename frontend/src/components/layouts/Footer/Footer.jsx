@@ -91,7 +91,7 @@ const Footer = () => {
                   to={getPathFromLabel(link)}
                   onClick={() => scrollToTop()}
                   aria-label={`Go to ${link}`}
-                  className="block text-gray-700 hover:text-primary transition-colors"
+                  className="block  hover:text-gray-700 text-body-light text-black "
                 >
                   {link}
                 </Link>

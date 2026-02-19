@@ -15,7 +15,8 @@ const ChapelsPage = () => {
         hasSlider={true}
         background="bg-white"
       >
-        <p>
+        <p className=" text-body-light text-black ">
+
           The Black Tulip Funerals Chapel is a truly exceptional venue,
           thoughtfully designed to provide comfort, elegance, and serenity for
           every service. With a seating capacity of 240 guests, the chapel
@@ -27,7 +28,8 @@ const ChapelsPage = () => {
           and walls, gently enhances the ambiance, ensuring a calming and
           respectful environment.
         </p>
-        <p>
+        <p className=" text-body-light text-black ">
+
           Central to the chapel is a state-of-the-art, 24 square metre
           presentation screen, providing a vivid digital backdrop for photo
           tributes, live streams, and video content, giving families every
@@ -38,7 +40,8 @@ const ChapelsPage = () => {
           experience, offering opportunities for live or recorded music to be
           shared in perfect harmony.
         </p>
-        <p className="text-sm italic mt-4 opacity-80">
+        <p className=" text-body-light text-black ">
+
           Every detail of the chapel, from the luxurious seating layout to the
           luminous finishes and advanced technological features, has been
           carefully curated to deliver a modern celebration of life without
@@ -52,7 +55,8 @@ const ChapelsPage = () => {
         image={img2}
         background="bg-surface" // Using your global surface color
       >
-        <p>
+        <p className=" text-body-light text-black ">
+
           The Library Chapel offers an intimate, elegantly modern space designed
           for heartfelt and meaningful gatherings. Accommodating up to 84
           guests, the chapel features gently curved, pew-style seating with
@@ -61,7 +65,8 @@ const ChapelsPage = () => {
           windows and minimalist concrete walls, create a serene and
           contemplative ambiance.
         </p>
-        <p>
+        <p className=" text-body-light text-black ">
+
           A 12 square metre digital screen sits prominently at the front,
           providing a clear and vivid platform for photo tributes, live streams,
           or personalised visual presentations, ensuring every service feels
@@ -70,7 +75,8 @@ const ChapelsPage = () => {
           environment, fostering warmth and tranquility throughout every
           ceremony.
         </p>
-        <p>
+        <p className=" text-body-light text-black ">
+
           The space is thoughtfully designed to blend openness with a sense of
           privacy—ideal for smaller, more personal farewells. Carefully selected
           décor, including indoor greenery and modern fixtures, further enhances
@@ -83,7 +89,8 @@ const ChapelsPage = () => {
 
       {/* 3. Viewing Rooms */}
       <ChapelSection title="Viewing Rooms" image={img3} background="bg-white">
-        <p>
+        <p className=" text-body-light text-black ">
+
           Within each Viewing Room, guests will find elegantly crafted timber
           bench seating arranged to encourage togetherness and reflection.
           Calming neutral tones and soft, contemporary décor—including fresh
@@ -93,7 +100,7 @@ const ChapelsPage = () => {
           distraction of visual or audio-visual equipment, allowing your
           family's focus to remain on these heartfelt moments.
         </p>
-        <p>
+        <p className=" text-body-light text-black ">
           The layout and design of the three rooms support both communal sharing
           and quiet contemplation, with ample space for small gatherings or
           individual reflection. By offering multiple, soundproofed suites, we

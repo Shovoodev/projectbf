@@ -16,14 +16,13 @@ const LinkCard = ({ title, theme, listType, items, children }) => {
     <div
       className={`
       rounded-lg p-8 border h-full flex flex-col
-      ${
-        isDark
+      ${isDark
           ? "bg-black text-white border-black"
           : "bg-white text-gray-900 border-gray-300"
-      }
+        }
     `}
     >
-      <h3 className="text-2xl font-bold font-display uppercase mb-6 tracking-wide">
+      <h3 className="text-2xl font-bold font-roboto uppercase mb-6 tracking-wide">
         {title}
       </h3>
 
@@ -73,11 +72,10 @@ const SocialCard = ({ platform, icon: Icon, theme, items }) => {
     <div
       className={`
       rounded-lg p-8 border h-full text-center
-      ${
-        isDark
+      ${isDark
           ? "bg-black text-white border-black"
           : "bg-white text-gray-900 border-gray-300"
-      }
+        }
     `}
     >
       <div className="flex flex-col items-center mb-6">
@@ -89,7 +87,7 @@ const SocialCard = ({ platform, icon: Icon, theme, items }) => {
         >
           <Icon className="text-xl" />
         </div>
-        <h3 className="text-2xl font-bold font-display">{platform}</h3>
+        <h3 className="text-2xl font-bold font-roboto">{platform}</h3>
       </div>
 
       <ul className="space-y-4 text-left">
@@ -99,9 +97,8 @@ const SocialCard = ({ platform, icon: Icon, theme, items }) => {
             className="flex items-start gap-3 text-lg leading-relaxed"
           >
             <FaCircleCheck
-              className={`mt-1 flex-shrink-0 ${
-                isDark ? "text-white" : "text-black"
-              }`}
+              className={`mt-1 flex-shrink-0 ${isDark ? "text-white" : "text-black"
+                }`}
             />
             <span className={isDark ? "text-gray-300" : "text-gray-700"}>
               {item}
@@ -225,8 +222,8 @@ const UsefulLinksSection = () => {
                 "How to Memorialise a Facebook Account",
                 "How to Close a Facebook Account When Someone Dies",
               ]}
-                      />
-                      
+            />
+
             <SocialCard
               platform="Instagram"
               theme="light"

@@ -23,7 +23,7 @@ const PackageCard = ({ img, title, desc, price, link }) => (
         {desc}
       </p>
       <div className="mt-auto w-full flex flex-col items-center">
-        <div className="text-5xl  font-display font-semibold mb-4 text-gray-900">
+        <div className="text-5xl  font-body font-semibold mb-4 text-gray-900">
           ${price}
         </div>
         <Link to={link} className="btn-primary btn-sm">

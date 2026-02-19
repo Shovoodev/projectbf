@@ -40,17 +40,17 @@ const AshesStorageHero = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <a
               href="tel:1300110031"
-              className="flex items-center justify-center gap-2 bg-white text-black px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-200 transition-colors shadow-lg"
+              className="flex items-center justify-center gap-2 bg-white text-black px-8 py-3 rounded-full text-sm font-body font-bold uppercase hover:bg-gray-200 transition-colors shadow-lg"
             >
               <FaPhone /> 1300 11 0031
             </a>
-            <Link
+            <a
               to="/contact"
-              className="btn-enquire flex items-center justify-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg"
+              className="flex items-center justify-center gap-2 bg-white text-black px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-200 transition-colors shadow-lg"
             >
               <span className="">Enquire Now</span>
               <FaLongArrowAltRight />
-            </Link>
+            </a>
             ;
           </div>
         </div>

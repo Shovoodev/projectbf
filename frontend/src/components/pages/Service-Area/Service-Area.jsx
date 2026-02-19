@@ -20,7 +20,7 @@ const ServiceAreasSection = () => {
           <div className="inline-block px-4 py-1 border border-black rounded-full text-xs font-bold uppercase tracking-widest mb-6">
             Locations
           </div>
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+          <h2 className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
             Service Areas
           </h2>
           <p className="text-gray-600 font-body leading-relaxed">

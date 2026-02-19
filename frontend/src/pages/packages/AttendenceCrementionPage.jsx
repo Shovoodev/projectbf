@@ -13,7 +13,7 @@ export function Card({ title, children, className = "" }) {
     <div
       className={`bg-gray-50 rounded-xl p-8 border border-gray-100 h-full ${className}`}
     >
-      <h3 className="font-body font-lato font-bold uppercase text-sm md:text-base text-gray-900 mb-6 tracking-wide">
+      <h3 className="font-body font-lato font-bold uppercase text-body-light md:text-base text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
       {children}
@@ -307,14 +307,14 @@ const AttendenceCrementionPage = ({ isLanding }) => {
 
   return (
     <div className="bg-white pb-2">
-      <div className="section-container max-w-7xl mx-auto px-6 py-16">
+      <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         {/* HEADER */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-10">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-6">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start items-center mb-10 sm:mb-16 gap-8 md:gap-10">
+          <div className="w-full md:max-w-3xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-4 sm:mb-6">
               Attending Service Cremation
             </h1>
-            <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
+            <p className="text-body-light sm:text-body-light leading-relaxed text-left sm:text-justify">
               Black Tulip Funerals offers a respectful and simple farewell,
               allowing family and close friends to be present during the
               cremation service. It provides a meaningful opportunity to honor
@@ -322,23 +322,23 @@ const AttendenceCrementionPage = ({ isLanding }) => {
             </p>
           </div>
 
-          <div className="bg-gray-50 border border-gray-100 rounded-xl p-8 text-center min-w-[220px] self-start">
+          {/* PRICE */}
+          <div className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
             <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
               Price
             </span>
-            <span className="text-6xl font-body font-bold text-gray-900">
+            <span className="text-5xl sm:text-6xl text-body-light font-bold text-gray-900">
               ${totalPrice}
             </span>
           </div>
         </div>
 
         {/* CONTENT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 mb-10 sm:mb-12">
           <div className="lg:col-span-8">
             <Card title="Included Variables">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3 sm:gap-2">
                 {attendenceData.map((item) => {
-                  // ✅ Hide Urn + Collection of Urn on landing
                   if (
                     isAttendingLanding &&
                     (item.question === "Urn" || item.question === "Collection of Urn")
@@ -373,7 +373,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                               Stationery
                             </a>
                           ) : item.question === "Coffin" ? (
-                            // ✅ use <a> for opening new tab
                             <a
                               href="/coffins"
                               target="_blank"
@@ -419,15 +418,22 @@ const AttendenceCrementionPage = ({ isLanding }) => {
         </div>
 
         {/* ACTIONS */}
-        <div className="flex flex-wrap gap-4 justify-center mt-10 pb-2">
-          <button className="btn-primary normal" onClick={handleRegistrationSubmit}>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 pb-2">
+          <button
+            className="btn-primary normal w-full sm:w-auto"
+            onClick={handleRegistrationSubmit}
+          >
             Make Agreement Now
           </button>
 
-          <div>
-            <button className="btn-primary normal" onClick={() => openPopup("enquirey")}>
+          <div className="w-full sm:w-auto">
+            <button
+              className="btn-primary normal w-full sm:w-auto"
+              onClick={() => openPopup("enquirey")}
+            >
               Enquire Now
             </button>
+
             <PopupEnquirey
               isOpen={activePopup === "enquirey"}
               onClose={closePopup}
@@ -439,11 +445,12 @@ const AttendenceCrementionPage = ({ isLanding }) => {
             />
           </div>
 
-          <button className="btn-primary normal" onClick={handlePrepaySubmit}>
+          <button className="btn-primary normal w-full sm:w-auto" onClick={handlePrepaySubmit}>
             Prepay
           </button>
         </div>
-        <div className="mt-10">
+
+        <div className="mt-8 sm:mt-10">
           <TransferZonesBox />
         </div>
 
@@ -459,6 +466,7 @@ const AttendenceCrementionPage = ({ isLanding }) => {
         )}
       </div>
     </div>
+
   );
 };
 

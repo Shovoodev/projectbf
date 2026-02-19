@@ -14,9 +14,9 @@ const ChapelSection = ({ title, image, children, background = "bg-white" }) => {
         </div>
 
         {/* Text Content */}
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto  text-center">
           <h2 className="heading-lg uppercase tracking-wide">{title}</h2>
-          <div className="space-y-6 text-gray-600 leading-loose font-light font-body text-justify md:text-center">
+          <div className="space-y-6 text-black font-body-light leading-loose font-body text-justify md:text-center">
             {children}
           </div>
         </div>

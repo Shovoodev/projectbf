@@ -182,10 +182,10 @@ const ViewingAndCrementionPage = () => {
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-4 sm:mb-6">
               Viewing & Cremation
             </h1>
-            <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
+            <p className="text-body-light sm:text-body-light leading-relaxed text-left sm:text-justify">
               Black Tulip Funerals provides families with the opportunity to
               spend private time viewing their loved one before a dignified
               cremation service. This option allows for a personal and
@@ -194,7 +194,7 @@ const ViewingAndCrementionPage = () => {
           </div>
 
           {/* Price Box */}
-          <div className="bg-gray-50 border border-gray-100 rounded-xl p-6 text-center min-w-[200px]">
+          <div className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
             <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
               Price
             </span>

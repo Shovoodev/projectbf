@@ -123,12 +123,12 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* LEFT COLUMN: Contact Form */}
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold text-gray-900 mb-1 font-display">
+            <h2 className="text-2xl font-display text-gray-900 mb-1">
               Get in Touch With
             </h2>
             {/* Using italic font-display to mimic the script look, 
                 or you can import a script font like 'Great Vibes' */}
-            <h1 className="text-4xl md:text-5xl font-display italic font-bold text-gray-900 mb-8">
+            <h1 className="text-4xl md:text-5xl font-roboto font-bold text-gray-900 mb-8">
               Black Tulip Funerals
             </h1>
 
@@ -151,15 +151,13 @@ const Contact = () => {
                   aria-describedby={
                     errors.name && touched.name ? "name-error" : undefined
                   }
-                  className={`w-full bg-white border ${
-                    errors.name && touched.name
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${
-                    errors.name && touched.name
+                  className={`w-full bg-white border ${errors.name && touched.name
+                    ? "border-red-500"
+                    : "border-gray-400"
+                    } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${errors.name && touched.name
                       ? "focus:border-red-500"
                       : "focus:border-black"
-                  } transition-colors`}
+                    } transition-colors`}
                   required
                 />
                 {errors.name && touched.name && (
@@ -189,15 +187,13 @@ const Contact = () => {
                   aria-describedby={
                     errors.phone && touched.phone ? "phone-error" : undefined
                   }
-                  className={`w-full bg-white border ${
-                    errors.phone && touched.phone
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${
-                    errors.phone && touched.phone
+                  className={`w-full bg-white border ${errors.phone && touched.phone
+                    ? "border-red-500"
+                    : "border-gray-400"
+                    } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${errors.phone && touched.phone
                       ? "focus:border-red-500"
                       : "focus:border-black"
-                  } transition-colors`}
+                    } transition-colors`}
                 />
                 {errors.phone && touched.phone && (
                   <p id="phone-error" className="mt-1 text-sm text-red-600">
@@ -226,15 +222,13 @@ const Contact = () => {
                   aria-describedby={
                     errors.email && touched.email ? "email-error" : undefined
                   }
-                  className={`w-full bg-white border ${
-                    errors.email && touched.email
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${
-                    errors.email && touched.email
+                  className={`w-full bg-white border ${errors.email && touched.email
+                    ? "border-red-500"
+                    : "border-gray-400"
+                    } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${errors.email && touched.email
                       ? "focus:border-red-500"
                       : "focus:border-black"
-                  } transition-colors`}
+                    } transition-colors`}
                   required
                 />
                 {errors.email && touched.email && (
@@ -313,15 +307,13 @@ const Contact = () => {
                       ? "message-error"
                       : undefined
                   }
-                  className={`w-full bg-white border ${
-                    errors.message && touched.message
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${
-                    errors.message && touched.message
+                  className={`w-full bg-white border ${errors.message && touched.message
+                    ? "border-red-500"
+                    : "border-gray-400"
+                    } text-gray-900 text-sm rounded-sm p-3 placeholder-gray-500 focus:outline-none ${errors.message && touched.message
                       ? "focus:border-red-500"
                       : "focus:border-black"
-                  } transition-colors resize-none`}
+                    } transition-colors resize-none`}
                 ></textarea>
                 {errors.message && touched.message && (
                   <p id="message-error" className="mt-1 text-sm text-red-600">
@@ -393,7 +385,7 @@ const Contact = () => {
                 <FaPhoneVolume className="text-2xl md:text-3xl flex items-center rotate-[-10deg]" />
                 <a
                   href="tel:1300110031"
-                  className="text-3xl md:text-4xl font-bold text-gray-900 hover:text-gray-700 transition-colors font-display"
+                  className="text-3xl md:text-4xl font-body text-gray-900 hover:text-gray-700 transition-colors "
                 >
                   1300 11 0031
                 </a>

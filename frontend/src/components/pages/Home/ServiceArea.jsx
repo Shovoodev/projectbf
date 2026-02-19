@@ -10,7 +10,7 @@ const ServiceArea = () => {
         <h4 className="text-lg font-medium text-gray-800 mb-4 font-body">
           We service the following and surrounding areas
         </h4>
-        <p className="text-gray-600 mb-8 leading-relaxed font-light font-body">
+        <p className=" mb-8 leading-relaxed px-4 text-body-light">
           Sydney, Botany, Homebush, Rookwood, Liverpool, Leppington, Matraville,
           North Ryde, Sutherland, Kemps Creek, Minchinbury, Macquarie Park,
           Greater Western Sydney & the Sydney Metropolitan.
