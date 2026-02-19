@@ -103,8 +103,8 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-body">
           <p>
-            Copyright © {new Date().getFullYear()} OVANTA Pty Ltd. All rights
-            reserved.
+            Copyright © {new Date().getFullYear()} blacktulipfunerals. All
+            rights reserved.
           </p>
           <div className="flex space-x-4">
             {[<FaFacebookF />, <FaTwitter />, <FaYoutube />].map((icon, i) => (
