@@ -4,6 +4,7 @@ import { List } from "../../components/common/Reusables";
 import { showToast } from "../../utility/toast";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
+import TransferZonesBox from "./_components/TransferZonesBox";
 
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
@@ -23,55 +24,18 @@ const noServiceFunralData = [
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      { label: "Select an Option", value: "Select an Option", priceAdjustment: 0 },
       { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
         priceAdjustment: 220,
-        subOptions: [
-          "Blue Mountains",
-          "Cessnock",
-          "Dungog",
-          "Bathurst Regional",
-          "Goulburn",
-          "Kiama",
-          "Lithgow",
-          "Port Stephens",
-          "Shellharbour",
-          "Shoalhaven",
-          "Singleton",
-          "Wingecarribee",
-          "Wollongong",
-        ],
+
       },
       {
         label: "Zone 3 (+ $385)",
         value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
-        subOptions: [
-          "Blayney",
-          "Coffs Harbour",
-          "Cootamundra-Gundagai",
-          "Cowra",
-          "Dubbo Regional",
-          "Eurobodalla",
-          "Hilltops",
-          "Junee",
-          "Kempsey",
-          "Liverpool Plains",
-          "Mid-Coast",
-          "Mid-Western Regional",
-          "Muswellbrook",
-          "Oberon",
-          "Orange",
-          "Port Macquarie – Hastings",
-          "Queanbeyan – Palerang",
-          "Upper Hunter Shire",
-          "Upper Lachlan Shire",
-          "Yass Valley",
-          "ACT",
-        ],
+
       },
     ],
   },
@@ -80,16 +44,8 @@ const noServiceFunralData = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "BTF Preferred Scattering Tube",
-        value: "BTF Preferred Scattering Tube",
-        priceAdjustment: 0,
-      },
-      {
-        label: "BTF Preferred Adult Urn",
-        value: "BTF Preferred Adult Urn",
-        priceAdjustment: 100,
-      },
+      { label: "BTF Scattering Tube", value: "BTF Scattering Tube", priceAdjustment: 0 },
+      { label: "BTF Adult Urn (+$100)", value: "BTF Adult Urn", priceAdjustment: 100 },
     ],
   },
   {
@@ -98,11 +54,7 @@ const noServiceFunralData = [
     type: "select",
     options: [
       { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
-      {
-        label: "Australia Post Registered Mail",
-        value: "Australia Post Registered Mail",
-        priceAdjustment: 65,
-      },
+      { label: "Australia Post Registered Mail (+$65)", value: "Australia Post Registered Mail", priceAdjustment: 65 },
     ],
   },
 ];
@@ -110,15 +62,9 @@ const noServiceFunralData = [
 const NoServiceCrementionPage = () => {
   const BASE_PRICE = 2295;
 
-  const [transferZonePlace, setTransferZonePlace] = useState("");
-  const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
-
-  // ✅ FIX: include transferZonePlace in initial state (backend expects it)
-  // ✅ FIX: urn default matches your options list
   const [selections, setSelections] = useState({
-    transferOption: { value: "Select an Option", price: 0 },
-    transferZonePlace: { value: "", price: 0 }, // ✅ added
-    urn: { value: "BTF Preferred Scattering Tube", price: 0 }, // ✅ fixed
+    transferOption: { value: "Sydney Metro", price: 0 },
+    urn: { value: "BTF Scattering Tube", price: 0 },
     collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
 
@@ -130,14 +76,18 @@ const NoServiceCrementionPage = () => {
   const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ FIX: Only ONE total price calculation (remove duplicates)
+
   useEffect(() => {
+
     const extras = Object.values(selections || {}).reduce(
       (sum, opt) => sum + Number(opt?.price || 0),
       0
     );
     setTotalPrice(BASE_PRICE + extras);
   }, [selections, BASE_PRICE]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [])
 
   const openPopup = (popupType) => setActivePopup(popupType);
   const closePopup = () => setActivePopup(null);
@@ -170,11 +120,7 @@ const NoServiceCrementionPage = () => {
 
     // ✅ Transfer nested zone places
     if (itemId === 1) {
-      const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
-      setActiveTransferSubOptions(sub);
 
-      // reset nested choice whenever zone changes
-      setTransferZonePlace("");
       setSelections((prev) => ({
         ...prev,
         transferZonePlace: { value: "", price: 0 },
@@ -228,7 +174,7 @@ const NoServiceCrementionPage = () => {
   if (error) return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="bg-white min-h-screen pb-20">
+    <div className="bg-white min-h-screen pb-10">
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
@@ -291,13 +237,6 @@ const NoServiceCrementionPage = () => {
 
                   const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
-
-                  const isTransfer = item.id === 1;
-                  const shouldShowNested =
-                    isTransfer &&
-                    activeTransferSubOptions.length > 0 &&
-                    (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
-
                   return (
                     <div key={item.id} className="flex flex-col gap-2">
                       <RowSelect
@@ -308,22 +247,7 @@ const NoServiceCrementionPage = () => {
                         placeholder="Select an option"
                       />
 
-                      {shouldShowNested && (
-                        <RowSelect
-                          label="Select Area"
-                          value={transferZonePlace}
-                          onChange={(e) => {
-                            const v = e.target.value;
-                            setTransferZonePlace(v);
-                            setSelections((prev) => ({
-                              ...prev,
-                              transferZonePlace: { value: v, price: 0 }, // ✅ correct for backend
-                            }));
-                          }}
-                          options={activeTransferSubOptions}
-                          placeholder="Select a place"
-                        />
-                      )}
+
                     </div>
                   );
                 })}
@@ -358,6 +282,9 @@ const NoServiceCrementionPage = () => {
               closePopup();
             }}
           />
+        </div>
+        <div className="mt-10">
+          <TransferZonesBox />
         </div>
 
         {message && (

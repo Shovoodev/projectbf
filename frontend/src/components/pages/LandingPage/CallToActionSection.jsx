@@ -1,6 +1,7 @@
 import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import { FaPhone } from "react-icons/fa6";
+const CORE = import.meta.env.VITE_API_URL;
 
 const CallToActionSection = () => {
   const formRef = useRef();
@@ -15,7 +16,6 @@ const CallToActionSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic client-side validation
     const fd = new FormData(formRef.current);
     const first_name = (fd.get("first_name") || "").toString().trim();
     const last_name = (fd.get("last_name") || "").toString().trim();
@@ -37,6 +37,29 @@ const CallToActionSection = () => {
         error: "Please enter a valid mobile number.",
       });
       return;
+    }
+    try {
+      const res = await fetch(`${CORE}/new-client-enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: fd,
+
+        credentials: "include",
+      });
+      if (res.ok) {
+        console.log(
+          "Enquiry submitted successfully! We'll contact you shortly.",
+          "success",
+        );
+      }
+
+      setStatus({
+        loading: false,
+        success: "Message sent successfully!",
+        error: null,
+      });
+    } catch (err) {
+      console.log(err);
     }
 
     const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -70,6 +93,7 @@ const CallToActionSection = () => {
         error: "Something went wrong. Please try again.",
       });
     }
+
   };
 
   return (
@@ -162,9 +186,9 @@ const CallToActionSection = () => {
               />
 
               <select name="service_type" className="border p-2 rounded w-full">
-                <option>No Service — Direct Cremation</option>
-                <option>Macarthur Viewing & Cremation</option>
                 <option>Attending Service Cremation</option>
+                <option>Viewing & Cremation</option>
+                <option>No Service — Direct Cremation</option>
               </select>
 
               {/* Multiple admin emails */}

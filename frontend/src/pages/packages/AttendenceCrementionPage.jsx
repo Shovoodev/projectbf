@@ -5,6 +5,7 @@ import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
 import { packagePricesDetail } from "../../utility/config";
 import { useNavigate, useLocation } from "react-router-dom";
+import TransferZonesBox from "./_components/TransferZonesBox";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -31,49 +32,11 @@ const attendenceData = [
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
         priceAdjustment: 220,
-        subOptions: [
-          "Blue Mountains",
-          "Cessnock",
-          "Dungog",
-          "Bathurst Regional",
-          "Goulburn",
-          "Kiama",
-          "Lithgow",
-          "Port Stephens",
-          "Shellharbour",
-          "Shoalhaven",
-          "Singleton",
-          "Wingecarribee",
-          "Wollongong",
-        ],
       },
       {
         label: "Zone 3 (+ $385)",
         value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
-        subOptions: [
-          "Blayney",
-          "Coffs Harbour",
-          "Cootamundra-Gundagai",
-          "Cowra",
-          "Dubbo Regional",
-          "Eurobodalla",
-          "Hilltops",
-          "Junee",
-          "Kempsey",
-          "Liverpool Plains",
-          "Mid-Coast",
-          "Mid-Western Regional",
-          "Muswellbrook",
-          "Oberon",
-          "Orange",
-          "Port Macquarie – Hastings",
-          "Queanbeyan – Palerang",
-          "Upper Hunter Shire",
-          "Upper Lachlan Shire",
-          "Yass Valley",
-          "ACT",
-        ],
       },
     ],
   },
@@ -168,7 +131,7 @@ const attendenceData = [
   },
   {
     id: 5,
-    question: "Flowers:",
+    question: "Flowers",
     type: "select",
     options: [
       { label: "Select an Option", value: "Select an Option", priceAdjustment: 0 },
@@ -182,8 +145,8 @@ const attendenceData = [
     question: "Urn",
     type: "select",
     options: [
-      { label: "Funera Preferred Scattering Tube", value: "Funera Preferred Scattering Tube", priceAdjustment: 0 },
-      { label: "Funera Preferred Adult Urn", value: "Funera Preferred Adult Urn", priceAdjustment: 100 },
+      { label: "BTF Scattering Tube", value: "BTF Scattering Tube", priceAdjustment: 0 },
+      { label: "BTF Adult Urn (+$100)", value: "BTF Adult Urn", priceAdjustment: 100 },
     ],
   },
   {
@@ -192,10 +155,13 @@ const attendenceData = [
     type: "select",
     options: [
       { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
-      { label: "Australia Post Registered Mail", value: "Australia Post Registered Mail", priceAdjustment: 65 },
+      { label: "Australia Post Registered Mail (+$65)", value: "Australia Post Registered Mail", priceAdjustment: 65 },
     ],
   },
 ];
+
+
+
 
 const AttendenceCrementionPage = ({ isLanding }) => {
   const BASE_PRICE = isLanding
@@ -203,17 +169,14 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     : packagePricesDetail.attendence;
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  const [transferZonePlace, setTransferZonePlace] = useState("");
-  const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
 
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
-    transferZonePlace: { value: "", price: 0 },
     stationery: { value: "50 Memoriam Cards", price: 0 },
     bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
     coffin: { value: "contract-raw", price: 0 },
     flowers: { value: "Select an Option", price: 0 },
-    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
+    urn: { value: "BTF Scattering Tube", price: 0 },
     collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
 
@@ -252,7 +215,10 @@ const AttendenceCrementionPage = ({ isLanding }) => {
       [key]: { value, price: Number(priceAdjustment) || 0 },
     }));
   };
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
+  }, [])
   useEffect(() => {
     const extras = Object.values(selections || {}).reduce(
       (sum, opt) => sum + Number(opt?.price || 0),
@@ -275,10 +241,7 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     handleOptionChange(item.question, selectedValue, price);
 
     if (itemId === 1) {
-      const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
-      setActiveTransferSubOptions(sub);
 
-      setTransferZonePlace("");
       setSelections((prev) => ({
         ...prev,
         transferZonePlace: { value: "", price: 0 },
@@ -307,6 +270,7 @@ const AttendenceCrementionPage = ({ isLanding }) => {
       }, 100);
     } catch (err) {
       setMessage(err.message || "Something went wrong");
+      setError("Something went wrong")
     } finally {
       setLoading(false);
     }
@@ -395,12 +359,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                   const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
 
-                  const isTransfer = item.id === 1;
-                  const shouldShowNested =
-                    isTransfer &&
-                    activeTransferSubOptions.length > 0 &&
-                    (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
-
                   return (
                     <div key={item.id} className="flex flex-col gap-2">
                       <RowSelect
@@ -433,23 +391,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                         options={item.options}
                         placeholder="Select an option"
                       />
-
-                      {shouldShowNested && (
-                        <RowSelect
-                          label="Select Area"
-                          value={transferZonePlace}
-                          onChange={(e) => {
-                            const v = e.target.value;
-                            setTransferZonePlace(v);
-                            setSelections((prev) => ({
-                              ...prev,
-                              transferZonePlace: { value: v, price: 0 },
-                            }));
-                          }}
-                          options={activeTransferSubOptions}
-                          placeholder="Select a place"
-                        />
-                      )}
                     </div>
                   );
                 })}
@@ -502,12 +443,15 @@ const AttendenceCrementionPage = ({ isLanding }) => {
             Prepay
           </button>
         </div>
+        <div className="mt-10">
+          <TransferZonesBox />
+        </div>
 
         {message && (
           <div
             className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
-                ? "bg-red-50 text-red-600 border border-red-100"
-                : "bg-green-50 text-green-600 border border-green-100"
+              ? "bg-red-50 text-red-600 border border-red-100"
+              : "bg-green-50 text-green-600 border border-green-100"
               }`}
           >
             {message}

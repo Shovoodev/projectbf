@@ -5,7 +5,6 @@ import {
   getAttendenceByReference,
   getAttendenceByUserId,
 } from "../db/attendence";
-import { noServiceFunralData } from "../data/noServicefunralData";
 import { FormNoServiceResponseModel } from "../db/noViewingCremention";
 import { FormVandCResponseModel } from "../db/viewingAndCremention";
 
@@ -48,9 +47,6 @@ export const getAttendenceAnswers = async (
     const transferOption = getValue("transferOption");
     const transferOptionPrice = getPrice("transferOption");
 
-    const transferZonePlace = getValue("transferZonePlace");
-    const transferZonePlacePrice = getPrice("transferZonePlace");
-
     const totalPriceImpact =
       stationeryPrice +
       bodyPreparationPrice +
@@ -58,8 +54,7 @@ export const getAttendenceAnswers = async (
       flowersPrice +
       urnPrice +
       collectionOfUrnPrice +
-      transferOptionPrice +
-      transferZonePlacePrice;
+      transferOptionPrice
 
     const BASE_PRICE = 4895;
     const finalTotalPrice = BASE_PRICE + totalPriceImpact;
@@ -109,9 +104,6 @@ export const getAttendenceAnswers = async (
     response.transferOption = transferOption;
     response.transferOptionPrice = transferOptionPrice
 
-    response.transferZonePlace = transferZonePlace;
-    response.transferZonePlacePrice = transferZonePlacePrice;
-
     response.totalPriceImpact = totalPriceImpact;
     response.totalPrice = finalTotalPrice;
     response.status = "draft";
@@ -158,15 +150,10 @@ export const getVandCnswers = async (
     const transferOptionValue = getValue("transferOption");
     const transferOptionPrice = getPrice("transferOption");
 
-    const transferZonePlaceValue = getValue("transferZonePlace");
-
-    const transferZonePlacePrice = getPrice("transferZonePlace");
-
     const totalPriceImpact =
       urnPrice +
       collectionOfUrnPrice +
-      transferOptionPrice +
-      transferZonePlacePrice;
+      transferOptionPrice
 
     const BASE_PRICE = 3595;
     const finalTotalPrice = totalPrice > 0 ? Number(totalPrice) : BASE_PRICE + totalPriceImpact;
@@ -185,9 +172,6 @@ export const getVandCnswers = async (
       existingResponse.transferOption = transferOptionValue;
       existingResponse.transferOptionPrice = transferOptionPrice;
 
-      existingResponse.transferZonePlace = transferZonePlaceValue;
-      existingResponse.transferZonePlacePrice = transferZonePlacePrice;
-
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
       existingResponse.status = "draft";
@@ -204,9 +188,6 @@ export const getVandCnswers = async (
 
         transferOption: transferOptionValue,
         transferOptionPrice,
-
-        transferZonePlace: transferZonePlaceValue,
-        transferZonePlacePrice,
 
         totalPriceImpact,
         totalPrice: finalTotalPrice,
@@ -263,10 +244,6 @@ export const getNoServiceCrementionnswers = async (
     const collectionOfUrnPrice = Number(selections?.collectionOfUrn?.price ?? 0);
     const transferOptionPrice = Number(selections?.transferOption?.price ?? 0);
 
-    // ✅ FIX: transferZonePlace price comes from selections.transferZonePlace.price
-    const transferZonePlace = selections?.transferZonePlace?.value ?? "";
-    const transferZonePlacePrice = Number(selections?.transferZonePlace?.price ?? 0);
-
     // ✅ Values
     const urnValue = normalizeSelection(selections?.urn, "Funera Preferred Adult Urn");
     const collectionOfUrnValue = normalizeSelection(
@@ -280,7 +257,7 @@ export const getNoServiceCrementionnswers = async (
 
     // ✅ Include transferZonePlacePrice in impact
     const totalPriceImpact =
-      urnPrice + collectionOfUrnPrice + transferOptionPrice + transferZonePlacePrice;
+      urnPrice + collectionOfUrnPrice + transferOptionPrice
 
     const finalTotalPrice =
       totalPrice > 0 ? Number(totalPrice) : BASE_PRICE + totalPriceImpact;
@@ -300,9 +277,6 @@ export const getNoServiceCrementionnswers = async (
       // ✅ Save prices too (needs schema field transferOptionPrice)
       existingResponse.transferOptionPrice = transferOptionPrice;
 
-      existingResponse.transferZonePlace = transferZonePlace;
-      existingResponse.transferZonePlacePrice = transferZonePlacePrice;
-
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
       existingResponse.status = "draft";
@@ -318,10 +292,6 @@ export const getNoServiceCrementionnswers = async (
         collectionOfUrn: collectionOfUrnValue,
         transferOption: transferOptionValue,
         transferOptionPrice, // ✅ save
-
-        transferZonePlace,
-        transferZonePlacePrice,
-
         totalPriceImpact,
         totalPrice: finalTotalPrice,
         status: "draft",

@@ -11,11 +11,8 @@ const formVandCSchema = new mongoose.Schema(
 
     baseTotal: { type: Number, default: 3595 },
 
-    transferOption: { type: String, default: "Sydney Metro" }, // ✅ FIX
+    transferOption: { type: String, default: "Sydney Metro" },
     transferOptionPrice: { type: Number, default: 0 },
-
-    transferZonePlace: { type: String, default: "" },
-    transferZonePlacePrice: { type: Number, default: 0 },
 
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },

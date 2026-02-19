@@ -30,10 +30,6 @@ const formNoServiceSchema = new mongoose.Schema(
 
     transferOptionPrice: { type: Number, default: 0 },
 
-    transferZonePlace: { type: String },
-    transferZonePlacePrice: { type: Number, default: 0 },
-
-
     status: {
       type: String,
       enum: ["draft", "submitted", "confirmed", "cancelled"],

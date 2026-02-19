@@ -1,3 +1,4 @@
+import FooterWithoutLinks from "../components/layouts/Footer/footerWithoutLinks";
 import Facilities from "../components/pages/Home/Facilities";
 import Hero from "../components/pages/Home/Hero";
 import TestimonialsCarousel from "../components/pages/Home/HomeTestimonial";
@@ -16,6 +17,7 @@ function Home() {
       <Facilities />
       <ServiceArea />
       <TestimonialsCarousel />
+      <FooterWithoutLinks />
     </section>
   );
 }

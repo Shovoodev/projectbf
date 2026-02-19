@@ -50,6 +50,8 @@ import Sign from "./funeral/ScottHarrisSign.png"
 import LogoPdf from "./invoicepdf/BTF.png"
 import btficon from "./invoicepdf/btfIcon.png"
 import invoice from "./invoicepdf/invoice.jpg"
+import sydney from "./sydney.png"
+import urn from "./Urn.jpg"
 
 export {
     cover, one, two, three, four, five, six, seven, eight, nine, ten,
@@ -59,5 +61,5 @@ export {
     twentyNine, thirty, thirtyOne, thirtyTwo, thirtyThree, thirtyFour,
     thirtyFive, thirtySix, thirtySeven, thirtyEight, thirtyNine,
     forty, fortyOne, fortyTwo, fortyThree, fortyFour, fortyFive,
-    fortySix, fortySeven ,Sign ,LogoPdf ,btficon,invoice
+    fortySix, fortySeven, Sign, LogoPdf, btficon, invoice, sydney, urn
 };

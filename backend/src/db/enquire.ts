@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const enquireSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, },
   source: { type: String, default: "social media" },
-  question: { type: String, default: true },
-  message: { type: String, default: true },
-  phone: { type: Number, default: true },
+  question: { type: String },
+  message: { type: String },
+  phone: { type: Number },
 });
 
 export const enquireyModel = mongoose.model("Enquires", enquireSchema);
