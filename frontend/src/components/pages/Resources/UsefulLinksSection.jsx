@@ -8,7 +8,6 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 
-// Reusable Card Component for the main grid
 const LinkCard = ({ title, theme, listType, items, children }) => {
   const isDark = theme === "dark";
 
@@ -58,13 +57,11 @@ const LinkCard = ({ title, theme, listType, items, children }) => {
         ))}
       </ul>
 
-      {/* For App Store Buttons or extra content */}
       {children && <div className="mt-6">{children}</div>}
     </div>
   );
 };
 
-// Reusable Social Card Component
 const SocialCard = ({ platform, icon: Icon, theme, items }) => {
   const isDark = theme === "dark";
 

@@ -1013,6 +1013,9 @@ const AgreementForm = () => {
 
                       <input
                         type="file"
+                        className="hidden"
+                        required
+                        multiple
                         onChange={(e) => handlePhotoUpload(e.target.files)}
                       />
                     </label>

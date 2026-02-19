@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const SignatureField = ({ sigPadRef, clearSignature, onStrokeEnd }) => {
   const wrapperRef = useRef(null);
@@ -24,28 +25,30 @@ const SignatureField = ({ sigPadRef, clearSignature, onStrokeEnd }) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="p-1">
+      {/* Make this relative */}
+      <div ref={wrapperRef} className="relative p-1">
         {size.width > 0 && (
-          <ReactSketchCanvas
-            ref={sigPadRef}
-            width={size.width}
-            height={size.height}
-            strokeWidth={2}
-            strokeColor="black"
-            className="rounded-md border border-dashed border-gray-400 touch-none"
-            onStrokeEnd={onStrokeEnd}
-          />
-        )}
-      </div>
+          <>
+            <ReactSketchCanvas
+              ref={sigPadRef}
+              width={size.width}
+              height={size.height}
+              strokeWidth={2}
+              strokeColor="black"
+              className="rounded-md border border-dashed border-gray-400 touch-none"
+              onStrokeEnd={onStrokeEnd}
+            />
 
-      <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={clearSignature}
-          className="px-4 py-2 rounded bg-black text-white"
-        >
-          Clear
-        </button>
+            {/* Close Button INSIDE canvas */}
+            <button
+              type="button"
+              onClick={clearSignature}
+              className="absolute top-2 right-2 text-red-500 hover:scale-110 transition"
+            >
+              <IoMdCloseCircle size={32} />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

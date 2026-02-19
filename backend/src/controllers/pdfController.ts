@@ -53,7 +53,6 @@ export const sendPdfOfInvoice = async (
       return res.status(400).json({ error: "pdfAttachment is required" });
     }
 
-    // Use explicit recipient from body, fallback to authenticated user email
     const recipient = typeof to === "string" && to.trim() ? to : response.email;
     const email = validateRecipient(recipient);
 
