@@ -1,7 +1,4 @@
 import { useState } from "react";
-import BrownStain from "./MDF_RANGE/Contract/Brown-Stain.jpg";
-import Raw from "./MDF_RANGE/Contract/Raw.jpg";
-import RedStain from "./MDF_RANGE/Contract/Red-Stain.jpg";
 import BasicCountryOak from "./MDF_RANGE/Basic/Country-Oak.jpg";
 import BasicDeluxeTeak from "./MDF_RANGE/Basic/Deluxe-Teak.jpg";
 import BasicSapelle from "./MDF_RANGE/Basic/Sapelle.jpg";
@@ -10,6 +7,15 @@ import BlaxlandCedar from "./MDF_RANGE/Blaxland/Cedar.jpg";
 import BlaxlandCountryOak2 from "./MDF_RANGE/Blaxland/Country-Oak-2.jpg";
 import BlaxlandDeluxeTeak2 from "./MDF_RANGE/Blaxland/Deluxe-Teak-2.jpg";
 import BlaxlandRoseMahogany from "./MDF_RANGE/Blaxland/Rose-Mahogany.jpg";
+import BlaxlandRosewood from "./MDF_RANGE/Blaxland/Rosewood.png";
+import BlaxlandSapelle from "./MDF_RANGE/Blaxland/Sapelle.png";
+import BlaxlandTeak from "./MDF_RANGE/Blaxland/Teak.png";
+import BlaxlandWalnut from "./MDF_RANGE/Blaxland/walnut.png";
+import BlaxlandWhite from "./MDF_RANGE/Blaxland/white.png";
+import BrownStain from "./MDF_RANGE/Contract/Brown-Stain.jpg";
+import Raw from "./MDF_RANGE/Contract/Raw.jpg";
+import RedStain from "./MDF_RANGE/Contract/Red-Stain.jpg";
+
 import CalvaryNewCoffin from "./MDF_RANGE/Calvary/new-coffin.jpg";
 import CalvaryRosewood2 from "./MDF_RANGE/Calvary/Rosewood-2.jpg";
 import CreswickDeluxeTeak3 from "./MDF_RANGE/Creswick/Deluxe-Teak-3.jpg";
@@ -21,6 +27,7 @@ import PortlandCreamPearl1 from "./MDF_RANGE/Portland/portland-cream-pearl-1.png
 import PortlandWhite3 from "./MDF_RANGE/Portland/White-3.jpg";
 import WentworthRosewood3 from "./MDF_RANGE/Wentworth/Rosewood-3.jpg";
 import WentworthWalnut3 from "./MDF_RANGE/Wentworth/Walnut-3.jpg";
+import WentworthWhite from "./MDF_RANGE/Wentworth/wentworth-white.png";
 import WickerCasketWICKER from "./MDF_RANGE/Wicker Casket/WICKER.jpeg";
 import BrentwoodCedar1 from "./SOLID_TIMBER_RANGE/Brentwood/Cedar-1.jpg";
 import BrentwoodRosewood21 from "./SOLID_TIMBER_RANGE/Brentwood/Rosewood-2-1.jpg";
@@ -30,6 +37,15 @@ import EnviroRawPine from "./SOLID_TIMBER_RANGE/Enviro/Raw-Pine.jpg";
 import WhiteRoseClear from "./SOLID_TIMBER_RANGE/White Rose/Clear.jpg";
 import WhiteRoseLimewash from "./SOLID_TIMBER_RANGE/White Rose/Limewash.jpg";
 import WhiteRoseWhite1 from "./SOLID_TIMBER_RANGE/White Rose/White-1.jpg";
+// new category imports
+import ChinesePatriarchCedar from "./TIMBER_CASKETS/CHINESE PATRIARCH/Picture9.png";
+import CorintheanCedar from "./TIMBER_CASKETS/CORINTHEAN/Picture6.png";
+import CorintheanWhite from "./TIMBER_CASKETS/CORINTHEAN/Picture7.png";
+import GrecianRosewood from "./TIMBER_CASKETS/GRECIAN URN/Picture2.png";
+import GrecianCedar from "./TIMBER_CASKETS/GRECIAN URN/Picture3.png";
+import GrecianWhite from "./TIMBER_CASKETS/GRECIAN URN/Picture4.png";
+import PatriarchRoseMahogany from "./TIMBER_CASKETS/PATRIARCH/Picture8.png";
+import RosedaleRoseMahogany from "./TIMBER_CASKETS/ROSEDALE/Picture5.png";
 
 // Data Structure (Same as before)
 const coffinData = {
@@ -60,6 +76,11 @@ const coffinData = {
           { src: BlaxlandCountryOak2, title: "Country Oak" },
           { src: BlaxlandDeluxeTeak2, title: "Deluxe Teak" },
           { src: BlaxlandRoseMahogany, title: "Rose Mahogany" },
+          { src: BlaxlandRosewood, title: "Rosewood" },
+          { src: BlaxlandSapelle, title: "Sapelle" },
+          { src: BlaxlandTeak, title: "Teak" },
+          { src: BlaxlandWalnut, title: "Walnut" },
+          { src: BlaxlandWhite, title: "White" },
         ],
       },
       {
@@ -74,13 +95,14 @@ const coffinData = {
         images: [
           { src: WentworthWalnut3, title: "Walnut" },
           { src: WentworthRosewood3, title: "Rosewood" },
+          { src: WentworthWhite, title: "White" },
         ],
       },
       {
         name: "Portland",
         images: [
           { src: PortlandWhite3, title: "White" },
-          { src: PortlandCreamPearl1, title: "Cream" },
+          { src: PortlandCreamPearl1, title: "Cream Pearl Metallic" },
         ],
       },
       {
@@ -140,11 +162,44 @@ const coffinData = {
       },
     ],
   },
+  timber_caskets: {
+    title: "TIMBER CASKETS",
+    models: [
+      {
+        name: "Grecian Urn",
+        images: [
+          { src: GrecianRosewood, title: "Rosewood" },
+          { src: GrecianCedar, title: "Cedar" },
+          { src: GrecianWhite, title: "White" },
+        ],
+      },
+      {
+        name: "Rosedale",
+        images: [{ src: RosedaleRoseMahogany, title: "Rose Mahogany" }],
+      },
+      {
+        name: "Corinthean",
+        images: [
+          { src: CorintheanCedar, title: "Cedar" },
+          { src: CorintheanWhite, title: "White" },
+        ],
+      },
+      {
+        name: "Patriarch",
+        images: [{ src: PatriarchRoseMahogany, title: "Rose Mahogany" }],
+      },
+      {
+        name: "Chinese Patriarch ",
+        images: [{ src: ChinesePatriarchCedar, title: "Chinese Patriarch" }],
+      },
+    ],
+  },
 };
 
 const CoffinCatalog = () => {
   const [activeRange, setActiveRange] = useState("mdf");
   const [activeModelIndex, setActiveModelIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleRangeChange = (rangeKey) => {
     setActiveRange(rangeKey);
@@ -179,6 +234,16 @@ const CoffinCatalog = () => {
           >
             {coffinData.timber.title}
           </button>
+          <button
+            onClick={() => handleRangeChange("timber_caskets")}
+            className={`px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-all duration-300 border text-sm md:text-base ${
+              activeRange === "timber_caskets"
+                ? "bg-black text-white border-black shadow-lg"
+                : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+            }`}
+          >
+            {coffinData.timber_caskets.title}
+          </button>
         </div>
 
         {/* --- SUB TABS (Pill Style - Wrapped Layout) --- */}
@@ -212,8 +277,13 @@ const CoffinCatalog = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {activeModel.images.map((img, idx) => (
               <div key={idx} className="group">
-                <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 bg-white">
-                  <div className="aspect-[16/10] overflow-hidden bg-gray-50">
+                <div
+                  className="rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 bg-white md:cursor-pointer"
+                  onClick={() =>
+                    window.innerWidth >= 768 && setSelectedImage(img)
+                  }
+                >
+                  <div className="aspect-[16/10] overflow-hidden ">
                     <img
                       src={img.src}
                       alt={img.title}
@@ -221,7 +291,7 @@ const CoffinCatalog = () => {
                     />
                   </div>
                   <div className="p-4 text-center border-t border-gray-50">
-                    <p className="font-display font-bold text-gray-800 uppercase tracking-wide text-sm">
+                    <p className="font-body font-bold text-gray-800 uppercase tracking-wide text-sm">
                       {img.title}
                     </p>
                   </div>
@@ -230,6 +300,39 @@ const CoffinCatalog = () => {
             ))}
           </div>
         </div>
+
+        {/* --- IMAGE MODAL/LIGHTBOX --- */}
+        {selectedImage && (
+          <div
+            className="hidden md:flex fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm items-center justify-center z-50 p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div
+              className="relative max-w-4xl w-full bg-white rounded-lg shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 bg-black text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-800 transition-colors duration-200 z-10"
+              >
+                ✕
+              </button>
+
+              <div className="flex flex-col items-center">
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  className="w-full h-auto rounded-t-lg object-contain"
+                />
+                <div className="p-6 text-center w-full border-t border-gray-200">
+                  <p className="font-body font-bold text-gray-900 uppercase tracking-wide text-lg">
+                    {selectedImage.title}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

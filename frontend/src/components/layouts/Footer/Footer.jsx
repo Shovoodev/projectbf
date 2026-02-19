@@ -69,7 +69,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-surface pt-2 pb-8 border-t border-gray-200 relative">
+    <footer className="bg-surface pt-8 pb-8 border-t border-gray-200 relative">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
           {/* Brand */}

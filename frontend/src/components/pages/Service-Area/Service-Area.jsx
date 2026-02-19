@@ -85,7 +85,10 @@ const ServiceAreasSection = () => {
           >
             <FaPhone className="text-sm" /> 1300 11 0031
           </a>
-          <Link to="/contact" className="btn-enquire">
+          <Link
+            to="/contact"
+            className="bg-black border border-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+          >
             <span className="">Enquire Now</span>
             <FaLongArrowAltRight />
           </Link>

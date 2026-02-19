@@ -57,7 +57,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="bg-surface py-16 md:py-24">
+    <section className="bg-surface p-2 py-16 md:py-24">
       <div className="section-container">
         {/* --- HEADER --- */}
         <div className="text-center max-w-3xl mx-auto mb-16">

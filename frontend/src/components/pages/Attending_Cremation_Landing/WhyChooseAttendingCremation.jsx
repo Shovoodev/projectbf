@@ -2,7 +2,7 @@ import React from "react";
 
 const WhyChooseAttendingCremation = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 p-2 bg-white">
       <div className="section-container mx-auto px-6 text-center">
         {/* --- WHY CHOOSE SECTION --- */}
         <div className="mb-20">
