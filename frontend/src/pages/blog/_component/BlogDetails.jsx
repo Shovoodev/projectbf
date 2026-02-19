@@ -52,7 +52,6 @@ const BlogDetails = () => {
 
     getBlogs();
   }, []);
-  console.log({ blogData });
 
   useEffect(() => {
     window.scrollTo(0, 0);

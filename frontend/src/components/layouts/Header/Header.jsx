@@ -196,7 +196,7 @@ const Header = () => {
                 <Link
                   to="/packages"
                   onClick={() => toggleMobileDropdown("packages")}
-                  className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 block"
+                  className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4"
                 >
                   Packages <FaChevronDown className="text-[10px]" />
                 </Link>

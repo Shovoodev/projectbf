@@ -4,7 +4,7 @@ import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
 import { packagePricesDetail } from "../../utility/config";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -19,17 +19,14 @@ export function Card({ title, children, className = "" }) {
     </div>
   );
 }
+
 const attendenceData = [
   {
     id: 1,
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Sydney Metro",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
+      { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
@@ -85,66 +82,18 @@ const attendenceData = [
     question: "Stationery",
     type: "select",
     options: [
-      {
-        label: "50 Memoriam Cards",
-        value: "50-memoriam-cards",
-        priceAdjustment: 0,
-      },
-      {
-        label: "100 Memoriam Cards + $60",
-        value: "100-memoriam-cards",
-        priceAdjustment: 60,
-      },
-      {
-        label: "150 Memoriam Cards + $120",
-        value: "150-memoriam-cards",
-        priceAdjustment: 120,
-      },
-      {
-        label: "200 Memoriam Cards + $180",
-        value: "200-memoriam-cards",
-        priceAdjustment: 180,
-      },
-      {
-        label: "50 Bookmarks + $60",
-        value: "50-bookmarks",
-        priceAdjustment: 60,
-      },
-      {
-        label: "100 Bookmarks + $120",
-        value: "100-bookmarks",
-        priceAdjustment: 120,
-      },
-      {
-        label: "150 Bookmarks + $180",
-        value: "150-bookmarks",
-        priceAdjustment: 180,
-      },
-      {
-        label: "200 Bookmarks + $240",
-        value: "200-bookmarks",
-        priceAdjustment: 240,
-      },
-      {
-        label: "50 Order of Service Booklets + $120",
-        value: "50-booklets",
-        priceAdjustment: 120,
-      },
-      {
-        label: "100 Order of Service Booklets + $180",
-        value: "100-booklets",
-        priceAdjustment: 180,
-      },
-      {
-        label: "150 Order of Service Booklets + $240",
-        value: "150-booklets",
-        priceAdjustment: 240,
-      },
-      {
-        label: "200 Order of Service Booklets + $300",
-        value: "200-booklets",
-        priceAdjustment: 300,
-      },
+      { label: "50 Memoriam Cards", value: "50-memoriam-cards", priceAdjustment: 0 },
+      { label: "100 Memoriam Cards + $60", value: "100-memoriam-cards", priceAdjustment: 60 },
+      { label: "150 Memoriam Cards + $120", value: "150-memoriam-cards", priceAdjustment: 120 },
+      { label: "200 Memoriam Cards + $180", value: "200-memoriam-cards", priceAdjustment: 180 },
+      { label: "50 Bookmarks + $60", value: "50-bookmarks", priceAdjustment: 60 },
+      { label: "100 Bookmarks + $120", value: "100-bookmarks", priceAdjustment: 120 },
+      { label: "150 Bookmarks + $180", value: "150-bookmarks", priceAdjustment: 180 },
+      { label: "200 Bookmarks + $240", value: "200-bookmarks", priceAdjustment: 240 },
+      { label: "50 Order of Service Booklets + $120", value: "50-booklets", priceAdjustment: 120 },
+      { label: "100 Order of Service Booklets + $180", value: "100-booklets", priceAdjustment: 180 },
+      { label: "150 Order of Service Booklets + $240", value: "150-booklets", priceAdjustment: 240 },
+      { label: "200 Order of Service Booklets + $300", value: "200-booklets", priceAdjustment: 300 },
     ],
   },
   {
@@ -170,228 +119,62 @@ const attendenceData = [
     question: "Coffin",
     type: "select",
     options: [
-      {
-        label: "Contract - Raw (Included)",
-        value: "contract-raw",
-        priceAdjustment: 0,
-        includedInBase: true,
-      },
-      {
-        label: "Contract - Red Stain (Included)",
-        value: "contract-red-stain",
-        priceAdjustment: 0,
-        includedInBase: true,
-      },
-      {
-        label: "Contract - Brown Stain (Included)",
-        value: "contract-brown-stain",
-        priceAdjustment: 0,
-        includedInBase: true,
-      },
-      {
-        label: "Basic - Deluxe Teak + $336.70",
-        value: "basic-deluxe-teak",
-        priceAdjustment: 336.7,
-      },
-      {
-        label: "Basic - Country Oak + $336.70",
-        value: "basic-country-oak",
-        priceAdjustment: 336.7,
-      },
-      {
-        label: "Basic - Teak + $336.70",
-        value: "basic-teak",
-        priceAdjustment: 336.7,
-      },
-      {
-        label: "Basic - Sapelle + $336.70",
-        value: "basic-sapelle",
-        priceAdjustment: 336.7,
-      },
-      {
-        label: "Blaxland - Deluxe Teak + $576.35",
-        value: "blaxland-deluxe-teak",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Country Oak + $576.35",
-        value: "blaxland-country-oak",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Teak + $576.35",
-        value: "blaxland-teak",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Sapelle + $576.35",
-        value: "blaxland-sapelle",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Cedar + $576.35",
-        value: "blaxland-cedar",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Rosewood + $576.35",
-        value: "blaxland-rosewood",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Rose Mahogany + $576.35",
-        value: "blaxland-rose-mahogany",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - Walnut + $576.35",
-        value: "blaxland-walnut",
-        priceAdjustment: 576.35,
-      },
-      {
-        label: "Blaxland - White + $796.35",
-        value: "blaxland-white",
-        priceAdjustment: 796.35,
-      },
-      {
-        label: "Wicker + $1,092.92",
-        value: "wicker",
-        priceAdjustment: 1092.92,
-      },
-      {
-        label: "Calvary - Walnut + $1,205.05",
-        value: "calvary-walnut",
-        priceAdjustment: 1205.05,
-      },
-      {
-        label: "Calvary - Rosewood + $1,205.05",
-        value: "calvary-rosewood",
-        priceAdjustment: 1205.05,
-      },
-      {
-        label: "Wentworth - Walnut + $1,218.75",
-        value: "wentworth-walnut",
-        priceAdjustment: 1218.75,
-      },
-      {
-        label: "Wentworth - Rosewood + $1,218.75",
-        value: "wentworth-rosewood",
-        priceAdjustment: 1218.75,
-      },
-      {
-        label: "Wentworth - White + $1,438.75",
-        value: "wentworth-white",
-        priceAdjustment: 1438.75,
-      },
-      {
-        label: "Portland - Creme Pearl Metallic + $1,534.55",
-        value: "portland-creme-pearl",
-        priceAdjustment: 1534.55,
-      },
-      {
-        label: "Portland - White + $1,384.72",
-        value: "portland-white",
-        priceAdjustment: 1384.72,
-      },
-      {
-        label: "Creswick - Deluxe Teak + $1,423.75",
-        value: "creswick-deluxe-teak",
-        priceAdjustment: 1423.75,
-      },
-      {
-        label: "Denman - Rosewood + $1,659.60",
-        value: "denman-rosewood",
-        priceAdjustment: 1659.6,
-      },
-      {
-        label: "Denman - Rose Mahogany + $1,659.60",
-        value: "denman-rose-mahogany",
-        priceAdjustment: 1659.6,
-      },
+      { label: "Contract - Raw (Included)", value: "contract-raw", priceAdjustment: 0, includedInBase: true },
+      { label: "Contract - Red Stain (Included)", value: "contract-red-stain", priceAdjustment: 0, includedInBase: true },
+      { label: "Contract - Brown Stain (Included)", value: "contract-brown-stain", priceAdjustment: 0, includedInBase: true },
 
-      {
-        label: "Goldline - Light Oak + $1,687.85",
-        value: "goldline-light-oak",
-        priceAdjustment: 1687.85,
-      },
+      { label: "Basic - Deluxe Teak + $336.70", value: "basic-deluxe-teak", priceAdjustment: 336.7 },
+      { label: "Basic - Country Oak + $336.70", value: "basic-country-oak", priceAdjustment: 336.7 },
+      { label: "Basic - Teak + $336.70", value: "basic-teak", priceAdjustment: 336.7 },
+      { label: "Basic - Sapelle + $336.70", value: "basic-sapelle", priceAdjustment: 336.7 },
 
-      {
-        label: "Dome Regal - Rosewood + $1,756.45",
-        value: "dome-regal-rosewood",
-        priceAdjustment: 1756.45,
-      },
+      { label: "Blaxland - Deluxe Teak + $576.35", value: "blaxland-deluxe-teak", priceAdjustment: 576.35 },
+      { label: "Blaxland - Country Oak + $576.35", value: "blaxland-country-oak", priceAdjustment: 576.35 },
+      { label: "Blaxland - Teak + $576.35", value: "blaxland-teak", priceAdjustment: 576.35 },
+      { label: "Blaxland - Sapelle + $576.35", value: "blaxland-sapelle", priceAdjustment: 576.35 },
+      { label: "Blaxland - Cedar + $576.35", value: "blaxland-cedar", priceAdjustment: 576.35 },
+      { label: "Blaxland - Rosewood + $576.35", value: "blaxland-rosewood", priceAdjustment: 576.35 },
+      { label: "Blaxland - Rose Mahogany + $576.35", value: "blaxland-rose-mahogany", priceAdjustment: 576.35 },
+      { label: "Blaxland - Walnut + $576.35", value: "blaxland-walnut", priceAdjustment: 576.35 },
+      { label: "Blaxland - White + $796.35", value: "blaxland-white", priceAdjustment: 796.35 },
 
-      {
-        label: "Enviro - Raw Pine + $1,327.95",
-        value: "enviro-raw-pine",
-        priceAdjustment: 1327.95,
-      },
+      { label: "Wicker + $1,092.92", value: "wicker", priceAdjustment: 1092.92 },
+      { label: "Calvary - Walnut + $1,205.05", value: "calvary-walnut", priceAdjustment: 1205.05 },
+      { label: "Calvary - Rosewood + $1,205.05", value: "calvary-rosewood", priceAdjustment: 1205.05 },
 
-      {
-        label: "White Rose - Clear + $2,022.89",
-        value: "white-rose-clear",
-        priceAdjustment: 2022.89,
-      },
-      {
-        label: "White Rose - Limewash + $2,022.89",
-        value: "white-rose-limewash",
-        priceAdjustment: 2022.89,
-      },
-      {
-        label: "White Rose - White + $2,022.89",
-        value: "white-rose-white",
-        priceAdjustment: 2022.89,
-      },
+      { label: "Wentworth - Walnut + $1,218.75", value: "wentworth-walnut", priceAdjustment: 1218.75 },
+      { label: "Wentworth - Rosewood + $1,218.75", value: "wentworth-rosewood", priceAdjustment: 1218.75 },
+      { label: "Wentworth - White + $1,438.75", value: "wentworth-white", priceAdjustment: 1438.75 },
 
-      {
-        label: "Dome Regal Deluxe + $1,869.94",
-        value: "dome-regal-deluxe",
-        priceAdjustment: 1869.94,
-      },
+      { label: "Portland - Creme Pearl Metallic + $1,534.55", value: "portland-creme-pearl", priceAdjustment: 1534.55 },
+      { label: "Portland - White + $1,384.72", value: "portland-white", priceAdjustment: 1384.72 },
 
-      {
-        label: "Brentwood - Cedar + $2,079.96",
-        value: "brentwood-cedar",
-        priceAdjustment: 2079.96,
-      },
-      {
-        label: "Brentwood - Rosewood + $2,079.96",
-        value: "brentwood-rosewood",
-        priceAdjustment: 2079.96,
-      },
+      { label: "Creswick - Deluxe Teak + $1,423.75", value: "creswick-deluxe-teak", priceAdjustment: 1423.75 },
+      { label: "Denman - Rosewood + $1,659.60", value: "denman-rosewood", priceAdjustment: 1659.6 },
+      { label: "Denman - Rose Mahogany + $1,659.60", value: "denman-rose-mahogany", priceAdjustment: 1659.6 },
+      { label: "Goldline - Light Oak + $1,687.85", value: "goldline-light-oak", priceAdjustment: 1687.85 },
+      { label: "Dome Regal - Rosewood + $1,756.45", value: "dome-regal-rosewood", priceAdjustment: 1756.45 },
+      { label: "Enviro - Raw Pine + $1,327.95", value: "enviro-raw-pine", priceAdjustment: 1327.95 },
 
-      {
-        label: "Denman Cedar - Cedar + $2,475.96",
-        value: "denman-cedar-cedar",
-        priceAdjustment: 2475.96,
-      },
-    ]
+      { label: "White Rose - Clear + $2,022.89", value: "white-rose-clear", priceAdjustment: 2022.89 },
+      { label: "White Rose - Limewash + $2,022.89", value: "white-rose-limewash", priceAdjustment: 2022.89 },
+      { label: "White Rose - White + $2,022.89", value: "white-rose-white", priceAdjustment: 2022.89 },
+
+      { label: "Dome Regal Deluxe + $1,869.94", value: "dome-regal-deluxe", priceAdjustment: 1869.94 },
+      { label: "Brentwood - Cedar + $2,079.96", value: "brentwood-cedar", priceAdjustment: 2079.96 },
+      { label: "Brentwood - Rosewood + $2,079.96", value: "brentwood-rosewood", priceAdjustment: 2079.96 },
+      { label: "Denman Cedar - Cedar + $2,475.96", value: "denman-cedar-cedar", priceAdjustment: 2475.96 },
+    ],
   },
   {
     id: 5,
     question: "Flowers:",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
-        label: "100cm Mixed Seasonal Coffin Cover - White",
-        value: "100cm Mixed Seasonal Coffin Cover - White",
-        priceAdjustment: 0,
-      },
-      {
-        label: "100cm Mixed Seasonal Coffin Cover - Pastel",
-        value: "100cm Mixed Seasonal Coffin Cover - Pastel",
-        priceAdjustment: 0,
-      },
-      {
-        label: "100cm Mixed Seasonal Coffin Cover - Colourful",
-        value: "100cm Mixed Seasonal Coffin Cover - Colourful",
-        priceAdjustment: 0,
-      },
+      { label: "Select an Option", value: "Select an Option", priceAdjustment: 0 },
+      { label: "100cm Mixed Seasonal Coffin Cover - White", value: "100cm Mixed Seasonal Coffin Cover - White", priceAdjustment: 0 },
+      { label: "100cm Mixed Seasonal Coffin Cover - Pastel", value: "100cm Mixed Seasonal Coffin Cover - Pastel", priceAdjustment: 0 },
+      { label: "100cm Mixed Seasonal Coffin Cover - Colourful", value: "100cm Mixed Seasonal Coffin Cover - Colourful", priceAdjustment: 0 },
     ],
   },
   {
@@ -399,16 +182,8 @@ const attendenceData = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "Funera Preferred Scattering Tube",
-        value: "Funera Preferred Scattering Tube",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Funera Preferred Adult Urn",
-        value: "Funera Preferred Adult Urn",
-        priceAdjustment: 100,
-      },
+      { label: "Funera Preferred Scattering Tube", value: "Funera Preferred Scattering Tube", priceAdjustment: 0 },
+      { label: "Funera Preferred Adult Urn", value: "Funera Preferred Adult Urn", priceAdjustment: 100 },
     ],
   },
   {
@@ -416,16 +191,8 @@ const attendenceData = [
     question: "Collection of Urn",
     type: "select",
     options: [
-      {
-        label: "Collect in Person",
-        value: "Collect in Person",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Australia Post Registered Mail",
-        value: "Australia Post Registered Mail",
-        priceAdjustment: 65,
-      },
+      { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
+      { label: "Australia Post Registered Mail", value: "Australia Post Registered Mail", priceAdjustment: 65 },
     ],
   },
 ];
@@ -434,6 +201,7 @@ const AttendenceCrementionPage = ({ isLanding }) => {
   const BASE_PRICE = isLanding
     ? packagePricesDetail.attendingLanding
     : packagePricesDetail.attendence;
+
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
   const [transferZonePlace, setTransferZonePlace] = useState("");
   const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
@@ -446,33 +214,25 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     coffin: { value: "contract-raw", price: 0 },
     flowers: { value: "Select an Option", price: 0 },
     urn: { value: "Funera Preferred Scattering Tube", price: 0 },
-    collectionOfUrn: {
-      value: "Collect in Person", price: 0
-    },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
+
   const location = useLocation();
   const isAttendingLanding = location.pathname === "/attending-cremation-landing";
 
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
   const [message, setMessage] = useState("");
-  //popup
 
-  // Static Options State
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
 
   const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
 
-  const closePopup = () => {
-    setActivePopup(null);
-  };
+  const openPopup = (popupType) => setActivePopup(popupType);
+  const closePopup = () => setActivePopup(null);
+
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
       "Transfers from Place of Passing": "transferOption",
@@ -496,13 +256,12 @@ const AttendenceCrementionPage = ({ isLanding }) => {
   useEffect(() => {
     const extras = Object.values(selections || {}).reduce(
       (sum, opt) => sum + Number(opt?.price || 0),
-      0,
+      0
     );
 
     const finalPrice = BASE_PRICE + extras;
     setTotalPrice(finalPrice);
-    setAmount(finalPrice);
-  }, [selections]);
+  }, [selections, BASE_PRICE]);
 
   const handleSelectChange = (itemId, selectedValue) => {
     const item = attendenceData.find((data) => data.id === itemId);
@@ -519,7 +278,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
       const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
       setActiveTransferSubOptions(sub);
 
-      // reset nested choice whenever zone changes
       setTransferZonePlace("");
       setSelections((prev) => ({
         ...prev,
@@ -527,7 +285,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
       }));
     }
   };
-
 
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
@@ -537,28 +294,23 @@ const AttendenceCrementionPage = ({ isLanding }) => {
       setTimeout(() => {
         showToast.info("Getting PrePay document Ready for your Selections", {
           duration: 3000,
-          options: {
-            position: "bottom-right",
-          },
+          options: { position: "bottom-right" },
         });
+
         navigate("/prepay", {
           state: {
             selections,
             path: "newattendingservicecremationanswers",
-            totalPrice: totalPrice,
+            totalPrice,
           },
         });
       }, 100);
     } catch (err) {
-      message(err.message, "error");
+      setMessage(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
-
-  if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
@@ -567,30 +319,32 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     try {
       showToast.success("Getting Aggrement form ", {
         duration: 3000,
-        options: {
-          position: "bottom-right",
-        },
+        options: { position: "bottom-right" },
       });
+
       setTimeout(() => {
         navigate("/fill-agreement-form", {
           state: {
             selections,
             path: "newattendingservicecremationanswers",
-            totalPrice: totalPrice,
+            totalPrice,
           },
         });
       }, 1000);
     } catch (err) {
-      setMessage(err.message, "error");
+      setMessage(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error) return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+
   return (
-    <div className="bg-white  pb-2">
+    <div className="bg-white pb-2">
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
-        {/* --- HEADER --- */}
+        {/* HEADER */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-6">
@@ -604,7 +358,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
             </p>
           </div>
 
-          {/* Price Box */}
           <div className="bg-gray-50 border border-gray-100 rounded-xl p-8 text-center min-w-[220px] self-start">
             <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
               Price
@@ -615,59 +368,20 @@ const AttendenceCrementionPage = ({ isLanding }) => {
           </div>
         </div>
 
-        {/* --- TOP ROW: 3 COLUMNS --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* 1. Required Services */}
-          <Card title="Required Services">
-            <List
-              items={[
-                "Phone or Zoom Consultation",
-                "Administration Fees",
-                "Registration of Death",
-                "Celebrant or Host",
-                "Cremation Fee",
-              ]}
-            />
-          </Card>
-
-          {/* 2. Disbursements */}
-          <Card title="Disbursements">
-            <List
-              items={[
-                "Medical Referee Certificate",
-                "Cremation Risk Advice",
-                "NSW Government Services Levy",
-                "Official Death Certificate Issued by BDM",
-              ]}
-            />
-          </Card>
-
-          {/* 3. Included Services */}
-          <Card title="Included Services">
-            <List
-              items={[
-                "Live Video Streaming",
-                "SMS Photo Invitation",
-                "Photo Slideshow",
-                "Photo for Screens in Chapel",
-              ]}
-            />
-          </Card>
-        </div>
-
-        {/* --- BOTTOM ROW: 2 COLUMNS --- */}
+        {/* CONTENT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-          {/* Left: Included Variables (Dynamic) - 70% */}
           <div className="lg:col-span-8">
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
                 {attendenceData.map((item) => {
+                  // ✅ Hide Urn + Collection of Urn on landing
                   if (
                     isAttendingLanding &&
                     (item.question === "Urn" || item.question === "Collection of Urn")
                   ) {
                     return null;
                   }
+
                   const categoryKeyMap = {
                     "Transfers from Place of Passing": "transferOption",
                     Stationery: "stationery",
@@ -683,7 +397,8 @@ const AttendenceCrementionPage = ({ isLanding }) => {
 
                   const isTransfer = item.id === 1;
                   const shouldShowNested =
-                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    isTransfer &&
+                    activeTransferSubOptions.length > 0 &&
                     (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
 
                   return (
@@ -700,14 +415,15 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                               Stationery
                             </a>
                           ) : item.question === "Coffin" ? (
-                            <Link
-                              to={"/coffins"}
+                            // ✅ use <a> for opening new tab
+                            <a
+                              href="/coffins"
                               target="_blank"
                               rel="noreferrer"
                               className="hover:text-primary"
                             >
                               Coffin
-                            </Link>
+                            </a>
                           ) : (
                             item.question
                           )
@@ -718,7 +434,6 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                         placeholder="Select an option"
                       />
 
-                      {/* ✅ Nested dropdown for Zone 2 / Zone 3 places (same RowSelect = same style) */}
                       {shouldShowNested && (
                         <RowSelect
                           label="Select Area"
@@ -738,15 +453,11 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                     </div>
                   );
                 })}
-
               </div>
             </Card>
           </div>
 
-          {/* Right: Options (Static) - 30% */}
           <div className="lg:col-span-4">
-            {" "}
-            {/* 4/12 = 33.33% ≈ 30% */}
             <Card title="Options">
               <div className="flex flex-col gap-4">
                 <RowSelect
@@ -766,24 +477,14 @@ const AttendenceCrementionPage = ({ isLanding }) => {
           </div>
         </div>
 
-        {/* --- ACTIONS --- */}
+        {/* ACTIONS */}
         <div className="flex flex-wrap gap-4 justify-center mt-10 pb-2">
-          {/* Make Agreement button */}
-          <div>
-            <button
-              className="btn-primary normal"
-              onClick={handleRegistrationSubmit}
-            >
-              Make Agreement Now
-            </button>
-          </div>
+          <button className="btn-primary normal" onClick={handleRegistrationSubmit}>
+            Make Agreement Now
+          </button>
 
-          {/* Enquiry button */}
           <div>
-            <button
-              className="btn-primary normal"
-              onClick={() => openPopup("enquirey")}
-            >
+            <button className="btn-primary normal" onClick={() => openPopup("enquirey")}>
               Enquire Now
             </button>
             <PopupEnquirey
@@ -793,26 +494,20 @@ const AttendenceCrementionPage = ({ isLanding }) => {
               mainTitle="Please tell us what you whant to know about us"
               description="We'll get back to you shortly"
               title="Make an Enquiry"
-              onSuccess={(userData) => {
-                console.log("Enquiry submitted:", userData);
-                closePopup();
-                // Handle enquiry submission
-              }}
+              onSuccess={() => closePopup()}
             />
           </div>
 
-          {/* PrePay button */}
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
         </div>
 
-        {/* Message Display */}
         {message && (
           <div
             className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
-              ? "bg-red-50 text-red-600 border border-red-100"
-              : "bg-green-50 text-green-600 border border-green-100"
+                ? "bg-red-50 text-red-600 border border-red-100"
+                : "bg-green-50 text-green-600 border border-green-100"
               }`}
           >
             {message}

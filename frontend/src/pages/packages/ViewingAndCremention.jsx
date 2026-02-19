@@ -1,18 +1,16 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from "react";
 import { List } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import { useNavigate } from "react-router-dom";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
+
 const CORE = import.meta.env.VITE_API_URL;
 
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
-    <div
-      className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
-    >
+    <div className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}>
       <h3 className="font-display font-lato font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
@@ -21,22 +19,14 @@ export function Card({ title, children, className = "" }) {
   );
 }
 
-export const viewingAndCremention = [
+const viewingAndCremention = [
   {
     id: 1,
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Sydney Metro",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
+      { label: "Select an Option", value: "Select an Option", priceAdjustment: 0 },
+      { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
@@ -92,16 +82,8 @@ export const viewingAndCremention = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "BTF Preferred Scattering Tube",
-        value: "BTF Preferred Scattering Tube",
-        priceAdjustment: 0,
-      },
-      {
-        label: "BTF Preferred Adult Urn",
-        value: "BTF Preferred Adult Urn",
-        priceAdjustment: 100,
-      },
+      { label: "BTF Preferred Scattering Tube", value: "BTF Preferred Scattering Tube", priceAdjustment: 0 },
+      { label: "BTF Preferred Adult Urn", value: "BTF Preferred Adult Urn", priceAdjustment: 100 },
     ],
   },
   {
@@ -109,16 +91,8 @@ export const viewingAndCremention = [
     question: "Collection of Urn",
     type: "select",
     options: [
-      {
-        label: "Collect in Person",
-        value: "Collect in Person",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Australia Post Registered Mail",
-        value: "Australia Post Registered Mail",
-        priceAdjustment: 65,
-      },
+      { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
+      { label: "Australia Post Registered Mail", value: "Australia Post Registered Mail", priceAdjustment: 65 },
     ],
   },
 ];
@@ -130,38 +104,30 @@ const ViewingAndCrementionPage = () => {
   const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  const navigate = useNavigate();
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },
+    transferZonePlace: { value: "", price: 0 }, // ✅ IMPORTANT (backend expects this)
     urn: { value: "BTF Preferred Scattering Tube", price: 0 },
     collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
+
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
-  //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
-  // --- Calculate Total Price ---
+
   const [activePopup, setActivePopup] = useState(null);
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
+  const openPopup = (popupType) => setActivePopup(popupType);
+  const closePopup = () => setActivePopup(null);
 
-  const closePopup = () => {
-    setActivePopup(null);
-  };
+  // ✅ ONE total price calculation only
   useEffect(() => {
-    const variableTotal = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
+    const extras = Object.values(selections || {}).reduce(
+      (sum, opt) => sum + Number(opt?.price || 0),
+      0
     );
-    // Base + Variables + Transfer Cost
-    setTotalPrice(BASE_PRICE + variableTotal);
-  }, [selections]);
-
-  if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+    setTotalPrice(BASE_PRICE + extras);
+  }, [selections, BASE_PRICE]);
 
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
@@ -171,22 +137,14 @@ const ViewingAndCrementionPage = () => {
     };
 
     const key = categoryKeyMap[category];
+    if (!key) return; // ✅ guard
 
-    setSelections((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
-
-      // Calculate total price impact
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-      setAmount(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
+    setSelections((prev) => ({
+      ...prev,
+      [key]: { value, price: Number(priceAdjustment) || 0 },
+    }));
   };
+
   const handleSelectChange = (itemId, selectedValue) => {
     const item = viewingAndCremention.find((data) => data.id === itemId);
     if (!item) return;
@@ -194,10 +152,10 @@ const ViewingAndCrementionPage = () => {
     const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    const price = selectedOption.priceAdjustment || 0;
-
+    const price = Number(selectedOption.priceAdjustment) || 0;
     handleOptionChange(item.question, selectedValue, price);
 
+    // ✅ nested area for zone 2 / 3
     if (itemId === 1) {
       const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
       setActiveTransferSubOptions(sub);
@@ -211,7 +169,6 @@ const ViewingAndCrementionPage = () => {
     }
   };
 
-
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -222,12 +179,12 @@ const ViewingAndCrementionPage = () => {
           state: {
             selections,
             path: "new-view-and-service-cremation",
-            totalPrice: totalPrice,
+            totalPrice,
           },
         });
       }, 1000);
     } catch (err) {
-      setMessage(err.message, "error");
+      setMessage(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -241,35 +198,32 @@ const ViewingAndCrementionPage = () => {
       setTimeout(() => {
         showToast.info("Getting PrePay document Ready for your Selections", {
           duration: 3000,
-          options: {
-            position: "bottom-right",
+          options: { position: "bottom-right" },
+        });
+
+        // ✅ match your other pages (send selections + totalPrice)
+        navigate("/prepay", {
+          state: {
+            selections,
+            path: "new-view-and-service-cremation",
+            totalPrice,
           },
         });
-        navigate(`/prepay`);
       }, 100);
     } catch (err) {
-      message(err.message, "error");
-      setError(error);
+      setMessage(err?.message || "Something went wrong");
+      setError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const totalPriceImpact = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
-    );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
-
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error) return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
     <div className="bg-white min-h-screen pb-20">
-      <div className="section-container  mx-auto px-6 py-16">
+      <div className="section-container mx-auto px-6 py-16">
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
           <div className="max-w-2xl">
@@ -297,11 +251,7 @@ const ViewingAndCrementionPage = () => {
 
         {/* --- GRID CONTENT --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* 1. Required Services */}
-          <Card
-            title="Required Services"
-            className="flex flex-col justify-between"
-          >
+          <Card title="Required Services" className="flex flex-col justify-between">
             <List
               items={[
                 "Phone or Zoom Consultation",
@@ -313,7 +263,6 @@ const ViewingAndCrementionPage = () => {
             />
           </Card>
 
-          {/* 2. Disbursements */}
           <Card title="Disbursements">
             <List
               items={[
@@ -325,7 +274,6 @@ const ViewingAndCrementionPage = () => {
             />
           </Card>
 
-          {/* 3. Included Variables (Full Width) */}
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
@@ -341,7 +289,8 @@ const ViewingAndCrementionPage = () => {
 
                   const isTransfer = item.id === 1;
                   const shouldShowNested =
-                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    isTransfer &&
+                    activeTransferSubOptions.length > 0 &&
                     (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
 
                   return (
@@ -363,7 +312,7 @@ const ViewingAndCrementionPage = () => {
                             setTransferZonePlace(v);
                             setSelections((prev) => ({
                               ...prev,
-                              transferZonePlace: { value: v, price: 0 },
+                              transferZonePlace: { value: v, price: 0 }, // ✅ backend expects this
                             }));
                           }}
                           options={activeTransferSubOptions}
@@ -380,22 +329,12 @@ const ViewingAndCrementionPage = () => {
 
         {/* --- ACTIONS FOOTER --- */}
         <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
-          {/* Make Agreement button */}
-          <div>
-            <button
-              className="btn-primary normal"
-              onClick={handleRegistrationSubmit}
-            >
-              Make Agreement Now
-            </button>
-          </div>
+          <button className="btn-primary normal" onClick={handleRegistrationSubmit}>
+            Make Agreement Now
+          </button>
 
-          {/* Enquiry button */}
           <div>
-            <button
-              className="btn-primary normal"
-              onClick={() => openPopup("enquirey")}
-            >
+            <button className="btn-primary normal" onClick={() => openPopup("enquirey")}>
               Enquire Now
             </button>
             <PopupEnquirey
@@ -406,19 +345,22 @@ const ViewingAndCrementionPage = () => {
               description="We'll get back to you shortly"
               title="Make an Enquiry"
               subtitle="We'll get back to you shortly"
-              onSuccess={(userData) => {
-                console.log("Enquiry submitted:", userData);
+              onSuccess={() => {
                 closePopup();
-                // Handle enquiry submission
               }}
             />
           </div>
 
-          {/* PrePay button */}
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
         </div>
+
+        {message && (
+          <div className="mt-6 p-4 rounded text-center font-medium bg-red-50 text-red-600 border border-red-100">
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );

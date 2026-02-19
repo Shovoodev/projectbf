@@ -4,15 +4,11 @@ import { List } from "../../components/common/Reusables";
 import { showToast } from "../../utility/toast";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
-import { viewingAndCremention } from "./ViewingAndCremention";
 
-const CORE = import.meta.env.VITE_API_URL;
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
-    <div
-      className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
-    >
+    <div className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}>
       <h3 className="font-display font-lato font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
@@ -20,22 +16,15 @@ export function Card({ title, children, className = "" }) {
     </div>
   );
 }
+
 const noServiceFunralData = [
   {
     id: 1,
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Sydney Metro",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
+      { label: "Select an Option", value: "Select an Option", priceAdjustment: 0 },
+      { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
@@ -108,11 +97,7 @@ const noServiceFunralData = [
     question: "Collection of Urn",
     type: "select",
     options: [
-      {
-        label: "Collect in Person",
-        value: "Collect in Person",
-        priceAdjustment: 0,
-      },
+      { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
       {
         label: "Australia Post Registered Mail",
         value: "Australia Post Registered Mail",
@@ -121,104 +106,41 @@ const noServiceFunralData = [
     ],
   },
 ];
+
 const NoServiceCrementionPage = () => {
   const BASE_PRICE = 2295;
 
   const [transferZonePlace, setTransferZonePlace] = useState("");
   const [activeTransferSubOptions, setActiveTransferSubOptions] = useState([]);
 
+  // ✅ FIX: include transferZonePlace in initial state (backend expects it)
+  // ✅ FIX: urn default matches your options list
   const [selections, setSelections] = useState({
     transferOption: { value: "Select an Option", price: 0 },
-    urn: { value: "Funera Preferred Scattering Tube", price: 0 },
+    transferZonePlace: { value: "", price: 0 }, // ✅ added
+    urn: { value: "BTF Preferred Scattering Tube", price: 0 }, // ✅ fixed
     collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
-  const [loading, setLoading] = useState(false); // Changed to false since no initial fetch
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
-  //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  // Transfer Dropdown State
+
+  const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
 
+  // ✅ FIX: Only ONE total price calculation (remove duplicates)
   useEffect(() => {
-    const totalPriceImpact = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
+    const extras = Object.values(selections || {}).reduce(
+      (sum, opt) => sum + Number(opt?.price || 0),
+      0
     );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
-
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
-
-  // --- Calculate Total Price ---
-  useEffect(() => {
-    const variableTotal = Object.values(selections).reduce(
-      (sum, opt) => sum + (Number(opt.price) || 0),
-      0,
-    );
-
-    setTotalPrice(BASE_PRICE + variableTotal);
-    setAmount(BASE_PRICE + variableTotal);
+    setTotalPrice(BASE_PRICE + extras);
   }, [selections, BASE_PRICE]);
 
-  const handleRegistrationSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      setTimeout(() => {
-        navigate("/fill-agreement-form", {
-          state: {
-            selections,
-            path: "new-no-service-cremation",
-          },
-        });
-      }, 1000);
-    } catch (err) {
-      setMessage(err.message, "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePrepaySubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      setTimeout(() => {
-        showToast.info("Getting PrePay document Ready for your Selections", {
-          duration: 3000,
-          options: {
-            position: "bottom-right",
-          },
-        });
-        navigate("/prepay", {
-          state: {
-            selections,
-            path: "new-no-service-cremation",
-            totalPrice: totalPrice,
-          },
-        });
-      }, 100);
-    } catch (err) {
-      setMessage(err.message, "error");
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const [activePopup, setActivePopup] = useState(null);
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
-
-  const closePopup = () => {
-    setActivePopup(null);
-  };
+  const openPopup = (popupType) => setActivePopup(popupType);
+  const closePopup = () => setActivePopup(null);
 
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
@@ -228,21 +150,12 @@ const NoServiceCrementionPage = () => {
     };
 
     const key = categoryKeyMap[category];
+    if (!key) return; // ✅ guard
 
-    setSelections((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
-
-      // Calculate total price impact
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-      setAmount(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
+    setSelections((prev) => ({
+      ...prev,
+      [key]: { value, price: Number(priceAdjustment) || 0 },
+    }));
   };
 
   const handleSelectChange = (itemId, selectedValue) => {
@@ -252,10 +165,10 @@ const NoServiceCrementionPage = () => {
     const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    const price = selectedOption.priceAdjustment || 0;
-
+    const price = Number(selectedOption.priceAdjustment) || 0;
     handleOptionChange(item.question, selectedValue, price);
 
+    // ✅ Transfer nested zone places
     if (itemId === 1) {
       const sub = Array.isArray(selectedOption.subOptions) ? selectedOption.subOptions : [];
       setActiveTransferSubOptions(sub);
@@ -269,22 +182,50 @@ const NoServiceCrementionPage = () => {
     }
   };
 
+  const handleRegistrationSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      setTimeout(() => {
+        navigate("/fill-agreement-form", {
+          state: { selections, path: "new-no-service-cremation" },
+        });
+      }, 1000);
+    } catch (err) {
+      setMessage(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const totalPriceImpact = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
-    );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
+  const handlePrepaySubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      setTimeout(() => {
+        showToast.info("Getting PrePay document Ready for your Selections", {
+          duration: 3000,
+          options: { position: "bottom-right" },
+        });
 
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
+        navigate("/prepay", {
+          state: {
+            selections,
+            path: "new-no-service-cremation",
+            totalPrice,
+          },
+        });
+      }, 100);
+    } catch (err) {
+      setMessage(err?.message || "Something went wrong");
+      setError(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
+  if (error) return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -316,11 +257,7 @@ const NoServiceCrementionPage = () => {
 
         {/* --- GRID CONTENT --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* 1. Required Services */}
-          <Card
-            title="Required Services"
-            className="flex flex-col justify-between"
-          >
+          <Card title="Required Services" className="flex flex-col justify-between">
             <List
               items={[
                 "Phone or Zoom Consultation",
@@ -331,7 +268,6 @@ const NoServiceCrementionPage = () => {
             />
           </Card>
 
-          {/* 2. Disbursements */}
           <Card title="Disbursements">
             <List
               items={[
@@ -343,7 +279,6 @@ const NoServiceCrementionPage = () => {
             />
           </Card>
 
-          {/* 3. Included Variables (Full Width) */}
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
@@ -359,7 +294,8 @@ const NoServiceCrementionPage = () => {
 
                   const isTransfer = item.id === 1;
                   const shouldShowNested =
-                    isTransfer && activeTransferSubOptions.length > 0 &&
+                    isTransfer &&
+                    activeTransferSubOptions.length > 0 &&
                     (currentValue.includes("Zone 2") || currentValue.includes("Zone 3"));
 
                   return (
@@ -381,7 +317,7 @@ const NoServiceCrementionPage = () => {
                             setTransferZonePlace(v);
                             setSelections((prev) => ({
                               ...prev,
-                              transferZonePlace: { value: v, price: 0 },
+                              transferZonePlace: { value: v, price: 0 }, // ✅ correct for backend
                             }));
                           }}
                           options={activeTransferSubOptions}
@@ -398,30 +334,18 @@ const NoServiceCrementionPage = () => {
 
         {/* --- ACTIONS FOOTER --- */}
         <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
-          {/* Make Agreement button */}
-          <div>
-            <button
-              className="btn-primary normal"
-              onClick={handleRegistrationSubmit}
-            >
-              Make Agreement Now
-            </button>
-          </div>
+          <button className="btn-primary normal" onClick={handleRegistrationSubmit}>
+            Make Agreement Now
+          </button>
 
-          {/* Enquiry button */}
-          <div>
-            <button
-              className="btn-primary normal"
-              onClick={() => openPopup("enquirey")}
-            >
-              Enquire Now
-            </button>
-          </div>
+          <button className="btn-primary normal" onClick={() => openPopup("enquirey")}>
+            Enquire Now
+          </button>
 
-          {/* PrePay button */}
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
+
           <PopupEnquirey
             isOpen={activePopup === "enquirey"}
             onClose={closePopup}
@@ -430,13 +354,17 @@ const NoServiceCrementionPage = () => {
             description="We'll get back to you shortly"
             title="Make an Enquiry"
             subtitle="We'll get back to you shortly"
-            onSuccess={(userData) => {
-              console.log("Enquiry submitted:", userData);
+            onSuccess={() => {
               closePopup();
-              // Handle enquiry submission
             }}
           />
         </div>
+
+        {message && (
+          <div className="mt-6 p-4 rounded text-center font-medium bg-red-50 text-red-600 border border-red-100">
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );
