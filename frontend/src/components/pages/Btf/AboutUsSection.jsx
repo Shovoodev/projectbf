@@ -27,7 +27,7 @@ const AboutUsSection = () => {
             <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
               Honoring Every Life with Grace and Respect
             </h2>
-            <p className="text-gray-600  leading-relaxed mb-8 text-center lg:text-left">
+            <p className="text-gray-600 text-body-light  leading-relaxed mb-8 text-center lg:text-left">
               We believe every life deserves to be remembered with dignity and
               compassion. Our dedicated team provides personalized funeral
               services that reflect the unique journey of each individual. With
@@ -57,7 +57,7 @@ const AboutUsSection = () => {
           {/* --- COLUMN 3: STATS & SECONDARY TEXT --- */}
           <div className="flex flex-col items-center lg:items-start h-full justify-between text-center lg:text-left">
             <div className="mb-8">
-              <p className="font-body text-gray-600 text-base leading-relaxed text-center lg:text-left">
+              <p className="font-body text-gray-600  text-base text-body-light leading-relaxed text-center lg:text-left">
                 Our commitment to compassion and excellence is reflected in
                 every service we provide. With years of experience, countless
                 families served, and a reputation built on trust, we take pride
@@ -65,7 +65,7 @@ const AboutUsSection = () => {
                 grace and respect.
               </p>
             </div>
-             
+
             {/* Stats */}
             <div className="flex flex-col items-center lg:items-start w-full mb-8 space-y-4">
               <StatItem number="25+" label="Years of experience" />

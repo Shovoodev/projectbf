@@ -41,7 +41,7 @@ const NotificationChecklistSection = () => {
       <div className="section-container">
         {/* Header */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 uppercase tracking-wide mb-6">
+          <h2 className="text-3xl md:text-4xl font-roboto font-bold text-gray-900 uppercase tracking-wide mb-6">
             Who Needs to be Informed of a Death
           </h2>
           <p className="text-gray-600 font-body leading-relaxed">

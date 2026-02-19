@@ -7,7 +7,7 @@ const FAQItem = ({ id, question, answer, isOpen, onToggle }) => (
       onClick={() => onToggle(id)}
       className="w-full flex justify-between items-start p-5 text-left focus:outline-none"
     >
-      <span className="font-display font-bold text-lg leading-snug pr-4">
+      <span className="font-body font-bold text-lg leading-snug pr-4">
         {question}
       </span>
       <span className="mt-1 flex-shrink-0 text-white/70 text-sm">
@@ -16,9 +16,8 @@ const FAQItem = ({ id, question, answer, isOpen, onToggle }) => (
     </button>
 
     <div
-      className={`px-5 font-body text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[1000px] opacity-100 pb-6" : "max-h-0 opacity-0"
-      }`}
+      className={`px-5 font-body text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-[1000px] opacity-100 pb-6" : "max-h-0 opacity-0"
+        }`}
     >
       <div dangerouslySetInnerHTML={{ __html: answer }} />
     </div>

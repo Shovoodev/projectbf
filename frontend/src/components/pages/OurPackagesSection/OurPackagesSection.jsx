@@ -58,7 +58,7 @@ const PackageCard = ({
         <p className="text-lg font-bold text-black uppercase tracking-wider mb-1">
           Starts At
         </p>
-        <p className="text-4xl font-body font-bold text-black">${price}</p>
+        <p className="text-4xl font-body font-bold text-black"> $ {price}</p>
       </div>
       {/* CTA Button */}
 

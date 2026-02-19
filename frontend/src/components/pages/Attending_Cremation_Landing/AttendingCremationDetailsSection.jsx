@@ -38,7 +38,7 @@ const AttendingCremationDetailsSection = () => {
     {
       name: "Richmond Gloss",
       material: "MDF",
-      colour: "Creme Pearl Metallic",
+      colour: "RoseWood",
       image: img4,
     },
     {

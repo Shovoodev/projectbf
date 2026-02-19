@@ -66,7 +66,7 @@ const formResponseSchema = new mongoose.Schema(
     collectionOfUrn: { type: Number, default: 0 },
 
     transferOption: { type: String },
-    transferPrice: { type: Number, default: 0 },
+    transferOptionPrice: { type: Number, default: 0 },
 
     baseTotal: { type: Number, default: 4895 },
     totalPriceImpact: { type: Number, default: 0 },

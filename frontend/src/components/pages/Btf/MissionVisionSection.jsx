@@ -9,22 +9,12 @@ const MissionVisionSection = () => {
             <h4 className="font-display font-bold text-gray-900 text-2xl md:text-3xl mb-6  inline-block pb-2 lg:self-start self-center">
               Our Mission
             </h4>
-            <div className="text-gray-600 text-lg md:text-base leading-relaxed space-y-4 max-h-64 md:max-h-72 overflow-y-auto pr-3">
-              <p>
-                Looking to the future, our vision is to excel in the funeral
-                service industry and deliver exceptional fixed priced services
-                that goes above and beyond our clients’ expectations. We are
-                committed to offering sincerity, dignity, and compassion in all
-                that we do and to providing a transparent approach that removes
-                any pressure or hard sell.
-              </p>
-              <p>
-                Our goal is to streamline the entire funeral planning process
-                and offer an all-inclusive, one-stop package that takes care of
-                everything our clients need during this difficult time. We
-                believe that by focusing on our clients’ needs and delivering
-                exceptional service, we can become a trusted and respected
-                leader in the funeral service industry.
+            <div>
+              <p className="text-gray-600 text-lg md:text-base text-body-light text- leading-relaxed space-y-4 max-h-64 md:max-h-72 overflow-y-auto pr-3">
+                At Black Tulip Funerals, our mission is focused on providing a dignified funeral service to our clients at the most affordable price possible. We believe that a funeral service should be a meaningful celebration of a person’s life, and that the choices made during the planning process can truly help to honour the deceased and preserve their legacy.s
+                We strive to personalise each service to reflect the unique beliefs, culture, and nationality of our clients, and we offer a wide range of products and options to make the service more memorable and comforting for all those involved.
+
+                As an Australian-owned independent family business, we are committed to delivering compassionate care, professional guidance, and unwavering support to families during one of life’s most difficult times. Our dedicated team takes pride in ensuring every detail is handled with respect, sensitivity, and integrity, allowing families to focus on remembering and celebrating their loved one.
               </p>
             </div>
           </div>
@@ -46,23 +36,20 @@ const MissionVisionSection = () => {
             <h4 className="font-display font-bold text-gray-900 text-2xl md:text-3xl mb-6  inline-block pb-2 lg:self-start self-center">
               Our Vision
             </h4>
-            <div className="text-gray-600 text-lg md:text-base leading-relaxed space-y-4 max-h-64 md:max-h-72 overflow-y-auto pr-3">
-              <p>
-                Looking to the future, our vision is to excel in the funeral
-                service industry and deliver exceptional fixed priced services
-                that goes above and beyond our clients’ expectations. We are
-                committed to offering sincerity, dignity, and compassion in all
-                that we do and to providing a transparent approach that removes
-                any pressure or hard sell.
-              </p>
-              <p>
-                Our goal is to streamline the entire funeral planning process
-                and offer an all-inclusive, one-stop package that takes care of
-                everything our clients need during this difficult time. We
-                believe that by focusing on our clients’ needs and delivering
-                exceptional service, we can become a trusted and respected
-                leader in the funeral service industry.
-              </p>
+            <div>  <p className="text-gray-600 text-lg md:text-base text-body-light text- leading-relaxed max-h-64 md:max-h-72 overflow-y-auto pr-3">
+              Looking to the future, our vision is to excel in the funeral
+              service industry and deliver exceptional fixed priced services
+              that goes above and beyond our clients’ expectations. We are
+              committed to offering sincerity, dignity, and compassion in all
+              that we do and to providing a transparent approach that removes
+              any pressure or hard sell.
+              Our goal is to streamline the entire funeral planning process
+              and offer an all-inclusive, one-stop package that takes care of
+              everything our clients need during this difficult time. We
+              believe that by focusing on our clients’ needs and delivering
+              exceptional service, we can become a trusted and respected
+              leader in the funeral service industry.
+            </p>
             </div>
           </div>
         </div>

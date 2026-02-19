@@ -13,11 +13,10 @@ const AccordionItem = ({ title, content, isOpen, onClick }) => (
   <div className="mb-4">
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-between p-5 text-left transition-all duration-300 ${
-        isOpen
-          ? "bg-black text-white rounded-t-xl"
-          : "bg-black text-white rounded-xl hover:bg-gray-900"
-      }`}
+      className={`w-full flex items-center justify-between p-5 text-left transition-all duration-300 ${isOpen
+        ? "bg-black text-white rounded-t-xl"
+        : "bg-black text-white rounded-xl hover:bg-gray-900"
+        }`}
     >
       <span className="font-body text-center font-bold text-base md:text-lg pr-4 leading-tight">
         {title}
@@ -28,9 +27,8 @@ const AccordionItem = ({ title, content, isOpen, onClick }) => (
     </button>
 
     <div
-      className={`overflow-hidden transition-all duration-300 ease-in-out bg-white border border-gray-200 shadow-sm ${
-        isOpen ? "max-h-[500px] opacity-100 rounded-b-xl" : "max-h-0 opacity-0"
-      }`}
+      className={`overflow-hidden transition-all duration-300 ease-in-out bg-white border border-gray-200 shadow-sm ${isOpen ? "max-h-[500px] opacity-100 rounded-b-xl" : "max-h-0 opacity-0"
+        }`}
     >
       <div className="p-6">
         <p className="text-center text-gray-600 text-lg md:text-base leading-relaxed">
@@ -98,7 +96,7 @@ const WhyChooseUsSection = () => {
             </h2>
 
             {/* Description */}
-            <p className="font-body text-gray-600 text-base leading-relaxed mb-8">
+            <p className="font-body text-gray-600  text-base leading-relaxed mb-8">
               We walk beside you through every step of the farewell journey.
               With compassion, professionalism, and genuine care, we ensure
               every detail is handled with dignity—making us your trusted
@@ -107,7 +105,7 @@ const WhyChooseUsSection = () => {
 
             {/* Black Pill Button */}
             <Link
-              to="/contact-us"
+              to="/contact"
               className="inline-flex items-center gap-2 bg-black text-white text-sm font-bold py-4 px-8 rounded-full hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wider"
             >
               <span>Enquire Now</span>

@@ -4,40 +4,31 @@ const formVandCSchema = new mongoose.Schema(
   {
     userid: { type: String, required: true },
     reference: { type: String, required: true, unique: true },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-    },
-    urn: {
-      type: String,
-      required: true,
-      default: "Funera Preferred Adult Urn",
-    },
-    collectionOfUrn: {
-      type: String,
-      required: true,
-      default: "Collect in Person",
-    },
+    email: { type: String, required: true, lowercase: true, trim: true },
+
+    urn: { type: String, required: true, default: "Funera Preferred Adult Urn" },
+    collectionOfUrn: { type: String, required: true, default: "Collect in Person" },
+
+    baseTotal: { type: Number, default: 3595 },
+
+    transferOption: { type: String, default: "Sydney Metro" },
+    transferOptionPrice: { type: Number, default: 0 },
+
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
+
     status: {
       type: String,
       enum: ["draft", "submitted", "confirmed", "cancelled"],
       default: "draft",
     },
-    baseTotal: { type: Number, default: 3595 },
-    transferOption: { type: Number, default: 0 },
 
     service: { type: String, default: "Viewing and Cremention" },
-
     submittedAt: { type: Date },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
+
 
 export const FormVandCResponseModel = mongoose.model(
   "ViewingAndCremention",

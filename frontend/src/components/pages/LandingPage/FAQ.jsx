@@ -7,7 +7,7 @@ const FAQItem = ({ q, a, isOpen, onToggle }) => (
       onClick={onToggle}
       className="w-full flex justify-between items-start p-5 text-left focus:outline-none"
     >
-      <span className="font-montserrat  text-white font-bold text-lg leading-snug pr-4">
+      <span className=" text-white font-body text-lg leading-snug pr-4">
         {q}
       </span>
       <span className="mt-1 flex-shrink-0 text-white/70 text-sm">
@@ -16,7 +16,7 @@ const FAQItem = ({ q, a, isOpen, onToggle }) => (
     </button>
 
     <div
-      className={`px-5 font-montserrat text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${
+      className={`px-5 font-body text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${
         isOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0"
       }`}
     >

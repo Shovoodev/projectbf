@@ -136,7 +136,7 @@ const SupportGroupsSection = () => {
       <div className="section-container">
         {/* Heading */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 uppercase tracking-wide">
+          <h2 className="text-3xl md:text-4xl font-roboto font-bold text-gray-900 uppercase tracking-wide">
             Help & Support Groups
           </h2>
           <div className="w-24 h-1 bg-black mx-auto mt-4 opacity-20"></div>
