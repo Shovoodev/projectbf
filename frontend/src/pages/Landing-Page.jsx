@@ -1,3 +1,4 @@
+import FooterWithoutLinks from "../components/layouts/Footer/footerWithoutLinks";
 import About from "../components/pages/LandingPage/About";
 import CallToActionSection from "../components/pages/LandingPage/CallToActionSection";
 import FAQ from "../components/pages/LandingPage/FAQ";
@@ -25,6 +26,7 @@ const LandingPage = () => {
       <ServiceAreasSection />
       <TeamPreview />
       <FAQ />
+      <FooterWithoutLinks />
     </div>
   );
 };

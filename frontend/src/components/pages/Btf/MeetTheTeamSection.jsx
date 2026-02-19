@@ -67,7 +67,7 @@ const MeetTheTeamSection = () => {
             <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
               Guiding You with Care
             </h2>
-            <p className="font-body text-gray-600 text-base leading-relaxed mb-8">
+            <p className="font-body text-gray-600 text-base text-body-light leading-relaxed mb-8">
               Our team at Black Tulip Funerals is dedicated to providing
               compassionate support and personalized care, helping families
               honor their loved ones with dignity and respect.

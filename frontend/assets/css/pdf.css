@@ -45,6 +45,7 @@
    COMPONENTS
 ================================ */
 @layer components {
+
   /* Root Layout */
   .form-container-base {
     @apply w-full min-h-[1123px] bg-white border border-gray-200 rounded-lg overflow-hidden font-roboto shadow-xl p-4 md:p-8;
@@ -94,7 +95,7 @@
 
   /* Radio / Checkbox */
   .pdf-radio-group {
-    @apply flex flex-wrap gap-2 p-3 bg-slate-50 rounded-md border border-slate-100;
+    @apply flex flex-wrap gap-2 justify-center items-center p-3 bg-slate-50 rounded-md border border-slate-100;
   }
 
   .pdf-radio-item {

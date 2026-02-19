@@ -40,14 +40,14 @@ const Musicians = () => {
 
           {/* Details */}
           <div className="w-full lg:w-2/5 space-y-6">
-            <h3 className="text-2xl font-display font-bold text-gray-900">
+            <h3 className="text-2xl text-center font-display md:text-left font-bold text-gray-900">
               MUSIC TO YOUR EARS
             </h3>
-            <p className="text-gray-600 font-body">
+            <p className="text-gray-600 font-body md:text-left text-body-light text-center">
               Patrick Harrison and his amazing team offer a personalized live
               service, catering to your every need.
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap md:justify-start gap-2 justify-center">
               {instruments.map((inst) => (
                 <span key={inst} className="instrument-tag">
                   {inst}

@@ -5,22 +5,8 @@ import {
   getAttendenceByReference,
   getAttendenceByUserId,
 } from "../db/attendence";
-import { noServiceFunralData } from "../data/noServicefunralData";
 import { FormNoServiceResponseModel } from "../db/noViewingCremention";
 import { FormVandCResponseModel } from "../db/viewingAndCremention";
-
-export const getNoServiceFunral = async (
-  req: express.Request,
-  res: express.Response,
-): Promise<any> => {
-  try {
-    const filtered = noServiceFunralData;
-
-    res.json(filtered);
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 export const getAttendenceAnswers = async (
   req: AuthenticatedRequest,
@@ -37,9 +23,8 @@ export const getAttendenceAnswers = async (
       return res.status(400).json({ message: "No selections provided" });
     }
 
-    // ✅ Extract values + prices safely
-    const getValue = (key: string) => selections?.[key]?.value || "";
-    const getPrice = (key: string) => Number(selections?.[key]?.price || 0);
+    const getValue = (key: string) => selections?.[key]?.value ?? "";
+    const getPrice = (key: string) => Number(selections?.[key]?.price ?? 0);
 
     const stationeryOption = getValue("stationery");
     const stationeryPrice = getPrice("stationery");
@@ -60,7 +45,7 @@ export const getAttendenceAnswers = async (
     const collectionOfUrnPrice = getPrice("collectionOfUrn");
 
     const transferOption = getValue("transferOption");
-    const transferPrice = getPrice("transferOption");
+    const transferOptionPrice = getPrice("transferOption");
 
     const totalPriceImpact =
       stationeryPrice +
@@ -68,7 +53,9 @@ export const getAttendenceAnswers = async (
       coffinPrice +
       flowersPrice +
       urnPrice +
-      collectionOfUrnPrice;
+      collectionOfUrnPrice +
+      transferOptionPrice
+
     const BASE_PRICE = 4895;
     const finalTotalPrice = BASE_PRICE + totalPriceImpact;
 
@@ -88,7 +75,6 @@ export const getAttendenceAnswers = async (
       });
     }
 
-    // ✅ Save OPTION + PRICE correctly
     response.stationeryOption = stationeryOption;
     response.stationery = stationeryPrice;
 
@@ -101,14 +87,22 @@ export const getAttendenceAnswers = async (
     response.flowersOption = flowersOption;
     response.flowers = flowersPrice;
 
-    response.urnOption = urnOption;
-    response.urn = urnPrice;
+    if (selections?.urn) {
+      response.urnOption = urnOption;
+      response.urn = urnPrice;
+    }
+
+    if (selections?.collectionOfUrn) {
+      response.collectionOfUrnOption = collectionOfUrnOption;
+      response.collectionOfUrn = collectionOfUrnPrice;
+    }
+
 
     response.collectionOfUrnOption = collectionOfUrnOption;
     response.collectionOfUrn = collectionOfUrnPrice;
 
     response.transferOption = transferOption;
-    response.transferPrice = transferPrice;
+    response.transferOptionPrice = transferOptionPrice
 
     response.totalPriceImpact = totalPriceImpact;
     response.totalPrice = finalTotalPrice;
@@ -138,32 +132,31 @@ export const getVandCnswers = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Log the entire request body for debugging
-
     const { selections, totalPrice = 0 } = req.body;
 
     if (!selections) {
       return res.status(400).json({ message: "No selections provided" });
     }
 
-    // Extract values and prices from selections
-    const urnValue = selections?.urn?.value || "";
-    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+    const getValue = (key: string) => selections?.[key]?.value ?? "";
+    const getPrice = (key: string) => Number(selections?.[key]?.price ?? 0);
 
-    const collectionOfUrnValue = selections?.collectionOfUrn?.value || "";
-    const collectionOfUrnPrice =
-      parseFloat(selections?.collectionOfUrn?.price) || 0;
-    const transferOption = selections?.transferOption?.value || "";
-    const transferOptionPrice =
-      parseFloat(selections?.transferOption?.price) || 0;
+    const urnValue = getValue("urn");
+    const urnPrice = getPrice("urn");
 
-    // Calculate total price impact
+    const collectionOfUrnValue = getValue("collectionOfUrn");
+    const collectionOfUrnPrice = getPrice("collectionOfUrn");
+
+    const transferOptionValue = getValue("transferOption");
+    const transferOptionPrice = getPrice("transferOption");
+
     const totalPriceImpact =
-      urnPrice + collectionOfUrnPrice + transferOptionPrice;
+      urnPrice +
+      collectionOfUrnPrice +
+      transferOptionPrice
 
-    const BASE_PRICE = 3595; // Match frontend base price
-    const finalTotalPrice =
-      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+    const BASE_PRICE = 3595;
+    const finalTotalPrice = totalPrice > 0 ? Number(totalPrice) : BASE_PRICE + totalPriceImpact;
 
     let existingResponse = await FormVandCResponseModel.findOne({
       userid: req.identity._id,
@@ -175,9 +168,13 @@ export const getVandCnswers = async (
     if (existingResponse) {
       existingResponse.urn = urnValue;
       existingResponse.collectionOfUrn = collectionOfUrnValue;
+
+      existingResponse.transferOption = transferOptionValue;
+      existingResponse.transferOptionPrice = transferOptionPrice;
+
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
-      existingResponse.transferOption = transferOption;
+      existingResponse.status = "draft";
 
       savedResponse = await existingResponse.save();
     } else {
@@ -188,6 +185,10 @@ export const getVandCnswers = async (
 
         urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
+
+        transferOption: transferOptionValue,
+        transferOptionPrice,
+
         totalPriceImpact,
         totalPrice: finalTotalPrice,
         status: "draft",
@@ -218,6 +219,13 @@ export const getNoServiceCrementionnswers = async (
     }
 
     const { selections, totalPrice = 0 } = req.body;
+
+    if (!selections) {
+      return res.status(400).json({ message: "No selections provided" });
+    }
+
+    const BASE_PRICE = 2295;
+
     const normalizeSelection = (field: any, fallback: string) => {
       if (!field) return fallback;
       if (typeof field === "string" && field.trim() !== "") return field;
@@ -231,38 +239,28 @@ export const getNoServiceCrementionnswers = async (
       return fallback;
     };
 
-    if (!selections) {
-      return res.status(400).json({ message: "No selections provided" });
-    }
-    const BASE_PRICE = 2295;
-    // Extract values and prices from selections
-    const urnPrice = parseFloat(selections?.urn?.price) || 0;
+    // ✅ Read prices correctly
+    const urnPrice = Number(selections?.urn?.price ?? 0);
+    const collectionOfUrnPrice = Number(selections?.collectionOfUrn?.price ?? 0);
+    const transferOptionPrice = Number(selections?.transferOption?.price ?? 0);
 
-    const collectionOfUrnPrice =
-      parseFloat(selections?.collectionOfUrn?.price) || 0;
-
-    const transferOptionPrice =
-      parseFloat(selections?.transferOption?.price) || 0;
-    const urnValue = normalizeSelection(
-      selections?.urn,
-      "Funera Preferred Adult Urn",
-    );
-
+    // ✅ Values
+    const urnValue = normalizeSelection(selections?.urn, "Funera Preferred Adult Urn");
     const collectionOfUrnValue = normalizeSelection(
       selections?.collectionOfUrn,
       "Collect in Person",
     );
-
     const transferOptionValue = normalizeSelection(
       selections?.transferOption,
       "Sydney Metro",
     );
 
-    // Calculate total price impact
+    // ✅ Include transferZonePlacePrice in impact
     const totalPriceImpact =
-      urnPrice + collectionOfUrnPrice + transferOptionPrice;
+      urnPrice + collectionOfUrnPrice + transferOptionPrice
+
     const finalTotalPrice =
-      totalPrice > 0 ? totalPrice : BASE_PRICE + totalPriceImpact;
+      totalPrice > 0 ? Number(totalPrice) : BASE_PRICE + totalPriceImpact;
 
     let existingResponse = await FormNoServiceResponseModel.findOne({
       userid: req.identity._id,
@@ -275,8 +273,13 @@ export const getNoServiceCrementionnswers = async (
       existingResponse.urn = urnValue;
       existingResponse.collectionOfUrn = collectionOfUrnValue;
       existingResponse.transferOption = transferOptionValue;
+
+      // ✅ Save prices too (needs schema field transferOptionPrice)
+      existingResponse.transferOptionPrice = transferOptionPrice;
+
       existingResponse.totalPriceImpact = totalPriceImpact;
       existingResponse.totalPrice = finalTotalPrice;
+      existingResponse.status = "draft";
 
       savedResponse = await existingResponse.save();
     } else {
@@ -288,6 +291,7 @@ export const getNoServiceCrementionnswers = async (
         urn: urnValue,
         collectionOfUrn: collectionOfUrnValue,
         transferOption: transferOptionValue,
+        transferOptionPrice, // ✅ save
         totalPriceImpact,
         totalPrice: finalTotalPrice,
         status: "draft",
@@ -295,7 +299,7 @@ export const getNoServiceCrementionnswers = async (
     }
 
     return res.status(200).json({
-      message: "Viewing And Cremention response saved",
+      message: "No Service Cremation response saved",
       data: savedResponse,
       totalPrice: savedResponse.totalPrice,
     });
@@ -307,6 +311,7 @@ export const getNoServiceCrementionnswers = async (
     });
   }
 };
+
 
 export const getdeatilByReference = async (
   req: express.Request,

@@ -1,27 +1,22 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Footer from "./components/layouts/Footer/Footer";
 import Header from "./components/layouts/Header/Header";
 import Intro_video from "./pages/Intro_video";
 
 function App() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [showIntro, setShowIntro] = useState(
     location.pathname === "/"
   );
 
-  useEffect(() => {
-    if (location.pathname === "/") {
-      const timer = setTimeout(() => {
-        setShowIntro(false);
-        navigate("/home");
-      }, 4500);
+  const noFooterRoutes = [
+    "/landing-page",
+    "/attending-cremation-landing",
+  ];
 
-      return () => clearTimeout(timer);
-    }
-  }, [location.pathname, navigate]);
+  const hideFooter = noFooterRoutes.includes(location.pathname);
 
   return (
     <section>
@@ -33,11 +28,13 @@ function App() {
           <main className="mx-auto">
             <Outlet />
           </main>
-          <Footer />
+
+          {!hideFooter && <Footer />}
         </>
       )}
     </section>
   );
 }
+
 
 export default App;

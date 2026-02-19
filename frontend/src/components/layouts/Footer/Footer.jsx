@@ -71,7 +71,7 @@ const Footer = () => {
   return (
     <footer className="bg-surface pt-8 pb-8 border-t border-gray-200 relative">
       <div className="max-w-[1360px] mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mt-4 mb-12 text-center md:text-left">
           {/* Brand */}
           <div className="flex items-center justify-center md:items-start md:justify-start">
             <div className="flex items-center gap-3">
@@ -91,7 +91,7 @@ const Footer = () => {
                   to={getPathFromLabel(link)}
                   onClick={() => scrollToTop()}
                   aria-label={`Go to ${link}`}
-                  className="block text-gray-700 hover:text-primary transition-colors"
+                  className="block  hover:text-gray-700 text-body-light text-black "
                 >
                   {link}
                 </Link>
@@ -102,12 +102,9 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-body">
-          <p
-            className="text-center
-          "
-          >
-            Copyright © {new Date().getFullYear()} blacktulipfunerals. All
-            rights reserved.
+          <p>
+            Copyright © {new Date().getFullYear()} OVANTA Pty Ltd. All rights
+            reserved.
           </p>
           <div className="flex space-x-4">
             {[<FaFacebookF />, <FaTwitter />, <FaYoutube />].map((icon, i) => (

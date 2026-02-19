@@ -14,7 +14,7 @@ const FacilityCard = ({ img, title, desc }) => (
     <h3 className="text-lg font-display font-bold text-gray-900 mb-2 uppercase tracking-wide">
       {title}
     </h3>
-    <p className="text-sm text-gray-500 leading-relaxed px-4 font-body">
+    <p className="leading-relaxed px-4 font-body text-body-light">
       {desc}
     </p>
   </div>

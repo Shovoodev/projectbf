@@ -52,7 +52,7 @@ Text: Montserrat (Normal) */
   }
 
   p {
-    @apply leading-relaxed font-montserrat;
+    @apply leading-relaxed text-[16px] font-montserrat;
   }
 }
 
@@ -61,7 +61,7 @@ Text: Montserrat (Normal) */
      EXISTING CLASSES (DO NOT DELETE)
      ========================================= */
   .section-container {
-    @apply max-w-7xl mx-auto;
+    @apply max-w-7xl mx-auto p-2 sm:items-center;
   }
 
   .section-padding {
@@ -81,7 +81,7 @@ Text: Montserrat (Normal) */
   }
 
   .text-body-light {
-    @apply text-gray-600 font-light leading-relaxed;
+    @apply text-gray-600 font-light text-[16px] leading-relaxed;
   }
 
   .btn-primary {
@@ -89,7 +89,7 @@ Text: Montserrat (Normal) */
   }
 
   .btn-enquire {
-    @apply flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200;
+    @apply flex items-center justify-center gap-2 bg-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200;
   }
 
   .btn-sm {
@@ -150,7 +150,7 @@ Text: Montserrat (Normal) */
 
   /* paragraph  */
   .bold-paragraph {
-    @apply text-lg md:text-xl text-gray-600 font-light mb-12 font-body;
+    @apply text-lg md:text-xl text-gray-600 text-left font-light mb-12 font-body;
   }
 
   /*  This is about for PDF  */

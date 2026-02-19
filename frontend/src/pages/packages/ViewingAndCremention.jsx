@@ -1,18 +1,14 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from "react";
 import { List } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import { useNavigate } from "react-router-dom";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
-const CORE = import.meta.env.VITE_API_URL;
-
+import TransferZonesBox from "./_components/TransferZonesBox";
 // Card Component matching the design (Light Gray Background)
 export function Card({ title, children, className = "" }) {
   return (
-    <div
-      className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}
-    >
+    <div className={`bg-gray-50 rounded-xl p-8 border border-gray-100 ${className}`}>
       <h3 className="font-display font-lato font-bold uppercase text-2xl text-gray-900 mb-6 tracking-wide">
         {title}
       </h3>
@@ -21,22 +17,14 @@ export function Card({ title, children, className = "" }) {
   );
 }
 
-export const viewingAndCremention = [
+const viewingAndCremention = [
   {
     id: 1,
     question: "Transfers from Place of Passing",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Sydney Metro",
-        value: "Sydney Metro",
-        priceAdjustment: 0,
-      },
+
+      { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
         label: "Zone 2 (+ $220)",
         value: "Zone 2 (+ $220)",
@@ -44,7 +32,7 @@ export const viewingAndCremention = [
       },
       {
         label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385",
+        value: "Zone 3 (+ $385)",
         priceAdjustment: 385,
       },
     ],
@@ -54,21 +42,8 @@ export const viewingAndCremention = [
     question: "Urn",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
-        label: "BTF Preferred Scattering Tube",
-        value: "BTF Preferred Scattering Tube",
-        priceAdjustment: 0,
-      },
-      {
-        label: "BTF Preferred Adult Urn",
-        value: "BTF Preferred Adult Urn",
-        priceAdjustment: 0,
-      },
+      { label: "BTF Scattering Tube", value: "BTF Scattering Tube", priceAdjustment: 0 },
+      { label: "BTF Adult Urn (+$100)", value: "BTF Adult Urn", priceAdjustment: 100 },
     ],
   },
   {
@@ -76,21 +51,8 @@ export const viewingAndCremention = [
     question: "Collection of Urn",
     type: "select",
     options: [
-      {
-        label: "Select an Option",
-        value: "Select an Option",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Collect in Person",
-        value: "Collect in Person",
-        priceAdjustment: 0,
-      },
-      {
-        label: "Australia Post Registered Mail",
-        value: "Australia Post Registered Mail",
-        priceAdjustment: 0,
-      },
+      { label: "Collect in Person", value: "Collect in Person", priceAdjustment: 0 },
+      { label: "Australia Post Registered Mail (+$65)", value: "Australia Post Registered Mail", priceAdjustment: 65 },
     ],
   },
 ];
@@ -99,39 +61,32 @@ const ViewingAndCrementionPage = () => {
   const BASE_PRICE = 3595;
 
   const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-  const navigate = useNavigate();
   const [selections, setSelections] = useState({
-    transferOption: { value: "Select an Option", price: 0 },
-    urn: { value: "Select an Option", price: 0 },
-    collectionOfUrn: { value: "Select an Option", price: 0 },
+    transferOption: { value: "Sydney Metro", price: 0 },
+    urn: { value: "BTF Scattering Tube", price: 0 },
+    collectionOfUrn: { value: "Collect in Person", price: 0 },
   });
+
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [amount, setAmount] = useState(0);
-  //   const { user } = useUserFront();
   const [message, setMessage] = useState("");
-  // --- Calculate Total Price ---
+
   const [activePopup, setActivePopup] = useState(null);
-  const openPopup = (popupType) => {
-    setActivePopup(popupType);
-  };
+  const openPopup = (popupType) => setActivePopup(popupType);
+  const closePopup = () => setActivePopup(null);
 
-  const closePopup = () => {
-    setActivePopup(null);
-  };
   useEffect(() => {
-    const variableTotal = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
+
+    const extras = Object.values(selections || {}).reduce(
+      (sum, opt) => sum + Number(opt?.price || 0),
+      0
     );
-    // Base + Variables + Transfer Cost
-    setTotalPrice(BASE_PRICE + variableTotal);
-  }, [selections]);
-
-  if (loading) return <div className="p-20 text-center">Loading...</div>;
-  if (error)
-    return <div className="p-20 text-center text-red-500">Error: {error}</div>;
-
+    setTotalPrice(BASE_PRICE + extras);
+  }, [selections, BASE_PRICE]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [])
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
       "Transfers from Place of Passing": "transferOption",
@@ -140,35 +95,33 @@ const ViewingAndCrementionPage = () => {
     };
 
     const key = categoryKeyMap[category];
+    if (!key) return; // ✅ guard
 
-    setSelections((prev) => {
-      const updated = { ...prev, [key]: { value, price: priceAdjustment } };
-
-      // Calculate total price impact
-      const totalPriceImpact = Object.values(updated).reduce(
-        (sum, opt) => sum + (opt.price || 0),
-        0,
-      );
-
-      setTotalPrice(BASE_PRICE + totalPriceImpact);
-      setAmount(BASE_PRICE + totalPriceImpact);
-
-      return updated;
-    });
+    setSelections((prev) => ({
+      ...prev,
+      [key]: { value, price: Number(priceAdjustment) || 0 },
+    }));
   };
+
   const handleSelectChange = (itemId, selectedValue) => {
     const item = viewingAndCremention.find((data) => data.id === itemId);
     if (!item) return;
 
-    const selectedOption = item.options.find(
-      (opt) => opt.value === selectedValue,
-    );
+    const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    // Make sure priceAdjustment is being used
-    const price = selectedOption.priceAdjustment || 0;
-
+    const price = Number(selectedOption.priceAdjustment) || 0;
     handleOptionChange(item.question, selectedValue, price);
+
+    // ✅ nested area for zone 2 / 3
+    if (itemId === 1) {
+
+      // reset nested choice whenever zone changes
+      setSelections((prev) => ({
+        ...prev,
+        transferZonePlace: { value: "", price: 0 },
+      }));
+    }
   };
 
   const handleRegistrationSubmit = async (e) => {
@@ -181,12 +134,12 @@ const ViewingAndCrementionPage = () => {
           state: {
             selections,
             path: "new-view-and-service-cremation",
-            totalPrice: totalPrice,
+            totalPrice,
           },
         });
       }, 1000);
     } catch (err) {
-      setMessage(err.message, "error");
+      setMessage(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -200,42 +153,39 @@ const ViewingAndCrementionPage = () => {
       setTimeout(() => {
         showToast.info("Getting PrePay document Ready for your Selections", {
           duration: 3000,
-          options: {
-            position: "bottom-right",
+          options: { position: "bottom-right" },
+        });
+
+        // ✅ match your other pages (send selections + totalPrice)
+        navigate("/prepay", {
+          state: {
+            selections,
+            path: "new-view-and-service-cremation",
+            totalPrice,
           },
         });
-        navigate(`/prepay`);
       }, 100);
     } catch (err) {
-      message(err.message, "error");
-      setError(error);
+      setMessage(err?.message || "Something went wrong");
+      setError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const totalPriceImpact = Object.values(selections).reduce(
-      (sum, opt) => sum + (opt.price || 0),
-      0,
-    );
-    // Add any static option costs here if needed
-    const finalTotal = BASE_PRICE + totalPriceImpact;
-
-    setTotalPrice(finalTotal);
-    setAmount(finalTotal);
-  }, [selections, BASE_PRICE, setTotalPrice, setAmount]);
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+  if (error) return <div className="p-20 text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="bg-white min-h-screen pb-20">
-      <div className="section-container  mx-auto px-6 py-16">
+    <div className="bg-white min-h-screen pb-10">
+      <div className="section-container mx-auto px-6 py-16">
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-4 sm:mb-6">
               Viewing & Cremation
             </h1>
-            <p className="text-gray-600 font-body text-base leading-relaxed text-justify">
+            <p className="text-body-light sm:text-body-light leading-relaxed text-left sm:text-justify">
               Black Tulip Funerals provides families with the opportunity to
               spend private time viewing their loved one before a dignified
               cremation service. This option allows for a personal and
@@ -244,7 +194,7 @@ const ViewingAndCrementionPage = () => {
           </div>
 
           {/* Price Box */}
-          <div className="bg-gray-50 border border-gray-100 rounded-xl p-6 text-center min-w-[200px]">
+          <div className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
             <span className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
               Price
             </span>
@@ -256,11 +206,7 @@ const ViewingAndCrementionPage = () => {
 
         {/* --- GRID CONTENT --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* 1. Required Services */}
-          <Card
-            title="Required Services"
-            className="flex flex-col justify-between"
-          >
+          <Card title="Required Services" className="flex flex-col justify-between">
             <List
               items={[
                 "Phone or Zoom Consultation",
@@ -272,7 +218,6 @@ const ViewingAndCrementionPage = () => {
             />
           </Card>
 
-          {/* 2. Disbursements */}
           <Card title="Disbursements">
             <List
               items={[
@@ -284,7 +229,6 @@ const ViewingAndCrementionPage = () => {
             />
           </Card>
 
-          {/* 3. Included Variables (Full Width) */}
           <div className="md:col-span-2">
             <Card title="Included Variables">
               <div className="flex flex-col gap-2">
@@ -294,20 +238,23 @@ const ViewingAndCrementionPage = () => {
                     Urn: "urn",
                     "Collection of Urn": "collectionOfUrn",
                   };
-                  const key = categoryKeyMap[item.question] || item.question; // Fallback
+
+                  const key = categoryKeyMap[item.question] || item.question;
                   const currentValue = selections[key]?.value || "";
 
+
                   return (
-                    <RowSelect
-                      key={item.id}
-                      label={item.question}
-                      value={currentValue}
-                      onChange={(e) =>
-                        handleSelectChange(item.id, e.target.value)
-                      }
-                      options={item.options}
-                      placeholder="Select an option"
-                    />
+                    <div key={item.id} className="flex flex-col gap-2">
+                      <RowSelect
+                        label={item.question}
+                        value={currentValue}
+                        onChange={(e) => handleSelectChange(item.id, e.target.value)}
+                        options={item.options}
+                        placeholder="Select an option"
+                      />
+
+
+                    </div>
                   );
                 })}
               </div>
@@ -317,22 +264,12 @@ const ViewingAndCrementionPage = () => {
 
         {/* --- ACTIONS FOOTER --- */}
         <div className="flex flex-wrap gap-4 justify-center mt-10 pb-10">
-          {/* Make Agreement button */}
-          <div>
-            <button
-              className="btn-primary normal"
-              onClick={handleRegistrationSubmit}
-            >
-              Make Agreement Now
-            </button>
-          </div>
+          <button className="btn-primary normal" onClick={handleRegistrationSubmit}>
+            Make Agreement Now
+          </button>
 
-          {/* Enquiry button */}
           <div>
-            <button
-              className="btn-primary normal"
-              onClick={() => openPopup("enquirey")}
-            >
+            <button className="btn-primary normal" onClick={() => openPopup("enquirey")}>
               Enquire Now
             </button>
             <PopupEnquirey
@@ -343,19 +280,24 @@ const ViewingAndCrementionPage = () => {
               description="We'll get back to you shortly"
               title="Make an Enquiry"
               subtitle="We'll get back to you shortly"
-              onSuccess={(userData) => {
-                console.log("Enquiry submitted:", userData);
+              onSuccess={() => {
                 closePopup();
-                // Handle enquiry submission
               }}
             />
           </div>
 
-          {/* PrePay button */}
           <button className="btn-primary normal" onClick={handlePrepaySubmit}>
             Prepay
           </button>
         </div>
+        <div className="mt-10">
+          <TransferZonesBox />
+        </div>
+        {message && (
+          <div className="mt-6 p-4 rounded text-center font-medium bg-red-50 text-red-600 border border-red-100">
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );

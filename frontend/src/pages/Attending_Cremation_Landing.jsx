@@ -1,3 +1,4 @@
+import FooterWithoutLinks from "../components/layouts/Footer/footerWithoutLinks";
 import ArrangementsIncludedSection from "../components/pages/Attending_Cremation_Landing/ArrangementsIncludedSection";
 import AttendingCremationDetailsSection from "../components/pages/Attending_Cremation_Landing/AttendingCremationDetailsSection";
 import CremationCostsSydneySection from "../components/pages/Attending_Cremation_Landing/CremationCostsSydneySection";
@@ -31,6 +32,7 @@ function Attending_Cremation_Landing() {
       <ServiceAreasSection />
       <TeamPreview />
       <FAQ />
+      <FooterWithoutLinks />
     </div>
   );
 }

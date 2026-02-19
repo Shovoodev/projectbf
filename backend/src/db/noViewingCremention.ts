@@ -27,6 +27,9 @@ const formNoServiceSchema = new mongoose.Schema(
     },
     totalPriceImpact: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
+
+    transferOptionPrice: { type: Number, default: 0 },
+
     status: {
       type: String,
       enum: ["draft", "submitted", "confirmed", "cancelled"],
