@@ -251,8 +251,6 @@ const AgreementForm = () => {
         if (!field || field.trim() === "") throw new Error(message);
       }
 
-
-
       // 1) Transform selections (optional)
       const backendSelections = transformSelectionsForBackend(selections);
       if (!backendSelections) {
@@ -264,7 +262,7 @@ const AgreementForm = () => {
       // 2) Register user
       const registerPayload = {
         email: formKinValues.email,
-        password: formKinValues.givenName + formKinValues.surname
+        password: formKinValues.givenName + formKinValues.surname,
       };
 
       const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
@@ -404,7 +402,7 @@ const AgreementForm = () => {
         body: JSON.stringify({
           selections: backendSelections ?? selections ?? {},
           pdfAttachment: base64data,
-          to: formKinValues.email
+          to: formKinValues.email,
         }),
       });
 
