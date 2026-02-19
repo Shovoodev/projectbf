@@ -1,4 +1,4 @@
-import FooterWithoutLinks from "../components/layouts/Footer/footerWithoutLinks";
+import FooterWithoutLinks from "../components/layouts/Footer/FooterWithoutLinks";
 import ArrangementsIncludedSection from "../components/pages/Attending_Cremation_Landing/ArrangementsIncludedSection";
 import AttendingCremationDetailsSection from "../components/pages/Attending_Cremation_Landing/AttendingCremationDetailsSection";
 import CremationCostsSydneySection from "../components/pages/Attending_Cremation_Landing/CremationCostsSydneySection";
