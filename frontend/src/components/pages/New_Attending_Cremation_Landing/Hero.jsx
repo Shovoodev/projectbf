@@ -3,6 +3,7 @@ import img from "./images/funeral-arrangements.jpeg";
 
 import { FaArrowRight, FaCircleCheck, FaPhone } from "react-icons/fa6";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import MakeAgreementBtn from "./common/MakeAgreementBtn";
 
 const Hero = () => {
   const features = [
@@ -64,10 +65,7 @@ const Hero = () => {
               >
                 <FaPhone className="text-sm" /> 1300 11 0031
               </a>
-              <Link to="/contact" className="btn-enquire">
-                <span className="">Enquire Now</span>
-                <FaLongArrowAltRight />
-              </Link>
+              <MakeAgreementBtn />
             </div>
           </div>
 
