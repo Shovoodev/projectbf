@@ -5,7 +5,7 @@ import {
   deleteBlog,
   getallBlogs,
   getBlog,
-  getSingleBlog,
+  getBtfNews,
   searchBlogs,
   updateBlog,
 } from "../controllers/blogcontroller";
@@ -19,9 +19,9 @@ export default (router: express.Router) => {
     createBlog,
   );
   router.get("/publish-all-blog-data", getallBlogs);
+  router.get("/publish-btf-news", getBtfNews);
   router.get("/search-blogs", searchBlogs);
-  router.get("/single-blog-data/:id", getSingleBlog);
-  router.get("/publish-blog/:id", getallBlogs);
+  router.get("/single-blog-data/:id", getBlog);
   router.put(
     "/update-blog/:id",
     upload.single("image"),

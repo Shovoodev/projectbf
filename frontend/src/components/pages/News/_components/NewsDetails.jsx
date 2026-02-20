@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-const CORE = import.meta.env.VITE_API_URL;
 
+const CORE = import.meta.env.VITE_API_URL;
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -23,28 +23,42 @@ const NewsDetails = () => {
   const { id } = useParams();
 
   const [article, setArticle] = useState(null);
-  const [newsData, setNewsData] = useState([]);
+
+  // ✅ only titles list
+  const [relatedTitles, setRelatedTitles] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  /* ---------------- FETCH ALL NEWS ---------------- */
+  /* ---------------- FETCH RELATED TITLES (MAX 12) ---------------- */
   useEffect(() => {
-    const getNews = async () => {
+    const getRelatedTitles = async () => {
       try {
+        // ✅ preferred: ask backend for only title + max 12
         const res = await fetch(
-          `${CORE}/publish-all-blog-data`, // change to news endpoint if you have one
+          `${CORE}/publish-all-blog-data?limit=12&fields=title`
         );
+
         const data = await res.json();
-        setNewsData(data);
+
+        // ✅ fallback if backend ignores query params:
+        // make sure we only keep _id + title and only 12 items
+        const normalized = Array.isArray(data) ? data : data?.data || [];
+
+        const onlyTitle = normalized
+          .map((x) => ({ _id: x._id, title: x.title }))
+          .slice(0, 12);
+
+        setRelatedTitles(onlyTitle);
       } catch (err) {
         console.error(err);
       }
     };
 
-    getNews();
+    getRelatedTitles();
   }, []);
 
-  /* ---------------- FETCH SINGLE NEWS ---------------- */
+  /* ---------------- FETCH SINGLE BLOG ---------------- */
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -53,14 +67,10 @@ const NewsDetails = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${CORE}/single-blog-data/${id}`, // change if different
-        );
-
+        const res = await fetch(`${CORE}/single-blog-data/${id}`);
         if (!res.ok) throw new Error("Failed to fetch article");
 
         const data = await res.json();
-
         const plainText = stripHtml(data.content || "");
 
         const transformed = {
@@ -90,7 +100,6 @@ const NewsDetails = () => {
   }, [id]);
 
   /* ---------------- STATES ---------------- */
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -111,7 +120,6 @@ const NewsDetails = () => {
   }
 
   /* ---------------- UI ---------------- */
-
   return (
     <div className="bg-white min-h-screen">
       <div className="section-container max-w-7xl mx-auto px-6 py-16">
@@ -125,14 +133,12 @@ const NewsDetails = () => {
               <span>{article.date}</span>
             </div>
 
-            {/* Image */}
             <img
               src={article.image}
               alt={article.title}
               className="rounded-xl mb-10 w-full"
             />
 
-            {/* Content */}
             <article className="prose max-w-none">
               {article.content?.includes("<") ? (
                 <div dangerouslySetInnerHTML={{ __html: article.content }} />
@@ -141,7 +147,6 @@ const NewsDetails = () => {
               )}
             </article>
 
-            {/* Footer */}
             <div className="mt-10">
               <Link
                 to="/news"
@@ -150,14 +155,10 @@ const NewsDetails = () => {
                 <FaArrowLeft /> Back to News
               </Link>
             </div>
-
-            {/* Comments */}
-            {/* <CommentSection /> */}
           </main>
 
           {/* ================= SIDEBAR ================= */}
           <aside className="lg:col-span-4 space-y-8">
-            {/* Search */}
             <div className="bg-gray-50 p-6 rounded-xl">
               <h3 className="font-bold mb-4">Search News</h3>
               <div className="relative">
@@ -169,7 +170,6 @@ const NewsDetails = () => {
               </div>
             </div>
 
-            {/* Author */}
             <div className="bg-gray-50 p-6 rounded-xl">
               <div className="flex items-center gap-4">
                 <FaUser />
@@ -180,14 +180,14 @@ const NewsDetails = () => {
               </div>
             </div>
 
-            {/* Related News */}
+            {/* ✅ Related titles (MAX 12, title only) */}
             <div className="bg-white border rounded-xl p-6">
               <h3 className="font-bold mb-4">Related News</h3>
 
               <ul className="space-y-3">
-                {newsData
+                {relatedTitles
                   .filter((n) => n._id !== id)
-                  .slice(0, 5)
+                  .slice(0, 12)
                   .map((item) => (
                     <li key={item._id}>
                       <Link
