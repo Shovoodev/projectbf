@@ -193,6 +193,82 @@ const AgreementForm = () => {
     setError("");
     setMessage("");
 
+    // ---------- helpers ----------
+    const parseMaybeJson = (raw) => {
+      try {
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const readErrorMessage = async (res, fallback) => {
+      const raw = await res.text().catch(() => "");
+      const j = parseMaybeJson(raw);
+      return j?.error || j?.message || raw || fallback;
+    };
+
+    // Critical JSON POST: throws on failure
+    const postJsonOrThrow = async (url, body, opts = {}) => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
+        credentials: opts.credentials ?? "include",
+        body: JSON.stringify(body),
+        ...opts,
+      });
+
+      if (!res.ok) {
+        throw new Error(await readErrorMessage(res, "Request failed"));
+      }
+
+      // Some endpoints return empty body; don't break
+      const raw = await res.text().catch(() => "");
+      return { res, data: parseMaybeJson(raw), raw };
+    };
+
+    // Non-critical JSON POST: never throws (keeps flow alive)
+    const postJsonSafe = async (url, body, opts = {}) => {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
+          credentials: opts.credentials ?? "include",
+          body: JSON.stringify(body),
+          ...opts,
+        });
+
+        const raw = await res.text().catch(() => "");
+        const data = parseMaybeJson(raw);
+
+        if (!res.ok) {
+          console.warn("Non-critical request failed:", url, res.status, data || raw);
+          return { ok: false, status: res.status, data, raw };
+        }
+        return { ok: true, status: res.status, data, raw };
+      } catch (err) {
+        console.warn("Non-critical request error:", url, err);
+        return { ok: false, status: 0, data: null, raw: String(err) };
+      }
+    };
+
+    // Critical FormData POST: throws on failure
+    const postFormOrThrow = async (url, formData, opts = {}) => {
+      const res = await fetch(url, {
+        method: "POST",
+        credentials: opts.credentials ?? "include",
+        body: formData,
+        ...opts,
+      });
+
+      if (!res.ok) {
+        throw new Error(await readErrorMessage(res, "Request failed"));
+      }
+
+      const raw = await res.text().catch(() => "");
+      return { res, data: parseMaybeJson(raw), raw };
+    };
+
     const transformSelectionsForBackend = (selections) => {
       if (!selections) return null;
 
@@ -223,118 +299,77 @@ const AgreementForm = () => {
         const reader = new FileReader();
         reader.onerror = () => reject(new Error("FileReader failed"));
         reader.onloadend = () => {
-          const base64 = reader.result?.toString().split(",")[1];
-          if (!base64)
-            return reject(new Error("Failed to convert PDF to base64"));
+          const result = reader.result?.toString() || "";
+          const base64 = result.includes(",") ? result.split(",")[1] : "";
+          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
           resolve(base64);
         };
         reader.readAsDataURL(blob);
       });
 
+    // ---------- main flow ----------
     try {
       // 0) Validate required fields
       const requiredFields = [
         { field: formKinValues.email, message: "Email is required" },
         { field: formKinValues.givenName, message: "First name is required" },
         { field: formKinValues.mobile, message: "Mobile number is required" },
-        {
-          field: deceasedFormValues.givenName,
-          message: "Deceased first name is required",
-        },
-        {
-          field: deceasedFormValues.surname,
-          message: "Deceased surname is required",
-        },
+        { field: deceasedFormValues.givenName, message: "Deceased first name is required" },
+        { field: deceasedFormValues.surname, message: "Deceased surname is required" },
       ];
 
       for (const { field, message } of requiredFields) {
-        if (!field || field.trim() === "") throw new Error(message);
+        if (!field || String(field).trim() === "") throw new Error(message);
       }
+
+      const email = String(formKinValues.email).trim().toLowerCase();
+      const password = String((formKinValues.givenName || "") + (formKinValues.surname || "")).trim();
+      if (!password) throw new Error("Unable to create password (missing givenName/surname)");
 
       // 1) Transform selections (optional)
       const backendSelections = transformSelectionsForBackend(selections);
       if (!backendSelections) {
-        console.warn(
-          "No selections provided - continuing without package selections",
-        );
+        console.warn("No selections provided - continuing without package selections");
       }
 
-      // 2) Register user
-      const registerPayload = {
-        email: formKinValues.email,
-        password: formKinValues.givenName + formKinValues.surname,
-      };
+      // 2) Register user (CRITICAL)
+      const registerPayload = { email, password };
 
-      const responseUser = await fetch(`${CORE}/blacktulipauth/newuser`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registerPayload),
-      });
+      const { data: registerData, raw: registerRaw } = await postJsonOrThrow(
+        `${CORE}/blacktulipauth/newuser`,
+        registerPayload,
+        { credentials: "omit" } // register usually doesn't need cookies
+      );
 
-      if (!responseUser.ok) {
-        const errorText = await responseUser.text();
-        throw new Error(errorText || "Registration failed");
+      const reference = registerData?.reference || parseMaybeJson(registerRaw)?.reference;
+      if (!reference) {
+        throw new Error("Registration succeeded but reference was not returned");
       }
 
-      // 3) Login user
-      const loginRes = await fetch(`${CORE}/blacktulipauth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registerPayload),
-        credentials: "include",
-      });
+      // 3) Login user (CRITICAL) - includes reference
+      await postJsonOrThrow(`${CORE}/blacktulipauth/login`, { email, password, reference }, { credentials: "include" });
 
-      if (!loginRes.ok) {
-        const errorText = await loginRes.text();
-        throw new Error(errorText || "Login failed");
-      }
-
-      // 4) Save selections if available (don’t block whole flow if it fails)
+      // 4) Save selections (OPTIONAL - never breaks flow)
       if (backendSelections && path) {
-        try {
-          const selectionRes = await fetch(`${CORE}/${path}`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              selections: backendSelections,
-              totalPrice: totalPrice,
-            }),
-          });
-
-          if (!selectionRes.ok) {
-            const errorText = await selectionRes.text();
-            console.warn("Failed to save selections:", errorText);
-          }
-        } catch (selectionError) {
-          console.warn("Error saving selections:", selectionError);
-        }
+        await postJsonSafe(`${CORE}/${path}`, {
+          selections: backendSelections,
+          totalPrice: totalPrice,
+        });
       }
 
-      // 5) Save deceased details
+      // 5) Save deceased details (CRITICAL)
       const deceasedFD = new FormData();
       Object.entries(deceasedFormValues).forEach(([key, value]) => {
         if (key !== "photo") deceasedFD.append(key, value);
       });
 
       if (Array.isArray(deceasedFormValues.photo)) {
-        deceasedFormValues.photo.forEach((file) =>
-          deceasedFD.append("photo", file),
-        );
+        deceasedFormValues.photo.forEach((file) => deceasedFD.append("photo", file));
       }
 
-      const deceasedRes = await fetch(`${CORE}/desencepersondetailsanswer`, {
-        method: "POST",
-        credentials: "include",
-        body: deceasedFD,
-      });
+      await postFormOrThrow(`${CORE}/desencepersondetailsanswer`, deceasedFD);
 
-      if (!deceasedRes.ok) {
-        const text = await deceasedRes.text();
-        throw new Error(text || "Failed to save deceased details");
-      }
-
-      // 6) Save next of kin details (DON’T early-return, throw)
+      // 6) Save next of kin details (CRITICAL)
       const signFile = await saveSignature();
       if (!signFile) throw new Error("Please provide a signature");
 
@@ -347,76 +382,64 @@ const AgreementForm = () => {
       fd.append("email", formKinValues.email);
       fd.append("relation", formKinValues.relation);
 
-      if (formKinValues.photo instanceof File) {
-        fd.append("photo", formKinValues.photo);
+      if (Array.isArray(formKinValues.photo)) {
+        formKinValues.photo.forEach((file) => fd.append("photo", file));
       }
 
       fd.append("sign", signFile);
 
-      const resforkin = await fetch(`${CORE}/next-to-keen-details`, {
-        method: "POST",
-        credentials: "include",
-        body: fd,
-      });
+      await postFormOrThrow(`${CORE}/next-to-keen-details`, fd);
 
-      if (!resforkin.ok) {
-        const text = await resforkin.text();
-        throw new Error(text || "Failed to save next of kin details");
-      }
-
-      // 7) Generate + Send invoice (NO silent fail)
-      const resSelections = await fetch(`${CORE}/all-selected-selections`, {
-        credentials: "include",
-      });
-
+      // 7) Load invoice data (CRITICAL)
+      const resSelections = await fetch(`${CORE}/all-selected-selections`, { credentials: "include" });
       if (!resSelections.ok) {
-        const t = await resSelections.text();
-        throw new Error(`Failed to load selections: ${t}`);
+        throw new Error(await readErrorMessage(resSelections, "Failed to load selections"));
       }
 
-      const data = await resSelections.json();
-      const invoiceData = data?.data;
+      const selectionsRaw = await resSelections.text().catch(() => "");
+      const selectionsJson = parseMaybeJson(selectionsRaw);
+      const invoiceData = selectionsJson?.data;
 
       if (!invoiceData) {
-        throw new Error(
-          "No invoice data returned from /all-selected-selections",
-        );
+        throw new Error("No invoice data returned from /all-selected-selections");
       }
 
+      // 8) Generate invoice PDF (CRITICAL)
       const blob = await pdf(
         <StaticInvoicePDF
           invoiceDetails={invoiceData}
           deceasedName={deceasedFormValues.givenName}
           kinName={formKinValues.givenName}
-        />,
+        />
       ).toBlob();
 
-      console.log("Invoice PDF blob size:", blob.size);
+      if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
 
       const base64data = await toBase64FromBlob(blob);
 
-      const invoiceRes = await fetch(`${CORE}/api/send-invoice`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          selections: backendSelections ?? selections ?? {},
-          pdfAttachment: base64data,
-          to: formKinValues.email,
-        }),
+      // 9) Send invoice (CRITICAL - change to postJsonSafe if you want it non-critical)
+      await postJsonOrThrow(`${CORE}/api/send-invoice`, {
+        selections: backendSelections || {}, // don't send raw UI selections
+        pdfAttachment: base64data,
+        to: email,
       });
 
-      const invoiceText = await invoiceRes.text();
-      console.log("send-invoice status:", invoiceRes.status, invoiceText);
+      // 10) Notify admin (OPTIONAL)
+      await postJsonSafe(`${CORE}/notify-admin-agreement`, {
+        pdfAttachment: base64data,
+        reference: invoiceData.reference,
+        clientEmail: email,
+      });
 
-      if (!invoiceRes.ok) {
-        throw new Error(`Send invoice failed: ${invoiceText}`);
-      }
+      await postJsonSafe(`${CORE}/notify-client-account`, {
+        email,
+        customerName: `${formKinValues.givenName} ${formKinValues.surname}`.trim(),
+        reference: invoiceData.reference,
+        pdfAttachment: base64data,
+      });
 
-      // Optional: update UI
+      // UI updates
       setInvoiceDetails(invoiceData);
-
-      // 8) Success
       setMessage("Form submitted successfully!");
       showToast.success("completed Your Registration");
 
@@ -424,7 +447,7 @@ const AgreementForm = () => {
       localStorage.removeItem("packagePath");
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 2000);
     } catch (err) {
       console.error("Submit error:", err);
