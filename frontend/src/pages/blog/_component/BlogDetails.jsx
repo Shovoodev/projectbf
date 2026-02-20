@@ -35,16 +35,28 @@ const BlogDetails = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBlogs, setFilteredBlogs] = useState([]);
 
+  const ITEMS_PER_PAGE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [blogData, setBlogData] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
+
     const getBlogs = async () => {
       try {
-        const res = await fetch(`${CORE}/publish-all-blog-data`);
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(
+          `${CORE}/publish-all-blog-data?page=${currentPage}&limit=${ITEMS_PER_PAGE}`
+        );
         const data = await res.json();
-        setBlogData(data);
+
+        setBlogData(Array.isArray(data.items) ? data.items : []);
+        setTotalPages(data?.meta?.totalPages || 1);
       } catch (error) {
         console.error(error);
+        setError(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }

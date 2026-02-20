@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   reference: { type: String },
-  email: { type: String },
+  email: {
+    type: String, lowercase: true,
+    trim: true,
+  },
   authentication: {
     password: { type: String, select: false },
     salt: { type: String, select: false },

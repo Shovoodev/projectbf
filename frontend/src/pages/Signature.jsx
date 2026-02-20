@@ -7,6 +7,48 @@ import { showToast } from "../utility/toast";
 import { Navigate } from "react-router-dom";
 
 const CORE = import.meta.env.VITE_API_URL;
+const MAX_UPLOAD_SIZE = 1024 * 1024; // 1MB per file
+const MAX_TOTAL_UPLOAD_SIZE = 3 * 1024 * 1024; // 3MB for all files in request
+
+async function compressImage(file, maxWidth = 1400, quality = 0.7) {
+  if (!file?.type?.startsWith("image/")) return file;
+
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, maxWidth / bitmap.width);
+  const width = Math.round(bitmap.width * scale);
+  const height = Math.round(bitmap.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) return file;
+  ctx.drawImage(bitmap, 0, 0, width, height);
+
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", quality),
+  );
+
+  if (!blob) return file;
+
+  const newName = file.name.replace(/\.\w+$/, ".jpg");
+  return new File([blob], newName, { type: "image/jpeg" });
+}
+
+async function compressImageUnderLimit(file, limitBytes, maxWidth = 1400) {
+  // Try progressively lower quality until the output fits
+  const qualities = [0.75, 0.65, 0.55, 0.45, 0.35];
+  let best = file;
+
+  for (const q of qualities) {
+    const compressed = await compressImage(best, maxWidth, q);
+    best = compressed;
+    if (compressed.size <= limitBytes) return compressed;
+  }
+
+  return best;
+}
 
 /* ================= Reusable Components ================= */
 
@@ -99,7 +141,12 @@ const Signature = () => {
       const dataUrl = await sigCanvasRef.current.exportImage("png");
       if (!dataUrl) return null;
 
-      const file = base64ToFile(dataUrl, "signatureRegister.png");
+      const rawFile = base64ToFile(dataUrl, "signatureRegister.png");
+      const file = await compressImageUnderLimit(rawFile, MAX_UPLOAD_SIZE, 1100);
+      if (file.size > MAX_UPLOAD_SIZE) {
+        setError("Signature image is too large. Please sign with shorter strokes.");
+        return null;
+      }
       setSignatureForm((prev) => ({ ...prev, nextToKeenSign: file }));
 
       // ✅ set preview url for digital signature too
@@ -127,16 +174,29 @@ const Signature = () => {
   };
 
   // ✅ ID photo upload (max 2)
-  const handleKinPhotoUpload = (fileList) => {
+  const handleKinPhotoUpload = async (fileList) => {
     const files = Array.from(fileList || []).filter((f) =>
-      f.type.startsWith("image/")
+      f.type.startsWith("image/"),
     );
 
     if (!files.length) return;
 
+    const compressed = [];
+    for (const file of files) {
+      const resized = await compressImageUnderLimit(file, MAX_UPLOAD_SIZE, 1300);
+      if (resized.size <= MAX_UPLOAD_SIZE) {
+        compressed.push(resized);
+      }
+    }
+
+    if (!compressed.length) {
+      setError("Uploaded images are too large. Please choose smaller files.");
+      return;
+    }
+
     // take only remaining slots
     const remaining = 2 - signatureForm.nextToKeenPhoto.length;
-    const pick = files.slice(0, remaining);
+    const pick = compressed.slice(0, remaining);
 
     if (!pick.length) return;
 
@@ -165,16 +225,22 @@ const Signature = () => {
   };
 
   // ✅ signature upload preview
-  const handleSignUpload = (file) => {
+  const handleSignUpload = async (file) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
       setError("Signature must be an image file (jpg/png/heic)");
       return;
     }
 
-    setSignatureForm((prev) => ({ ...prev, nextToKeenSign: file }));
+    const compressed = await compressImageUnderLimit(file, MAX_UPLOAD_SIZE, 1100);
+    if (compressed.size > MAX_UPLOAD_SIZE) {
+      setError("Signature image too large. Please upload a smaller image.");
+      return;
+    }
 
-    const url = URL.createObjectURL(file);
+    setSignatureForm((prev) => ({ ...prev, nextToKeenSign: compressed }));
+
+    const url = URL.createObjectURL(compressed);
     setSignPreview((prevUrl) => {
       if (prevUrl) URL.revokeObjectURL(prevUrl);
       return url;
@@ -273,6 +339,13 @@ const Signature = () => {
       });
 
       formData.append("sign", signFile); // ✅ multer field
+
+      const totalUploadSize =
+        signatureForm.nextToKeenPhoto.reduce((sum, f) => sum + (f?.size || 0), 0) +
+        (signFile?.size || 0);
+      if (totalUploadSize > MAX_TOTAL_UPLOAD_SIZE) {
+        throw new Error("Total upload size is too large. Please use smaller images.");
+      }
 
       // 5) Submit
       const deceasedRes = await fetch(`${CORE}/signature-register`, {

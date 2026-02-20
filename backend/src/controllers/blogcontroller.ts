@@ -48,23 +48,67 @@ export const createBlog = async (
   }
 };
 
-export const getallBlogs = async (
-  req: express.Request,
-  res: express.Response,
-) => {
-  const blogs = await getBlogs().sort({ createdAt: -1 });
-  res.json(blogs);
-};
-export const getSingleBlog = async (
-  req: express.Request,
-  res: express.Response,
-) => {
-  const id = Array.isArray((req.params as any).id)
-    ? (req.params as any).id[0]
-    : (req.params as any).id;
+export const getallBlogs = async (req: express.Request, res: express.Response) => {
+  try {
+    const page = Math.max(parseInt(String(req.query.page ?? "1"), 10) || 1, 1);
+    const limit = Math.min(parseInt(String(req.query.limit ?? "12"), 10) || 12, 50);
+    const skip = (page - 1) * limit;
 
-  const blogs = await getBlogById(String(id));
-  res.json(blogs);
+    const filter = { category: { $not: /btf news/i } };
+
+    const query = getBlogs().find(filter);
+
+    const [items, total] = await Promise.all([
+      query.sort({ createdAt: -1 }).skip(skip).limit(limit),
+      getBlogs().countDocuments(filter),
+    ]);
+
+    res.json({
+      items,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasPrev: page > 1,
+        hasNext: page * limit < total,
+      },
+    });
+  } catch (err: any) {
+    res.status(500).json({ message: err?.message || "Failed to load blogs" });
+  }
+};
+
+
+
+export const getBtfNews = async (req: express.Request, res: express.Response) => {
+  try {
+    const page = Math.max(parseInt(String(req.query.page ?? "1"), 10) || 1, 1);
+    const limit = Math.min(parseInt(String(req.query.limit ?? "12"), 10) || 12, 50);
+    const skip = (page - 1) * limit;
+
+    // ONLY btf news (case-insensitive exact match)
+    const filter = { category: { $regex: /^btf news$/i } };
+
+    const [items, total] = await Promise.all([
+      blogModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      blogModel.countDocuments(filter),
+    ]);
+
+    res.json({
+      items,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasPrev: page > 1,
+        hasNext: page * limit < total,
+      },
+    });
+  } catch (err: any) {
+    res.status(500).json({ message: err?.message || "Failed to load news" });
+  }
 };
 
 // GET SINGLE BLOG

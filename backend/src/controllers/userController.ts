@@ -59,57 +59,31 @@ import { getDeceasedByUserId } from "../db/deceasedPerson";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password } = req.body as {
-      email?: string;
-      password?: string;
-    };
+    const { email, password } = req.body as { email?: string; password?: string };
 
-    // ✅ 400 = bad request (missing fields)
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
     const user = await getUserByEmail(email).select(
-      "+authentication.salt +authentication.password +authentication.sessionToken +authentication.expiresAt",
+      "+authentication.salt +authentication.password",
     );
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
-    }
-
-    // ✅ TS + runtime safety
-    if (!user.authentication?.salt || !user.authentication?.password) {
+    if (!user?.authentication?.salt || !user?.authentication?.password) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const expectedHash = authentication(user.authentication.salt, password);
-
     if (user.authentication.password !== expectedHash) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const salt = random();
-
-    // ✅ ensure object exists (TS safety)
-    user.authentication = user.authentication || ({} as any);
-
-    user.authentication.sessionToken = authentication(
-      salt,
-      user._id.toString(),
-    );
-
-    await user.save();
-
-    // ✅ Send session token as HTTP-only cookie
-    res.cookie("sessionToken", user.authentication.sessionToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-    });
+    // ✅ IMPORTANT: Do NOT set cookies, do NOT create sessionToken
+    // res.cookie(...)  <-- remove this
 
     return res.status(200).json({
       _id: user._id,
-      email: user.email ?? "", // ✅ avoid TS string|undefined issues
+      email: user.email ?? "",
       message: "Login successful",
     });
   } catch (error) {
@@ -123,34 +97,41 @@ export const registerUser = async (
   res: express.Response,
 ): Promise<any> => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as { email?: string; password?: string };
 
     if (!email || !password) {
-      return res.status(400);
+      return res.status(400).json({ message: "Email and password are required" });
     }
-    const existingUser = await getUserByEmail(email);
-    console.log(existingUser);
+
     const reference = invoiceId();
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "User already registrated to the database" });
-    }
     const salt = random();
+
     const user = await createUser({
-      email,
+      email: email.trim().toLowerCase(),
       reference,
       authentication: {
         salt,
         password: authentication(salt, password),
       },
     });
-    return res.status(200).json(user).end();
-  } catch (error) {
-    console.log(error);
+
+    return res.status(200).json(user);
+  } catch (error: any) {
+    console.error(error);
+
+    // If you still have a unique index, Mongo will throw E11000
+    if (error?.code === 11000) {
+      return res.status(409).json({
+        message:
+          "Duplicate key error (your DB still has a unique index on email). Remove the unique index to allow duplicates.",
+      });
+    }
+
     return res.status(400).json({ message: "Bad request" });
   }
 };
+
+
 export const logOut = async (
   req: express.Request,
   res: express.Response,
