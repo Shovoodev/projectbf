@@ -1,5 +1,6 @@
 import { pdf } from "@react-pdf/renderer";
 import { useRef, useState } from "react";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import base64ToFile from "../../utility";
@@ -641,12 +642,22 @@ const AgreementForm = () => {
                         ? translations.dateOfBirth.en
                         : translations.dateOfBirth.zh}
                     </FormLabel>
-                    <InputField
-                      type="date"
-                      value={deceasedFormValues.dateofbirth}
-                      onChange={(e) =>
-                        handleDeceasedChange("dateofbirth", e.target.value)
+
+                    <DatePicker
+                      selected={
+                        deceasedFormValues.dateofbirth
+                          ? new Date(deceasedFormValues.dateofbirth)
+                          : null
                       }
+                      onChange={(date) =>
+                        handleDeceasedChange(
+                          "dateofbirth",
+                          date ? date.toISOString().split("T")[0] : "",
+                        )
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText={isEnglish ? "dd/mm/yyyy" : "日/月/年"}
+                      className="w-full p-3 border rounded-md"
                       required
                     />
                   </div>
@@ -671,12 +682,21 @@ const AgreementForm = () => {
                           ? translations.dateOfDeath.en
                           : translations.dateOfDeath.zh}
                       </FormLabel>
-                      <InputField
-                        type="date"
-                        value={deceasedFormValues.dateofdeath}
-                        onChange={(e) =>
-                          handleDeceasedChange("dateofdeath", e.target.value)
+                      <DatePicker
+                        selected={
+                          deceasedFormValues.dateofdeath
+                            ? new Date(deceasedFormValues.dateofdeath)
+                            : null
                         }
+                        onChange={(date) =>
+                          handleDeceasedChange(
+                            "dateofdeath",
+                            date ? date.toISOString().split("T")[0] : "",
+                          )
+                        }
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText={isEnglish ? "dd/mm/yyyy" : "日/月/年"}
+                        className="w-full p-3 border rounded-md"
                         required
                       />
                     </div>
@@ -831,6 +851,7 @@ const AgreementForm = () => {
 
                       <input
                         type="file"
+                        className="hidden"
                         required
                         onChange={(e) =>
                           handleDeceasedPhotoUpload(e.target.files)
@@ -1128,7 +1149,12 @@ const AgreementForm = () => {
                         </p>
                       </div>
 
-                      <input type="file" required accept="image/*" />
+                      <input
+                        type="file"
+                        className="hidden"
+                        required
+                        accept="image/*"
+                      />
                     </label>
 
                     <div className="md:col-span-2">

@@ -1,7 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "./App";
-
 import Ash_Storage from "./pages/Ash_Storage";
 import Btf from "./pages/Btf";
 import Chapels from "./pages/Chapels";
@@ -29,9 +27,9 @@ import Registrarion from "./pages/Registration";
 import LoginScreen from "./pages/SignIn";
 // import PaynowPage from "./pages/packages/PaynowPage";
 
-import BlogPage from "./pages/blog/BlogPage";
-import CreateBlog from "./pages/blog/_component/CreateBlog";
 import BlogDetails from "./pages/blog/_component/BlogDetails";
+import CreateBlog from "./pages/blog/_component/CreateBlog";
+import BlogPage from "./pages/blog/BlogPage";
 
 import NoServiceCrementionPage from "./pages/packages/NoServiceCrementionPage";
 // import PaynowPage from "./pages/packages/PaynowPage";
@@ -39,29 +37,32 @@ import ViewingAndCrementionPage from "./pages/packages/ViewingAndCremention";
 import PrePayindex from "./pages/prepay";
 import Signature from "./pages/Signature";
 // import BlankLayout from "./BlankLayout";
-import AgreementFormPage from "./pages/packages/Agreement";
 import Packages from "./pages/Packages";
+import AgreementFormPage from "./pages/packages/Agreement";
 
 import Registration from "./pages/Registration";
 
 import InvoicePage from "./pages/pay/InvoicePage";
 
-import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 import NewsDetails from "./components/pages/News/_components/NewsDetails";
-import EditBlog from "./pages/blog/_component/EditBlog";
-import SignIn from "./pages/admin/SignIn";
 import Register from "./pages/admin/Register";
+import SignIn from "./pages/admin/SignIn";
+import EditBlog from "./pages/blog/_component/EditBlog";
 import Error from "./pages/Error";
 import Intro_video from "./pages/Intro_video";
-
-import Attending_Cremation_Landing from "./pages/Attending_Cremation_Landing";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import New_Attending_Cremation_Landing from "./pages/New_Attending_Cremation_Landing";
+import StaticInvoicePDF from "./pages/packages/_components/StaticInvoicePDF";
 import PaymentTerms from "./pages/PaymentTerms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+// import layouts
+import LandingLayout from "./layoutes/LandingLayout";
+import MainLayout from "./layoutes/MainLayout";
+
 export const routes = createBrowserRouter([
   {
     path: "/",
 
-    element: <App />,
+    element: <MainLayout />,
     children: [
       {
         path: "/home",
@@ -228,12 +229,22 @@ export const routes = createBrowserRouter([
         element: <InvoicePage />,
         isPrivate: true,
       },
-      {
-        path: "/attending-cremation-landing",
-        element: <Attending_Cremation_Landing />,
-      },
+      // {
+      //   path: "/attending-cremation-landing",
+      //   element: <New_Attending_Cremation_Landing />,
+      // },
 
       { path: "*", element: <Error /> },
+    ],
+  },
+  {
+    path: "/attending-cremation-landing",
+    element: <LandingLayout />,
+    children: [
+      {
+        path: "/attending-cremation-landing",
+        element: <New_Attending_Cremation_Landing />,
+      },
     ],
   },
   {
