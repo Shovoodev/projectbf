@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { List } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
@@ -160,6 +160,12 @@ const attendenceData = [
   },
 ];
 
+const landingCoffins = [
+  { label: "Richmond Gloss Teak", value: "richmond-gloss-teak", priceAdjustment: 0 },
+  { label: "Richmond Gloss Red Cedar", value: "richmond-gloss-red-cedar", priceAdjustment: 0 },
+  { label: "Richmond Gloss Rosewood", value: "richmond-gloss-rosewood", priceAdjustment: 0 },
+  { label: "Richmond Gloss White", value: "richmond-gloss-white", priceAdjustment: 0 },
+];
 
 
 
@@ -196,13 +202,45 @@ const AttendenceCrementionPage = ({ isLanding }) => {
   const openPopup = (popupType) => setActivePopup(popupType);
   const closePopup = () => setActivePopup(null);
 
+
+  const displayData = useMemo(() => {
+    return attendenceData.map((item) => {
+      if (item.question === "Coffin" && isAttendingLanding) {
+        return { ...item, options: landingCoffins };
+      }
+      return item;
+    });
+  }, [isAttendingLanding, landingCoffins]);
+
+
+  useEffect(() => {
+    if (!isAttendingLanding) return;
+
+    const allowed = landingCoffins.map((c) => c.value);
+    const current = selections?.coffin?.value;
+
+    if (!allowed.includes(current)) {
+      setSelections((prev) => ({
+        ...prev,
+        coffin: { value: allowed[0], price: 0 },
+      }));
+    } else if (Number(selections?.coffin?.price) !== 0) {
+      setSelections((prev) => ({
+        ...prev,
+        coffin: { value: prev.coffin.value, price: 0 },
+      }));
+    }
+  }, [isAttendingLanding, landingCoffins, selections?.coffin?.value]);
+
+
+
   const handleOptionChange = (category, value, priceAdjustment) => {
     const categoryKeyMap = {
       "Transfers from Place of Passing": "transferOption",
       Stationery: "stationery",
       "Body Preparation": "bodyPreparation",
       Coffin: "coffin",
-      "Flowers:": "flowers",
+      Flowers: "flowers",
       Urn: "urn",
       "Collection of Urn": "collectionOfUrn",
     };
@@ -210,11 +248,44 @@ const AttendenceCrementionPage = ({ isLanding }) => {
     const key = categoryKeyMap[category];
     if (!key) return;
 
+    const safePrice =
+      isAttendingLanding && key === "coffin" ? 0 : Number(priceAdjustment) || 0;
+
     setSelections((prev) => ({
       ...prev,
-      [key]: { value, price: Number(priceAdjustment) || 0 },
+      [key]: { value, price: safePrice },
     }));
   };
+
+  useEffect(() => {
+    if (!isAttendingLanding) return;
+
+    // landing-only coffin options (values must match the options you show)
+    const landingDefault = {
+      value: "richmond-gloss-teak",
+      price: 0,
+    };
+
+    setSelections((prev) => {
+      // if already one of the landing values, don't override user choice
+      const allowed = new Set([
+        "richmond-gloss-teak",
+        "richmond-gloss-red-cedar",
+        "richmond-gloss-rosewood",
+        "richmond-gloss-white",
+      ]);
+
+      if (allowed.has(prev?.coffin?.value)) return prev;
+
+      return {
+        ...prev,
+        coffin: landingDefault,
+      };
+    });
+  }, [isAttendingLanding]);
+
+
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -230,24 +301,19 @@ const AttendenceCrementionPage = ({ isLanding }) => {
   }, [selections, BASE_PRICE]);
 
   const handleSelectChange = (itemId, selectedValue) => {
-    const item = attendenceData.find((data) => data.id === itemId);
+    const item = displayData.find((d) => d.id === itemId);
     if (!item) return;
 
     const selectedOption = item.options.find((opt) => opt.value === selectedValue);
     if (!selectedOption) return;
 
-    const price = selectedOption.priceAdjustment || 0;
+    const price = (isAttendingLanding && item.question === "Coffin")
+      ? 0
+      : Number(selectedOption.priceAdjustment) || 0;
 
     handleOptionChange(item.question, selectedValue, price);
-
-    if (itemId === 1) {
-
-      setSelections((prev) => ({
-        ...prev,
-        transferZonePlace: { value: "", price: 0 },
-      }));
-    }
   };
+
 
   const handlePrepaySubmit = async (e) => {
     e.preventDefault();
@@ -338,7 +404,8 @@ const AttendenceCrementionPage = ({ isLanding }) => {
           <div className="lg:col-span-8">
             <Card title="Included Variables">
               <div className="flex flex-col gap-3 sm:gap-2">
-                {attendenceData.map((item) => {
+                {displayData.map((item) => {
+                  // hide urn + collection on landing
                   if (
                     isAttendingLanding &&
                     (item.question === "Urn" || item.question === "Collection of Urn")
@@ -351,7 +418,7 @@ const AttendenceCrementionPage = ({ isLanding }) => {
                     Stationery: "stationery",
                     "Body Preparation": "bodyPreparation",
                     Coffin: "coffin",
-                    "Flowers:": "flowers",
+                    Flowers: "flowers",
                     Urn: "urn",
                     "Collection of Urn": "collectionOfUrn",
                   };
