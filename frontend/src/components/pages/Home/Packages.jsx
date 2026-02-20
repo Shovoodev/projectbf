@@ -91,7 +91,6 @@ const Packages = () => {
             <span className="">Enquire Now</span>
             <FaLongArrowAltRight />
           </Link>
-          ;
         </div>
       </div>
     </section>

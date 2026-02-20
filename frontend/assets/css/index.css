@@ -39,7 +39,7 @@ Text: Montserrat (Normal) */
 
   body {
     font-family: var(--font-body);
-    @apply bg-white text-gray-800 antialiased;
+    @apply bg-white text-gray-800 antialiased overflow-x-hidden;
   }
 
   h1,

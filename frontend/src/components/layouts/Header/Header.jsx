@@ -14,12 +14,10 @@ const Header = () => {
     setOpenMobileDropdown(openMobileDropdown === name ? null : name);
   };
 
-  const isAttendingLanding = location.pathname === "/attending-cremation-landing";
+  const isAttendingLanding =
+    location.pathname === "/attending-cremation-landing";
 
-  const hiddenOnAttendingLanding = new Set([
-    "/chepels",
-    "/upcoming-funerals",
-  ]);
+  const hiddenOnAttendingLanding = new Set(["/chepels", "/upcoming-funerals"]);
 
   const shouldHideLink = (to) => {
     return isAttendingLanding && hiddenOnAttendingLanding.has(to);
@@ -176,17 +174,26 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed inset-0 z-50 lg:hidden transition-opacity ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-50 lg:hidden transition-opacity ${
+          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
       >
-        <div className="absolute inset-0 bg-black/50" onClick={toggleMenu}></div>
+        <div
+          className="absolute inset-0 bg-black/50"
+          onClick={toggleMenu}
+        ></div>
 
         <div
-          className={`absolute top-0 left-0 w-[80%] max-w-sm h-full bg-white shadow-xl transition-transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
+          className={`absolute top-0 left-0 w-[80%] max-w-sm h-full bg-white shadow-xl transition-transform ${
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           <div className="p-6">
-            <Link to="/home" className="block text-lg font-medium mb-4">
+            <Link
+              to="/home"
+              onClick={toggleMenu}
+              className="block text-lg font-medium mb-4"
+            >
               Home
             </Link>
 
@@ -195,7 +202,10 @@ const Header = () => {
               <>
                 <Link
                   to="/packages"
-                  onClick={() => toggleMobileDropdown("packages")}
+                  onClick={() => {
+                    toggleMobileDropdown("packages");
+                    toggleMenu();
+                  }}
                   className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4"
                 >
                   Packages <FaChevronDown className="text-[10px]" />
@@ -205,18 +215,21 @@ const Header = () => {
                   <div className="ml-4 mb-4 flex flex-col space-y-1">
                     <Link
                       to="/packages/attending-service-cremation"
+                      onClick={toggleMenu}
                       className="dropdown-item"
                     >
                       Attending Service & Cremation
                     </Link>
                     <Link
                       to="/packages/viewing-and-cremention"
+                      onClick={toggleMenu}
                       className="dropdown-item"
                     >
                       Viewing & Cremation
                     </Link>
                     <Link
                       to="/packages/no-service-cremention"
+                      onClick={toggleMenu}
                       className="dropdown-item"
                     >
                       No Service Cremation
@@ -229,20 +242,27 @@ const Header = () => {
             {/* BTF */}
             <Link
               to="/about-btf"
-              onClick={() => toggleMobileDropdown("btf")}
+              onClick={() => {
+                toggleMobileDropdown("btf");
+                toggleMenu();
+              }}
               className="flex items-center gap-1 hover:text-primary text-lg font-medium w-full mb-4 "
             >
               BTF <FaChevronDown className="text-[10px]" />
             </Link>
             {openMobileDropdown === "btf" && (
               <div className="ml-4 mb-4 flex flex-col space-y-1">
-                <Link to="/team" className="dropdown-item">
+                <Link to="/team" onClick={toggleMenu} className="dropdown-item">
                   Team
                 </Link>
-                <Link to="/contact" className="dropdown-item">
+                <Link
+                  to="/contact"
+                  onClick={toggleMenu}
+                  className="dropdown-item"
+                >
                   Contact
                 </Link>
-                <Link to="/news" className="dropdown-item">
+                <Link to="/news" onClick={toggleMenu} className="dropdown-item">
                   News
                 </Link>
               </div>
@@ -260,25 +280,42 @@ const Header = () => {
                 <Link
                   to="https://funeralstationery.com.au/"
                   target="_blank"
+                  onClick={toggleMenu}
                   className="dropdown-item"
                 >
                   Stationery
                 </Link>
-                <Link to="/coffins" className="dropdown-item">
+                <Link
+                  to="/coffins"
+                  onClick={toggleMenu}
+                  className="dropdown-item"
+                >
                   Coffins
                 </Link>
-                <Link to="/music" className="dropdown-item">
+                <Link
+                  to="/music"
+                  onClick={toggleMenu}
+                  className="dropdown-item"
+                >
                   Music
                 </Link>
 
                 {/* ✅ Hide Chapels only when on /attending-cremation-landing */}
                 {!shouldHideLink("/chepels") && (
-                  <Link to="/chepels" className="dropdown-item">
+                  <Link
+                    to="/chepels"
+                    onClick={toggleMenu}
+                    className="dropdown-item"
+                  >
                     Chapels
                   </Link>
                 )}
 
-                <Link to="/live-music" className="dropdown-item">
+                <Link
+                  to="/live-music"
+                  onClick={toggleMenu}
+                  className="dropdown-item"
+                >
                   Live Music
                 </Link>
               </div>
@@ -293,28 +330,44 @@ const Header = () => {
             </button>
             {openMobileDropdown === "info" && (
               <div className="ml-4 mb-4 flex flex-col space-y-1">
-                <Link to="/resources" className="dropdown-item">
+                <Link
+                  to="/resources"
+                  onClick={toggleMenu}
+                  className="dropdown-item"
+                >
                   Resources
                 </Link>
 
                 {/* ✅ Hide Upcoming Funerals only when on /attending-cremation-landing */}
                 {!shouldHideLink("/upcoming-funerals") && (
-                  <Link to="/upcoming-funerals" className="dropdown-item">
+                  <Link
+                    to="/upcoming-funerals"
+                    onClick={toggleMenu}
+                    className="dropdown-item"
+                  >
                     Upcoming Funerals
                   </Link>
                 )}
 
-                <Link to="/blog" className="dropdown-item">
+                <Link to="/blog" onClick={toggleMenu} className="dropdown-item">
                   Blog
                 </Link>
               </div>
             )}
 
-            <Link to="/agreement" className="block text-lg font-medium mb-4">
+            <Link
+              to="/agreement"
+              onClick={toggleMenu}
+              className="block text-lg font-medium mb-4"
+            >
               Agreement
             </Link>
 
-            <a href="tel:1300110031" className="btn-primary">
+            <a
+              href="tel:1300110031"
+              onClick={toggleMenu}
+              className="btn-primary"
+            >
               <FaPhone className="mr-2" /> Call Now
             </a>
           </div>
