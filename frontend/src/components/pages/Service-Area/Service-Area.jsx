@@ -2,6 +2,7 @@ import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { FaLocationDot, FaPhone, FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import MakeAgreementBtn from "../New_Attending_Cremation_Landing/common/MakeAgreementBtn";
 
 const ServiceAreasSection = () => {
   const transferLocations = [
@@ -85,13 +86,7 @@ const ServiceAreasSection = () => {
           >
             <FaPhone className="text-sm" /> 1300 11 0031
           </a>
-          <Link
-            to="/contact"
-            className="bg-black border border-black text-white px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-          >
-            <span className="">Enquire Now</span>
-            <FaLongArrowAltRight />
-          </Link>
+          <MakeAgreementBtn />
         </div>
       </div>
     </section>

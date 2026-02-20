@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import introVideo from "../../assets/video/BTF Intro Video.mp4"; // This is for desktop
-import introVideoMobile from "../../assets/video/BTF intro mobile.mp4"; // This is for mobile
+import { useNavigate } from "react-router-dom";
 
-import logo from "../../assets/video/Logo-Number.png";
+import introVideo from "../../assets/video/BTF Intro Video.mp4"; // desktop
+import introVideoMobile from "../../assets/video/BTF intro mobile.mp4"; // mobile
 
 function Intro_video() {
-  const [videoEnded, setVideoEnded] = useState(false);
+  const navigate = useNavigate();
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  // Detect screen resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -17,32 +19,34 @@ function Intro_video() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Redirect function
+  const goNextPage = () => {
+    navigate("/attending-cremation-landing", { replace: true });
+  };
+
+  // Fallback redirect (in case video can't autoplay / slow network / blocked)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      goNextPage();
+    }, 15000); // 15 sec fallback
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
-      {!videoEnded ? (
-        <video
-          src={isMobile ? introVideoMobile : introVideo}
-          autoPlay
-          muted
-          playsInline
-          onEnded={() => setVideoEnded(true)}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
-      ) : (
-        <div className="w-full h-full bg-black flex items-center justify-center">
-          <a href="/home" className="flex items-center justify-center">
-            <img
-              src={logo}
-              alt="Logo"
-              className="cursor-pointer max-w-[300px] md:max-w-lg"
-            />
-          </a>
-        </div>
-      )}
+      <video
+        src={isMobile ? introVideoMobile : introVideo}
+        autoPlay
+        muted
+        playsInline
+        onEnded={goNextPage}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
     </div>
   );
 }
