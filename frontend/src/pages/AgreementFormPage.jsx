@@ -1,4 +1,4 @@
-import { pdf } from "@react-pdf/renderer";
+
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -103,7 +103,6 @@ const AgreementForm = () => {
   const sigCanvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [invoiceDetails, setInvoiceDetails] = useState(null);
 
   const saveSignature = async () => {
     if (!sigCanvasRef.current) return null;
@@ -180,12 +179,7 @@ const AgreementForm = () => {
       photo: prev.photo.filter((_, i) => i !== index),
     }));
   };
-  const removeKinSignPhoto = (index) => {
-    setFormKinValues((prev) => ({
-      ...prev,
-      photo: prev.photo.filter((_, i) => i !== index),
-    }));
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -294,19 +288,6 @@ const AgreementForm = () => {
       return Object.keys(transformed).length ? transformed : null;
     };
 
-    const toBase64FromBlob = (blob) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error("FileReader failed"));
-        reader.onloadend = () => {
-          const result = reader.result?.toString() || "";
-          const base64 = result.includes(",") ? result.split(",")[1] : "";
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
-          resolve(base64);
-        };
-        reader.readAsDataURL(blob);
-      });
-
     // ---------- main flow ----------
     try {
       // 0) Validate required fields
@@ -391,55 +372,52 @@ const AgreementForm = () => {
       await postFormOrThrow(`${CORE}/next-to-keen-details`, fd);
 
       // 7) Load invoice data (CRITICAL)
-      const resSelections = await fetch(`${CORE}/all-selected-selections`, { credentials: "include" });
-      if (!resSelections.ok) {
-        throw new Error(await readErrorMessage(resSelections, "Failed to load selections"));
-      }
+      // const resSelections = await fetch(`${CORE}/all-selected-selections`, { credentials: "include" });
+      // if (!resSelections.ok) {
+      //   throw new Error(await readErrorMessage(resSelections, "Failed to load selections"));
+      // }
 
-      const selectionsRaw = await resSelections.text().catch(() => "");
-      const selectionsJson = parseMaybeJson(selectionsRaw);
-      const invoiceData = selectionsJson?.data;
+      // const selectionsRaw = await resSelections.text().catch(() => "");
+      // const selectionsJson = parseMaybeJson(selectionsRaw);
+      // const invoiceData = selectionsJson?.data;
 
-      if (!invoiceData) {
-        throw new Error("No invoice data returned from /all-selected-selections");
-      }
+      // if (!invoiceData) {
+      //   throw new Error("No invoice data returned from /all-selected-selections");
+      // }
 
       // 8) Generate invoice PDF (CRITICAL)
-      const blob = await pdf(
-        <StaticInvoicePDF
-          invoiceDetails={invoiceData}
-          deceasedName={deceasedFormValues.givenName}
-          kinName={formKinValues.givenName}
-        />
-      ).toBlob();
+      // const blob = await pdf(
+      //   <StaticInvoicePDF
+      //     invoiceDetails={invoiceData}
+      //     deceasedName={deceasedFormValues.givenName}
+      //     kinName={formKinValues.givenName}
+      //   />
+      // ).toBlob();
 
-      if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
+      // if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
 
-      const base64data = await toBase64FromBlob(blob);
+      // const base64data = await toBase64FromBlob(blob);
 
       // 9) Send invoice (CRITICAL - change to postJsonSafe if you want it non-critical)
-      await postJsonOrThrow(`${CORE}/api/send-invoice`, {
-        selections: backendSelections || {}, // don't send raw UI selections
-        pdfAttachment: base64data,
-        to: email,
-      });
+      // await postJsonOrThrow(`${CORE}/api/send-invoice`, {
+      //   selections: backendSelections || {}, // don't send raw UI selections
+      //   pdfAttachment: base64data,
+      //   to: email,
+      // });
 
       // 10) Notify admin (OPTIONAL)
       await postJsonSafe(`${CORE}/notify-admin-agreement`, {
-        pdfAttachment: base64data,
-        reference: invoiceData.reference,
+
         clientEmail: email,
       });
 
       await postJsonSafe(`${CORE}/notify-client-account`, {
         email,
         customerName: `${formKinValues.givenName} ${formKinValues.surname}`.trim(),
-        reference: invoiceData.reference,
-        pdfAttachment: base64data,
+
       });
 
       // UI updates
-      setInvoiceDetails(invoiceData);
       setMessage("Form submitted successfully!");
       showToast.success("completed Your Registration");
 
