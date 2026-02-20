@@ -17,84 +17,66 @@ const CallToActionSection = () => {
     e.preventDefault();
 
     const fd = new FormData(formRef.current);
-    const first_name = (fd.get("first_name") || "").toString().trim();
-    const last_name = (fd.get("last_name") || "").toString().trim();
-    const mobile = (fd.get("mobile") || "").toString().trim();
+    const firstName = (fd.get("first_name") || "").toString().trim();
+    const lastName = (fd.get("last_name") || "").toString().trim();
+    const phone = (fd.get("mobile") || "").toString().trim();
+    const serviceType = (fd.get("service_type") || "").toString().trim();
 
-    if (!first_name || !last_name || !mobile) {
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Please fill in First name, Last name and Mobile.",
-      });
+    if (!firstName || !lastName || !phone) {
+      setStatus({ loading: false, success: null, error: "Please fill in First name, Last name and Mobile." });
       return;
     }
-
-    if (!mobileRegex.test(mobile)) {
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Please enter a valid mobile number.",
-      });
-      return;
-    }
-    try {
-      const res = await fetch(`${CORE}/new-client-enquiry`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: fd,
-
-        credentials: "include",
-      });
-      if (res.ok) {
-        console.log(
-          "Enquiry submitted successfully! We'll contact you shortly.",
-          "success",
-        );
-      }
-
-      setStatus({
-        loading: false,
-        success: "Message sent successfully!",
-        error: null,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_IDTWO;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceID || !templateID || !publicKey) {
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Email service not configured (check env vars).",
-      });
+    if (!mobileRegex.test(phone)) {
+      setStatus({ loading: false, success: null, error: "Please enter a valid mobile number." });
       return;
     }
 
     setStatus({ loading: true, success: null, error: null });
 
     try {
-      await emailjs.sendForm(serviceID, templateID, formRef.current, publicKey);
-      setStatus({
-        loading: false,
-        success: "Request submitted successfully.",
-        error: null,
+      const payload = {
+        firstName,
+        lastName,
+        phone,
+        message: `Call back request from website. Service Type: ${serviceType || "N/A"}`,
+      };
+
+      const res = await fetch(`${CORE}/new-client-enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include",
       });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setStatus({ loading: false, success: null, error: data.message || "Failed to submit. Please try again." });
+        return;
+      }
+
+      // OPTIONAL: If you still want EmailJS as a backup, run it after backend succeeds
+      const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_IDTWO;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (serviceID && templateID && publicKey) {
+        try {
+          await emailjs.sendForm(serviceID, templateID, formRef.current, publicKey);
+        } catch (e) {
+          // don’t fail the UX if backup fails
+          console.warn("EmailJS backup failed:", e);
+        }
+      }
+
+      setStatus({ loading: false, success: "Request submitted successfully.", error: null });
       formRef.current.reset();
     } catch (err) {
-      console.error("EmailJS error:", err);
-      setStatus({
-        loading: false,
-        success: null,
-        error: "Something went wrong. Please try again.",
-      });
+      console.error(err);
+      setStatus({ loading: false, success: null, error: "Network error. Please try again." });
     }
-
   };
+
 
   return (
     <section className="bg-surface py-16">

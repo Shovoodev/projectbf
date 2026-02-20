@@ -1,10 +1,10 @@
 import express from "express";
 import {
-  // generatePdf,
+  notifyAdminNewAgreement,
+  notifyClientAccountCreated,
   sendAttendenceServiceSelection,
   sendPdfOfInvoice,
   sendPdfOfPrepay,
-  // generatePdf,
 } from "../controllers/pdfController";
 import multer from "multer";
 import { isAuthenticated } from "../middlewear";
@@ -18,10 +18,15 @@ export default (router: express.Router) => {
   // router.post("/generate-pdf", generatePdf);
 
   router.post("/api/send-invoice", isAuthenticated, sendPdfOfInvoice);
-
+  router.post(
+    "/notify-admin-agreement",
+    isAuthenticated,
+    notifyAdminNewAgreement
+  );
   router.get(
     "/all-selected-selections",
     isAuthenticated,
     sendAttendenceServiceSelection,
   );
+  router.post("/notify-client-account", notifyClientAccountCreated);
 };

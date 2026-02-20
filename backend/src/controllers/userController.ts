@@ -1,61 +1,10 @@
 import express from "express";
 import {
   createUser,
-  getUserByEmail,
-  getUserBySessionToken,
-  userModel,
+  getLatestUserByEmail,
+
 } from "../db/user";
 import { authentication, invoiceId, random } from "../lib";
-import nodemailer from "nodemailer";
-import { AuthenticatedRequest } from "../lib/types";
-// import SendEmail from "../lib/resend";
-import { getAttendenceByUserId } from "../db/attendence";
-import { getKinByUserId } from "../db/kinDetails";
-import { getDeceasedByUserId } from "../db/deceasedPerson";
-
-// export const login = async (
-//   req: express.Request,
-//   res: express.Response
-// ): Promise<any> => {
-//   try {
-//     const { email, password } = req.body;
-
-//     if (!email || !password) {
-//       return res.status(403).json({ error: "email or password is wrong" });
-//     }
-//     const user = await getUserByEmail(email).select(
-//       "+authentication.salt +authentication.password"
-//     );
-//     if (!user) {
-//       return res.status(403).json({ error: "User is not registered" });
-//     }
-//     const expectdHash = authentication(user.authentication.salt, password);
-
-//     if (user.authentication.password !== expectdHash) {
-//       return res.status(403).json({ error: "email or password is wrong" });
-//     }
-//     const salt = random();
-//     user.authentication.sessionToken = authentication(
-//       salt,
-//       user._id.toString()
-//     );
-//     await user.save();
-
-//     res.cookie("auth", user.authentication.sessionToken, {
-//       domain: "localhost",
-//       path: "/",
-//       sameSite: "lax", // Adjust as needed; "lax" works for most cases
-//     });
-
-//     res.status(200).json({
-//       _id: user._id,
-//       email: user.email,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400);
-//   }
-// };
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -65,11 +14,11 @@ export const login = async (req: express.Request, res: express.Response) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = await getUserByEmail(email).select(
-      "+authentication.salt +authentication.password",
+    const user = await getLatestUserByEmail(email).select(
+      "+authentication.salt +authentication.password +authentication.sessionToken",
     );
 
-    if (!user?.authentication?.salt || !user?.authentication?.password) {
+    if (!user || !user.authentication?.salt || !user.authentication?.password) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
@@ -78,12 +27,20 @@ export const login = async (req: express.Request, res: express.Response) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // ✅ IMPORTANT: Do NOT set cookies, do NOT create sessionToken
-    // res.cookie(...)  <-- remove this
+    const salt = random();
+    user.authentication.sessionToken = authentication(salt, user._id.toString());
+    await user.save();
+
+    res.cookie("sessionToken", user.authentication.sessionToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
 
     return res.status(200).json({
       _id: user._id,
       email: user.email ?? "",
+      reference: user.reference ?? "",
       message: "Login successful",
     });
   } catch (error) {
@@ -92,6 +49,7 @@ export const login = async (req: express.Request, res: express.Response) => {
   }
 };
 
+// controller/auth.ts
 export const registerUser = async (
   req: express.Request,
   res: express.Response,
@@ -103,11 +61,13 @@ export const registerUser = async (
       return res.status(400).json({ message: "Email and password are required" });
     }
 
+    const normalizedEmail = String(email).trim().toLowerCase();
     const reference = invoiceId();
+
     const salt = random();
 
     const user = await createUser({
-      email: email.trim().toLowerCase(),
+      email: normalizedEmail,
       reference,
       authentication: {
         salt,
@@ -115,23 +75,12 @@ export const registerUser = async (
       },
     });
 
-    return res.status(200).json(user);
-  } catch (error: any) {
-    console.error(error);
-
-    // If you still have a unique index, Mongo will throw E11000
-    if (error?.code === 11000) {
-      return res.status(409).json({
-        message:
-          "Duplicate key error (your DB still has a unique index on email). Remove the unique index to allow duplicates.",
-      });
-    }
-
+    return res.status(201).json(user).end();
+  } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: "Bad request" });
   }
 };
-
-
 export const logOut = async (
   req: express.Request,
   res: express.Response,
@@ -148,7 +97,6 @@ export const logOut = async (
   }
 };
 
-// export const sendAllRelatedDocuments = async (
 //   req: AuthenticatedRequest,
 //   res: express.Response
 // ): Promise<any> => {

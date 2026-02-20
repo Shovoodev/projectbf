@@ -1,6 +1,6 @@
 import express from "express";
-import { getAllUsers } from "../controllers/adminController";
 import {
+  callMeEnquiryEmail,
   getAllEnquires,
   newClientEnquirey,
 } from "../controllers/enquireyController";
@@ -8,4 +8,6 @@ import {
 export default (router: express.Router) => {
   router.get("/get-all-enquires", getAllEnquires);
   router.post("/new-client-enquiry", newClientEnquirey);
+
+  router.post("/call-me", callMeEnquiryEmail);
 };
