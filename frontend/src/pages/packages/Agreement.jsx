@@ -8,7 +8,7 @@ import { showToast } from "../../utility/toast";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
 import Paragraph from "./aggrementComponent/Paragraph";
-import { parseMaybeJson, postFormOrThrow, postJsonOrThrow, postJsonSafe, readErrorMessage, transformSelectionsForBackend } from "./_components/helper";
+import { parseMaybeJson, postFormOrThrow, postJsonOrThrow, postJsonSafe, readErrorMessage, toBase64FromBlob, transformSelectionsForBackend } from "./_components/helper";
 const CORE = import.meta.env.VITE_API_URL;
 /* ================= Reusable Components ================= */
 
@@ -226,7 +226,7 @@ const AgreementForm = () => {
       const { data: registerData, raw: registerRaw } = await postJsonOrThrow(
         `${CORE}/blacktulipauth/newuser`,
         registerPayload,
-        { credentials: "omit" } // register usually doesn't need cookies
+        { credentials: "include" } // register usually doesn't need cookies
       );
 
       const reference = registerData?.reference || parseMaybeJson(registerRaw)?.reference;

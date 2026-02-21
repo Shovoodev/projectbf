@@ -5,7 +5,7 @@ import { showToast } from "../utility/toast";
 import SignatureField from "./packages/_components/SignatureField";
 import Paragraph from "./packages/aggrementComponent/Paragraph";
 import DatePicker from "react-datepicker";
-import { parseMaybeJson, postJsonOrThrow, postJsonSafe, readErrorMessage, toBase64FromBlob } from "./packages/_components/helper";
+import { parseMaybeJson, postJsonOrThrow, postJsonSafe, readErrorMessage } from "./packages/_components/helper";
 import { pdf } from "@react-pdf/renderer";
 import StaticInvoicePDF from "./packages/_components/StaticInvoicePDF";
 
