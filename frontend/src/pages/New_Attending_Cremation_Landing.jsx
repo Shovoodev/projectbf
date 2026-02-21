@@ -26,6 +26,8 @@ function New_Attending_Cremation_Landing() {
   const [selections, setSelections] = useState({
     transferOption: { value: "Sydney Metro", price: 0 },
     stationery: { value: "50 Memoriam Cards", price: 0 },
+    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
+    flowers: { value: "Not Selected", price: 0 },
     coffin: { value: "contract-raw", price: 0 },
   });
   useEffect(() => {
@@ -33,7 +35,7 @@ function New_Attending_Cremation_Landing() {
       selections,
       totalPrice
     }
-    sessionStorage.setItem("agreementDraft", JSON.stringify(payload));
+    sessionStorage.setItem("agreementDraft", JSON.stringify(payload))
   }, [setSelections, setTotalPrice, totalPrice, selections])
 
 
@@ -50,7 +52,7 @@ function New_Attending_Cremation_Landing() {
   return (
     <div className="">
       {isOpen && (
-        <div className="fixed inset-0 z-[1400] bg-white flex flex-col">
+        <div className="fixed inset-0 py-5 z-[1400] bg-white flex flex-col">
           <div>
             <button
               onClick={() => setIsOpen(false)}

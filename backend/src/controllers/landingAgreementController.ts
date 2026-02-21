@@ -5,6 +5,7 @@ import {
     createDeceasedpersondetail,
 } from "../db/landingAgreement"; // adjust path
 import { AuthenticatedRequest } from "../lib/types";
+import { FormResponseModel } from "../db/attendence";
 
 export const fixedPriceLandingAgreement = async (
     req: AuthenticatedRequest,
@@ -288,5 +289,131 @@ export const LandingPageAgreement = async (
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const saveFormResponses = async (
+    req: AuthenticatedRequest,
+    res: express.Response,
+) => {
+    try {
+        if (!req.identity) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const { selections } = req.body;
+
+        if (!selections || typeof selections !== "object") {
+            return res.status(400).json({ message: "No selections provided" });
+        }
+
+        const getValue = (key: string) => selections?.[key]?.value ?? "";
+        const getPrice = (key: string) => Number(selections?.[key]?.price ?? 0);
+
+        const stationeryOption = getValue("stationery");
+        const stationeryPrice = getPrice("stationery");
+
+        const bodyPreparationOption = getValue("bodyPreparation");
+        const bodyPreparationPrice = getPrice("bodyPreparation");
+
+        const coffinOption = getValue("coffin");
+        const coffinPrice = getPrice("coffin");
+
+        const flowersOption = getValue("flowers");
+        const flowersPrice = getPrice("flowers");
+
+        const urnOption = getValue("urn");
+        const urnPrice = getPrice("urn");
+
+        const collectionOfUrnOption = getValue("collectionOfUrn");
+        const collectionOfUrnPrice = getPrice("collectionOfUrn");
+
+        const transferOption = getValue("transferOption");
+        const transferOptionPrice = getPrice("transferOption");
+
+        const totalPriceImpact =
+            stationeryPrice +
+            bodyPreparationPrice +
+            coffinPrice +
+            flowersPrice +
+            urnPrice +
+            collectionOfUrnPrice +
+            transferOptionPrice;
+
+        const BASE_PRICE = 6600;
+        const finalTotalPrice = BASE_PRICE + totalPriceImpact;
+
+        if (!Number.isFinite(finalTotalPrice) || finalTotalPrice <= 0) {
+            return res.status(400).json({ message: "Invalid total price" });
+        }
+
+        let response = await FormResponseModel.findOne({
+            userid: String(req.identity._id),
+            reference: req.identity.reference, // must exist in identity based on your example
+        });
+
+        if (!response) {
+            response = new FormResponseModel({
+                userid: String(req.identity._id),
+                reference: req.identity.reference,
+                email: req.identity.email,
+                baseTotal: BASE_PRICE,
+            });
+        }
+        response.stationeryOption = stationeryOption;
+        response.stationery = stationeryPrice;
+
+        response.bodyPreparationOption = bodyPreparationOption;
+        response.bodyPreparation = bodyPreparationPrice;
+
+        response.coffinOption = coffinOption;
+        response.coffin = coffinPrice;
+
+        response.flowersOption = flowersOption;
+        response.flowers = flowersPrice;
+
+        if (selections?.urn) {
+            response.urnOption = urnOption;
+            response.urn = urnPrice;
+        } else {
+            response.urnOption = "";
+            response.urn = 0;
+        }
+
+        if (selections?.collectionOfUrn) {
+            response.collectionOfUrnOption = collectionOfUrnOption;
+            response.collectionOfUrn = collectionOfUrnPrice;
+        } else {
+            response.collectionOfUrnOption = "";
+            response.collectionOfUrn = 0;
+        }
+
+        response.transferOption = transferOption;
+        response.transferOptionPrice = transferOptionPrice;
+
+        response.totalPriceImpact = totalPriceImpact;
+        response.totalPrice = finalTotalPrice;
+
+        response.status = "draft";
+
+        const saved = await response.save();
+
+        return res.status(200).json({
+            message: "Form response saved",
+            data: saved,
+        });
+    } catch (error) {
+        console.error("ERROR:", error);
+        if ((error as any)?.code === 11000) {
+            return res.status(409).json({
+                message: "Duplicate reference. A response with this reference already exists.",
+                error,
+            });
+        }
+
+        return res.status(500).json({
+            message: "Server error",
+            error: error instanceof Error ? error.message : error,
+        });
     }
 };

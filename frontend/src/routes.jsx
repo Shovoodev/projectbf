@@ -204,11 +204,7 @@ export const routes = createBrowserRouter([
         element: <AgreementFormPage />,
         isPrivate: true,
       },
-      {
-        path: "/blog",
-        element: <BlogPage />,
-        isPrivate: false,
-      },
+
       {
         path: "/edit-blog/:id",
         element: <EditBlog />,
@@ -272,6 +268,11 @@ export const routes = createBrowserRouter([
       {
         path: "/agreement",
         element: <AgreementForm />,
+      },
+      {
+        path: "/blog",
+        element: <BlogPage />,
+        isPrivate: false,
       },
     ],
   },

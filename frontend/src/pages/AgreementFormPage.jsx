@@ -1,11 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import base64ToFile from "../utility";
 import { showToast } from "../utility/toast";
 import SignatureField from "./packages/_components/SignatureField";
 import Paragraph from "./packages/aggrementComponent/Paragraph";
 import DatePicker from "react-datepicker";
-import { postJsonSafe } from "./packages/_components/helper";
+import { parseMaybeJson, postJsonOrThrow, postJsonSafe, readErrorMessage, toBase64FromBlob } from "./packages/_components/helper";
+import { pdf } from "@react-pdf/renderer";
+import StaticInvoicePDF from "./packages/_components/StaticInvoicePDF";
 
 const CORE = import.meta.env.VITE_API_URL;
 
@@ -106,7 +108,9 @@ const LandingAgreement = () => {
             [field]: value,
         }));
     };
-
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [])
     // deceased photos -> backend expects: photo (array)
     const handleDeceasedPhotoUpload = (files) => {
         const fileArray = Array.from(files || []);
@@ -216,7 +220,6 @@ const LandingAgreement = () => {
                 formData.append("kin_sign", formKinValues.kin_sign);
             }
 
-            // ✅ call your backend controller route
             const res = await fetch(`${CORE}/landing-agreement`, {
                 method: "POST",
                 credentials: "include",
@@ -225,9 +228,24 @@ const LandingAgreement = () => {
 
             const data = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw new Error(data?.message || "Failed to submit agreement");
-            }
+            // // 8) Generate invoice PDF (CRITICAL)
+            // const blob = await pdf(
+            //     <StaticInvoicePDF
+            //         invoiceDetails={data}
+            //         deceasedName={deceasedFormValues.givenName}
+            //         kinName={formKinValues.givenName}
+            //     />
+            // ).toBlob();
+
+            // if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
+
+            // const base64data = await toBase64FromBlob(blob);
+
+            // await postJsonOrThrow(`${CORE}/send-invoice-of-landing`, {
+            //     pdfAttachment: base64data,
+            //     to: formKinValues.kin_email,
+            // });
+
             await postJsonSafe(`${CORE}/notify-admin-agreement`, {
                 clientEmail: formKinValues.kin_email,
             });
@@ -379,7 +397,7 @@ const LandingAgreement = () => {
                                     )}
 
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Last registered address</FormLabel>
+                                        <FormLabel required>Last registered address of {`${deceasedFormValues.givenName}`}</FormLabel>
                                         <InputField
                                             required
                                             value={deceasedFormValues.deceasedpersonaddress}
@@ -451,11 +469,7 @@ const LandingAgreement = () => {
                                         <FormLabel required>Upload photo identification for {deceasedLabel}</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-                                            <div className="flex flex-col items-center justify-center text-center p-4">
-                                                <p className="text-sm text-gray-500 mb-4">
-                                                    You can upload up to 2 images (jpg, jpeg, png, heic)
-                                                </p>
-                                            </div>
+
 
                                             <input
                                                 type="file"
@@ -463,6 +477,35 @@ const LandingAgreement = () => {
                                                 multiple
                                                 onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
                                             />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
                                         </label>
                                     </div>
 
@@ -568,11 +611,7 @@ const LandingAgreement = () => {
                                         <FormLabel required>Upload photo identification for {kinLabel}</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-                                            <div className="flex flex-col items-center justify-center text-center p-4">
-                                                <p className="text-sm text-gray-500 mb-4">
-                                                    Upload 1 image (jpg, jpeg, png, heic)
-                                                </p>
-                                            </div>
+
 
                                             <input
                                                 type="file"
@@ -580,6 +619,35 @@ const LandingAgreement = () => {
                                                 accept="image/*"
                                                 onChange={(e) => handleKinPhotoUpload(e.target.files)}
                                             />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
                                         </label>
                                     </div>
 
@@ -623,17 +691,13 @@ const LandingAgreement = () => {
                                     </select>
                                 </div>
 
-                                {/* Upload Signature Image */}
+
                                 {signatureType === "Upload Photo" && (
                                     <div className="mt-4">
                                         <FormLabel required>Upload Your Signature Here</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
-                                            <div className="flex flex-col items-center justify-center text-center py-4">
-                                                <p className="text-sm text-gray-500 mb-4">
-                                                    Upload 1 image (jpg, jpeg, png, heic)
-                                                </p>
-                                            </div>
+
 
                                             <input
                                                 type="file"
@@ -641,6 +705,35 @@ const LandingAgreement = () => {
                                                 accept="image/*"
                                                 onChange={(e) => handleKinSignUpload(e.target.files)}
                                             />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
                                         </label>
 
                                         {formKinValues.kin_sign && (

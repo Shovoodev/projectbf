@@ -99,3 +99,18 @@ export const transformSelectionsForBackend = (selections) => {
 
     return Object.keys(transformed).length ? transformed : null;
 };
+
+
+
+export const toBase64FromBlob = (blob) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("FileReader failed"));
+        reader.onloadend = () => {
+            const result = reader.result?.toString() || "";
+            const base64 = result.includes(",") ? result.split(",")[1] : "";
+            if (!base64) return reject(new Error("Failed to convert PDF to base64"));
+            resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+    });

@@ -167,10 +167,15 @@ const FAQ = () => {
           </h2>
 
           <div className="mb-6">
-            <Link to="/blog" className="btn-enquire">
+            <a
+              href="/blog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-enquire"
+            >
               <span className="normal">Read Our Blogs</span>
               <FaLongArrowAltRight />
-            </Link>
+            </a>
           </div>
           <p className="text-gray-600 font-body">
             Here you’ll find clear, compassionate answers to help guide you

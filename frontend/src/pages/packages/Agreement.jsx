@@ -195,21 +195,6 @@ const AgreementForm = () => {
     setError("");
     setMessage("");
 
-    // ---------- helpers ----------
-
-    const toBase64FromBlob = (blob) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error("FileReader failed"));
-        reader.onloadend = () => {
-          const result = reader.result?.toString() || "";
-          const base64 = result.includes(",") ? result.split(",")[1] : "";
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
-          resolve(base64);
-        };
-        reader.readAsDataURL(blob);
-      });
-
     // ---------- main flow ----------
     try {
       // 0) Validate required fields
@@ -376,7 +361,7 @@ const AgreementForm = () => {
     dodPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
     personNotPassed: { en: "person has not passed away", zh: "还未过世" },
     lastRegisteredAddress: {
-      en: "Last registered address of the deceased",
+      en: `Last registered address of  ${deceasedLabel}`,
       zh: "最近注册过的居住地址",
     },
     lastAddressPlaceholder: {
