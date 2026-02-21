@@ -77,7 +77,7 @@ export const callMeEnquiryEmail = async (
       socketTimeout: 20_000,
     });
 
-    const arrangerEmail = "shovoodev@gmail.com"; // or process.env.ARRANGER_EMAIL
+    const arrangerEmail = process.env.RECEPTION_EMAIL
 
     const subject = `📞 Call Me Request: ${firstName} ${lastName}`;
 

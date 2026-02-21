@@ -75,7 +75,6 @@ export const sendPdfOfInvoice = async (
       greetingTimeout: 20_000,
       socketTimeout: 20_000,
     });
-
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: email,
