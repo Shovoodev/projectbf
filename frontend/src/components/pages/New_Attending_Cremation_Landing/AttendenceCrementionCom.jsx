@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import PopupEnquirey from "../../../pages/packages/_components/PopupEnquirey";
 import RowSelect from "../../../pages/packages/_components/RowSelect";
 import TransferZonesBox from "../../../pages/packages/_components/TransferZonesBox";
-import { packagePricesDetail } from "../../../utility/config";
-import { showToast } from "../../../utility/toast";
-import MakeAgreementBtn from "./common/MakeAgreementBtn";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 // --- Reusable Card Component ---
 export function Card({ title, children, className = "" }) {
@@ -29,14 +26,14 @@ const attendenceData = [
     options: [
       { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
-        label: "Zone 2 (+ $220)",
-        value: "Zone 2 (+ $220)",
-        priceAdjustment: 220,
+        label: "Zone 2 (+ $495)",
+        value: "Zone 2 (+ $495)",
+        priceAdjustment: 495,
       },
       {
-        label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385)",
-        priceAdjustment: 385,
+        label: "Zone 3 (+ $795)",
+        value: "Zone 3 (+ $795)",
+        priceAdjustment: 795,
       },
     ],
   },
@@ -414,21 +411,10 @@ const landingCoffins = [
   },
 ];
 
-const AttendenceCrementionCom = () => {
-  const BASE_PRICE = packagePricesDetail.attendingLanding;
-
-  const [totalPrice, setTotalPrice] = useState(BASE_PRICE);
-
-  const [selections, setSelections] = useState({
-    transferOption: { value: "Sydney Metro", price: 0 },
-    stationery: { value: "50 Memoriam Cards", price: 0 },
-    bodyPreparation: { value: "General Wash | Dress | Makeup", price: 0 },
-    coffin: { value: "contract-raw", price: 0 },
-    flowers: { value: "Select an Option", price: 0 },
-    urn: { value: "BTF Scattering Tube", price: 0 },
-    collectionOfUrn: { value: "Collect in Person", price: 0 },
-  });
-
+const AttendenceCrementionCom = ({ setIsOpen, selections, setSelections, totalPrice }) => {
+  useEffect(() => {
+    sessionStorage.setItem("agreementDraft", JSON.stringify(selections));
+  }, [setSelections])
   const location = useLocation();
   const isAttendingLanding =
     location.pathname === "/attending-cremation-landing";
@@ -440,11 +426,7 @@ const AttendenceCrementionCom = () => {
   const [water, setWater] = useState("Not Required");
   const [tissues, setTissues] = useState("Not Required");
 
-  const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
-
-  const openPopup = (popupType) => setActivePopup(popupType);
-  const closePopup = () => setActivePopup(null);
 
   const displayData = useMemo(() => {
     return attendenceData.map((item) => {
@@ -527,15 +509,6 @@ const AttendenceCrementionCom = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
-  useEffect(() => {
-    const extras = Object.values(selections || {}).reduce(
-      (sum, opt) => sum + Number(opt?.price || 0),
-      0,
-    );
-
-    const finalPrice = BASE_PRICE + extras;
-    setTotalPrice(finalPrice);
-  }, [selections, BASE_PRICE]);
 
   const handleSelectChange = (itemId, selectedValue) => {
     const item = displayData.find((d) => d.id === itemId);
@@ -552,59 +525,6 @@ const AttendenceCrementionCom = () => {
         : Number(selectedOption.priceAdjustment) || 0;
 
     handleOptionChange(item.question, selectedValue, price);
-  };
-
-  const handlePrepaySubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      setTimeout(() => {
-        showToast.info("Getting PrePay document Ready for your Selections", {
-          duration: 3000,
-          options: { position: "bottom-right" },
-        });
-
-        navigate("/prepay", {
-          state: {
-            selections,
-            path: "newattendingservicecremationanswers",
-            totalPrice,
-          },
-        });
-      }, 100);
-    } catch (err) {
-      setMessage(err.message || "Something went wrong");
-      setError("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRegistrationSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      showToast.success("Getting Aggrement form ", {
-        duration: 3000,
-        options: { position: "bottom-right" },
-      });
-
-      setTimeout(() => {
-        navigate("/fill-agreement-form", {
-          state: {
-            selections,
-            path: "newattendingservicecremationanswers",
-            totalPrice,
-          },
-        });
-      }, 1000);
-    } catch (err) {
-      setMessage(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
   };
 
   if (loading) return <div className="p-20 text-center">Loading...</div>;
@@ -729,35 +649,14 @@ const AttendenceCrementionCom = () => {
 
         {/* ACTIONS */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 pb-2">
-          {/* <button
-            className="btn-primary normal w-full sm:w-auto"
-            onClick={handleRegistrationSubmit}
-          >
-            Make Agreement Now
-          </button> */}
-
           <div className="w-full sm:w-auto">
-            {/* <button
-              className="btn-primary normal w-full sm:w-auto"
-              onClick={() => openPopup("enquirey")}
+            <button className="btn-enquire"
+              onClick={() => setIsOpen(true)}
             >
-              Enquire Now
-            </button> */}
-            <MakeAgreementBtn />
-            <PopupEnquirey
-              isOpen={activePopup === "enquirey"}
-              onClose={closePopup}
-              mode="enquirey"
-              mainTitle="Please tell us what you whant to know about us"
-              description="We'll get back to you shortly"
-              title="Make an Enquiry"
-              onSuccess={() => closePopup()}
-            />
+              <span className="">Make Agreement</span>
+              <FaLongArrowAltRight />
+            </button>
           </div>
-
-          {/* <button className="btn-primary normal w-full sm:w-auto" onClick={handlePrepaySubmit}>
-            Prepay
-          </button> */}
         </div>
 
         <div className="mt-8 sm:mt-10">
@@ -766,11 +665,10 @@ const AttendenceCrementionCom = () => {
 
         {message && (
           <div
-            className={`mt-6 p-4 rounded text-center font-medium ${
-              message.includes("Error")
-                ? "bg-red-50 text-red-600 border border-red-100"
-                : "bg-green-50 text-green-600 border border-green-100"
-            }`}
+            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
+              ? "bg-red-50 text-red-600 border border-red-100"
+              : "bg-green-50 text-green-600 border border-green-100"
+              }`}
           >
             {message}
           </div>

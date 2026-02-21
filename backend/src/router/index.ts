@@ -10,6 +10,7 @@ import pdfRouter from "./pdfRouter";
 import blogRouter from "./blogRouter";
 import prePayRouter from "./prePayRouter";
 import signatureRouter from "./signatureRouter";
+import landingAgreementRouter from "./landingAgreementRouter";
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ export default (): express.Router => {
   userRouter(router);
   enquireyRouter(router);
   paymentRouter(router);
+  landingAgreementRouter(router)
   pdfRouter(router);
   adminRouter(router);
   blogRouter(router);

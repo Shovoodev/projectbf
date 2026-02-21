@@ -9,7 +9,7 @@ const TransferZonesBox = () => {
                 {/* Zone 2 Box */}
                 <div className="w-full md:w-1/2 bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-8">
                     <h4 className="font-body font-lato font-bold text-gray-900 mb-3">
-                        Zone 2 (+ $220)
+                        Zone 2 (+ $495)
                     </h4>
 
                     <ul className="list-disc pl-5 text-gray-700 space-y-1">
@@ -24,7 +24,7 @@ const TransferZonesBox = () => {
                 {/* Zone 3 Box */}
                 <div className="w-full md:w-1/2 bg-gray-50 border border-gray-100 rounded-xl p-5 sm:p-8">
                     <h4 className="font-body font-lato font-bold text-gray-900 mb-3">
-                        Zone 3 (+ $385)
+                        Zone 3 (+ $795)
                     </h4>
 
                     <ul className="list-disc pl-5 text-gray-700 space-y-1">

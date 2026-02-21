@@ -435,13 +435,13 @@ export const notifyClientAccountCreated = async (
     await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc>',
       to: email,
-      subject: "Your Client Account & Invoice - Black Tulip Funerals",
+      subject: "Your Registraion in  Black Tulip Funerals has been completed sucessfully",
       text: `
 Dear ${customerName},
 
 Thank you for entrusting Black Tulip Funerals with the funeral arrangement.
 
-Your client account has been successfully created. Please check your email to set up your password and access the dashboard.
+Your client account has been successfully created.
 
 ${attachments.length
           ? "Kindly find the attached invoice and arrange payment at your earliest convenience to ensure everything proceeds smoothly."
@@ -449,7 +449,6 @@ ${attachments.length
         }
 
 If you need any assistance, please let us know.
-
 Best regards,
 Black Tulip Funerals
       `.trim(),
@@ -479,17 +478,14 @@ Black Tulip Funerals
                 Thank you for entrusting <strong>Black Tulip Funerals</strong> with the funeral arrangement.
               </p>
 
-              <p>
-                Your client account has been successfully created.
-                Please check your email to set up your password and access your dashboard.
-              </p>
-
               ${attachments.length
           ? `<p>
+                Your client account has been successfully created.
                       Kindly find the attached invoice and arrange payment at your earliest convenience
                       to ensure everything proceeds smoothly.
                     </p>`
           : `<p>
+                Your client account has been successfully created.
                       An invoice will be shared with you shortly.
                     </p>`
         }
