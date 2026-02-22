@@ -412,19 +412,19 @@ const LandingAgreement = () => {
                                         <>
                                             <div className="md:col-span-2">
                                                 <FormLabel required>
-                                                    {`Where did ${deceasedLabel} pass away?`}
+                                                    {isEnglish ? `Where did ${deceasedLabel} pass away?` : `${deceasedLabel}在哪里去世？`}
                                                 </FormLabel>
                                                 <InputField
                                                     required
                                                     value={deceasedFormValues.deceasedNow}
                                                     onChange={(e) => handleDeceasedChange("deceasedNow", e.target.value)}
-                                                    placeholder="Eg: Home / Hospital"
+                                                    placeholder={isEnglish ? "Eg: Home / Hospital" : "例如：家 / 医院"}
                                                 />
                                             </div>
 
                                             <div className="md:col-span-2">
                                                 <FormLabel required>
-                                                    {`Where is ${deceasedLabel} now?`}
+                                                    {isEnglish ? `Where is ${deceasedLabel} now?` : `${deceasedLabel}现在在哪里？`}
                                                 </FormLabel>
                                                 <InputField
                                                     required
@@ -432,7 +432,7 @@ const LandingAgreement = () => {
                                                     onChange={(e) =>
                                                         handleDeceasedChange("deceasedPassedReason", e.target.value)
                                                     }
-                                                    placeholder="Eg: Home / Hospital"
+                                                    placeholder={isEnglish ? "Eg: Home / Hospital" : "例如：家 / 医院"}
                                                 />
                                             </div>
                                         </>
