@@ -111,6 +111,7 @@ const CallToActionSection = () => {
         let msg = "API call failed";
         try {
           const data = await res.json();
+          console.log("data",data)
           msg = data?.message || data?.error || msg;
         } catch {
           // ignore JSON parse error

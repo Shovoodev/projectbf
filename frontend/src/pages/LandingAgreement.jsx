@@ -4,7 +4,13 @@ import base64ToFile from "../utility";
 import { showToast } from "../utility/toast";
 import SignatureField from "./packages/_components/SignatureField";
 import DatePicker from "react-datepicker";
-import { parseMaybeJson, postJsonOrThrow, postJsonSafe, readErrorMessage, toBase64FromBlob } from "./packages/_components/helper";
+import {
+  parseMaybeJson,
+  postJsonOrThrow,
+  postJsonSafe,
+  readErrorMessage,
+  toBase64FromBlob,
+} from "./packages/_components/helper";
 import LandingParagraph from "./packages/aggrementComponent/LandingParagraph";
 import { pdf } from "@react-pdf/renderer";
 
@@ -56,7 +62,16 @@ const SelectField = ({ options, required, value, onChange }) => (
 const LandingAgreement = () => {
   const sigCanvasRef = useRef(null);
 
-  const salutations = ["Mr", "Mrs", "Ms", "Miss", "Master", "Baby", "Dr", "Other"];
+  const salutations = [
+    "Mr",
+    "Mrs",
+    "Ms",
+    "Miss",
+    "Master",
+    "Baby",
+    "Dr",
+    "Other",
+  ];
 
   const [isEnglish, setIsEnglish] = useState(true);
   const [signatureType, setSignatureType] = useState("Digital Signature");
@@ -177,13 +192,15 @@ const LandingAgreement = () => {
       }
 
       // Basic required checks (client side)
-      if (!formKinValues.kin_salutation ||
+      if (
+        !formKinValues.kin_salutation ||
         !formKinValues.kin_givenName ||
         !formKinValues.kin_surname ||
         !formKinValues.kin_currentAddress ||
         !formKinValues.kin_mobile ||
         !formKinValues.kin_email ||
-        !formKinValues.kin_relation) {
+        !formKinValues.kin_relation
+      ) {
         throw new Error("Please fill all required Next of Kin fields.");
       }
 
@@ -193,12 +210,27 @@ const LandingAgreement = () => {
       formData.append("givenName", deceasedFormValues.givenName);
       formData.append("surname", deceasedFormValues.surname);
       formData.append("dateofbirth", deceasedFormValues.dateofbirth);
-      formData.append("dateofdeath", notPassed ? "" : deceasedFormValues.dateofdeath);
-      formData.append("deceasedpersonaddress", deceasedFormValues.deceasedpersonaddress);
-      formData.append("deceasedPassedReason", deceasedFormValues.deceasedPassedReason);
+      formData.append(
+        "dateofdeath",
+        notPassed ? "" : deceasedFormValues.dateofdeath,
+      );
+      formData.append(
+        "deceasedpersonaddress",
+        deceasedFormValues.deceasedpersonaddress,
+      );
+      formData.append(
+        "deceasedPassedReason",
+        deceasedFormValues.deceasedPassedReason,
+      );
       formData.append("deceasedNow", deceasedFormValues.deceasedNow);
-      formData.append("batterypowereddevices", deceasedFormValues.batterypowereddevices);
-      formData.append("regulardoctoraddress", deceasedFormValues.regulardoctoraddress);
+      formData.append(
+        "batterypowereddevices",
+        deceasedFormValues.batterypowereddevices,
+      );
+      formData.append(
+        "regulardoctoraddress",
+        deceasedFormValues.regulardoctoraddress,
+      );
       formData.append("kin_salutation", formKinValues.kin_salutation);
       formData.append("kin_givenName", formKinValues.kin_givenName);
       formData.append("kin_surname", formKinValues.kin_surname);
@@ -269,7 +301,8 @@ const LandingAgreement = () => {
       });
       await postJsonSafe(`${CORE}/notify-client-account`, {
         email: formKinValues.kin_email,
-        customerName: `${formKinValues.kin_givenName} ${formKinValues.kin_surname}`.trim(),
+        customerName:
+          `${formKinValues.kin_givenName} ${formKinValues.kin_surname}`.trim(),
       });
 
       setMessage("Form submitted successfully!");
@@ -277,7 +310,6 @@ const LandingAgreement = () => {
         duration: 3000,
         options: { position: "bottom-right" },
       });
-
     } catch (err) {
       console.error("Submit error:", err);
       setError(err?.message || "Something went wrong");
@@ -327,7 +359,9 @@ const LandingAgreement = () => {
                       options={salutations}
                       required
                       value={deceasedFormValues.salutation}
-                      onChange={(e) => handleDeceasedChange("salutation", e.target.value)}
+                      onChange={(e) =>
+                        handleDeceasedChange("salutation", e.target.value)
+                      }
                     />
                   </div>
 
@@ -335,7 +369,9 @@ const LandingAgreement = () => {
                     <FormLabel required>First given name</FormLabel>
                     <InputField
                       value={deceasedFormValues.givenName}
-                      onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
+                      onChange={(e) =>
+                        handleDeceasedChange("givenName", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -343,7 +379,9 @@ const LandingAgreement = () => {
                   <div>
                     <FormLabel>Other given name(s)</FormLabel>
                     <InputField
-                      onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
+                      onChange={(e) =>
+                        handleDeceasedChange("otherNames", e.target.value)
+                      }
                     />
                   </div>
 
@@ -351,7 +389,9 @@ const LandingAgreement = () => {
                     <FormLabel required>Surname / Family Name</FormLabel>
                     <InputField
                       value={deceasedFormValues.surname}
-                      onChange={(e) => handleDeceasedChange("surname", e.target.value)}
+                      onChange={(e) =>
+                        handleDeceasedChange("surname", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -367,7 +407,7 @@ const LandingAgreement = () => {
                       onChange={(date) =>
                         handleDeceasedChange(
                           "dateofbirth",
-                          date ? date.toISOString().split("T")[0] : ""
+                          date ? date.toISOString().split("T")[0] : "",
                         )
                       }
                       dateFormat="dd/MM/yyyy"
@@ -401,7 +441,7 @@ const LandingAgreement = () => {
                         onChange={(date) =>
                           handleDeceasedChange(
                             "dateofdeath",
-                            date ? date.toISOString().split("T")[0] : ""
+                            date ? date.toISOString().split("T")[0] : "",
                           )
                         }
                         dateFormat="dd/MM/yyyy"
@@ -413,16 +453,21 @@ const LandingAgreement = () => {
                   )}
 
                   <div className="md:col-span-2">
-                    <FormLabel required>Last registered address of {`${deceasedFormValues.givenName}`}</FormLabel>
+                    <FormLabel required>
+                      Last registered address of{" "}
+                      {`${deceasedFormValues.givenName}`}
+                    </FormLabel>
                     <InputField
                       required
                       value={deceasedFormValues.deceasedpersonaddress}
                       onChange={(e) =>
-                        handleDeceasedChange("deceasedpersonaddress", e.target.value)
+                        handleDeceasedChange(
+                          "deceasedpersonaddress",
+                          e.target.value,
+                        )
                       }
                       placeholder="This is the address they have resided at for the last 3 months."
                     />
-
                   </div>
 
                   {!notPassed && (
@@ -434,7 +479,9 @@ const LandingAgreement = () => {
                         <InputField
                           required
                           value={deceasedFormValues.deceasedNow}
-                          onChange={(e) => handleDeceasedChange("deceasedNow", e.target.value)}
+                          onChange={(e) =>
+                            handleDeceasedChange("deceasedNow", e.target.value)
+                          }
                           placeholder="Eg: Home / Hospital"
                         />
                       </div>
@@ -447,7 +494,10 @@ const LandingAgreement = () => {
                           required
                           value={deceasedFormValues.deceasedPassedReason}
                           onChange={(e) =>
-                            handleDeceasedChange("deceasedPassedReason", e.target.value)
+                            handleDeceasedChange(
+                              "deceasedPassedReason",
+                              e.target.value,
+                            )
                           }
                           placeholder="Eg: Home / Hospital"
                         />
@@ -463,19 +513,27 @@ const LandingAgreement = () => {
                       required
                       value={deceasedFormValues.batterypowereddevices}
                       onChange={(e) =>
-                        handleDeceasedChange("batterypowereddevices", e.target.value)
+                        handleDeceasedChange(
+                          "batterypowereddevices",
+                          e.target.value,
+                        )
                       }
                       placeholder="Pacemakers, defibrillators etc."
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <FormLabel required>Regular doctor (GP) & surgery address</FormLabel>
+                    <FormLabel required>
+                      Regular doctor (GP) & surgery address
+                    </FormLabel>
                     <InputField
                       required
                       value={deceasedFormValues.regulardoctoraddress}
                       onChange={(e) =>
-                        handleDeceasedChange("regulardoctoraddress", e.target.value)
+                        handleDeceasedChange(
+                          "regulardoctoraddress",
+                          e.target.value,
+                        )
                       }
                       placeholder="Eg: Dr Adam Brown, Strathfield"
                     />
@@ -483,16 +541,18 @@ const LandingAgreement = () => {
 
                   {/* Deceased photo upload */}
                   <div className="md:col-span-2">
-                    <FormLabel required>Upload photo identification for {deceasedLabel}</FormLabel>
+                    <FormLabel required>
+                      Upload photo identification for {deceasedLabel}
+                    </FormLabel>
 
                     <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-
-
                       <input
                         type="file"
                         className="hidden"
                         multiple
-                        onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
+                        onChange={(e) =>
+                          handleDeceasedPhotoUpload(e.target.files)
+                        }
                       />
                       <div className="flex flex-col items-center justify-center text-center p-4">
                         <svg
@@ -562,7 +622,9 @@ const LandingAgreement = () => {
                     <SelectField
                       options={salutations}
                       value={formKinValues.kin_salutation}
-                      onChange={(e) => handleKinChange("kin_salutation", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_salutation", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -571,7 +633,9 @@ const LandingAgreement = () => {
                     <FormLabel required>First given name</FormLabel>
                     <InputField
                       value={formKinValues.kin_givenName}
-                      onChange={(e) => handleKinChange("kin_givenName", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_givenName", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -580,7 +644,9 @@ const LandingAgreement = () => {
                     <FormLabel required>Surname / Family Name</FormLabel>
                     <InputField
                       value={formKinValues.kin_surname}
-                      onChange={(e) => handleKinChange("kin_surname", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_surname", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -589,7 +655,9 @@ const LandingAgreement = () => {
                     <FormLabel required>Current Address</FormLabel>
                     <InputField
                       value={formKinValues.kin_currentAddress}
-                      onChange={(e) => handleKinChange("kin_currentAddress", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_currentAddress", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -599,7 +667,9 @@ const LandingAgreement = () => {
                     <InputField
                       type="tel"
                       value={formKinValues.kin_mobile}
-                      onChange={(e) => handleKinChange("kin_mobile", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_mobile", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -609,27 +679,33 @@ const LandingAgreement = () => {
                     <InputField
                       type="email"
                       value={formKinValues.kin_email}
-                      onChange={(e) => handleKinChange("kin_email", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_email", e.target.value)
+                      }
                       required
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <FormLabel required>Your relationship to {deceasedLabel}?</FormLabel>
+                    <FormLabel required>
+                      Your relationship to {deceasedLabel}?
+                    </FormLabel>
                     <InputField
                       value={formKinValues.kin_relation}
-                      onChange={(e) => handleKinChange("kin_relation", e.target.value)}
+                      onChange={(e) =>
+                        handleKinChange("kin_relation", e.target.value)
+                      }
                       required
                     />
                   </div>
 
                   {/* Kin photo upload */}
                   <div className="md:col-span-2">
-                    <FormLabel required>Upload photo identification for {kinLabel}</FormLabel>
+                    <FormLabel required>
+                      Upload photo identification for {kinLabel}
+                    </FormLabel>
 
                     <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-
-
                       <input
                         type="file"
                         className="hidden"
@@ -714,8 +790,6 @@ const LandingAgreement = () => {
                     <FormLabel required>Upload Your Signature Here</FormLabel>
 
                     <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
-
-
                       <input
                         type="file"
                         className="hidden"
@@ -755,7 +829,8 @@ const LandingAgreement = () => {
 
                     {formKinValues.kin_sign && (
                       <div className="mt-3 text-sm text-gray-600">
-                        Signature file selected: <b>{formKinValues.kin_sign.name}</b>
+                        Signature file selected:{" "}
+                        <b>{formKinValues.kin_sign.name}</b>
                       </div>
                     )}
                   </div>
@@ -778,7 +853,9 @@ const LandingAgreement = () => {
 
               {/* Errors */}
               {error && (
-                <div className="p-4 bg-red-50 text-red-700 rounded-lg">{error}</div>
+                <div className="p-4 bg-red-50 text-red-700 rounded-lg">
+                  {error}
+                </div>
               )}
 
               {message && (
