@@ -19,14 +19,13 @@ export default (router: express.Router) => {
   // router.post("/generate-pdf", generatePdf);
 
   router.post("/api/send-invoice", isAuthenticated, sendPdfOfInvoice);
-  router.post("/send-invoice-of-landing", isAuthenticated, sendPdfOfInvoiceOfLandingPage);
+  router.post("/send-invoice-of-landing",  sendPdfOfInvoiceOfLandingPage);
   router.post(
     "/notify-admin-agreement",
     notifyAdminNewAgreement
   );
   router.get(
     "/all-selected-selections",
-    isAuthenticated,
     sendAttendenceServiceSelection,
   );
   router.post("/notify-client-account", notifyClientAccountCreated);

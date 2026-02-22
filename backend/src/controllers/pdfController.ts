@@ -525,12 +525,12 @@ export const notifyAdminNewAgreement = async (
     }
 
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || "smtp.resend.com",
-      port: process.env.EMAIL_PORT ? Number(process.env.EMAIL_PORT) : 587,
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
       secure: false,
       auth: {
-        user: process.env.EMAIL_WEBFORM_USER || "resend",
-        pass: process.env.EMAIL_WEBFORM_PASS || process.env.RESEND_API_KEY,
+        user: process.env.EMAIL_WEBFORM_USER,
+        pass: process.env.EMAIL_WEBFORM_PASS,
       },
       requireTLS: true,
       connectionTimeout: 20_000,
@@ -617,12 +617,13 @@ export const notifyClientAccountCreated = async (
     }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.resend.com",
-      port: 587,
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
       secure: false,
       auth: {
-        user: "resend",
-        pass: process.env.RESEND_API_KEY,
+        user: process.env.EMAIL_WEBFORM_USER,
+        pass: process.env.EMAIL_WEBFORM_PASS,
+
       },
       requireTLS: true,
       connectionTimeout: 20_000,
@@ -631,7 +632,7 @@ export const notifyClientAccountCreated = async (
     });
 
     await transporter.sendMail({
-      from: '"Administrator" <Blacktulipfunerals@toukir.cc>',
+      from: `"Administrator" <${process.env.EMAIL_WEBFORM_USER}>`,
       to: email,
       subject: "Your Registraion in  Black Tulip Funerals has been completed sucessfully",
       text: `

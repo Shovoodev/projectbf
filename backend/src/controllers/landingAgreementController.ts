@@ -9,17 +9,13 @@ import { FormResponseModel } from "../db/attendence";
 import mongoose from "mongoose";
 
 export const fixedPriceLandingAgreement = async (
-    req: AuthenticatedRequest,
-    res: express.Response
+     req: express.Request,
+     res: express.Response
 ): Promise<any> => {
     try {
-        if (!req.identity) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        const existingResponse = await landingAgreementModel.findOne({
-            userid: req.identity._id,
-        });
+          const existingResponse = null; 
+    // If you still want to detect duplicates by email/phone later,
+    // replace this logic with another unique field
 
         const {
             salutation,
@@ -78,43 +74,10 @@ export const fixedPriceLandingAgreement = async (
             kinSignUrl = uploaded.secure_url;
         }
 
-        let savedResponse;
+        
 
-        if (existingResponse) {
-            // update fields
-            existingResponse.salutation = salutation;
-            existingResponse.givenName = givenName;
-            existingResponse.surname = surname;
-            existingResponse.dateofdeath = dateofdeath;
-            existingResponse.dateofbirth = dateofbirth;
-            existingResponse.deceasedpersonaddress = deceasedpersonaddress;
-            existingResponse.deceasedPassedReason = deceasedPassedReason;
-            existingResponse.deceasedNow = deceasedNow;
-            existingResponse.batterypowereddevices = batterypowereddevices;
-            existingResponse.regulardoctoraddress = regulardoctoraddress;
-
-            existingResponse.kin_salutation = kin_salutation;
-            existingResponse.kin_givenName = kin_givenName;
-            existingResponse.kin_surname = kin_surname;
-            existingResponse.kin_currentAddress = kin_currentAddress;
-            existingResponse.kin_mobile = kin_mobile;
-            existingResponse.kin_email = kin_email;
-            existingResponse.kin_relation = kin_relation;
-
-            // ✅ only overwrite if new uploads exist
-            if (deceasedPhotos.length) {
-                // choose one:
-                // existingResponse.photo = deceasedPhotos; // overwrite
-                existingResponse.photo = [...(existingResponse.photo || []), ...deceasedPhotos]; // append
-            }
-            if (kinPhotoUrl) existingResponse.kin_photo = kinPhotoUrl;
-            if (kinSignUrl) existingResponse.kin_sign = kinSignUrl;
-
-            savedResponse = await existingResponse.save();
-        } else {
-            savedResponse = await createDeceasedpersondetail({
-                userid: req.identity._id,
-
+            const savedResponse = await createDeceasedpersondetail({
+                userid: new mongoose.Types.ObjectId(), 
                 salutation,
                 givenName,
                 surname,
@@ -140,7 +103,7 @@ export const fixedPriceLandingAgreement = async (
 
                 fixedPrice: 6600
             });
-        }
+       
 
         return res.status(201).json({
             message: "Landing agreement saved successfully",

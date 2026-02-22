@@ -13,7 +13,6 @@ export default (router: express.Router) => {
             { name: "kin_photo", maxCount: 1 },
             { name: "kin_sign", maxCount: 1 },
         ]),
-        isAuthenticated,
         fixedPriceLandingAgreement
     );
     router.post(
