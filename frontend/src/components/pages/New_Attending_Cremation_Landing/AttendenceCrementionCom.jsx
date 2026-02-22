@@ -391,30 +391,35 @@ const attendenceData = [
 const landingCoffins = [
   {
     label: "Richmond Gloss Teak",
-    value: "richmond-gloss-teak",
+    value: "Richmond Gloss Teak",
     priceAdjustment: 0,
   },
   {
     label: "Richmond Gloss Red Cedar",
-    value: "richmond-gloss-red-cedar",
+    value: "Richmond Gloss Red Cedar",
     priceAdjustment: 0,
   },
   {
     label: "Richmond Gloss Rosewood",
-    value: "richmond-gloss-rosewood",
+    value: "Richmond Gloss Rosewood",
     priceAdjustment: 0,
   },
   {
     label: "Richmond Gloss White",
-    value: "richmond-gloss-white",
+    value: "Richmond Gloss White",
     priceAdjustment: 0,
   },
 ];
 
-const AttendenceCrementionCom = ({ setIsOpen, selections, setSelections, totalPrice }) => {
+const AttendenceCrementionCom = ({
+  setIsOpen,
+  selections,
+  setSelections,
+  totalPrice,
+}) => {
   useEffect(() => {
     sessionStorage.setItem("agreementDraft", JSON.stringify(selections));
-  }, [setSelections])
+  }, [setSelections]);
   const location = useLocation();
   const isAttendingLanding =
     location.pathname === "/attending-cremation-landing";
@@ -648,11 +653,9 @@ const AttendenceCrementionCom = ({ setIsOpen, selections, setSelections, totalPr
         </div>
 
         {/* ACTIONS */}
-        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 pb-2">
-          <div className="w-full sm:w-auto">
-            <button className="btn-enquire"
-              onClick={() => setIsOpen(true)}
-            >
+        <div className="flex items-center justify-center">
+          <div className="">
+            <button className="btn-enquire" onClick={() => setIsOpen(true)}>
               <span className="">Make Agreement</span>
               <FaLongArrowAltRight />
             </button>
@@ -665,10 +668,11 @@ const AttendenceCrementionCom = ({ setIsOpen, selections, setSelections, totalPr
 
         {message && (
           <div
-            className={`mt-6 p-4 rounded text-center font-medium ${message.includes("Error")
-              ? "bg-red-50 text-red-600 border border-red-100"
-              : "bg-green-50 text-green-600 border border-green-100"
-              }`}
+            className={`mt-6 p-4 rounded text-center font-medium ${
+              message.includes("Error")
+                ? "bg-red-50 text-red-600 border border-red-100"
+                : "bg-green-50 text-green-600 border border-green-100"
+            }`}
           >
             {message}
           </div>
