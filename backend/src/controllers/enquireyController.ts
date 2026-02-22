@@ -50,12 +50,14 @@ export const callMeEnquiryEmail = async (
   res: express.Response,
 ): Promise<Response> => {
   try {
+    
     const { firstName, lastName, phone, message } = req.body as {
       firstName?: string;
       lastName?: string;
       phone?: string;
       message?: string;
     };
+
 
     if (!firstName || !lastName || !phone) {
       return res.status(400).json({
@@ -64,12 +66,12 @@ export const callMeEnquiryEmail = async (
     }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.resend.com",
-      port: 587,
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
       secure: false,
       auth: {
-        user: "resend",
-        pass: process.env.RESEND_API_KEY,
+        user: process.env.EMAIL_WEBFORM_USER,
+        pass: process.env.EMAIL_WEBFORM_PASS,
       },
       requireTLS: true,
       connectionTimeout: 20_000,
@@ -77,7 +79,7 @@ export const callMeEnquiryEmail = async (
       socketTimeout: 20_000,
     });
 
-    const arrangerEmail = process.env.RECEPTION_EMAIL
+    const arrangerEmail = process.env.RECEPTION_NOTIFY_EMAIL
 
     const subject = `📞 Call Me Request: ${firstName} ${lastName}`;
 
@@ -105,7 +107,7 @@ ${safeMessage || "(No message provided)"}
     `;
 
     await transporter.sendMail({
-      from: '"Administrator" <Blacktulipfunerals@toukir.cc>',
+      from: `"Administrator" <${process.env.EMAIL_WEBFORM_USER}>`,
       to: arrangerEmail,
       subject,
       text,

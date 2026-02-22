@@ -286,7 +286,7 @@ const LandingAgreement = () => {
                             {/* Language */}
                             <div className="rounded-xl p-2">
                                 <div className="mb-6">
-                                    <FormLabel required>Select Your Preferred Language</FormLabel>
+                                    <FormLabel required>{isEnglish ? "Select Your Preferred Language" : "选择您的首选语言"}</FormLabel>
                                     <select
                                         value={isEnglish ? "english" : "chinese"}
                                         onChange={(e) => setIsEnglish(e.target.value === "english")}
@@ -306,7 +306,7 @@ const LandingAgreement = () => {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <FormLabel required>Salutation</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Salutation" : "称呼"}</FormLabel>
                                         <SelectField
                                             options={salutations}
                                             required
@@ -316,7 +316,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>First given name</FormLabel>
+                                        <FormLabel required>{isEnglish ? "First given name" : "名字"}</FormLabel>
                                         <InputField
                                             value={deceasedFormValues.givenName}
                                             onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
@@ -325,14 +325,14 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel>Other given name(s)</FormLabel>
+                                        <FormLabel>{isEnglish ? "Other given name(s)" : "其他名字"}</FormLabel>
                                         <InputField
                                             onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
                                         />
                                     </div>
 
                                     <div>
-                                        <FormLabel required>Surname / Family Name</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Surname / Family Name" : "姓氏"}</FormLabel>
                                         <InputField
                                             value={deceasedFormValues.surname}
                                             onChange={(e) => handleDeceasedChange("surname", e.target.value)}
@@ -341,7 +341,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>Date of Birth</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Date of Birth" : "出生日期"}</FormLabel>
                                         <DatePicker
                                             selected={
                                                 deceasedFormValues.dateofbirth
@@ -375,7 +375,7 @@ const LandingAgreement = () => {
 
                                     {!notPassed && (
                                         <div>
-                                            <FormLabel required>Date of Death</FormLabel>
+                                            <FormLabel required>{isEnglish ? "Date of Death" : "死亡日期"}</FormLabel>
                                             <DatePicker
                                                 selected={
                                                     deceasedFormValues.dateofdeath
@@ -397,14 +397,14 @@ const LandingAgreement = () => {
                                     )}
 
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Last registered address of {`${deceasedFormValues.givenName}`}</FormLabel>
+                                        <FormLabel required>{isEnglish ? `Last registered address of ${deceasedFormValues.givenName}` : `${deceasedFormValues.givenName}的最后登记地址`}</FormLabel>
                                         <InputField
                                             required
                                             value={deceasedFormValues.deceasedpersonaddress}
                                             onChange={(e) =>
                                                 handleDeceasedChange("deceasedpersonaddress", e.target.value)
                                             }
-                                            placeholder="This is the address they have resided at for the last 3 months."
+                                            placeholder={isEnglish ? "This is the address they have resided at for the last 3 months." : "这是他们在过去三个月居住的地址。"}
                                         />
                                     </div>
 
@@ -440,7 +440,7 @@ const LandingAgreement = () => {
 
                                     <div className="md:col-span-2">
                                         <FormLabel required>
-                                            Does the {deceasedLabel} have any battery powered devices?
+                                            {isEnglish ? `Does the ${deceasedLabel} have any battery powered devices?` : `${deceasedLabel}有任何电池供电的设备吗？`}
                                         </FormLabel>
                                         <InputField
                                             required
@@ -448,25 +448,25 @@ const LandingAgreement = () => {
                                             onChange={(e) =>
                                                 handleDeceasedChange("batterypowereddevices", e.target.value)
                                             }
-                                            placeholder="Pacemakers, defibrillators etc."
+                                            placeholder={isEnglish ? "Pacemakers, defibrillators etc." : "起搏器，除颤器等"}
                                         />
                                     </div>
 
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Regular doctor (GP) & surgery address</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Regular doctor (GP) & surgery address" : "常规医生（全科医生）及诊所地址"}</FormLabel>
                                         <InputField
                                             required
                                             value={deceasedFormValues.regulardoctoraddress}
                                             onChange={(e) =>
                                                 handleDeceasedChange("regulardoctoraddress", e.target.value)
                                             }
-                                            placeholder="Eg: Dr Adam Brown, Strathfield"
+                                            placeholder={isEnglish ? "Eg: Dr Adam Brown, Strathfield" : "例如：亚当·布朗医生，斯特拉斯菲尔德"}
                                         />
                                     </div>
 
                                     {/* Deceased photo upload */}
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Upload photo identification for {deceasedLabel}</FormLabel>
+                                        <FormLabel required>{isEnglish ? `Upload photo identification for ${deceasedLabel}` : `为${deceasedLabel}上传照片身份证明`}</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
 
@@ -541,7 +541,7 @@ const LandingAgreement = () => {
 
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div>
-                                        <FormLabel required>Salutation</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Salutation" : "称谓"}</FormLabel>
                                         <SelectField
                                             options={salutations}
                                             value={formKinValues.kin_salutation}
@@ -551,7 +551,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>First given name</FormLabel>
+                                        <FormLabel required>{isEnglish ? "First given name" : "名字"}</FormLabel>
                                         <InputField
                                             value={formKinValues.kin_givenName}
                                             onChange={(e) => handleKinChange("kin_givenName", e.target.value)}
@@ -560,7 +560,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>Surname / Family Name</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Surname / Family Name" : "姓 / 家庭名"}</FormLabel>
                                         <InputField
                                             value={formKinValues.kin_surname}
                                             onChange={(e) => handleKinChange("kin_surname", e.target.value)}
@@ -569,7 +569,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Current Address</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Current Address" : "当前地址"}</FormLabel>
                                         <InputField
                                             value={formKinValues.kin_currentAddress}
                                             onChange={(e) => handleKinChange("kin_currentAddress", e.target.value)}
@@ -578,7 +578,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>Mobile</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Mobile" : "手机"}</FormLabel>
                                         <InputField
                                             type="tel"
                                             value={formKinValues.kin_mobile}
@@ -588,7 +588,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div>
-                                        <FormLabel required>Email</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Email" : "电子邮件"}</FormLabel>
                                         <InputField
                                             type="email"
                                             value={formKinValues.kin_email}
@@ -598,7 +598,7 @@ const LandingAgreement = () => {
                                     </div>
 
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Your relationship to {deceasedLabel}?</FormLabel>
+                                        <FormLabel required>{isEnglish ? `Your relationship to ${deceasedLabel}?` : `您与${deceasedLabel}的关系？`}</FormLabel>
                                         <InputField
                                             value={formKinValues.kin_relation}
                                             onChange={(e) => handleKinChange("kin_relation", e.target.value)}
@@ -608,7 +608,7 @@ const LandingAgreement = () => {
 
                                     {/* Kin photo upload */}
                                     <div className="md:col-span-2">
-                                        <FormLabel required>Upload photo identification for {kinLabel}</FormLabel>
+                                        <FormLabel required>{isEnglish ? `Upload photo identification for ${kinLabel}` : `为${kinLabel}上传照片身份证明`}</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
 
@@ -680,21 +680,21 @@ const LandingAgreement = () => {
                                 </h3>
 
                                 <div>
-                                    <FormLabel required>Choose Your Signature Type</FormLabel>
+                                    <FormLabel required>{isEnglish ? "Choose Your Signature Type" : "选择您的签名类型"}</FormLabel>
                                     <select
                                         value={signatureType}
                                         onChange={(e) => setSignatureType(e.target.value)}
                                         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
                                     >
-                                        <option value="Digital Signature">Screen Signature</option>
-                                        <option value="Upload Photo">Upload Photo</option>
+                                        <option value="Digital Signature">{isEnglish ? "Screen Signature" : "屏幕签名"}</option>
+                                        <option value="Upload Photo">{isEnglish ? "Upload Photo" : "上传照片"}</option>
                                     </select>
                                 </div>
 
 
                                 {signatureType === "Upload Photo" && (
                                     <div className="mt-4">
-                                        <FormLabel required>Upload Your Signature Here</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Upload Your Signature Here" : "在此上传您的签名"}</FormLabel>
 
                                         <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
 
@@ -738,7 +738,11 @@ const LandingAgreement = () => {
 
                                         {formKinValues.kin_sign && (
                                             <div className="mt-3 text-sm text-gray-600">
-                                                Signature file selected: <b>{formKinValues.kin_sign.name}</b>
+                                                {isEnglish ? (
+                                                    <>Signature file selected: <b>{formKinValues.kin_sign.name}</b></>
+                                                ) : (
+                                                    <>已选择签名文件: <b>{formKinValues.kin_sign.name}</b></>
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -747,7 +751,7 @@ const LandingAgreement = () => {
                                 {/* Digital Signature */}
                                 {signatureType === "Digital Signature" && (
                                     <div className="mt-4">
-                                        <FormLabel required>Sign Your Name Here</FormLabel>
+                                        <FormLabel required>{isEnglish ? "Sign Your Name Here" : "在此签名"}</FormLabel>
                                         <div className="border rounded-md bg-gray-50 p-2">
                                             <SignatureField
                                                 sigPadRef={sigCanvasRef}
@@ -776,7 +780,7 @@ const LandingAgreement = () => {
                                 disabled={loading}
                                 className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                                {loading ? "Submitting..." : "Submit"}
+                                {loading ? (isEnglish ? "Submitting..." : "提交中...") : (isEnglish ? "Submit" : "提交")}
                             </button>
                         </form>
                     </div>

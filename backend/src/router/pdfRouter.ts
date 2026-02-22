@@ -22,7 +22,6 @@ export default (router: express.Router) => {
   router.post("/send-invoice-of-landing", isAuthenticated, sendPdfOfInvoiceOfLandingPage);
   router.post(
     "/notify-admin-agreement",
-    isAuthenticated,
     notifyAdminNewAgreement
   );
   router.get(

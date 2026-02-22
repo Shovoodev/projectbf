@@ -8,6 +8,7 @@ import http from "http";
 import mongoose from "mongoose";
 import path from "path";
 import Stripe from "stripe";
+import nodemailer from "nodemailer";
 
 import { claudinaryConfig } from "./config/cloudinary";
 import router from "./router";
@@ -84,6 +85,56 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api", router());
+
+app.post("/api/test-mail", async (req, res) => {
+  try {
+    const { to } = req.body;
+
+    if (!to) {
+      return res.status(400).json({ error: "Recipient email required" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 587,
+      secure: false, // 587 TLS
+      auth: {
+        user: "webform@blacktulipfunerals.com.au",
+        pass: "BreanaMonkey12#"
+      },
+    });
+
+    // Check SMTP connection
+    await transporter.verify();
+    console.log("✅ SMTP connection successful");
+
+    const info = await transporter.sendMail({
+      from: `"Administrator" <webform@blacktulipfunerals.com.au>`,
+      to,
+      subject: "Test Email From Localhost 🚀",
+      text: "This is a test email sent from your Express localhost server.",
+      html: `
+        <h2>SMTP Test Successful</h2>
+        <p>This email confirms your Hostinger SMTP is working.</p>
+        <p>Sent at: ${new Date().toLocaleString()}</p>
+      `,
+    });
+
+    return res.json({
+      success: true,
+      message: "Email sent successfully",
+      messageId: info.messageId,
+    });
+  } catch (error: any) {
+    console.error("❌ Mail error:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 app.options("*", cors());
 
 const MONGO_URI = process.env.MONGO_URL as string;
