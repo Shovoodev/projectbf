@@ -21,9 +21,9 @@ const ServiceAreasSection = () => {
           <div className="inline-block px-4 py-1 border border-black rounded-full text-xs font-bold uppercase tracking-widest mb-6">
             Locations
           </div>
-          <h2 className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
+          {/* <h2 className="w-full md:w-auto flex flex-col items-center md:items-end text-center md:text-right">
             Service Areas
-          </h2>
+          </h2> */}
           <p className="text-gray-600 font-body leading-relaxed">
             We offer a range of thoughtfully designed funeral packages to suit
             different needs, preferences, and budgets. Each option is delivered

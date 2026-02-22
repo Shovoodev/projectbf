@@ -75,7 +75,202 @@ export const sendPdfOfInvoice = async (
       greetingTimeout: 20_000,
       socketTimeout: 20_000,
     });
+    const data = await transporter.sendMail({
+      from: '"Administrator" <Blacktulipfunerals@toukir.cc',
+      to: email,
+      subject: `Thanks  hi beleaving us for trusting us `,
+      text: "we get all you documents",
+      html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8" />
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, Helvetica, sans-serif;
+          }
+          .wrapper {
+            width: 100%;
+            padding: 40px 0;
+            background-color: #f4f4f4;
+          }
+          .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+          }
+          .header {
+            background: #111111;
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+          }
+          .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+          }
+          .header p {
+            margin: 8px 0 0;
+            font-size: 14px;
+            color: #cccccc;
+          }
+          .content {
+            padding: 35px;
+            font-size: 15px;
+            color: #333333;
+            line-height: 1.7;
+          }
+          .invoice-box {
+            background: #fafafa;
+            border: 1px solid #eee;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+          }
+          .cta {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-left: 4px solid #111111;
+            font-size: 14px;
+          }
+          .footer {
+            background: #fafafa;
+            padding: 25px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            border-top: 1px solid #eee;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="container">
+      
+            <div class="header">
+              <h1>Tax Invoice</h1>
+              <p>Reference Number: ${reference}</p>
+            </div>
+      
+            <div class="content">
+      
+              <p>Dear Valued Client,</p>
+      
+              <p>
+                Thank you for placing your trust in <strong>Black Tulip Funerals</strong>.
+                Please find your official tax invoice attached as a PDF document.
+              </p>
+      
+              <div class="invoice-box">
+                <strong>Invoice Reference:</strong> ${reference}<br/>
+                <strong>Issue Date:</strong> ${new Date().toLocaleDateString()}
+              </div>
+      
+              <p>
+                To ensure all arrangements proceed smoothly and the service date and time
+                are secured, we kindly request that payment is arranged at your earliest convenience.
+              </p>
+      
+              <div class="cta">
+                If you have any questions regarding this invoice or require assistance,
+                please do not hesitate to contact our team.
+              </div>
+      
+              <p style="margin-top:30px;">
+                Warm regards,<br/>
+                <strong>Scott and the Black Tulip Team</strong>
+              </p>
+      
+            </div>
+      
+            <div class="footer">
+              <strong>Black Tulip Funerals</strong><br/>
+              OVANTA PTY LTD<br/>
+              25 Renown Avenue, Oatley NSW 2223<br/>
+              © ${new Date().getFullYear()} Black Tulip Funerals. All rights reserved.
+            </div>
+      
+          </div>
+        </div>
+      </body>
+      </html>
+      `,
 
+      attachments: [
+        {
+          filename: `invoice-${reference}.pdf`,
+          content: pdfBuffer,
+        },
+      ],
+    });
+    console.log({ data });
+
+    res.json({
+      success: true,
+
+      message: "Invoice sent successfully",
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({
+      error: "Failed to send invoice",
+      details: error instanceof Error ? error.message : String(error),
+    });
+  }
+};
+export const sendPdfOfInvoiceOfLandingPage = async (
+  req: AuthenticatedRequest,
+  res: express.Response,
+): Promise<any> => {
+  try {
+    const { pdfAttachment, to } = req.body;
+    const response = req.identity;
+
+    if (!response) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const reference = response.reference || "N/A";
+
+    if (!process.env.RESEND_API_KEY) {
+      return res.status(500).json({ error: "Missing RESEND_API_KEY" });
+    }
+
+    if (!pdfAttachment || typeof pdfAttachment !== "string") {
+      return res.status(400).json({ error: "pdfAttachment is required" });
+    }
+
+    const recipient = typeof to === "string" && to.trim() ? to : response.email;
+    const email = validateRecipient(recipient);
+
+    // Convert base64 to buffer for attachment
+    const pdfBuffer = Buffer.from(pdfAttachment, "base64");
+    if (!pdfBuffer.length) {
+      return res.status(400).json({ error: "Invalid pdfAttachment payload" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.resend.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "resend",
+        pass: process.env.RESEND_API_KEY,
+      },
+      requireTLS: true,
+      connectionTimeout: 20_000,
+      greetingTimeout: 20_000,
+      socketTimeout: 20_000,
+    });
     const data = await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc',
       to: email,
@@ -264,14 +459,14 @@ export const sendPdfOfPrepay = async (
 
 export const sendAttendenceServiceSelection = async (
   req: AuthenticatedRequest,
-  res: express.Response,
+  res: express.Response
 ) => {
   try {
     if (!req.identity) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const userId = req.identity._id;
+    const userId = String(req.identity._id);
 
     const doc =
       (await getAttendenceByUserId(userId)) ||
@@ -279,10 +474,12 @@ export const sendAttendenceServiceSelection = async (
       (await getNoCreByUserId(userId));
 
     if (!doc) {
-      return res.status(404).json({ message: "No service selection found" });
+      return res.status(404).json({
+        message: "No service selection found",
+        userId,
+      });
     }
 
-    // ✅ SEND THE FULL DOCUMENT
     return res.status(200).json({
       success: true,
       data: doc,
@@ -436,13 +633,13 @@ export const notifyClientAccountCreated = async (
     await transporter.sendMail({
       from: '"Administrator" <Blacktulipfunerals@toukir.cc>',
       to: email,
-      subject: "Your Client Account & Invoice - Black Tulip Funerals",
+      subject: "Your Registraion in  Black Tulip Funerals has been completed sucessfully",
       text: `
 Dear ${customerName},
 
 Thank you for entrusting Black Tulip Funerals with the funeral arrangement.
 
-Your client account has been successfully created. Please check your email to set up your password and access the dashboard.
+Your client account has been successfully created.
 
 ${attachments.length
           ? "Kindly find the attached invoice and arrange payment at your earliest convenience to ensure everything proceeds smoothly."
@@ -450,7 +647,6 @@ ${attachments.length
         }
 
 If you need any assistance, please let us know.
-
 Best regards,
 Black Tulip Funerals
       `.trim(),
@@ -480,17 +676,14 @@ Black Tulip Funerals
                 Thank you for entrusting <strong>Black Tulip Funerals</strong> with the funeral arrangement.
               </p>
 
-              <p>
-                Your client account has been successfully created.
-                Please check your email to set up your password and access your dashboard.
-              </p>
-
               ${attachments.length
           ? `<p>
+                Your client account has been successfully created.
                       Kindly find the attached invoice and arrange payment at your earliest convenience
                       to ensure everything proceeds smoothly.
                     </p>`
           : `<p>
+                Your client account has been successfully created.
                       An invoice will be shared with you shortly.
                     </p>`
         }

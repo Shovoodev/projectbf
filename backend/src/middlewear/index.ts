@@ -1,6 +1,6 @@
 import express from "express";
 import { merge } from "lodash";
-import { getUserBySessionToken } from "./../db/user";
+import { getUserBySessionToken } from "../db/user";
 import { AuthenticatedRequest } from "../lib/types";
 import { geAdminBySessionToken } from "../db/admin";
 
