@@ -87,7 +87,6 @@ const ServiceProcessSection = () => {
               1300 11 0031
             </a>
           </div>
-          {/* Button */}
           <MakeAgreementBtn />
         </div>
       </div>

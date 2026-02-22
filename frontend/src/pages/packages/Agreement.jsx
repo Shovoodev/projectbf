@@ -8,6 +8,7 @@ import { showToast } from "../../utility/toast";
 import SignatureField from "./_components/SignatureField";
 import StaticInvoicePDF from "./_components/StaticInvoicePDF";
 import Paragraph from "./aggrementComponent/Paragraph";
+import { parseMaybeJson, postFormOrThrow, postJsonOrThrow, postJsonSafe, readErrorMessage, toBase64FromBlob, transformSelectionsForBackend } from "./_components/helper";
 const CORE = import.meta.env.VITE_API_URL;
 /* ================= Reusable Components ================= */
 
@@ -194,120 +195,6 @@ const AgreementForm = () => {
     setError("");
     setMessage("");
 
-    // ---------- helpers ----------
-    const parseMaybeJson = (raw) => {
-      try {
-        return raw ? JSON.parse(raw) : null;
-      } catch {
-        return null;
-      }
-    };
-
-    const readErrorMessage = async (res, fallback) => {
-      const raw = await res.text().catch(() => "");
-      const j = parseMaybeJson(raw);
-      return j?.error || j?.message || raw || fallback;
-    };
-
-    // Critical JSON POST: throws on failure
-    const postJsonOrThrow = async (url, body, opts = {}) => {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-        credentials: opts.credentials ?? "include",
-        body: JSON.stringify(body),
-        ...opts,
-      });
-
-      if (!res.ok) {
-        throw new Error(await readErrorMessage(res, "Request failed"));
-      }
-
-      // Some endpoints return empty body; don't break
-      const raw = await res.text().catch(() => "");
-      return { res, data: parseMaybeJson(raw), raw };
-    };
-
-    // Non-critical JSON POST: never throws (keeps flow alive)
-    const postJsonSafe = async (url, body, opts = {}) => {
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-          credentials: opts.credentials ?? "include",
-          body: JSON.stringify(body),
-          ...opts,
-        });
-
-        const raw = await res.text().catch(() => "");
-        const data = parseMaybeJson(raw);
-
-        if (!res.ok) {
-          console.warn("Non-critical request failed:", url, res.status, data || raw);
-          return { ok: false, status: res.status, data, raw };
-        }
-        return { ok: true, status: res.status, data, raw };
-      } catch (err) {
-        console.warn("Non-critical request error:", url, err);
-        return { ok: false, status: 0, data: null, raw: String(err) };
-      }
-    };
-
-    // Critical FormData POST: throws on failure
-    const postFormOrThrow = async (url, formData, opts = {}) => {
-      const res = await fetch(url, {
-        method: "POST",
-        credentials: opts.credentials ?? "include",
-        body: formData,
-        ...opts,
-      });
-
-      if (!res.ok) {
-        throw new Error(await readErrorMessage(res, "Request failed"));
-      }
-
-      const raw = await res.text().catch(() => "");
-      return { res, data: parseMaybeJson(raw), raw };
-    };
-
-    const transformSelectionsForBackend = (selections) => {
-      if (!selections) return null;
-
-      const transformed = {};
-      const keyMapping = {
-        stationery: selections.stationery,
-        bodyPreparation: selections.bodyPreparation,
-        coffin: selections.coffin,
-        flowers: selections.flowers,
-        urn: selections.urn,
-        collectionOfUrn: selections.collectionOfUrn,
-        transferOption: selections.transferOption,
-      };
-
-      Object.entries(keyMapping).forEach(([key, value]) => {
-        if (!value) return;
-        transformed[key] = {
-          value: value?.value ?? value,
-          price: value?.price ?? "0",
-        };
-      });
-
-      return Object.keys(transformed).length ? transformed : null;
-    };
-
-    const toBase64FromBlob = (blob) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error("FileReader failed"));
-        reader.onloadend = () => {
-          const result = reader.result?.toString() || "";
-          const base64 = result.includes(",") ? result.split(",")[1] : "";
-          if (!base64) return reject(new Error("Failed to convert PDF to base64"));
-          resolve(base64);
-        };
-        reader.readAsDataURL(blob);
-      });
-
     // ---------- main flow ----------
     try {
       // 0) Validate required fields
@@ -339,7 +226,7 @@ const AgreementForm = () => {
       const { data: registerData, raw: registerRaw } = await postJsonOrThrow(
         `${CORE}/blacktulipauth/newuser`,
         registerPayload,
-        { credentials: "omit" } // register usually doesn't need cookies
+        { credentials: "include" } // register usually doesn't need cookies
       );
 
       const reference = registerData?.reference || parseMaybeJson(registerRaw)?.reference;
@@ -474,7 +361,7 @@ const AgreementForm = () => {
     dodPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
     personNotPassed: { en: "person has not passed away", zh: "还未过世" },
     lastRegisteredAddress: {
-      en: "Last registered address of the deceased",
+      en: `Last registered address of  ${deceasedLabel}`,
       zh: "最近注册过的居住地址",
     },
     lastAddressPlaceholder: {

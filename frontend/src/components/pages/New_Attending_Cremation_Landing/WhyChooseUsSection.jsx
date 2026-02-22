@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import HelpButton from "../Service/HelpButton";
 import img from "./images/image-1.png";
+import MakeAgreementBtn from "./common/MakeAgreementBtn";
 
 const WhyChooseUsSection = () => {
   const features = [
@@ -81,10 +82,7 @@ const WhyChooseUsSection = () => {
               >
                 <FaPhone className="text-sm" /> 1300 11 0031
               </a>
-              <Link to="/contact" className="btn-enquire">
-                <span className="">Enquire Now</span>
-                <FaLongArrowAltRight />
-              </Link>
+              <MakeAgreementBtn />
             </div>
           </div>
           <div className="rounded-xl overflow-hidden  h-full flex justify-center">

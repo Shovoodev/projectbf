@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { List } from "../../components/common/Reusables";
 import PopupEnquirey from "./_components/PopupEnquirey";
 import RowSelect from "./_components/RowSelect";
 import { showToast } from "../../utility/toast";
@@ -29,14 +28,15 @@ const attendenceData = [
     options: [
       { label: "Sydney Metro", value: "Sydney Metro", priceAdjustment: 0 },
       {
-        label: "Zone 2 (+ $220)",
-        value: "Zone 2 (+ $220)",
-        priceAdjustment: 220,
+        label: "Zone 2 (+ $495)",
+        value: "Zone 2 (+ $495)",
+        priceAdjustment: 495
+        ,
       },
       {
-        label: "Zone 3 (+ $385)",
-        value: "Zone 3 (+ $385)",
-        priceAdjustment: 385,
+        label: "Zone 3 (+ $795)",
+        value: "Zone 3 (+ $795)",
+        priceAdjustment: 795,
       },
     ],
   },

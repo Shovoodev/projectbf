@@ -57,6 +57,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 // import layouts
 import LandingLayout from "./layoutes/LandingLayout";
 import MainLayout from "./layoutes/MainLayout";
+import LandingAgreement from "./pages/LandingAgreement";
+import AgreementForm from "./pages/AgreementFormPage";
 
 export const routes = createBrowserRouter([
   {
@@ -166,10 +168,7 @@ export const routes = createBrowserRouter([
         path: "/packages/attending-service-cremation",
         element: <AttendenceCrementionPage />,
       },
-      {
-        path: "/agreement",
-        element: <AgreementFormPage />,
-      },
+
       {
         path: "/packages/no-service-cremention",
         element: <NoServiceCrementionPage />,
@@ -205,11 +204,7 @@ export const routes = createBrowserRouter([
         element: <AgreementFormPage />,
         isPrivate: true,
       },
-      {
-        path: "/blog",
-        element: <BlogPage />,
-        isPrivate: false,
-      },
+
       {
         path: "/edit-blog/:id",
         element: <EditBlog />,
@@ -269,6 +264,15 @@ export const routes = createBrowserRouter([
         path: "/add-new-btf-admin",
         element: <Register />,
         isPrivate: true,
+      },
+      {
+        path: "/agreement",
+        element: <AgreementForm />,
+      },
+      {
+        path: "/blog",
+        element: <BlogPage />,
+        isPrivate: false,
       },
     ],
   },

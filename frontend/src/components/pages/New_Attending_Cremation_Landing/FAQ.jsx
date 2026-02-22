@@ -17,9 +17,8 @@ const FAQItem = ({ q, a, isOpen, onToggle }) => (
     </button>
 
     <div
-      className={`px-5 font-body text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0"
-      }`}
+      className={`px-5 font-body text-sm leading-relaxed text-gray-300 text-justify transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0"
+        }`}
     >
       {a}
     </div>
@@ -155,15 +154,12 @@ const FAQ = () => {
       a: "You have the right, at any time during your lifetime, to cancel the agreement and withdraw from the plan. With the exception of administration expenses, all money paid by you would be refunded.",
     },
   ];
-
-  // We split the array in half to create two columns,
-  // BUT we keep the original index so the toggle logic works globally.
   const midPoint = Math.ceil(faqs.length / 2);
   const leftColumn = faqs.slice(0, midPoint);
   const rightColumn = faqs.slice(midPoint);
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white pt-16 pb-16 md:pt-24">
       <div className="section-container">
         <div className="text-center mb-12 max-w-4xl mx-auto flex flex-col items-center justify-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4 uppercase tracking-wide">
@@ -171,10 +167,15 @@ const FAQ = () => {
           </h2>
 
           <div className="mb-6">
-            <Link to="/blog" className="btn-enquire">
+            <a
+              href="/blog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-enquire"
+            >
               <span className="normal">Read Our Blogs</span>
               <FaLongArrowAltRight />
-            </Link>
+            </a>
           </div>
           <p className="text-gray-600 font-body">
             Here you’ll find clear, compassionate answers to help guide you

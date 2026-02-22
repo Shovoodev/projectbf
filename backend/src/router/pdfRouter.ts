@@ -4,6 +4,7 @@ import {
   notifyClientAccountCreated,
   sendAttendenceServiceSelection,
   sendPdfOfInvoice,
+  sendPdfOfInvoiceOfLandingPage,
   sendPdfOfPrepay,
 } from "../controllers/pdfController";
 import multer from "multer";
@@ -18,6 +19,7 @@ export default (router: express.Router) => {
   // router.post("/generate-pdf", generatePdf);
 
   router.post("/api/send-invoice", isAuthenticated, sendPdfOfInvoice);
+  router.post("/send-invoice-of-landing", isAuthenticated, sendPdfOfInvoiceOfLandingPage);
   router.post(
     "/notify-admin-agreement",
     isAuthenticated,

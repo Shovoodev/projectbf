@@ -1,1183 +1,789 @@
-
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import base64ToFile from "../../utility";
-import { showToast } from "../../utility/toast";
-import SignatureField from "./_components/SignatureField";
-import StaticInvoicePDF from "./_components/StaticInvoicePDF";
-import Paragraph from "./aggrementComponent/Paragraph";
+import base64ToFile from "../utility";
+import { showToast } from "../utility/toast";
+import SignatureField from "./packages/_components/SignatureField";
+import Paragraph from "./packages/aggrementComponent/Paragraph";
+import DatePicker from "react-datepicker";
+import { parseMaybeJson, postJsonOrThrow, postJsonSafe, readErrorMessage } from "./packages/_components/helper";
+import { pdf } from "@react-pdf/renderer";
+import StaticInvoicePDF from "./packages/_components/StaticInvoicePDF";
+
 const CORE = import.meta.env.VITE_API_URL;
+
 /* ================= Reusable Components ================= */
 
 const FormLabel = ({ children, required }) => (
-  <label className="block text-lg font-bold text-gray-700 mb-1">
-    {children} {required && <span className="text-red-500">*</span>}
-  </label>
+    <label className="block text-lg font-bold text-gray-700 mb-1">
+        {children} {required && <span className="text-red-500">*</span>}
+    </label>
 );
 
 const InputField = ({
-  type = "text",
-  placeholder,
-  required,
-  value,
-  onChange, // Changed from 'change' to 'onChange' for consistency
+    type = "text",
+    placeholder,
+    required,
+    value,
+    onChange,
 }) => (
-  <input
-    type={type}
-    required={required}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-  />
+    <input
+        type={type}
+        required={required}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+    />
 );
 
-const SelectField = (
-  { options, required, value, onChange }, // Added value and onChange
-) => (
-  <select
-    required={required}
-    value={value}
-    onChange={onChange}
-    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-  >
-    <option value="">Select Choice</option>
-    {options.map((opt, idx) => (
-      <option key={idx} value={opt}>
-        {opt}
-      </option>
-    ))}
-  </select>
+const SelectField = ({ options, required, value, onChange }) => (
+    <select
+        required={required}
+        value={value}
+        onChange={onChange}
+        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+    >
+        <option value="">Select Choice</option>
+        {options.map((opt, idx) => (
+            <option key={idx} value={opt}>
+                {opt}
+            </option>
+        ))}
+    </select>
 );
 
 /* ================= Main Component ================= */
 
-const AgreementForm = () => {
-  const salutations = [
-    "Mr",
-    "Mrs",
-    "Ms",
-    "Miss",
-    "Master",
-    "Baby",
-    "Dr",
-    "Other",
-  ];
-  const location = useLocation();
-  const { selections, path, totalPrice } = location.state || {};
+const LandingAgreement = () => {
+    const sigCanvasRef = useRef(null);
 
-  const [notPassed, setNotPassed] = useState(false);
-  const [error, setError] = useState("");
-  const [signatureType, setSignatureType] = useState("Digital Signature");
-  const navigate = useNavigate();
+    const salutations = ["Mr", "Mrs", "Ms", "Miss", "Master", "Baby", "Dr", "Other"];
 
-  const [isEnglish, setIsEnglish] = useState(true);
-  const [deceasedFormValues, setDeceasedFormValues] = useState({
-    salutation: "",
-    givenName: "",
-    surname: "",
-    dateofdeath: "",
-    dateofbirth: "",
-    deceasedpersonaddress: "",
-    deceasedPassedReason: "",
-    deceasedNow: "",
-    batterypowereddevices: "",
-    regulardoctoraddress: "",
-    photo: [],
-  });
+    const [isEnglish, setIsEnglish] = useState(true);
+    const [signatureType, setSignatureType] = useState("Digital Signature");
+    const [notPassed, setNotPassed] = useState(false);
 
-  const [formKinValues, setFormKinValues] = useState({
-    salutation: "",
-    givenName: "",
-    surname: "",
-    currentAddress: "",
-    mobile: "",
-    email: "",
-    relation: "",
-    photo: [],
-    // photoOfSign: null,
-    sign: null,
-  });
+    const [deceasedFormValues, setDeceasedFormValues] = useState({
+        salutation: "",
+        givenName: "",
+        surname: "",
+        dateofdeath: "",
+        dateofbirth: "",
+        deceasedpersonaddress: "",
+        deceasedPassedReason: "",
+        deceasedNow: "",
+        batterypowereddevices: "",
+        regulardoctoraddress: "",
+        photo: [],
+    });
 
-  const sigCanvasRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+    const [formKinValues, setFormKinValues] = useState({
+        kin_salutation: "",
+        kin_givenName: "",
+        kin_surname: "",
+        kin_currentAddress: "",
+        kin_mobile: "",
+        kin_email: "",
+        kin_relation: "",
+        kin_photo: null,
+        kin_sign: null,
+    });
 
-  const saveSignature = async () => {
-    if (!sigCanvasRef.current) return null;
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
 
-    try {
-      const dataUrl = await sigCanvasRef.current.exportImage("png"); // base64
-      if (!dataUrl) return null;
-      const file = base64ToFile(dataUrl, "signature.png");
+    /* ================= Handlers ================= */
 
-      setFormKinValues((prev) => ({
-        ...prev,
-        sign: file,
-      }));
-
-      return file;
-    } catch (error) {
-      console.error("Error saving signature:", error);
-      return null;
-    }
-  };
-  const removeDeceasedPhoto = (index) => {
-    setDeceasedFormValues((prev) => ({
-      ...prev,
-      photo: prev.photo.filter((_, i) => i !== index),
-    }));
-  };
-
-  const clearSignature = () => {
-    if (sigCanvasRef.current) {
-      sigCanvasRef.current.clearCanvas();
-    }
-
-    setFormKinValues((prev) => ({
-      ...prev,
-      sign: null,
-    }));
-  };
-
-  const handleDeceasedChange = (field, value) => {
-    setDeceasedFormValues((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleKinChange = (field, value) => {
-    setFormKinValues((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handlePhotoUpload = (files) => {
-    const fileArray = Array.from(files);
-
-    // For Next of Kin photos
-    setFormKinValues((prev) => ({
-      ...prev,
-      photo: [...prev.photo, ...fileArray].slice(0, 2),
-    }));
-  };
-  const handleDeceasedPhotoUpload = (files) => {
-    const fileArray = Array.from(files);
-
-    setDeceasedFormValues((prev) => ({
-      ...prev,
-      photo: [...prev.photo, ...fileArray].slice(0, 2),
-    }));
-  };
-
-  const removeKinPhoto = (index) => {
-    setFormKinValues((prev) => ({
-      ...prev,
-      photo: prev.photo.filter((_, i) => i !== index),
-    }));
-  };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setMessage("");
-
-    // ---------- helpers ----------
-    const parseMaybeJson = (raw) => {
-      try {
-        return raw ? JSON.parse(raw) : null;
-      } catch {
-        return null;
-      }
+    const handleDeceasedChange = (field, value) => {
+        setDeceasedFormValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
     };
 
-    const readErrorMessage = async (res, fallback) => {
-      const raw = await res.text().catch(() => "");
-      const j = parseMaybeJson(raw);
-      return j?.error || j?.message || raw || fallback;
+    const handleKinChange = (field, value) => {
+        setFormKinValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [])
+    // deceased photos -> backend expects: photo (array)
+    const handleDeceasedPhotoUpload = (files) => {
+        const fileArray = Array.from(files || []);
+        setDeceasedFormValues((prev) => ({
+            ...prev,
+            photo: [...prev.photo, ...fileArray].slice(0, 2),
+        }));
     };
 
-    // Critical JSON POST: throws on failure
-    const postJsonOrThrow = async (url, body, opts = {}) => {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-        credentials: opts.credentials ?? "include",
-        body: JSON.stringify(body),
-        ...opts,
-      });
-
-      if (!res.ok) {
-        throw new Error(await readErrorMessage(res, "Request failed"));
-      }
-
-      // Some endpoints return empty body; don't break
-      const raw = await res.text().catch(() => "");
-      return { res, data: parseMaybeJson(raw), raw };
+    const removeDeceasedPhoto = (index) => {
+        setDeceasedFormValues((prev) => ({
+            ...prev,
+            photo: prev.photo.filter((_, i) => i !== index),
+        }));
     };
 
-    // Non-critical JSON POST: never throws (keeps flow alive)
-    const postJsonSafe = async (url, body, opts = {}) => {
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-          credentials: opts.credentials ?? "include",
-          body: JSON.stringify(body),
-          ...opts,
-        });
+    // kin photo -> backend expects: kin_photo (single)
+    const handleKinPhotoUpload = (files) => {
+        const file = (files && files[0]) || null;
+        setFormKinValues((prev) => ({ ...prev, kin_photo: file }));
+    };
 
-        const raw = await res.text().catch(() => "");
-        const data = parseMaybeJson(raw);
+    const removeKinPhoto = () => {
+        setFormKinValues((prev) => ({ ...prev, kin_photo: null }));
+    };
 
-        if (!res.ok) {
-          console.warn("Non-critical request failed:", url, res.status, data || raw);
-          return { ok: false, status: res.status, data, raw };
+    // kin sign -> backend expects: kin_sign (single)
+    const handleKinSignUpload = (files) => {
+        const file = (files && files[0]) || null;
+        setFormKinValues((prev) => ({ ...prev, kin_sign: file }));
+    };
+
+    const saveSignatureFromCanvas = async () => {
+        if (!sigCanvasRef.current) return null;
+
+        try {
+            const dataUrl = await sigCanvasRef.current.exportImage("png");
+            if (!dataUrl) return null;
+
+            const file = base64ToFile(dataUrl, "signature.png");
+            setFormKinValues((prev) => ({ ...prev, kin_sign: file }));
+            return file;
+        } catch (err) {
+            console.error("Signature save error:", err);
+            return null;
         }
-        return { ok: true, status: res.status, data, raw };
-      } catch (err) {
-        console.warn("Non-critical request error:", url, err);
-        return { ok: false, status: 0, data: null, raw: String(err) };
-      }
     };
 
-    // Critical FormData POST: throws on failure
-    const postFormOrThrow = async (url, formData, opts = {}) => {
-      const res = await fetch(url, {
-        method: "POST",
-        credentials: opts.credentials ?? "include",
-        body: formData,
-        ...opts,
-      });
-
-      if (!res.ok) {
-        throw new Error(await readErrorMessage(res, "Request failed"));
-      }
-
-      const raw = await res.text().catch(() => "");
-      return { res, data: parseMaybeJson(raw), raw };
+    const clearSignature = () => {
+        sigCanvasRef.current?.clearCanvas();
+        setFormKinValues((prev) => ({ ...prev, kin_sign: null }));
     };
 
-    const transformSelectionsForBackend = (selections) => {
-      if (!selections) return null;
+    /* ================= Submit (POST to backend) ================= */
 
-      const transformed = {};
-      const keyMapping = {
-        stationery: selections.stationery,
-        bodyPreparation: selections.bodyPreparation,
-        coffin: selections.coffin,
-        flowers: selections.flowers,
-        urn: selections.urn,
-        collectionOfUrn: selections.collectionOfUrn,
-        transferOption: selections.transferOption,
-      };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        setMessage("");
 
-      Object.entries(keyMapping).forEach(([key, value]) => {
-        if (!value) return;
-        transformed[key] = {
-          value: value?.value ?? value,
-          price: value?.price ?? "0",
-        };
-      });
+        try {
+            // if user chose digital signature but hasn’t saved yet, save now
+            if (signatureType === "Digital Signature" && !formKinValues.kin_sign) {
+                await saveSignatureFromCanvas();
+            }
+            if (!formKinValues.kin_salutation ||
+                !formKinValues.kin_givenName ||
+                !formKinValues.kin_surname ||
+                !formKinValues.kin_currentAddress ||
+                !formKinValues.kin_mobile ||
+                !formKinValues.kin_email ||
+                !formKinValues.kin_relation) {
+                throw new Error("Please fill all required Next of Kin fields.");
+            }
 
-      return Object.keys(transformed).length ? transformed : null;
+            const formData = new FormData();
+
+            formData.append("salutation", deceasedFormValues.salutation);
+            formData.append("givenName", deceasedFormValues.givenName);
+            formData.append("surname", deceasedFormValues.surname);
+            formData.append("dateofbirth", deceasedFormValues.dateofbirth);
+            formData.append("dateofdeath", notPassed ? "" : deceasedFormValues.dateofdeath);
+            formData.append("deceasedpersonaddress", deceasedFormValues.deceasedpersonaddress);
+            formData.append("deceasedPassedReason", deceasedFormValues.deceasedPassedReason);
+            formData.append("deceasedNow", deceasedFormValues.deceasedNow);
+            formData.append("batterypowereddevices", deceasedFormValues.batterypowereddevices);
+            formData.append("regulardoctoraddress", deceasedFormValues.regulardoctoraddress);
+            formData.append("kin_salutation", formKinValues.kin_salutation);
+            formData.append("kin_givenName", formKinValues.kin_givenName);
+            formData.append("kin_surname", formKinValues.kin_surname);
+            formData.append("kin_currentAddress", formKinValues.kin_currentAddress);
+            formData.append("kin_mobile", formKinValues.kin_mobile);
+            formData.append("kin_email", formKinValues.kin_email);
+            formData.append("kin_relation", formKinValues.kin_relation);
+
+            // files:
+            deceasedFormValues.photo.forEach((file) => {
+                formData.append("photo", file); // backend: upload.fields name "photo"
+            });
+
+            if (formKinValues.kin_photo) {
+                formData.append("kin_photo", formKinValues.kin_photo);
+            }
+
+            if (formKinValues.kin_sign) {
+                formData.append("kin_sign", formKinValues.kin_sign);
+            }
+
+            const res = await fetch(`${CORE}/landing-agreement`, {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            });
+
+            const data = await res.json().catch(() => null);
+
+            // // 8) Generate invoice PDF (CRITICAL)
+            // const blob = await pdf(
+            //     <StaticInvoicePDF
+            //         invoiceDetails={data}
+            //         deceasedName={deceasedFormValues.givenName}
+            //         kinName={formKinValues.givenName}
+            //     />
+            // ).toBlob();
+
+            // if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
+
+            // const base64data = await toBase64FromBlob(blob);
+
+            // await postJsonOrThrow(`${CORE}/send-invoice-of-landing`, {
+            //     pdfAttachment: base64data,
+            //     to: formKinValues.kin_email,
+            // });
+
+            await postJsonSafe(`${CORE}/notify-admin-agreement`, {
+                clientEmail: formKinValues.kin_email,
+            });
+            await postJsonSafe(`${CORE}/notify-client-account`, {
+                email: formKinValues.kin_email,
+                customerName: `${formKinValues.kin_givenName} ${formKinValues.kin_surname}`.trim(),
+            });
+
+            setMessage("Form submitted successfully!");
+            showToast.success("Agreement submitted successfully", {
+                duration: 3000,
+                options: { position: "bottom-right" },
+            });
+
+        } catch (err) {
+            console.error("Submit error:", err);
+            setError(err?.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // ---------- main flow ----------
-    try {
-      // 0) Validate required fields
-      const requiredFields = [
-        { field: formKinValues.email, message: "Email is required" },
-        { field: formKinValues.givenName, message: "First name is required" },
-        { field: formKinValues.mobile, message: "Mobile number is required" },
-        { field: deceasedFormValues.givenName, message: "Deceased first name is required" },
-        { field: deceasedFormValues.surname, message: "Deceased surname is required" },
-      ];
-
-      for (const { field, message } of requiredFields) {
-        if (!field || String(field).trim() === "") throw new Error(message);
-      }
-
-      const email = String(formKinValues.email).trim().toLowerCase();
-      const password = String((formKinValues.givenName || "") + (formKinValues.surname || "")).trim();
-      if (!password) throw new Error("Unable to create password (missing givenName/surname)");
-
-      // 1) Transform selections (optional)
-      const backendSelections = transformSelectionsForBackend(selections);
-      if (!backendSelections) {
-        console.warn("No selections provided - continuing without package selections");
-      }
-
-      // 2) Register user (CRITICAL)
-      const registerPayload = { email, password };
-
-      const { data: registerData, raw: registerRaw } = await postJsonOrThrow(
-        `${CORE}/blacktulipauth/newuser`,
-        registerPayload,
-        { credentials: "omit" } // register usually doesn't need cookies
-      );
-
-      const reference = registerData?.reference || parseMaybeJson(registerRaw)?.reference;
-      if (!reference) {
-        throw new Error("Registration succeeded but reference was not returned");
-      }
-
-      // 3) Login user (CRITICAL) - includes reference
-      await postJsonOrThrow(`${CORE}/blacktulipauth/login`, { email, password, reference }, { credentials: "include" });
-
-      // 4) Save selections (OPTIONAL - never breaks flow)
-      if (backendSelections && path) {
-        await postJsonSafe(`${CORE}/${path}`, {
-          selections: backendSelections,
-          totalPrice: totalPrice,
-        });
-      }
-
-      // 5) Save deceased details (CRITICAL)
-      const deceasedFD = new FormData();
-      Object.entries(deceasedFormValues).forEach(([key, value]) => {
-        if (key !== "photo") deceasedFD.append(key, value);
-      });
-
-      if (Array.isArray(deceasedFormValues.photo)) {
-        deceasedFormValues.photo.forEach((file) => deceasedFD.append("photo", file));
-      }
-
-      await postFormOrThrow(`${CORE}/desencepersondetailsanswer`, deceasedFD);
-
-      // 6) Save next of kin details (CRITICAL)
-      const signFile = await saveSignature();
-      if (!signFile) throw new Error("Please provide a signature");
-
-      const fd = new FormData();
-      fd.append("salutation", formKinValues.salutation);
-      fd.append("givenName", formKinValues.givenName);
-      fd.append("surname", formKinValues.surname);
-      fd.append("currentAddress", formKinValues.currentAddress);
-      fd.append("mobile", formKinValues.mobile);
-      fd.append("email", formKinValues.email);
-      fd.append("relation", formKinValues.relation);
-
-      if (Array.isArray(formKinValues.photo)) {
-        formKinValues.photo.forEach((file) => fd.append("photo", file));
-      }
-
-      fd.append("sign", signFile);
-
-      await postFormOrThrow(`${CORE}/next-to-keen-details`, fd);
-
-      // 7) Load invoice data (CRITICAL)
-      // const resSelections = await fetch(`${CORE}/all-selected-selections`, { credentials: "include" });
-      // if (!resSelections.ok) {
-      //   throw new Error(await readErrorMessage(resSelections, "Failed to load selections"));
-      // }
-
-      // const selectionsRaw = await resSelections.text().catch(() => "");
-      // const selectionsJson = parseMaybeJson(selectionsRaw);
-      // const invoiceData = selectionsJson?.data;
-
-      // if (!invoiceData) {
-      //   throw new Error("No invoice data returned from /all-selected-selections");
-      // }
-
-      // 8) Generate invoice PDF (CRITICAL)
-      // const blob = await pdf(
-      //   <StaticInvoicePDF
-      //     invoiceDetails={invoiceData}
-      //     deceasedName={deceasedFormValues.givenName}
-      //     kinName={formKinValues.givenName}
-      //   />
-      // ).toBlob();
-
-      // if (!blob || !blob.size) throw new Error("Failed to generate invoice PDF");
-
-      // const base64data = await toBase64FromBlob(blob);
-
-      // 9) Send invoice (CRITICAL - change to postJsonSafe if you want it non-critical)
-      // await postJsonOrThrow(`${CORE}/api/send-invoice`, {
-      //   selections: backendSelections || {}, // don't send raw UI selections
-      //   pdfAttachment: base64data,
-      //   to: email,
-      // });
-
-      // 10) Notify admin (OPTIONAL)
-      await postJsonSafe(`${CORE}/notify-admin-agreement`, {
-
-        clientEmail: email,
-      });
-
-      await postJsonSafe(`${CORE}/notify-client-account`, {
-        email,
-        customerName: `${formKinValues.givenName} ${formKinValues.surname}`.trim(),
-
-      });
-
-      // UI updates
-      setMessage("Form submitted successfully!");
-      showToast.success("completed Your Registration");
-
-      localStorage.removeItem("packageSelections");
-      localStorage.removeItem("packagePath");
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-    } catch (err) {
-      console.error("Submit error:", err);
-      setError(err?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deceasedLabel = deceasedFormValues.givenName || "deceased";
-  const kinLabel = formKinValues.givenName || "Next of kin";
-
-  const translations = {
-    deceasedSectionTitle: { en: "Deceased Person Details", zh: "逝者信息" },
-    salutation: { en: "Salutation", zh: "称谓" },
-    selectChoice: { en: "Select Choice", zh: "选择" },
-    firstGivenName: { en: "First given name", zh: "名" },
-    otherGivenNames: { en: "Other given name(s)", zh: "其他名" },
-    surname: { en: "Surname / Family Name", zh: "姓" },
-    dateOfBirth: { en: "Date of Birth", zh: "出生年月" },
-    dobPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
-    dateOfDeath: { en: "Date of Death", zh: "过世日期" },
-    dodPlaceholder: { en: "dd/mm/yyyy", zh: "日/月/年" },
-    personNotPassed: { en: "person has not passed away", zh: "还未过世" },
-    lastRegisteredAddress: {
-      en: "Last registered address of the deceased",
-      zh: "最近注册过的居住地址",
-    },
-    lastAddressPlaceholder: {
-      en: "This is the address they have resided at for the last 3 months.",
-      zh: "此地址为过去三个月居住的地方",
-    },
-    deceasedPassedPlace: {
-      en: `Where did  ${deceasedLabel} pass away?`,
-      zh: "逝者过世 地点",
-    },
-    deceasedCurrentPlace: {
-      en: `Where is  ${deceasedLabel} now?`,
-      zh: "逝者现在在哪里",
-    },
-    deceasedCurrentPlacePlaceholder: {
-      en: "Eg: Home / Hospital",
-      zh: "比如：家中/医院",
-    },
-    batteryPoweredDevices: {
-      en: `Does the ${deceasedLabel} have any form of battery powered devices?`,
-      zh: "逝者身上是否有由电池驱动的仪器？",
-    },
-    batteryDevicesPlaceholder: {
-      en: "This includes all forms of pacemakers and defibrillators",
-      zh: "这包括所有的起搏器和除颤器",
-    },
-    regularDoctor: {
-      en: `Who is the ${deceasedLabel}'s regular doctor (GP) & surgery address?`,
-      zh: "逝者的家庭医生名字和诊所地址",
-    },
-    regularDoctorPlaceholder: {
-      en: "Eg: Dr Adam Brown, Strathfield",
-      zh: "比如：Adam Brown 医生，Strathfield",
-    },
-    uploadDeasedPhoto: {
-      en: `Upload photo identification for ${deceasedLabel}`,
-      zh: `上传照片证件 `,
-    },
-    nextOfKinSectionTitle: { en: "Next of Kin Details", zh: "近亲信息" },
-    kinSalutation: { en: "Salutation", zh: "称谓" },
-    kinSelectChoice: { en: "Select Choice", zh: "选择" },
-    kinFirstGivenName: { en: "First given name", zh: "名" },
-    kinOtherGivenNames: { en: "Other given name(s)", zh: "其他名" },
-    kinSurname: { en: "Surname / Family Name", zh: "姓" },
-    kinCurrentAddress: { en: "Current Address", zh: "目前地址" },
-    kinMobile: { en: "Mobile", zh: "手机" },
-    kinEmail: { en: "Email", zh: "邮箱" },
-    kinRelationship: {
-      en: `Your relationship to ${deceasedLabel}?`,
-      zh: "你与逝者的关系",
-    },
-    uploadKinPhoto: {
-      en: `Upload photo identification for ${kinLabel}`,
-      zh: `上传照片证件 `,
-    },
-    uploadFilesText: {
-      en: "Drag & Drop Files, or Choose Files to Upload",
-      zh: "拖拽文件，或选择文件上传",
-    },
-    uploadFilesLimit: {
-      en: "You can upload up to 2 files.",
-      zh: "你可以上传最多两份文件",
-    },
-
-    signHere: { en: "Sign Your Name Here", zh: "签名" },
-    clearSignature: { en: "[Clear Signature]", zh: "清除签名" },
-
-    submit: { en: "Submit", zh: "递交" },
-  };
-
-  return (
-    <>
-      <Paragraph />
-      <section className="py-8 md:py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto md:px-6">
-          <div className="bg-white p-8 md:p-12 rounded-2xl shadow border border-gray-300">
-            <form className="space-y-12" onSubmit={handleSubmit}>
-              {/* ================= DECEASED DETAILS ================= */}
-              <div className="rounded-xl p-8">
-                <div className="mb-8">
-                  <FormLabel required>Select Your Preferred Language</FormLabel>
-                  <select
-                    value={isEnglish ? "english" : "chinese"}
-                    onChange={(e) => setIsEnglish(e.target.value === "english")}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option value="english">English</option>
-                    <option value="chinese">Chinese</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  {isEnglish
-                    ? translations.deceasedSectionTitle.en
-                    : translations.deceasedSectionTitle.zh}
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.salutation.en
-                        : translations.salutation.zh}
-                    </FormLabel>
-                    <SelectField
-                      options={salutations}
-                      required
-                      value={deceasedFormValues.salutation}
-                      onChange={(e) =>
-                        handleDeceasedChange("salutation", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.firstGivenName.en
-                        : translations.firstGivenName.zh}
-                    </FormLabel>
-                    <InputField
-                      type="text"
-                      value={deceasedFormValues.givenName}
-                      onChange={(e) =>
-                        handleDeceasedChange("givenName", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.otherGivenNames.en
-                        : translations.otherGivenNames.zh}
-                    </FormLabel>
-                    <InputField
-                      type="text"
-                      onChange={(e) =>
-                        handleDeceasedChange("otherNames", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.surname.en
-                        : translations.surname.zh}
-                    </FormLabel>
-                    <InputField
-                      type="text"
-                      value={deceasedFormValues.surname}
-                      onChange={(e) =>
-                        handleDeceasedChange("surname", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.dateOfBirth.en
-                        : translations.dateOfBirth.zh}
-                    </FormLabel>
-                    <InputField
-                      type="date"
-                      value={deceasedFormValues.dateofbirth}
-                      onChange={(e) =>
-                        handleDeceasedChange("dateofbirth", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="flex items-center w-full md:col-span-2">
-                    <input
-                      type="checkbox"
-                      checked={notPassed}
-                      onChange={(e) => setNotPassed(e.target.checked)}
-                      className="w-5 h-5 mr-2"
-                    />
-                    <span className="font-medium">
-                      {isEnglish
-                        ? translations.personNotPassed.en
-                        : translations.personNotPassed.zh}
-                    </span>
-                  </div>
-
-                  {!notPassed && (
-                    <div>
-                      <FormLabel required>
-                        {isEnglish
-                          ? translations.dateOfDeath.en
-                          : translations.dateOfDeath.zh}
-                      </FormLabel>
-                      <InputField
-                        type="date"
-                        value={deceasedFormValues.dateofdeath}
-                        onChange={(e) =>
-                          handleDeceasedChange("dateofdeath", e.target.value)
-                        }
-                        required
-                      />
-                    </div>
-                  )}
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.lastRegisteredAddress.en
-                        : translations.lastRegisteredAddress.zh}
-                    </FormLabel>
-
-                    <InputField
-                      required
-                      value={deceasedFormValues.deceasedpersonaddress}
-                      onChange={(e) =>
-                        handleDeceasedChange(
-                          "deceasedpersonaddress",
-                          e.target.value,
-                        )
-                      }
-                      placeholder={
-                        isEnglish
-                          ? "This is the address they have resided at for the last 3 months."
-                          : "此地址为过去三个月居住的地方"
-                      }
-                    />
-                  </div>
-
-                  {!notPassed && (
-                    <>
-                      <div className="md:col-span-2">
-                        <FormLabel required>
-                          {isEnglish
-                            ? translations.deceasedPassedPlace.en
-                            : translations.deceasedPassedPlace.zh}
-                        </FormLabel>
-
-                        <InputField
-                          required
-                          onChange={(e) =>
-                            handleDeceasedChange("deceasedNow", e.target.value)
-                          }
-                          placeholder={
-                            isEnglish
-                              ? "This is the address they have resided at for the last 3 months."
-                              : "此地址为过去三个月居住的地方"
-                          }
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <FormLabel required>
-                          {isEnglish
-                            ? translations.deceasedCurrentPlace.en
-                            : translations.deceasedCurrentPlace.zh}
-                        </FormLabel>
-
-                        <InputField
-                          placeholder={
-                            isEnglish
-                              ? "Eg: Home / Hospital"
-                              : "比如：家中/医院"
-                          }
-                          value={deceasedFormValues.deceasedPassedReason}
-                          onChange={(e) =>
-                            handleDeceasedChange(
-                              "deceasedPassedReason",
-                              e.target.value,
-                            )
-                          }
-                          required
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.batteryPoweredDevices.en
-                        : translations.batteryPoweredDevices.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      placeholder="This includes all forms of pacemakers and defibrillators"
-                      value={deceasedFormValues.batterypowereddevices}
-                      onChange={(e) =>
-                        handleDeceasedChange(
-                          "batterypowereddevices",
-                          e.target.value,
-                        )
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.regularDoctor.en
-                        : translations.regularDoctor.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      placeholder="Eg: Dr Adam Brown, Strathfield"
-                      value={deceasedFormValues.regulardoctoraddress}
-                      onChange={(e) =>
-                        handleDeceasedChange(
-                          "regulardoctoraddress",
-                          e.target.value,
-                        )
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.uploadDeasedPhoto.en
-                        : translations.uploadDeasedPhoto.zh}
-                    </FormLabel>
-
-                    <label className="flex flex-col  items-center justify-center w-full  border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group ">
-                      <div className="flex flex-col items-center justify-center text-center p-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish ? (
-                            <>
-                              You can upload up to 2 images <br /> (Only .jpg,
-                              .jpeg, .png, .heic files are allowed)
-                            </>
-                          ) : (
-                            <>
-                              您最多可以上传 2 张图片 <br /> （仅允许
-                              .jpg、.jpeg、.png、.heic 文件）
-                            </>
-                          )}
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        required
-                        onChange={(e) =>
-                          handleDeceasedPhotoUpload(e.target.files)
-                        }
-                      />
-                    </label>
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="flex flex-wrap gap-2">
-                      {deceasedFormValues?.photo?.map((file, index) => (
-                        <div key={index} className="relative inline-block">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index + 1}`}
-                            className="w-52 object-cover border rounded"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => removeDeceasedPhoto(index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ================= NEXT OF KIN ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  Next of Kin Details
-                </h3>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinSalutation.en
-                        : translations.kinSalutation.zh}
-                    </FormLabel>{" "}
-                    <SelectField
-                      options={salutations}
-                      value={formKinValues.salutation}
-                      onChange={(e) =>
-                        handleKinChange("salutation", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinFirstGivenName.en
-                        : translations.kinFirstGivenName.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      value={formKinValues.givenName}
-                      onChange={(e) =>
-                        handleKinChange("givenName", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinOtherGivenNames.en
-                        : translations.kinOtherGivenNames.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      onChange={(e) =>
-                        handleKinChange("otherNames", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinSurname.en
-                        : translations.kinSurname.zh}
-                    </FormLabel>
-                    <InputField
-                      value={formKinValues.surname}
-                      onChange={(e) =>
-                        handleKinChange("surname", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinCurrentAddress.en
-                        : translations.kinCurrentAddress.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      value={formKinValues.currentAddress}
-                      onChange={(e) =>
-                        handleKinChange("currentAddress", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinMobile.en
-                        : translations.kinMobile.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      type="tel"
-                      value={formKinValues.mobile}
-                      onChange={(e) =>
-                        handleKinChange("mobile", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinEmail.en
-                        : translations.kinEmail.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      type="email"
-                      value={formKinValues.email}
-                      onChange={(e) => handleKinChange("email", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.kinRelationship.en
-                        : translations.kinRelationship.zh}
-                    </FormLabel>{" "}
-                    <InputField
-                      value={formKinValues.relation}
-                      onChange={(e) =>
-                        handleKinChange("relation", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <FormLabel required>
-                      {isEnglish
-                        ? translations.uploadKinPhoto.en
-                        : translations.uploadKinPhoto.zh}
-                    </FormLabel>
-
-                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
-                      <div className="flex flex-col items-center justify-center text-center p-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          {isEnglish
-                            ? "Drag & drop files here, or click to upload"
-                            : "拖放文件到此处，或点击上传"}
-                        </p>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish ? (
-                            <>
-                              You can upload up to 2 images <br /> (Only .jpg,
-                              .jpeg, .png, .heic files are allowed)
-                            </>
-                          ) : (
-                            <>
-                              您最多可以上传 2 张图片 <br /> （仅允许
-                              .jpg、.jpeg、.png、.heic 文件）
-                            </>
-                          )}
-                        </p>
-                      </div>
-
-                      <input
-                        type="file"
-                        className="hidden"
-                        required
-                        multiple
-                        onChange={(e) => handlePhotoUpload(e.target.files)}
-                      />
-                    </label>
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="flex flex-wrap gap-2">
-                      {formKinValues?.photo?.map((file, index) => (
-                        <div key={index} className="relative inline-block">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index + 1}`}
-                            className="w-52 object-cover border rounded"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => removeKinPhoto(index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ================= SIGNATURE ================= */}
-              <div>
-                <h3 className="text-4xl text-center font-bold mb-6">
-                  {isEnglish ? "Signature" : "签名"}
-                </h3>
-
-                <div>
-                  <FormLabel required>
-                    {isEnglish ? "Choose Your Signature Type" : "选择签名方式"}
-                  </FormLabel>
-
-                  <select
-                    value={signatureType}
-                    onChange={(e) => setSignatureType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option value="Digital Signature">
-                      {isEnglish ? "Screen Signature" : "屏幕签名"}
-                    </option>
-                    <option value="Upload Photo">
-                      {isEnglish ? "Upload Photo" : "上传照片"}
-                    </option>
-                  </select>
-                </div>
-
-                {/* Upload Signature Image */}
-                {signatureType === "Upload Photo" && (
-                  <div className="mt-4">
-                    <FormLabel required>
-                      {isEnglish
-                        ? "Upload Your Signature Here"
-                        : "在此上传您的签名"}
-                    </FormLabel>
-
-                    <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
-                      <div className="flex flex-col items-center justify-center text-center py-4">
-                        <svg
-                          className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
-
-                        <p className="font-semibold text-gray-900">
-                          {isEnglish
-                            ? "Drag & drop files here, or click to upload"
-                            : "将文件拖放到此处，或点击上传"}
-                        </p>
-
-                        <p className="text-sm text-gray-500 mb-4">
-                          {isEnglish
-                            ? "(Only .jpg, .jpeg, .png, .heic files are allowed)"
-                            : "（仅允许 .jpg、.jpeg、.png、.heic 文件）"}
-                        </p>
-                      </div>
-
-                      <input type="file" required accept="image/*" />
-                    </label>
-
-                    <div className="md:col-span-2">
-                      <div className="flex flex-wrap gap-2">
-                        {formKinValues?.photo?.map((file, index) => (
-                          <div key={index} className="relative inline-block">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
-                              className="w-52 object-cover border rounded"
-                            />
-
+    /* ================= Labels for translations (minimal) ================= */
+
+    const deceasedLabel = deceasedFormValues.givenName || "deceased";
+    const kinLabel = formKinValues.kin_givenName || "Next of kin";
+
+    /* ================= Render ================= */
+
+    return (
+        <>
+            <Paragraph />
+
+            <section className="py-8 md:py-16 bg-gray-50">
+                <div className="max-w-4xl mx-auto md:px-6">
+                    <div className="bg-white p-8 md:p-12 rounded-2xl shadow border border-gray-300">
+                        <form className="space-y-12" onSubmit={handleSubmit}>
+                            {/* Language */}
+                            <div className="rounded-xl p-2">
+                                <div className="mb-6">
+                                    <FormLabel required>Select Your Preferred Language</FormLabel>
+                                    <select
+                                        value={isEnglish ? "english" : "chinese"}
+                                        onChange={(e) => setIsEnglish(e.target.value === "english")}
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                                    >
+                                        <option value="english">English</option>
+                                        <option value="chinese">Chinese</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* ================= DECEASED DETAILS ================= */}
+                            <div>
+                                <h3 className="text-4xl text-center font-bold mb-6">
+                                    {isEnglish ? "Deceased Person Details" : "逝者信息"}
+                                </h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <FormLabel required>Salutation</FormLabel>
+                                        <SelectField
+                                            options={salutations}
+                                            required
+                                            value={deceasedFormValues.salutation}
+                                            onChange={(e) => handleDeceasedChange("salutation", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>First given name</FormLabel>
+                                        <InputField
+                                            value={deceasedFormValues.givenName}
+                                            onChange={(e) => handleDeceasedChange("givenName", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel>Other given name(s)</FormLabel>
+                                        <InputField
+                                            onChange={(e) => handleDeceasedChange("otherNames", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>Surname / Family Name</FormLabel>
+                                        <InputField
+                                            value={deceasedFormValues.surname}
+                                            onChange={(e) => handleDeceasedChange("surname", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>Date of Birth</FormLabel>
+                                        <DatePicker
+                                            selected={
+                                                deceasedFormValues.dateofbirth
+                                                    ? new Date(deceasedFormValues.dateofbirth)
+                                                    : null
+                                            }
+                                            onChange={(date) =>
+                                                handleDeceasedChange(
+                                                    "dateofbirth",
+                                                    date ? date.toISOString().split("T")[0] : ""
+                                                )
+                                            }
+                                            dateFormat="dd/MM/yyyy"
+                                            placeholderText={isEnglish ? "dd/mm/yyyy" : "日/月/年"}
+                                            className="w-full p-3 border rounded-md"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center w-full md:col-span-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={notPassed}
+                                            onChange={(e) => setNotPassed(e.target.checked)}
+                                            className="w-5 h-5 mr-2"
+                                        />
+                                        <span className="font-medium">
+                                            {isEnglish ? "person has not passed away" : "还未过世"}
+                                        </span>
+                                    </div>
+
+                                    {!notPassed && (
+                                        <div>
+                                            <FormLabel required>Date of Death</FormLabel>
+                                            <DatePicker
+                                                selected={
+                                                    deceasedFormValues.dateofdeath
+                                                        ? new Date(deceasedFormValues.dateofdeath)
+                                                        : null
+                                                }
+                                                onChange={(date) =>
+                                                    handleDeceasedChange(
+                                                        "dateofdeath",
+                                                        date ? date.toISOString().split("T")[0] : ""
+                                                    )
+                                                }
+                                                dateFormat="dd/MM/yyyy"
+                                                placeholderText={isEnglish ? "dd/mm/yyyy" : "日/月/年"}
+                                                className="w-full p-3 border rounded-md"
+                                                required
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Last registered address of {`${deceasedFormValues.givenName}`}</FormLabel>
+                                        <InputField
+                                            required
+                                            value={deceasedFormValues.deceasedpersonaddress}
+                                            onChange={(e) =>
+                                                handleDeceasedChange("deceasedpersonaddress", e.target.value)
+                                            }
+                                            placeholder="This is the address they have resided at for the last 3 months."
+                                        />
+                                    </div>
+
+                                    {!notPassed && (
+                                        <>
+                                            <div className="md:col-span-2">
+                                                <FormLabel required>
+                                                    {`Where did ${deceasedLabel} pass away?`}
+                                                </FormLabel>
+                                                <InputField
+                                                    required
+                                                    value={deceasedFormValues.deceasedNow}
+                                                    onChange={(e) => handleDeceasedChange("deceasedNow", e.target.value)}
+                                                    placeholder="Eg: Home / Hospital"
+                                                />
+                                            </div>
+
+                                            <div className="md:col-span-2">
+                                                <FormLabel required>
+                                                    {`Where is ${deceasedLabel} now?`}
+                                                </FormLabel>
+                                                <InputField
+                                                    required
+                                                    value={deceasedFormValues.deceasedPassedReason}
+                                                    onChange={(e) =>
+                                                        handleDeceasedChange("deceasedPassedReason", e.target.value)
+                                                    }
+                                                    placeholder="Eg: Home / Hospital"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>
+                                            Does the {deceasedLabel} have any battery powered devices?
+                                        </FormLabel>
+                                        <InputField
+                                            required
+                                            value={deceasedFormValues.batterypowereddevices}
+                                            onChange={(e) =>
+                                                handleDeceasedChange("batterypowereddevices", e.target.value)
+                                            }
+                                            placeholder="Pacemakers, defibrillators etc."
+                                        />
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Regular doctor (GP) & surgery address</FormLabel>
+                                        <InputField
+                                            required
+                                            value={deceasedFormValues.regulardoctoraddress}
+                                            onChange={(e) =>
+                                                handleDeceasedChange("regulardoctoraddress", e.target.value)
+                                            }
+                                            placeholder="Eg: Dr Adam Brown, Strathfield"
+                                        />
+                                    </div>
+
+                                    {/* Deceased photo upload */}
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Upload photo identification for {deceasedLabel}</FormLabel>
+
+                                        <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
+
+
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                multiple
+                                                onChange={(e) => handleDeceasedPhotoUpload(e.target.files)}
+                                            />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    {/* Deceased photo previews */}
+                                    <div className="md:col-span-2">
+                                        <div className="flex flex-wrap gap-2">
+                                            {deceasedFormValues.photo.map((file, index) => (
+                                                <div key={index} className="relative inline-block">
+                                                    <img
+                                                        src={URL.createObjectURL(file)}
+                                                        alt={`Preview ${index + 1}`}
+                                                        className="w-52 object-cover border rounded"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeDeceasedPhoto(index)}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ================= NEXT OF KIN ================= */}
+                            <div>
+                                <h3 className="text-4xl text-center font-bold mb-6">
+                                    {isEnglish ? "Next of Kin Details" : "近亲信息"}
+                                </h3>
+
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <FormLabel required>Salutation</FormLabel>
+                                        <SelectField
+                                            options={salutations}
+                                            value={formKinValues.kin_salutation}
+                                            onChange={(e) => handleKinChange("kin_salutation", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>First given name</FormLabel>
+                                        <InputField
+                                            value={formKinValues.kin_givenName}
+                                            onChange={(e) => handleKinChange("kin_givenName", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>Surname / Family Name</FormLabel>
+                                        <InputField
+                                            value={formKinValues.kin_surname}
+                                            onChange={(e) => handleKinChange("kin_surname", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Current Address</FormLabel>
+                                        <InputField
+                                            value={formKinValues.kin_currentAddress}
+                                            onChange={(e) => handleKinChange("kin_currentAddress", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>Mobile</FormLabel>
+                                        <InputField
+                                            type="tel"
+                                            value={formKinValues.kin_mobile}
+                                            onChange={(e) => handleKinChange("kin_mobile", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <FormLabel required>Email</FormLabel>
+                                        <InputField
+                                            type="email"
+                                            value={formKinValues.kin_email}
+                                            onChange={(e) => handleKinChange("kin_email", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Your relationship to {deceasedLabel}?</FormLabel>
+                                        <InputField
+                                            value={formKinValues.kin_relation}
+                                            onChange={(e) => handleKinChange("kin_relation", e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Kin photo upload */}
+                                    <div className="md:col-span-2">
+                                        <FormLabel required>Upload photo identification for {kinLabel}</FormLabel>
+
+                                        <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group">
+
+
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={(e) => handleKinPhotoUpload(e.target.files)}
+                                            />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    {/* Kin photo preview */}
+                                    <div className="md:col-span-2">
+                                        {formKinValues.kin_photo && (
+                                            <div className="relative inline-block">
+                                                <img
+                                                    src={URL.createObjectURL(formKinValues.kin_photo)}
+                                                    alt="Kin preview"
+                                                    className="w-52 object-cover border rounded"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={removeKinPhoto}
+                                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ================= SIGNATURE ================= */}
+                            <div>
+                                <h3 className="text-4xl text-center font-bold mb-6">
+                                    {isEnglish ? "Signature" : "签名"}
+                                </h3>
+
+                                <div>
+                                    <FormLabel required>Choose Your Signature Type</FormLabel>
+                                    <select
+                                        value={signatureType}
+                                        onChange={(e) => setSignatureType(e.target.value)}
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                                    >
+                                        <option value="Digital Signature">Screen Signature</option>
+                                        <option value="Upload Photo">Upload Photo</option>
+                                    </select>
+                                </div>
+
+
+                                {signatureType === "Upload Photo" && (
+                                    <div className="mt-4">
+                                        <FormLabel required>Upload Your Signature Here</FormLabel>
+
+                                        <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition group p-1">
+
+
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={(e) => handleKinSignUpload(e.target.files)}
+                                            />
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <svg
+                                                    className="w-12 h-12 mb-3 mt-5 text-gray-400 group-hover:text-black transition"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                    />
+                                                </svg>
+
+                                                <p className="text-sm text-gray-500 mb-4">
+                                                    {isEnglish ? (
+                                                        <>
+                                                            You can upload up to 2 images <br /> (Only .jpg,
+                                                            .jpeg, .png, .heic files are allowed)
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            您最多可以上传 2 张图片 <br /> （仅允许
+                                                            .jpg、.jpeg、.png、.heic 文件）
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </label>
+
+                                        {formKinValues.kin_sign && (
+                                            <div className="mt-3 text-sm text-gray-600">
+                                                Signature file selected: <b>{formKinValues.kin_sign.name}</b>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Digital Signature */}
+                                {signatureType === "Digital Signature" && (
+                                    <div className="mt-4">
+                                        <FormLabel required>Sign Your Name Here</FormLabel>
+                                        <div className="border rounded-md bg-gray-50 p-2">
+                                            <SignatureField
+                                                sigPadRef={sigCanvasRef}
+                                                saveSignature={saveSignatureFromCanvas}
+                                                clearSignature={clearSignature}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Errors */}
+                            {error && (
+                                <div className="p-4 bg-red-50 text-red-700 rounded-lg">{error}</div>
+                            )}
+
+                            {message && (
+                                <div className="p-4 bg-green-50 text-green-700 rounded-lg">
+                                    {message}
+                                </div>
+                            )}
+
+                            {/* Submit */}
                             <button
-                              type="button"
-                              onClick={() => removeDeceasedPhoto(index)}
-                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                                type="submit"
+                                disabled={loading}
+                                className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                              ×
+                                {loading ? "Submitting..." : "Submit"}
                             </button>
-                          </div>
-                        ))}
-                      </div>
+                        </form>
                     </div>
-                  </div>
-                )}
-
-                {/* Digital Signature */}
-                {signatureType === "Digital Signature" && (
-                  <div className="mt-4">
-                    <FormLabel required>
-                      {isEnglish ? "Sign Your Name Here" : "请在此签名"}
-                    </FormLabel>
-
-                    <div className="border rounded-md bg-gray-50 p-2">
-                      <SignatureField
-                        sigPadRef={sigCanvasRef}
-                        saveSignature={saveSignature}
-                        clearSignature={clearSignature}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Error and Success Messages */}
-              {error && (
-                <div className="p-4 bg-red-50 text-red-700 rounded-lg">
-                  {error}
                 </div>
-              )}
-
-              {message && (
-                <div className="p-4 bg-green-50 text-green-700 rounded-lg">
-                  {message}
-                </div>
-              )}
-
-              {/* ================= SUBMIT ================= */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full text-2xl bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
-    </>
-  );
+            </section>
+        </>
+    );
 };
 
-export default AgreementForm;
+export default LandingAgreement;
