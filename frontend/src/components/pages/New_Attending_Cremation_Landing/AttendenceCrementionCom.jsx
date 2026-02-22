@@ -538,7 +538,7 @@ const AttendenceCrementionCom = ({ setIsOpen, selections, setSelections, totalPr
         <div className="flex flex-col md:flex-row md:justify-between md:items-start items-center mb-10 sm:mb-16 gap-8 md:gap-10">
           <div className="w-full md:max-w-3xl">
             <h1 className="text-3xl sm:text-4xl md:text-5xl text-center md:text-left font-display font-bold text-gray-900 mb-4 sm:mb-6">
-              Attending Service Crematio
+              Attending Service Cremation
             </h1>
             <p className="text-body-light sm:text-body-light leading-relaxed text-left sm:text-justify">
               Black Tulip Funerals offers a respectful and simple farewell,
